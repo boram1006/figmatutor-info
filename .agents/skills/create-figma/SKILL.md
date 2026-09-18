@@ -11,6 +11,8 @@ Figma MCP가 필요한 작업은 메인에서 직접 호출하지 않고 `figma-
 [작업 계약](../../../docs/figma-delegation.md)에 따라 원본 응답·이미지는 전담 에이전트가 파일로 보존하고 메인에는 요약만 반환한다.
 메인은 로컬 게이트와 사용자 선택을 관리하며 전담 자식은 재위임하지 않는다.
 
+브랜드 헤더 컴포넌트와 해당 화면 인스턴스에는 [헤더 로고 계약](../../../docs/figma-contract.md#헤더-로고)의 `design/characters/Logo.svg`를 사용한다. 원본 비율·색상을 유지하고 캐릭터용 하늘색 배경을 강제하지 않는다.
+
 토큰 라이브러리를 정리할 때 [지정 토큰 문서 가이드](../../../docs/token-library-guide.md)를 적용한다. 실제 변수·스타일과 함께 계열별 견본·이름·값 문서를 만들고 바인딩 검사 및 실제 캡처 관찰을 작업 결과에 기록한다.
 
 1. npm run status로 components와 screens 중 가장 앞선 미완료 단계를 확인한다. docs/contracts.md, docs/figma-contract.md, docs/tool-adapters.md와 Figma 호출에 필요한 설치 스킬을 먼저 읽는다.

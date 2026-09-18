@@ -11,6 +11,8 @@ Figma MCP가 필요한 작업은 메인에서 직접 호출하지 않고 `figma-
 [작업 계약](../../../docs/figma-delegation.md)에 따라 원본 응답·이미지는 전담 에이전트가 파일로 보존하고 메인에는 요약만 반환한다.
 메인은 로컬 게이트와 사용자 선택을 관리하며 전담 자식은 재위임하지 않는다.
 
+대표 시안의 브랜드 헤더는 [헤더 로고 계약](../../../docs/figma-contract.md#헤더-로고)에 따라 `design/characters/Logo.svg` 원본을 사용한다. 브랜드명을 텍스트로 재현하지 않는다.
+
 [토큰 문서 가이드](../../../docs/token-library-guide.md)의 primitive→semantic 원칙을 적용한다. 이 단계에는 대표 시안용 최소 토큰만 만들고 전체 라이브러리 문서는 방향 선택 후 create-figma에서 정리한다.
 
 1. npm run status로 tokens, concepts, direction 중 가장 앞선 미완료 단계를 확인한다.

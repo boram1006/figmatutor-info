@@ -26,6 +26,8 @@ reference index에 출처와 경로를 남기고, 얻지 못한 핵심 과업은
 
 ## 캐릭터 이미지
 
+`design/characters/Logo.svg`는 캐릭터 이미지가 아닌 브랜드 로고다. SVG 로고의 가져오기·배치·검증은 [헤더 로고 계약](figma-contract.md#헤더-로고)을 따르며 아래 래스터 캐릭터 정책과 구분한다.
+
 이미지 생성·작업 제출·대기 단계는 사용하지 않는다. `npm run assets:list`로
 `harness.config.json`의 imagePolicy.directory에 있는 원본을 확인한다.
 기본 소스는 `design/characters`의 프로젝트 보유 에셋이다.
