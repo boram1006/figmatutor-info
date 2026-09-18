@@ -1,0 +1,9 @@
+node_modules/
+.DS_Store
+.env
+.env.*
+!.env.example
+*.log
+.cache/
+.tmp/
+# JSON evidence and approval receipts are intentionally versioned.

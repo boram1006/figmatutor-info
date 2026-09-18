@@ -1,0 +1,4 @@
+interface:
+  display_name: "디자인 검증"
+  short_description: "Figma 화면을 구조·시각·콘텐츠 기준으로 검사하고 결함을 재검증한다."
+  default_prompt: "$audit-design 스킬로 생성된 Figma UI를 검증해줘."

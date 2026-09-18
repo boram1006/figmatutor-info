@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI 디자인 파이프라인 시작·재개"
+  short_description: "기존 역할명으로 정리된 UI 디자인 흐름을 시작하거나 이어서 진행한다."
+  default_prompt: "$ui-flow 스킬로 이 프로젝트의 UI 디자인 단계를 이어서 진행해줘."

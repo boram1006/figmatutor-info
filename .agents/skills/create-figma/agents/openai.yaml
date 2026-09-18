@@ -1,0 +1,4 @@
+interface:
+  display_name: "Figma 화면 생성"
+  short_description: "선택한 방향으로 컴포넌트와 전체 화면·상태를 Figma에 만든다."
+  default_prompt: "$create-figma 스킬로 선택된 UI 방향을 Figma 화면으로 확장해줘."

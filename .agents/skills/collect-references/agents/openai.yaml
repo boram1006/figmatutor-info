@@ -1,0 +1,4 @@
+interface:
+  display_name: "레퍼런스 수집"
+  short_description: "PRD 기반 UI 레퍼런스와 출처를 design/01-references에 정리한다."
+  default_prompt: "$collect-references 스킬로 이 프로젝트의 UI 레퍼런스를 수집해줘."

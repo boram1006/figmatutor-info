@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "project": "New Project",
+  "target": "figma-mobile",
+  "viewports": [
+    {
+      "id": "mobile",
+      "width": 390,
+      "height": 844,
+      "safeAreaTop": 44,
+      "safeAreaBottom": 34
+    }
+  ],
+  "conceptCount": {
+    "min": 2,
+    "max": 3
+  },
+  "representativeScreenId": "home",
+  "grid": 4,
+  "minimumTapSize": 44,
+  "minimumReuseRate": 0.8,
+  "figma": {
+    "fileKey": ""
+  },
+  "approvalPolicy": "direction-only",
+  "notes": [],
+  "imagePolicy": {
+    "mode": "local-characters",
+    "directory": "design/characters",
+    "scaleMode": "FIT",
+    "backgroundColor": "#E3F2FD",
+    "backgroundToken": "color-character-bg"
+  }
+}

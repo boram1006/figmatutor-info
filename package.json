@@ -1,0 +1,27 @@
+{
+  "name": "design-flow-harness-codex",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Codex용 요구사항 → 최소 토큰 → 대표 시안 → 방향 선택 → 컴포넌트 → 화면·상태 → 검증 하네스",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "status": "node scripts/harness.mjs status",
+    "check": "node scripts/harness.mjs check",
+    "check:inputs": "node scripts/harness.mjs check --phase inputs",
+    "check:tokens": "node scripts/harness.mjs check --phase tokens",
+    "check:concepts": "node scripts/harness.mjs check --phase concepts",
+    "check:direction": "node scripts/harness.mjs check --phase direction",
+    "check:components": "node scripts/harness.mjs check --phase components",
+    "check:screens": "node scripts/harness.mjs check --phase screens",
+    "audit": "node scripts/harness.mjs audit",
+    "doctor": "node scripts/harness.mjs doctor",
+    "select": "node scripts/harness.mjs select",
+    "fingerprint": "node scripts/harness.mjs fingerprint",
+    "tokens:export": "node scripts/harness.mjs export-tokens",
+    "test": "node --test tests/*.test.mjs",
+    "assets:list": "node scripts/harness.mjs assets-list"
+  }
+}

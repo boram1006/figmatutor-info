@@ -1,0 +1,4 @@
+interface:
+  display_name: "화면 구조 정의"
+  short_description: "PRD와 레퍼런스를 화면·상태·흐름 JSON으로 정리한다."
+  default_prompt: "$build-structure 스킬로 화면과 사용자 흐름 구조를 정리해줘."

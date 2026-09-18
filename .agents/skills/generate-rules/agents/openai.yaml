@@ -1,0 +1,4 @@
+interface:
+  display_name: "디자인 규칙 확정"
+  short_description: "최소 토큰과 대표 시안을 만들고 사용자가 선택한 방향을 기록한다."
+  default_prompt: "$generate-rules 스킬로 디자인 규칙과 대표 시안을 진행해줘."

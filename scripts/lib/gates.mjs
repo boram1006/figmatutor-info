@@ -1,0 +1,173 @@
+import {readFileSync} from 'node:fs';
+import {paths,phases,read,safePath,fileHash,array,object,nonempty,unique,imageExists,validateTokens,effectiveTokens,directionDigest,buildDigest,reviewDigest} from './core.mjs';
+import {validateSnapshot} from './snapshot.mjs';
+import {characterFiles,validateCharacterAssets} from './assets.mjs';
+
+function configErrors(c) {
+  const e=[];
+  if(c.schemaVersion!==1) e.push('config.schemaVersion은 1이어야 함');
+  if(!array(c.viewports).length) e.push('viewport 필요');
+  unique(array(c.viewports),'id',e,'viewports');
+  for(const v of array(c.viewports)) if(!(v.width>0 && v.height>0 && v.safeAreaTop>=0 && v.safeAreaBottom>=0 && v.safeAreaTop+v.safeAreaBottom<v.height)) e.push(`${v.id}: viewport 치수 오류`);
+  if(!(c.grid>0 && c.minimumTapSize>0 && c.minimumReuseRate>=0 && c.minimumReuseRate<=1)) e.push('grid/tap/reuse 설정 오류');
+  if(!(c.conceptCount?.min>=2 && c.conceptCount?.max<=3 && c.conceptCount.min<=c.conceptCount.max)) e.push('대표 시안 수는 2~3개');
+  return e;
+}
+function inputs(root,c) {
+  const e=configErrors(c), r=read(root,paths.requirements), refs=read(root,paths.references);
+  try{characterFiles(root,c);}catch(error){e.push(error.message);}
+  if(r.schemaVersion!==1 || refs.schemaVersion!==1) e.push('inputs schemaVersion 오류');
+  if(r.status!=='ready') e.push('요구사항 초안 검토 후 status: ready 필요 (사용자 승인과는 별도)');
+  if(!nonempty(readFileSync(safePath(root,r.prd),'utf8'))) e.push('PRD 비어 있음');
+  if(array(r.openQuestions).length) e.push(`해결되지 않은 질문 ${r.openQuestions.length}개`);
+  const screens=array(r.screens), references=array(refs.references), refIds=new Set(references.map(x=>x.id));
+  if(!screens.length || !references.length) e.push('화면 및 레퍼런스 필요');
+  unique(screens,'id',e,'screens'); unique(references,'id',e,'references');
+  for(const ref of references) {
+    try{imageExists(root,ref.file);}catch(err){e.push(err.message);}
+    if(!nonempty(ref.sourceApp)) e.push(`${ref.id}: 출처 앱 필요`);
+  }
+  for(const s of screens) {
+    if(!nonempty(s.purpose) || !nonempty(s.primaryAction?.id) || !nonempty(s.primaryAction?.label)) e.push(`${s.id}: 목적/primaryAction 필요`);
+    if(!array(s.referenceIds).length || s.referenceIds.some(id=>!refIds.has(id))) e.push(`${s.id}: 화면별 referenceIds 누락/없는 참조`);
+    if(!['direct','partial','prd-derived'].includes(s.referenceCoverage)) e.push(`${s.id}: referenceCoverage 필요`);
+    if(s.referenceCoverage!=='direct' && !nonempty(s.referenceDecision)) e.push(`${s.id}: 근거가 약한 부분의 설계 결정(referenceDecision) 필요`);
+    const states=array(s.states); unique(states,'id',e,`${s.id} states`);
+    if(!states.some(x=>x.id==='default') || states.some(x=>typeof x.primaryRequired!=='boolean')) e.push(`${s.id}: default 상태/상태별 primaryRequired 필요`);
+    if(!array(s.viewportIds).length || s.viewportIds.some(id=>!c.viewports.some(v=>v.id===id))) e.push(`${s.id}: viewportIds 오류`);
+    if(!array(s.componentIds).length || new Set(s.componentIds).size!==s.componentIds.length) e.push(`${s.id}: componentIds 필요/중복`);
+    if(!array(s.contentCases).length) e.push(`${s.id}: 긴 콘텐츠/빈 데이터 등의 contentCases 필요`);
+    if(!Array.isArray(s.imageSlots)) e.push(`${s.id}: imageSlots 배열 필요 (없으면 [])`);
+    unique(array(s.imageSlots),'id',e,`${s.id} imageSlots`);
+  }
+  if(!screens.some(s=>s.id===c.representativeScreenId)) e.push('대표 화면 ID가 요구사항에 없음');
+  if(!array(r.flows).length) e.push('사용자 흐름 필요');
+  for(const f of array(r.flows)) if(!nonempty(f.goal)||!array(f.screenIds).length||f.screenIds.some(id=>!screens.some(s=>s.id===id))) e.push(`${f.id}: 흐름 화면 참조/목적 오류`);
+  return e;
+}
+function concepts(root,c) {
+  const e=[], doc=read(root,paths.concepts), items=array(doc.concepts), base=read(root,paths.tokens);
+  if(doc.schemaVersion!==1) e.push('concepts schemaVersion 오류');
+  if(items.length<c.conceptCount.min || items.length>c.conceptCount.max) e.push('대표 화면 시안 2~3개 필요');
+  unique(items,'id',e,'concepts');
+  if(new Set(items.map(x=>x.preview)).size!==items.length) e.push('서로 다른 시안 프리뷰 파일 필요');
+  for(const item of items) {
+    if(item.screenId!==c.representativeScreenId) e.push(`${item.id}: 같은 대표 화면을 비교해야 함`);
+    if(!nonempty(item.rationale)||!array(item.tradeoffs).length||!nonempty(item.layoutStrategy)) e.push(`${item.id}: 구조 차이/근거/장단점 필요`);
+    try{imageExists(root,item.preview);}catch(err){e.push(err.message);}
+    if(!object(item.primitiveOverrides)) e.push(`${item.id}: primitiveOverrides 객체 필요 (없으면 {})`);
+    e.push(...validateTokens({...base,primitives:{...base.primitives,...item.primitiveOverrides}}).map(x=>`${item.id}: ${x}`));
+  }
+  return e;
+}
+function direction(root) {
+  const e=[], s=read(root,paths.direction), all=array(read(root,paths.concepts).concepts);
+  if(s.schemaVersion!==1 || !all.some(c=>c.id===s.conceptId)) e.push('선택된 시안 없음');
+  if(s.decidedBy!=='user' || !nonempty(s.userMessage) || !Number.isFinite(Date.parse(s.decidedAt))) e.push('사용자의 실제 방향 선택 기록 필요');
+  if(s.inputDigest!==directionDigest(root)) e.push('선택 이후 요구사항/토큰/시안/프리뷰 변경: 방향 재확인 필요');
+  return e;
+}
+function components(root,c) {
+  const e=[], doc=read(root,paths.components), items=array(doc.components), req=read(root,paths.requirements), t=effectiveTokens(root);
+  if(doc.schemaVersion!==1 || !items.length) e.push('컴포넌트 카탈로그 필요');
+  unique(items,'id',e,'components');
+  for(const s of req.screens) for(const id of s.componentIds) if(!items.some(x=>x.id===id)) e.push(`${s.id}: 컴포넌트 ${id} 누락`);
+  for(const item of items) {
+    if(!nonempty(item.nodeId)||!array(item.states).length) e.push(`${item.id}: Figma nodeId/states 필요`);
+    if(item.height!=='hug' && (!object(item.height)||!t.semantic[item.height.token])) e.push(`${item.id}: height는 hug 또는 {token: semantic} 필요`);
+    if(!array(item.semanticTokens).length || item.semanticTokens.some(n=>!t.semantic[n])) e.push(`${item.id}: semanticTokens 누락/오류`);
+  }
+  const snap=read(root,paths.componentSnapshot);
+  e.push(...validateCharacterAssets(root,c,read(root,paths.assets),snap));
+  e.push(...validateSnapshot(snap,{config:c,tokens:t,catalog:doc,stage:'components',inputDigest:buildDigest(root)}));
+  const nodeIds=new Set(array(snap.frames).flatMap(f=>array(f.nodes)).filter(n=>['COMPONENT','COMPONENT_SET'].includes(n.type)).map(n=>n.id));
+  for(const item of items) if(!nodeIds.has(item.nodeId)) e.push(`${item.id}: 실제 COMPONENT/COMPONENT_SET 노드 없음`);
+  return e;
+}
+function screens(root,c) {
+  const e=[], req=read(root,paths.requirements), manifest=read(root,paths.screens), assets=read(root,paths.assets), snap=read(root,paths.screenSnapshot), catalog=read(root,paths.components), t=effectiveTokens(root);
+  if(manifest.schemaVersion!==1 || assets.schemaVersion!==1) e.push('screens/assets schemaVersion 오류');
+  const entries=array(manifest.screens), records=array(assets.assets);
+  const keys=entries.map(x=>`${x.screenId}/${x.state}/${x.viewportId}`);
+  if(new Set(keys).size!==keys.length) e.push('화면·상태·viewport 중복');
+  if(new Set(entries.map(x=>x.frameId)).size!==entries.length) e.push('하나의 프레임을 여러 상태로 재사용할 수 없음');
+  unique(records,'id',e,'assets');
+  e.push(...validateCharacterAssets(root,c,assets,snap));
+  for(const a of records) {
+    try{imageExists(root,a.file);if(a.sha256!==fileHash(root,a.file)) e.push(`${a.id}: 이미지 sha256 불일치`);}catch(err){e.push(err.message);}
+    if(!nonempty(a.source)||!nonempty(a.figmaImageHash)) e.push(`${a.id}: 출처/figmaImageHash 필요`);
+  }
+  const expected=[];
+  for(const s of req.screens) for(const state of s.states) for(const viewportId of s.viewportIds) expected.push({s,state,viewportId});
+  if(entries.length!==expected.length) e.push(`화면 상태 수 불일치: ${entries.length}/${expected.length}`);
+  e.push(...validateSnapshot(snap,{config:c,tokens:t,catalog,stage:'screens',inputDigest:buildDigest(root,'screens')}));
+  for(const {s,state,viewportId} of expected) {
+    const label=`${s.id}/${state.id}/${viewportId}`, entry=entries.find(x=>`${x.screenId}/${x.state}/${x.viewportId}`===label);
+    if(!entry){e.push(`${label}: 화면 상태 누락`);continue;}
+    try{imageExists(root,entry.screenshot);}catch(err){e.push(err.message);}
+    const f=array(snap.frames).find(x=>x.id===entry.frameId), viewport=c.viewports.find(v=>v.id===viewportId);
+    if(!f){e.push(`${label}: 실제 프레임 없음`);continue;}
+    if(f.screenId!==s.id || f.state!==state.id || f.viewportId!==viewportId) e.push(`${label}: Figma 메타데이터 불일치`);
+    if(f.width!==viewport.width || f.height!==viewport.height) e.push(`${label}: viewport 치수 불일치 (스크롤은 내부 컨테이너 사용)`);
+    const primaries=array(f.nodes).filter(n=>n.primaryActionId===s.primaryAction.id);
+    if(state.primaryRequired && primaries.length!==1) e.push(`${label}: 주 액션은 해당 상태에서 정확히 1개 필요`);
+    if(!state.primaryRequired && primaries.length>1) e.push(`${label}: 주 액션 중복`);
+    const nodeMap=new Map(array(f.nodes).map(n=>[n.id,n]));
+    for(const n of array(f.nodes).filter(n=>n.tapTarget)) {
+      if(n.role==='device-chrome') continue;
+      // Scroll content may extend beyond the viewport. Only its visible portion
+      // can intersect device chrome; unclipped content must still fail.
+      let top=n.bounds.y,bottom=top+n.bounds.height,parent=nodeMap.get(n.parentId);
+      const visited=new Set();
+      while(parent && !visited.has(parent.id)) {
+        visited.add(parent.id);
+        if(parent.scrollable===true && parent.clipsContent===true) {
+          top=Math.max(top,parent.bounds.y);
+          bottom=Math.min(bottom,parent.bounds.y+parent.bounds.height);
+        }
+        parent=nodeMap.get(parent.parentId);
+      }
+      if(bottom>top && (top<viewport.safeAreaTop || bottom>viewport.height-viewport.safeAreaBottom)) e.push(`${label}/${n.name}: 탭 타겟 safe area 위반`);
+    }
+    for(const slot of array(s.imageSlots).filter(slot=>!slot.states || slot.states.includes(state.id))) {
+      const n=array(f.nodes).find(n=>n.slotId===slot.id), a=records.find(a=>a.id===slot.assetId);
+      if(!a || !n || !array(n.fills).some(p=>p.type==='IMAGE'&&p.imageHash===a.figmaImageHash)) e.push(`${label}: 이미지 슬롯 ${slot.id} 누락/잘못된 이미지`);
+    }
+  }
+  return e;
+}
+function verification(root) {
+  const e=[], review=read(root,paths.visual), manifest=read(root,paths.screens), req=read(root,paths.requirements);
+  if(review.schemaVersion!==1 || review.inputDigest!==reviewDigest(root)) e.push('시각 검토 입력 변경/버전 불일치: 스크린샷 다시 검토');
+  if(!Number.isFinite(Date.parse(review.reviewedAt)) || !nonempty(review.reviewer)) e.push('시각 검토 시간/검토자 필요');
+  unique(array(review.screens),'frameId',e,'visual review');
+  for(const screen of manifest.screens) {
+    const row=array(review.screens).find(x=>x.frameId===screen.frameId);
+    const label=`${screen.screenId}/${screen.state}/${screen.viewportId}`;
+    if(!row){e.push(`${label}: 시각 검토 누락`);continue;}
+    if(row.screenshotSha256!==fileHash(root,screen.screenshot)) e.push(`${label}: 스크린샷 변경됨`);
+    for(const key of ['hierarchy','readability','alignment','brandFit','interactionClarity']) if(row.checks?.[key]!=='pass') e.push(`${label}: 시각 검토 ${key} 미통과`);
+    if(!nonempty(row.observations)) e.push(`${label}: 실제 관찰 내용 필요`);
+    if(array(row.issues).some(x=>x.status!=='resolved')) e.push(`${label}: 미해결 시각 결함`);
+  }
+  for(const s of req.screens) for(const contentCase of s.contentCases) {
+    const result=array(review.contentTests).find(t=>t.screenId===s.id && t.case===contentCase);
+    if(result?.status!=='pass' || !nonempty(result.observations)) e.push(`${s.id}: 콘텐츠 검토 미완료: ${contentCase}`);
+    else {try{imageExists(root,result.evidence);if(result.evidenceSha256!==fileHash(root,result.evidence)) e.push(`${s.id}: 콘텐츠 증거 변경됨`);}catch(err){e.push(err.message);}}
+  }
+  return e;
+}
+export function evaluate(root, until='verification') {
+  if(!phases.includes(until)) throw new Error(`알 수 없는 phase: ${until}`);
+  const results=[];
+  let c;
+  try{c=read(root,paths.config);}catch(err){return [{phase:'inputs',passed:false,errors:[err.message]}];}
+  const checks={inputs:()=>inputs(root,c),tokens:()=>validateTokens(read(root,paths.tokens)),concepts:()=>concepts(root,c),direction:()=>direction(root),components:()=>components(root,c),screens:()=>screens(root,c),verification:()=>verification(root)};
+  for(const phase of phases.slice(0,phases.indexOf(until)+1)) {
+    let errors;
+    try{errors=checks[phase]();}catch(err){errors=[err.message];}
+    const blockedBy=results.filter(r=>!r.passed).map(r=>r.phase);
+    results.push({phase,passed:errors.length===0&&blockedBy.length===0,blockedBy,errors});
+  }
+  return results;
+}
