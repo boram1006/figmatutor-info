@@ -1,6 +1,8 @@
 # Design Flow Harness — Codex
 
 Codex에서 모바일 Figma UI를 만드는 프로젝트 전용 하네스입니다.
+하네스 구조 관련된 내용은 이 영상을 참고해 보세요.
+https://youtu.be/yQcR1Dz5UDA?si=rnqF6nlvn7TSfW2O
 
 **요구사항·레퍼런스 → 최소 토큰 → 대표 화면 시안 2~3개 → 방향 선택 → 컴포넌트 정리 → 전체 화면·상태 확장 → 검증**
 
