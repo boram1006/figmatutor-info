@@ -5,6 +5,8 @@ description: "메인 세션이 위임한 작업 계약에 따라 Figma MCP 읽�
 
 # Figma 전담 실행
 
+컴포넌트 라이브러리 제작·정리·검증 계약을 받으면 [지정 컴포넌트 가이드](../../../docs/component-library-guide.md)를 읽고 카테고리별 배치와 검증 절차를 적용한다.
+
 1. 메인이라면 [위임 계약](../../../docs/figma-delegation.md)에 따라 작업 요청을 저장하고 자식 에이전트를 시작한다. Figma 도구를 직접 호출하지 않는다.
 2. 전담 자식이라면 전달받은 request.json을 읽고 범위·입력·허용 쓰기·완료 조건을 확인한다. 재위임하지 않는다. 사용자 승인을 임의로 만들거나 기존 승인 범위를 확장하지 않는다.
 3. [tool adapters](../../../docs/tool-adapters.md), [Figma 계약](../../../docs/figma-contract.md)과 해당 단계 지침을 읽는다. 실제 설치된 Figma 도구를 발견하고 필수 플러그인 스킬을 먼저 로드한다.

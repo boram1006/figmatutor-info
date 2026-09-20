@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "taskId": "inspect-component-guide",
+  "status": "completed",
+  "summary": "지정 노드 27:786은 02 Components 페이지의 Pagination 문서다. 실제 구조 및 캡처에서 제목·용도·가이드 액션 → Dot 하위 유형 → size 사례 인스턴스 → 실제 variant set → Resource 상태 세트 순서를 확인했다.",
+  "artifacts": [
+    {
+      "path": "design/operations/inspect-component-guide/metadata.json",
+      "kind": "raw-metadata",
+      "sha256": "bb7e331dde5c4abd324416e43fbf99aba25de534ae08aa90194aafe1d2347a27"
+    },
+    {
+      "path": "design/operations/inspect-component-guide/screenshot-response.json",
+      "kind": "raw-screenshot-response",
+      "sha256": "241be3e56d20258612da52861a8e7c8c9cac46277c2b9b012cbc2afce6c9bbeb"
+    },
+    {
+      "path": "design/operations/inspect-component-guide/structure-response.json",
+      "kind": "raw-structure",
+      "sha256": "c4d4da31ef4a1752d1898bb690ed41691ed7152a3ddd4890cf2e45ac52b51aa0"
+    },
+    {
+      "path": "design/operations/inspect-component-guide/pagination.png",
+      "kind": "screenshot",
+      "sha256": "6f37743eeeb69c742c20aafe18bd82d86e83ea6c81e225b4ff97146c1ca7a6c6"
+    }
+  ],
+  "figma": {
+    "fileKey": "8MaPdwz8IbmpbzUyWNEd8c",
+    "pageId": "2:3",
+    "inspectedNodeIds": [
+      "27:786",
+      "27:788",
+      "27:797",
+      "27:803",
+      "27:814",
+      "27:847",
+      "27:852",
+      "27:859",
+      "27:869",
+      "27:876"
+    ],
+    "createdNodeIds": [],
+    "modifiedNodeIds": []
+  },
+  "checks": [
+    {
+      "name": "get_metadata",
+      "result": "success"
+    },
+    {
+      "name": "get_screenshot + local download + view_image",
+      "result": "success; 544x1024 capture visually inspected; original node 664x1252"
+    },
+    {
+      "name": "read-only use_figma component types and definitions",
+      "result": "5 COMPONENT_SET nodes verified; no mutations"
+    },
+    {
+      "name": "sibling inventory",
+      "result": "Read parent page direct child names/types; no sibling screenshot or interior investigation"
+    }
+  ],
+  "observations": {
+    "structural": [
+      {
+        "nodeId": "27:786",
+        "finding": "Pagination 카테고리 문서. Heading 27:788에 제목·설명·가이드라인 보기 인스턴스 27:795."
+      },
+      {
+        "nodeId": "27:797",
+        "finding": "Dot 하위 유형 27:801 아래 Case 27:803에서 size=normal/small 라벨과 실제 인스턴스 27:812, 27:813을 비교."
+      },
+      {
+        "nodeId": "27:814",
+        "finding": "실제 Pagination Dot COMPONENT_SET은 Size Normal/Small × Color Adaptive/White의 4 COMPONENT와 dot 표시 Boolean 속성을 보유."
+      },
+      {
+        "nodeId": "27:847",
+        "finding": "Resource에서 Adaptive/Normal 27:852, White/Normal 27:859, Adaptive/Small 27:869, White/Small 27:876 네 실제 세트 각각 Active/Inactive variants 제공."
+      }
+    ],
+    "visual": [
+      {
+        "path": "design/operations/inspect-component-guide/pagination.png",
+        "finding": "흰색 외곽 문서, 좌측 정렬의 큰 제목과 한 줄 설명 및 작은 링크 버튼. 큰 연회색 둥근 본문 패널에 Dot 제목, 흰색 사례 카드, 중앙 정렬 variant 전시, Resource 소제목, 두 줄 리소스 패널이 수직 배치된다. 넓은 여백으로 문서/사례/실제 자산 계층이 구분된다."
+      },
+      {
+        "path": "design/operations/inspect-component-guide/pagination.png",
+        "finding": "실제 세트는 보라 점선 경계가 보이고 메인 4종 견본은 연녹색 배경에서 Adaptive/White를 함께 전시한다. 리소스 견본은 회색 바탕에서 검정/흰색 Active/Inactive를 대비시킨다. 텍스트 잘림이나 겹침은 이 캡처에서 보이지 않는다."
+      }
+    ],
+    "siblingInventoryScope": "02 Components 페이지 직접 자식의 이름/타입만 조회. Icon/* 16세트, Button 6:98, IconButton 7:20, Chip 7:27, StatusBadge 7:44, SearchBar 9:2, SectionHeader 9:7, ListRow 9:10, CategoryTile 9:15, Card 10:21, MissionBanner 10:22, AppBar 11:4, BottomTabBar 11:12, BottomCTA 11:48, EmptyState 11:49, DeviceFrame 11:54, Input 11:72, iOS/Status Bar/Black 27:305 확인. 이들은 독립 컴포넌트/세트이며 모두 Pagination형 문서 카테고리라고 판단하지 않음.",
+    "recommendations": [
+      "제작 지침은 카테고리 문서 → 이름/용도/관련 가이드 → 하위 유형 → 속성 라벨과 실제 사용 인스턴스 → 실제 component set → 필요 시 Resource 순서를 기본으로 삼을 수 있다.",
+      "프로젝트 카테고리 분류는 실제 catalog와 역할에서 별도 결정하고 이 레퍼런스가 완성된 전체 카테고리 분류를 제공한다고 주장하지 않는다.",
+      "견본 전시에서 크기/색/상태를 읽을 수 있는 배경과 여백을 확보하되 reference 색상·치수를 제품 토큰으로 무조건 복사하지 않는다."
+    ]
+  },
+  "unresolved": [
+    "가이드라인 보기 버튼의 외부 목적지와 그 문서 내용은 조사하지 않음.",
+    "주변 컴포넌트의 내부 구조·시각 배치는 조사 범위 밖; 토큰 바인딩과 전체 라이브러리 완성도는 검증하지 않음."
+  ]
+}

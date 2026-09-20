@@ -5,6 +5,8 @@ description: "선택한 디자인 방향으로 Figma 컴포넌트를 정리하�
 
 # Figma 컴포넌트와 화면 생성
 
+컴포넌트 라이브러리는 [지정 컴포넌트 가이드](../../../docs/component-library-guide.md)에 따라 카테고리별로 정리한다. 작업 계약에 카테고리별 componentId 목록을 넣고 실제 마스터·상태·사용 예시와 카테고리별 캡처를 검증한다.
+
 이 프로젝트 루트에서 실행한다. 공통 규칙은 AGENTS.md를 따른다.
 
 Figma MCP가 필요한 작업은 메인에서 직접 호출하지 않고 `figma-worker`에 위임한다.
