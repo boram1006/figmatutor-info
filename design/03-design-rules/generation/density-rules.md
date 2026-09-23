@@ -1,227 +1,167 @@
 # Density Rules
 
-> Rules for how much information to show per viewport. Do not simplify operational screens.
-> All rules grounded in observed v1–v5 screens.
+## D0. 밀도는 미적 선호가 아니라 업무 특성으로 결정한다
+**Confidence: HIGH**
+
+다음 질문으로 density를 먼저 정한다.
+
+1. 사용자가 동시에 몇 개의 정보를 비교해야 하는가?
+2. 같은 작업을 여러 entity에 반복하는가?
+3. 다른 자료를 계속 참조하면서 입력해야 하는가?
+4. 한 viewport에서 상태 차이를 빠르게 찾아야 하는가?
+5. 콘텐츠 자체를 읽는 것이 주목적인가?
 
 ---
 
-## D1. Density Correlates With User Mode, Not Aesthetic Preference  [HIGH]
+## D1. Low Density — Read / Celebrate
+**Confidence: HIGH**
 
-Density is set by the archetype (see `page-archetypes.md`), not by a desire for elegance or minimalism.
+### Trigger
+- 메시지 전달, 공지 상세, celebration, campaign
+- 한 번에 하나의 내용 흐름을 읽음
 
-| Archetype | Density Level | Viewport Content Units |
-|---|---|---|
-| HERO-ANNOUNCE | Very Low | 1–3 |
-| FEATURE-SHOWCASE | Low–Medium | 3–6 |
-| TASK-FLOW | Medium | 4–8 (one task + context) |
-| RESULT-SURFACE | High | 8–20+ (data grid) |
-| MANAGEMENT-OPERATIONAL | Very High | 15–40+ (table rows) |
+### Characteristics
+- 넓은 vertical whitespace
+- 큰 title/hero
+- 제한된 content width
+- 섹션 간 간격이 큼
+- 장식 표현 허용
 
-IF you are generating an Archetype D or E screen
-THEN start with high density and reduce only if specific items have no data to show
-DO NOT default to a clean/airy layout because it feels more polished
-
----
-
-## D2. Whitespace Is Structural in Low-Density Screens  [HIGH]
-
-In HERO-ANNOUNCE and FEATURE-SHOWCASE screens, whitespace is not empty space — it is a structural element that creates reading rhythm and prevents visual noise.
-
-Observed in v1 landing, v2-j01-top, v3 cover:
-- Minimum section gap: ~80–120px between major content blocks
-- Paragraph line-height: loose (observed `leading-relaxed` or equivalent)
-- Card padding in feature rows: ~32–48px internal
-
-IF generating a low-density screen with tight spacing
-THEN increase section gaps. Tight spacing reads as incomplete rather than efficient in this context.
+### Examples
+공지 상세, 합격 발표.
 
 ---
 
-## D3. Cards in High-Density Screens Have Compact Padding  [HIGH]
+## D2. Medium Density — Browse / Status
+**Confidence: HIGH**
 
-Result cards and management cards (Archetypes D and E) use minimal internal padding.
+### Trigger
+- 여러 entity를 탐색하지만 각 entity의 요약 정보와 action이 중요
+- 현재 상태와 다음 행동 확인
 
-Observed in v4/v5 result panels and plugin output grids:
-- Card internal padding: 12–16px (not 24–32px as in showcase cards)
-- Content within card is top-aligned, no vertical centering
-- Card border: `1px solid border-subtle` or `border-default`
-- Card height: determined by content, no fixed min-height on operational cards
+### Characteristics
+- card/list 단위 grouping
+- 충분한 scanning gap
+- 각 entity에 1차 정보 + 상태 + action 동시 노출
+- section 간 여백은 유지하되 카드 내부는 기능적으로 압축
 
-IF a result card is being designed with generous padding
-THEN reduce. Dense result grids need visual consistency, not breathing room.
-
----
-
-## D4. Metadata Exposure Rules by Archetype  [HIGH]
-
-**HERO-ANNOUNCE**: No metadata.
-**FEATURE-SHOWCASE**: Feature labels only (names, 1-line descriptions). No counts, IDs, dates.
-**TASK-FLOW**: Step number + step title only. No unrelated metadata visible.
-**RESULT-SURFACE**: Full metadata visible — token names, values, categories, types, counts.
-**MANAGEMENT-OPERATIONAL**: Maximum metadata in table columns — ID, date, status, owner, action counts.
-
-IF metadata is showing on a HERO or FEATURE screen
-THEN remove it unless it is a product-specific number used for credibility (e.g., "2,400+ components extracted" as a social proof stat)
+### Examples
+팀빌딩, 내 지원 현황.
 
 ---
 
-## D5. Actions Per Viewport  [HIGH]
+## D3. High Density — Operate / Compare
+**Confidence: HIGH**
 
-| Archetype | Max Simultaneous Actions Visible |
-|---|---|
-| HERO-ANNOUNCE | 1 (single CTA) |
-| FEATURE-SHOWCASE | 1–2 (section CTA + optional secondary) |
-| TASK-FLOW | 2 (primary + back) |
-| RESULT-SURFACE | 2–4 (primary export + secondary per-item actions) |
-| MANAGEMENT-OPERATIONAL | Per-row: 2–3 icon actions. Page-level: 1 primary add |
+### Trigger
+- 동일 schema의 많은 행 비교
+- sorting/filtering
+- 운영 현황 확인
+- 누락/예외를 빠르게 찾아야 함
 
-IF more actions are present than the archetype allows
-THEN group secondary actions into a `...` overflow menu or remove them from the primary view
+### Characteristics
+- table 우선
+- compact row/metadata
+- 화면 폭 적극 사용
+- controls를 데이터에 가깝게 배치
+- 장식보다 상태 구분과 정렬을 우선
 
----
-
-## D6. Decoration-to-Function Ratio  [HIGH]
-
-Observed distinction across v1–v5:
-
-- v1–v3 showcase screens: decoration is intentional — subtle grid overlays, gradient washes, abstract shapes at ~10–20% opacity serve as visual grounding
-- v4–v5 operational screens: zero decorative elements. Every pixel is data or structural.
-
-IF the screen is Archetype D or E
-THEN remove all decorative background elements
-THEN use surface elevation (`surface-raised`) as the only visual layering tool
-
-IF the screen is Archetype A or B
-THEN one subtle background treatment is acceptable — but it must not compete with text readability
+### Examples
+AI 심사 대시보드, 최종 검토 table.
 
 ---
 
-## D7. Table vs Card Grid Selection for Dense Content  [HIGH]
+## D4. Very High Density — Continuous Evaluation Workspace
+**Confidence: HIGH**
 
-This is one of the most consequential density decisions.
+### Trigger
+- entity queue + artifact + 평가 입력을 동시에 사용
+- context switching 비용이 큼
 
-**Use Table when**:
-- Items have 4+ comparable attributes
-- Users need to scan and compare rows (management, history, audit)
-- Items are not individually "presented" — they are records
-- Archetype E
+### Characteristics
+- multi-pane
+- narrow supporting panes + wide primary pane
+- persistent progress
+- local scrolling 허용
+- 대부분의 공간을 실제 업무 정보에 사용
+- 불필요한 page-level hero/large whitespace 제거
 
-**Use Card Grid when**:
-- Items have a primary identity (name/title) that dominates
-- Items are discrete outputs that can be previewed, selected, or exported
-- Items have 2–4 attributes (not 4+)
-- Archetype D (Result-Surface)
-
-**Observed evidence**:
-- v5 management panel: table layout with fixed columns
-- v4/v5 result screens: card grid 2–3 columns
-- Never observed: card grid used for management/history data
-- Never observed: table used for design token result preview
+### Examples
+심사 페이지, 최종 심사.
 
 ---
 
-## D8. One-Per-Row vs Grid: Column Count Decision  [MEDIUM]
+## D5. 정보를 줄이지 말아야 하는 조건
+**Confidence: HIGH**
 
-Observed column counts across screens:
+다음 중 하나라도 해당하면 생성 모델이 임의로 정보를 숨기거나 단계화하지 않는다.
 
-- Feature showcase (Archetype B): 2 or 3 columns equal-weight
-- Result card grid (Archetype D): 2–3 columns responsive
-- Management table (Archetype E): single-row per record, multi-column attributes
+- 여러 항목을 옆/위아래로 비교해야 한다.
+- 한 화면에서 누락 여부를 판단해야 한다.
+- 같은 entity를 연속 처리해야 한다.
+- 대상 자료와 입력 UI를 왕복해야 한다.
+- 운영자가 전체 진행률과 예외 상태를 동시에 봐야 한다.
 
-IF content items are homogeneous (same type, same attribute set)
-THEN grid, 2–3 columns
-IF content items are heterogeneous records
-THEN table, 1 row per record
-
----
-
-## D9. Long Screens: Section Pacing  [MEDIUM]
-
-For HERO-ANNOUNCE and FEATURE-SHOWCASE screens that scroll vertically (observed in v1, v2, v3 full-page layouts):
-
-- Dense section followed by breathing section (alternating rhythm)
-- Never two high-density sections adjacent without a visual break
-- Section transitions: either whitespace gap (80px+) or a full-width divider block
-
-IF generating a long showcase page
-THEN plan section pairs: heavy content → light content → heavy content
-This pattern is observed across v1-left, v2-a/b, v3 multi-section layouts
+**Do not automatically**
+- Card로 쪼개기
+- "More" 뒤에 숨기기
+- 별도 상세 페이지로 이동시키기
+- Accordion으로 기본 collapse하기
+- summary만 남기고 원데이터 제거하기
 
 ---
 
-## D10. Split-Pane Layout Is Mandatory for REVIEW-INSPECTOR  [HIGH]
+## D6. 내부 스크롤은 전체 구조를 안정화할 때만 사용한다
+**Confidence: MEDIUM**
 
-Archetype F (REVIEW-INSPECTOR) must use a two-pane horizontal split. A single-column or full-table layout collapses the review workflow into a linear scan, losing the ability to edit without losing list context.
+팀 카드처럼 variable-length sub-list 때문에 card 전체 높이가 크게 달라지는 경우,
+bounded area + internal scroll을 사용할 수 있다.
 
-**Left pane (list)**: ~35–40% width. Compact row height (40–48px per item). Status icon right-aligned.
-**Right pane (detail)**: ~60–65% width. Full detail of the selected item. Inline editable fields.
+원본 팀빌딩 정의에서는 포지션 목록이 최대 약 3.5개 보이는 고정 영역을 갖고
+초과 시 내부 scroll을 사용한다.
 
-IF generating a review/inspection screen as a single-column list
-THEN convert to split-pane. The detail pane is not optional.
+**Rule**
+IF 하위 반복 항목의 개수만 가변이고, 상위 카드들의 비교 가능성을 유지해야 한다  
+THEN 하위 목록만 bounded scrolling을 고려한다.
 
-IF the right pane is empty (no item selected)
-THEN show an empty-state prompt ("항목을 선택하세요") — not a blank white area.
-
----
-
-## D11. Category Tabs Are Always Visible in REVIEW-INSPECTOR  [HIGH]
-
-Category tabs (Color / Spacing / Typography / …) must remain visible at all times during review. They are orientation anchors — hiding or collapsing them forces the reviewer to lose context when switching items.
-
-Observed in v1. 심사 페이지 and v1. 최종 심사 페이지:
-- Tab bar is horizontal, full-width, above the split pane
-- Active tab uses `text-accent` underline or filled indicator
-- Inactive tabs use `text-secondary`
-- Tab count badge (e.g. "Color (12)") is acceptable and recommended for orientation
-
-IF tabs are hidden behind a dropdown or collapsed menu
-THEN surface them as a visible tab bar. Dropdown navigation is not permitted for this archetype.
+전체 page를 작은 scroll box 여러 개로 분절하지 않는다.
 
 ---
 
-## D12. Inline Editing Scope: Detail Pane Only  [HIGH]
+## D7. 밀도 높은 화면에서도 hierarchy를 유지한다
+**Confidence: HIGH**
 
-Editable value fields appear exclusively in the right detail pane. The left list pane is read-only (status icon + name + value preview only).
+High density ≠ 모든 간격을 최소화.
 
-This separation prevents accidental edits during list scanning and keeps the list rows compact.
+밀도가 높아질수록 다음을 더 명확히 유지한다.
 
-IF an editable input is placed inside a list row
-THEN move it to the detail pane. List rows show the current value as read-only text.
+- column alignment
+- header/body distinction
+- active row/selected entity
+- status color
+- local section title
+- primary action
+- separator/border
 
-**Edited state marker**: when a value in the detail pane diverges from the extracted original, the corresponding list item gains an ✎ `text-accent` indicator and the detail pane shows a diff ("원본: N → 수정: M").
-
----
-
-## D13. Fixed Bottom Action Bar for Review Completion  [HIGH]
-
-The bottom action bar in REVIEW-INSPECTOR is always fixed (not scrollable with content). It contains two actions maximum: a secondary action (내보내기/Export) left-aligned or subdued, and a primary action (적용/Apply) right-aligned.
-
-Observed delta between v1 심사 페이지 and v1 최종 심사 페이지:
-- v1 (initial): action may be inline or loosely positioned at bottom
-- v1-final: action bar is explicitly fixed, always visible regardless of list scroll position
-
-IF the action bar scrolls with the list
-THEN make it fixed. The reviewer must be able to apply without scrolling to the bottom.
-
-Primary action state rules:
-- Disabled: when pending items remain above threshold
-- Enabled: when review threshold is met (all reviewed, or user-defined minimum)
-- DO NOT auto-apply on close or navigation — always require explicit tap
+즉, whitespace의 양은 줄어도 구조적 구분은 약해지지 않는다.
 
 ---
 
-## D14. Status Indicator Density in Review Lists  [MEDIUM]
+## D8. 보편적인 숫자 임계값을 발명하지 않는다
+**Confidence: HIGH**
 
-Every list row in REVIEW-INSPECTOR must carry a visible status indicator. Blank rows without status create ambiguity about whether an item has been reviewed.
+PRD / Design System / 실제 geometry에 명시되어 있지 않다면 다음과 같은 규칙을 만들지 않는다.
 
-| Status | Indicator | Color token |
-|---|---|---|
-| Pending | ● filled circle | `text-disabled` or neutral |
-| Approved | ✓ checkmark | `status-success-s` |
-| Rejected | ✗ cross | `text-disabled` (muted, not alarming) |
-| Edited (diverged) | ✎ pencil | `text-accent` |
+- `속성 4개 이상 → Table`
+- `속성 2~4개 → Card`
+- `Card당 action 최대 N개`
+- `좌/우 panel 35:65`
+- archetype별 고정 row height
 
-Status icons are right-aligned within the list row, 16×16px, consistent vertical center.
+대신 행동 기준으로 판단한다.
 
-IF a list row has no status indicator
-THEN add one. Unmarked rows are indistinguishable from unloaded or errored items.
+- 동일 schema의 다수 항목 비교 → Table
+- 독립적인 상태/action을 가진 entity → Card
+- source를 보며 반복 평가 → Evaluation Workspace
+
+정확한 수치는 기존 token/component/extracted geometry를 사용한다.

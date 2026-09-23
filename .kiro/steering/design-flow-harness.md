@@ -4,7 +4,7 @@ inclusion: always
 
 # Design Flow Harness — Kiro 진입점
 
-이 워크스페이스는 Figma 모바일 UI를 일관되게 생성하는 디자인 하네스다.
+이 워크스페이스는 Figma 데스크톱 웹 UI를 일관되게 생성하는 디자인 하네스다.
 원본은 Codex용으로 만들어졌으며(`AGENTS.md`), Kiro에서는 이 steering이 진입점 역할을 한다.
 `AGENTS.md`, `.agents/skills/**/SKILL.md`, `docs/**`, `design/**/*.json` 계약을 활성 지침으로 사용한다.
 
@@ -62,6 +62,17 @@ inclusion: always
 8블록(화면개요·진입조건·로딩/예외·상태머신·상태별 UI 매트릭스·정렬/버튼·표기·레이아웃)을
 기존 릴리즈 관례를 기본값으로 채운 초안을 만들고, 정말 판단이 필요한 것만 질문해 보완한다.
 확정한 PRD는 그대로 new-screen-workflow의 입력이 된다.
+
+## 디자인 생성 규칙 (필수)
+
+화면을 새로 생성하거나 기존 화면을 수정할 때는 `design/03-design-rules/generation/README.md`를 진입점으로 사용한다.
+화면 목적에 맞는 archetype·density·layout·component usage·pattern·visual hierarchy·state 규칙을 선택해서 적용한다.
+일반적인 SaaS 관습보다 실제 기존 화면과 PRD 근거를 우선한다.
+
+- **신규 화면 생성**: PRD → page archetype/pattern → 유사 기존 화면 → 기존 component/token 순으로 판단한다.
+- **기존 화면 수정/기능 추가**: 반드시 `design/03-design-rules/generation/existing-screen-modification.md`를 먼저 읽고, 기존 화면을 baseline으로 유지한 채 ADD/MODIFY/REMOVE delta만 적용한다. PRD에 언급되지 않은 영역은 변경하지 않는다.
+- 기존 component instance/JSON 구조가 있으면 새로 비슷하게 만들지 말고 동일 component reference/instance structure를 재사용한다.
+- 근거 없는 Card/Table 변환, 고정 pane 비율, 속성 개수 기반 threshold, 임의의 spacing/width 재설계를 하지 않는다.
 
 ## 새 화면 생성 (PRD 기반)
 

@@ -1,259 +1,254 @@
 # Page Archetypes
 
-> Defines the 5 screen types observed across v1–v5. Use these to determine the starting structural template when generating a new screen.
+새 화면은 먼저 아래 archetype 중 하나를 선택한다.
+둘 이상이 섞이면 **주요 사용자 목표**를 기준으로 primary archetype을 정한다.
+
+## A1. Editorial / Information
+**Confidence: HIGH**
+
+### Use when
+- 공지사항 목록/상세
+- FAQ
+- 정적인 안내/정책 설명
+
+### Structure
+1. Global navigation
+2. Page title + short description
+3. Main reading/list area
+4. Optional pagination / supporting action
+5. Footer
+
+### Density
+Low ~ Medium
+
+### Rules
+- 중앙 정렬 content column을 사용한다.
+- 긴 문장은 충분한 line length와 여백을 확보한다.
+- 장식 Card보다 typography와 divider로 구조를 표현한다.
+- 목록은 동일 schema 비교가 필요하면 간결한 table/list를 사용한다.
+
+### Avoid
+- 대시보드형 KPI 카드 남발
+- 넓은 workspace layout
+
+Evidence: 공지사항, 공지 상세, FAQ.
 
 ---
 
-## Archetype A: HERO-ANNOUNCE
+## A2. Campaign / Celebration
+**Confidence: HIGH**
 
-**What it is**: A screen whose primary job is to communicate the product's existence, value proposition, or a major capability — before any interaction occurs.
+### Use when
+- 합격 발표
+- 결과 발표
+- 행사 milestone을 감정적으로 전달해야 하는 페이지
 
-**Observed in**: v1 landing overview, v2 intro screen, v3 splash/cover, v2-j01-top (splash panel)
+### Structure
+1. Strong hero / announcement
+2. 핵심 결과 또는 축하 메시지
+3. 관련 entity preview 또는 다음 행동
+4. 일정/카운트다운/후속 안내
+5. Footer
 
-**When to use**:
-- Entry point of the product (first screen a new user sees)
-- Major feature announcement or version reveal
-- Presentation/pitch context (발표 화면)
+### Density
+Low ~ Medium
 
-**Information density**: Very low. 1–3 content units per viewport.
+### Rules
+- 일반 functional page보다 큰 typography와 강한 visual treatment 허용.
+- dark/gold 계열 등 이벤트용 visual mode를 사용할 수 있다.
+- 아래에 실제 서비스 행동으로 연결되는 CTA를 명확하게 둔다.
+- 이벤트 표현은 페이지 전체 목적이 celebration일 때만 사용한다.
 
-**Base structure**:
-```
-[Full-viewport dark background]
-  [Centered or left-dominant text block]
-    [Eyebrow label — caption, gold or muted white]
-    [Primary headline — display or heading-xl, text-primary]
-    [Subheadline or descriptor — body-lg, text-secondary]
-  [Single CTA or none]
-  [Optional: background decoration — subtle gradient, faint grid, or abstract shape at low opacity]
-```
-
-**Primary hierarchy**: headline > subheadline > CTA > everything else
-
-**Appropriate components**: Large typographic stack, single primary button, optional icon/logo mark
-
-**Avoid**:
-- Cards with metadata
-- Lists or tables
-- Multiple CTAs
-- Secondary navigation within the viewport
-- Gold used on more than one element
+Evidence: 하반기 해커톤 1차 심사 합격 발표.
 
 ---
 
-## Archetype B: FEATURE-SHOWCASE
+## A3. Entity Browse / Selection
+**Confidence: HIGH**
 
-**What it is**: A screen that demonstrates how a specific feature or workflow works — still persuasive in tone but includes product UI previews, flow diagrams, or feature breakdowns.
+### Use when
+- 사용자가 여러 팀/아이디어/모집 항목 중 하나를 탐색하고 선택/지원하는 화면
 
-**Observed in**: v1-prd-a/b, v2-prd-a/b, v3-prd-a/b/c, v2-j02-1/2, v2-a1/a2, v2-b1/b2/b3
+### Structure
+1. Page title + rule/period notice
+2. Summary strip (count, deadline, countdown)
+3. Entity card grid
+4. Each card: identity → summary → status → available sub-items/actions
 
-**When to use**:
-- Feature introduction sections in a landing flow
-- Onboarding explainer screens
-- Capability comparison or breakdown
+### Density
+Medium
 
-**Information density**: Medium. 3–6 content units. Whitespace remains generous.
+### Rules
+- 독립적 action을 가진 entity는 Card 사용.
+- 카드 높이가 가변 데이터 때문에 지나치게 흔들리지 않도록 bounded sub-list를 사용 가능.
+- 사용자가 이미 참여한/지원한 entity를 정렬 우선순위로 올릴 수 있다.
+- closed/completed entity는 action을 명확히 비활성화한다.
 
-**Base structure**:
-```
-[Section heading block — left-aligned or centered]
-  [Section label — caption, gold]
-  [Section title — heading-lg or heading-xl]
-  [Section description — body, text-secondary, max ~2 lines]
-[Feature content area — one of:]
-  Option A: 2-column text+visual split
-  Option B: 3-column card row (equal weight features)
-  Option C: Numbered/stepped vertical list with icons
-[Optional: secondary CTA at section bottom]
-```
-
-**Primary hierarchy**: section-label > section-title > feature-content > description > CTA
-
-**Appropriate components**: Feature card (icon + heading + body), 2–3 column grid, step indicator (if sequence matters), icon set
-
-**Avoid**:
-- Tables
-- Status indicators (no items have operational state)
-- Dense metadata
-- More than 3 feature items in a single row
+Evidence: 팀빌딩.
 
 ---
 
-## Archetype C: TASK-FLOW
+## A4. Personal Status / Work Hub
+**Confidence: HIGH**
 
-**What it is**: A screen where the user performs a sequential action — input, confirmation, configuration, or step-by-step process inside the plugin.
+### Use when
+- 내 지원 현황
+- 여러 application/report의 상태와 다음 행동을 확인하는 화면
 
-**Observed in**: v4 plugin screens, v5-s1/s2/s5 (plugin UI flow), v2-j03-1 (step UI)
+### Structure
+1. Context title
+2. Phase/deadline banner
+3. Entity status list/cards
+4. 각 entity의 상태, 시간, 진행률, next action
+5. Create-new action when allowed
 
-**When to use**:
-- Plugin panel screens
-- Multi-step wizard or configuration flow
-- Form input with validation
-- Upload / file-picker flows
+### Density
+Medium
 
-**Information density**: Medium. One primary task per viewport. No unrelated content.
+### Rules
+- entity마다 현재 상태와 next action을 한 덩어리로 보여준다.
+- 상태에 따라 CTA가 달라진다.
+- 진행 중인 항목은 progress와 last modified를 함께 보여준다.
+- 완료 항목은 submitted timestamp와 read-only/view action을 우선한다.
 
-**Base structure**:
-```
-[Step indicator — top or left sidebar, shows current position]
-[Main task area]
-  [Task title — heading-sm or heading-md]
-  [Optional instruction — body, text-secondary, 1–2 lines]
-  [Input/action area — centered or full-width]
-[Action footer]
-  [Primary CTA — right-aligned or full-width]
-  [Optional: Back/Skip — left-aligned, text button]
-```
-
-**Primary hierarchy**: step-position > task-title > input > primary-CTA
-
-**Appropriate components**: Step indicator, text input, file-drop zone, toggle/radio group, primary button, back button (text variant)
-
-**Avoid**:
-- Showing multiple steps simultaneously
-- Metadata or unrelated content in the task area
-- Decorative gold accents (gold used only for active step indicator)
-- Tables or card grids inside the task area
+Evidence: 지원하기 A-01, 최종보고서 진입점.
 
 ---
 
-## Archetype D: RESULT-SURFACE
+## A5. Step Workflow / Form
+**Confidence: HIGH**
 
-**What it is**: A screen that presents the output of a process — generated design tokens, extracted components, AI analysis results, or completed job data.
+### Use when
+- 8개/9개 section처럼 긴 작성 업무
+- 단계 간 진행 구조를 잃으면 안 되는 폼
 
-**Observed in**: v4 result screens, v5 generation result, screens.json `result-*` entries, rebind-v5 snapshot output screens
+### Structure
+1. Global navigation
+2. Persistent step navigation
+3. Current section header
+4. Form/content workspace
+5. Local next/back action
+6. Final step에서 review/submit
 
-**When to use**:
-- After a generation/extraction process completes
-- Token or component preview after plugin run
-- Download/export confirmation screen
+### Density
+Medium
 
-**Information density**: High. Multiple data points visible simultaneously.
+### Rules
+- 왼쪽 step navigation과 오른쪽 current workspace를 유지한다.
+- step 상태(완료/현재/미완료)를 계속 노출한다.
+- "SECTION n / total" 등 현재 위치를 본문에서도 재확인시킨다.
+- 마지막 단계는 일반 입력 step이 아니라 review/finalization 성격을 가진다.
 
-**Base structure**:
-```
-[Status header — completion state, title, optional timestamp]
-[Result content — one of:]
-  Option A: Card grid (when items are discrete, selectable, or exportable)
-  Option B: Split-pane (code/preview on right, controls on left)
-  Option C: Grouped sections (tokens grouped by type: color/spacing/typography)
-[Action bar — fixed bottom or top-right: primary export/use action, secondary copy/download]
-```
-
-**Primary hierarchy**: status > result-title > result-content > action-bar
-
-**Appropriate components**: Result card, status badge, code block/token preview, export button, group header with count
-
-**Avoid**:
-- Reducing result density to appear simpler (violates P8)
-- Hiding categories that the user will need to scan
-- Large empty whitespace areas within the result grid
+Evidence: 지원하기, 최종보고서 제출.
 
 ---
 
-## Archetype E: MANAGEMENT-OPERATIONAL
+## A6. Operational Dashboard
+**Confidence: HIGH**
 
-**What it is**: A screen for ongoing monitoring, browsing, or managing a collection of items — jobs, projects, files, history, settings.
+### Use when
+- 전체 운영 현황과 다수 entity를 함께 관리/확인
+- KPI와 상세 목록이 모두 필요
 
-**Observed in**: v4/v5 job list screens, v5-s5 (management panel), operations snapshot management views
+### Structure
+1. Page title + global context selector
+2. Summary KPI cards
+3. Detailed data table
+4. Filter/sort/export actions near the table
 
-**When to use**:
-- Listing saved projects, jobs, or exports
-- Settings / configuration management
-- History or audit log view
+### Density
+High
 
-**Information density**: High. Maximum data per viewport. Every row is information-bearing.
+### Rules
+- KPI는 상단에서 제한된 수의 summary card로 압축한다.
+- 상세 entity는 table로 제공한다.
+- table을 card grid로 치환하지 않는다.
+- filter/sort/export는 데이터 영역과 시각적으로 붙여둔다.
+- 페이지 너비를 적극 사용한다.
 
-**Base structure**:
-```
-[Page header — title + optional status summary + primary add/create action]
-[Filter/search bar — full-width or right-aligned filters]
-[Content table or list]
-  [Column headers — fixed, sortable where applicable]
-  [Data rows — alternating or unified surface, expandable]
-  [Per-row actions — icon buttons, right-aligned or revealed on hover]
-[Pagination or infinite scroll indicator]
-```
-
-**Primary hierarchy**: filter-state > row-primary-id > row-status > row-metadata > row-actions
-
-**Appropriate components**: Data table, status badge, action icon button, filter chip, pagination, empty state (P9)
-
-**Avoid**:
-- Card grid layout for tabular data (cards are for Archetype D: Result-Surface)
-- Inline editing without explicit edit mode trigger
-- Dense decorative elements — this is pure functional territory
-- Gold accents except for status indicators (active/current item)
+Evidence: AI 심사 대시보드.
 
 ---
 
-## Archetype F: REVIEW-INSPECTOR
+## A7. Evaluation Workspace
+**Confidence: HIGH**
 
-**What it is**: A screen for reviewing, validating, and optionally editing the output of an automated extraction or generation process — tokens, components, or structured data — before applying or exporting it.
+### Use when
+- 한 entity의 산출물을 보면서 동시에 평가/입력
+- 여러 entity를 순차적으로 처리
 
-**Observed in**: v1. 심사 페이지 (inspection flow), v1. 최종 심사 페이지 (finalized review with action bar)
+### Structure
+핵심은 다음 작업 맥락을 한 흐름 안에서 유지하는 것이다.
 
-**When to use**:
-- Post-extraction review of design tokens (colors, spacing, typography)
-- Component catalog review before applying to a file
-- Any "confirm before apply" step in a plugin or tool flow
-- Auditing AI-generated or auto-detected values
+1. entity queue / navigation
+2. primary artifact / source content
+3. evaluation / summary / action
+4. persistent progress and next-item action
 
-**Information density**: High. Left pane: dense list with status indicators. Right pane: full detail of selected item.
+실제 화면에 따라 evaluation UI는 right panel, floating control, bottom sheet 등으로 달라질 수 있다.
+고정된 pane 개수나 비율을 규칙으로 만들지 않는다.
 
-**Base structure**:
-```
-[Page/panel header]
-  [Title — heading-sm, e.g. "추출 결과 심사"]
-  [Status summary — badge row: total count, reviewed count, pending count]
-[Category tab bar — full-width, horizontal scroll if needed]
-  [Tab items: Color | Spacing | Typography | … ]
-  [Active tab: underline or filled indicator, text-accent]
-[Two-pane split layout]
-  [Left pane — list, ~35–40% width, scrollable]
-    [List item row]
-      [Token/component name — body-sm, text-primary]
-      [Value preview — caption, text-secondary (hex / px / font-size)]
-      [Review status icon — right-aligned: ✓ approved / ✗ rejected / ● pending]
-  [Right pane — detail, ~60–65% width]
-    [Detail header]
-      [Token name — heading-sm]
-      [Category label — caption, text-secondary]
-    [Value field(s) — inline editable]
-      [Label — caption, text-tertiary]
-      [Value — body-sm, editable input or display]
-      [Edit trigger — pencil icon or click-to-edit pattern]
-    [Usage preview — where this token is applied (swatch / sample text / spacing demo)]
-    [Per-item action row]
-      [Approve button — icon or text, status-success-s]
-      [Reject button — icon or text, text-disabled or status-error]
-      [Reset to extracted — text link, text-tertiary]
-[Bottom action bar — fixed, full-width]
-  [Left: summary label — "N개 승인됨 / M개 보류"]
-  [Right: secondary action (내보내기/Export) + primary action (적용/Apply)]
-```
+### Density
+Very High
 
-**Primary hierarchy**: category-tab > list-item-status > detail-value > action-bar
+### Rules
+- 평가 근거와 입력 UI를 불필요하게 다른 페이지로 분리하지 않는다.
+- primary artifact/source가 중심이면 가장 큰 공간을 배정한다.
+- queue/list는 현재 대상과 상태를 빠르게 scan할 정도로 compact하게 유지한다.
+- evaluation/action UI는 작업 중 쉽게 접근 가능하게 한다.
+- exact pane ratio는 closest existing screen의 geometry를 따른다.
+- 해커톤 심사 화면을 token/component QA용 REVIEW-INSPECTOR로 재해석하지 않는다.
 
-**Appropriate components**: Category tab (horizontal nav), list row with status icon, inline editable field, value swatch/preview, approve/reject icon button, fixed bottom action bar
+Evidence: 1차 심사, 최종 심사, AI 심사 결과 상세.
 
-**State variants**:
-| State | List item | Detail pane | Action bar primary |
-|---|---|---|---|
-| Pending (default) | ● neutral indicator | Editable fields active | "적용" — disabled or enabled by threshold |
-| Approved | ✓ `status-success-s` indicator | Fields read-only, edit toggle available | Enabled when all reviewed |
-| Rejected | ✗ `text-disabled` indicator | Fields dimmed, optional reason label | — |
-| Edited (diverged) | ✎ `text-accent` indicator | Shows "원본 값 N → 수정값 M" diff | "적용" re-enabled |
+---
 
-**v1 → v1-final delta** (최종 심사 페이지 additions):
-- Status summary row added to header (total / reviewed / pending counts)
-- Bottom action bar made fixed (not inline) with explicit export + apply split
-- Per-item status indicators strengthened (clearer approved/rejected/edited distinction)
-- Edited state marker added to list items that diverge from extracted value
+## A8. Final Review / Finalization
+**Confidence: HIGH**
 
-**Avoid**:
-- Full-page table layout (split-pane is required — list for scanning, detail for editing)
-- Inline editing directly in the list pane (edits happen in the right detail pane only)
-- Decorative elements — zero decoration, this is a functional review tool
-- Collapsing or hiding category tabs (all categories must be visible for the reviewer to orient)
-- Applying without a confirmed action bar tap (no auto-apply on close)
+### Use when
+- 여러 작업 결과를 마지막으로 검토하고 확정/제출
+- 누락 여부를 한 번에 찾아야 함
+
+### Structure
+1. Final-review title/instruction
+2. Warning or incomplete-state summary
+3. Dense comparison/edit table or readiness summary
+4. Save
+5. Final confirm/submit action
+
+### Density
+High
+
+### Rules
+- 누락 항목을 감추지 않는다.
+- final action 전에 전체 상태를 한 화면에서 검토 가능하게 한다.
+- editable review라면 inline edit를 우선한다.
+- final action은 draft save와 명확히 구분한다.
+
+Evidence: 1차 심사 최종 검토, 최종 패키지 제출.
+
+---
+
+## A9. Submission Package / Readiness
+**Confidence: MEDIUM**
+
+### Use when
+- 서로 다른 산출물 여러 개가 모두 준비되어야 최종 제출 가능
+
+### Structure
+1. Final stage header
+2. Package readiness summary
+3. Artifact cards/grid
+4. Deadline/warning
+5. Action bar with explicit submit/re-submit
+
+### Density
+Medium ~ High
+
+### Rules
+- 각 artifact의 준비 여부를 개별적으로 보여준다.
+- missing/changed item은 전체 package 상태와 연결해 표시한다.
+- final submit은 모든 artifact 상태 확인 이후의 별도 action으로 둔다.
+
+Evidence: 최종보고서 SECTION 9/9.
