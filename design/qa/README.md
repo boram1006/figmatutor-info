@@ -39,9 +39,9 @@ design/qa/
 
 모든 케이스는 아래 우선순위의 source를 가진다.
 
-1. `design/operations/prd-*/PRD.md` — 릴리즈 PRD (역방향 복원 포함)
+1. 릴리즈 PDF/Figma의 **원본 노란색 PRD 박스**
 2. Figma 실제 화면
-3. `design/02-structure/SITEMAP.md` — 권한·상태·의존관계
-4. 명시적으로 확정된 프로젝트 문서
+3. `design/02-structure/SITEMAP.md` 및 명시적으로 확정된 프로젝트 문서
+4. 역방향 복원 PRD — 보조자료이며 해석이 들어간 부분은 `INFERRED`
 
 source 없는 케이스는 작성하지 않는다.
