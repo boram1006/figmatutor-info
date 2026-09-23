@@ -24,8 +24,8 @@
       "fills": [
         {
           "type": "SOLID",
-          "color": "#FFCC00",
-          "binding": "accent-yellow"
+          "color": "#F59E0B",
+          "binding": "status-warning"
         }
       ],
       "children": [

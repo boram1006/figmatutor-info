@@ -1,0 +1,372 @@
+{
+  "op": "create",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "nodes": [
+    {
+      "_comment": "=== A-30: 재제출 필요 카드 (Card-RESUBMIT-NEEDED) ===",
+      "type": "FRAME",
+      "name": "Card-RESUBMIT-NEEDED",
+      "parentId": "1:23008",
+      "x": 1175,
+      "y": 1870,
+      "width": 855,
+      "height": 160,
+      "layout": {
+        "mode": "VERTICAL",
+        "primaryAxisSizingMode": "AUTO",
+        "counterAxisSizingMode": "FIXED",
+        "primaryAxisAlignItems": "MIN",
+        "counterAxisAlignItems": "MIN"
+      },
+      "metrics": {
+        "paddingTop": 24,
+        "paddingRight": 24,
+        "paddingBottom": 24,
+        "paddingLeft": 24,
+        "itemSpacing": 12,
+        "topLeftRadius": 16,
+        "topRightRadius": 16,
+        "bottomLeftRadius": 16,
+        "bottomRightRadius": 16
+      },
+      "bindings": {
+        "paddingTop": "space-24",
+        "paddingRight": "space-24",
+        "paddingBottom": "space-24",
+        "paddingLeft": "space-24",
+        "itemSpacing": "space-12",
+        "topLeftRadius": "radius-16",
+        "topRightRadius": "radius-16",
+        "bottomLeftRadius": "radius-16",
+        "bottomRightRadius": "radius-16"
+      },
+      "fills": [
+        {
+          "type": "SOLID",
+          "binding": "text-inverse"
+        }
+      ],
+      "strokes": [
+        {
+          "type": "SOLID",
+          "binding": "border-disabled"
+        }
+      ],
+      "metadata": {
+        "role": "card",
+        "release": "v5",
+        "screenId": "A-30",
+        "state": "resubmit-needed"
+      },
+      "children": [
+        {
+          "type": "FRAME",
+          "name": "Top",
+          "layout": {
+            "mode": "HORIZONTAL",
+            "primaryAxisSizingMode": "FILL",
+            "counterAxisSizingMode": "AUTO",
+            "primaryAxisAlignItems": "SPACE_BETWEEN",
+            "counterAxisAlignItems": "CENTER"
+          },
+          "layoutSizingHorizontal": "FILL",
+          "metrics": { "itemSpacing": 8 },
+          "children": [
+            {
+              "type": "TEXT",
+              "name": "Title",
+              "textStyle": "Text/body-lg-bold",
+              "characters": "AI 아틀리에",
+              "fills": [{ "type": "SOLID", "binding": "text-primary" }],
+              "layoutSizingHorizontal": "FILL"
+            }
+          ]
+        },
+        {
+          "type": "FRAME",
+          "name": "Metadata",
+          "layout": {
+            "mode": "HORIZONTAL",
+            "primaryAxisSizingMode": "AUTO",
+            "counterAxisSizingMode": "AUTO",
+            "counterAxisAlignItems": "CENTER"
+          },
+          "metrics": { "itemSpacing": 8 },
+          "children": [
+            {
+              "type": "FRAME",
+              "name": "StatusPill",
+              "layout": {
+                "mode": "HORIZONTAL",
+                "primaryAxisSizingMode": "AUTO",
+                "counterAxisSizingMode": "AUTO",
+                "counterAxisAlignItems": "CENTER"
+              },
+              "metrics": {
+                "paddingTop": 4,
+                "paddingRight": 8,
+                "paddingBottom": 4,
+                "paddingLeft": 8,
+                "topLeftRadius": 4,
+                "topRightRadius": 4,
+                "bottomLeftRadius": 4,
+                "bottomRightRadius": 4
+              },
+              "fills": [{ "type": "SOLID", "binding": "background-subtle" }],
+              "children": [
+                {
+                  "type": "TEXT",
+                  "name": "pill-text",
+                  "textStyle": "Text/micro",
+                  "characters": "재제출 필요",
+                  "fills": [{ "type": "SOLID", "binding": "text-accent" }]
+                }
+              ]
+            },
+            {
+              "type": "TEXT",
+              "name": "team",
+              "textStyle": "Text/caption",
+              "characters": "Team Atelier",
+              "fills": [{ "type": "SOLID", "binding": "text-tertiary" }]
+            },
+            {
+              "type": "TEXT",
+              "name": "dot",
+              "textStyle": "Text/caption",
+              "characters": "·",
+              "fills": [{ "type": "SOLID", "binding": "text-disabled" }]
+            },
+            {
+              "type": "TEXT",
+              "name": "time",
+              "textStyle": "Text/caption",
+              "characters": "최종 제출 26.10.14 11:23 · 수정 후 미반영",
+              "fills": [{ "type": "SOLID", "binding": "text-disabled" }]
+            }
+          ]
+        },
+        {
+          "type": "RECTANGLE",
+          "name": "Divider",
+          "height": 1,
+          "layoutSizingHorizontal": "FILL",
+          "fills": [{ "type": "SOLID", "binding": "border-disabled" }]
+        },
+        {
+          "type": "FRAME",
+          "name": "Bottom",
+          "layout": {
+            "mode": "HORIZONTAL",
+            "primaryAxisSizingMode": "FILL",
+            "counterAxisSizingMode": "AUTO",
+            "primaryAxisAlignItems": "SPACE_BETWEEN",
+            "counterAxisAlignItems": "CENTER"
+          },
+          "layoutSizingHorizontal": "FILL",
+          "children": [
+            {
+              "type": "TEXT",
+              "name": "note",
+              "textStyle": "Text/caption",
+              "characters": "제출 후 수정한 내용이 있습니다. 재제출해야 심사에 반영됩니다.",
+              "fills": [{ "type": "SOLID", "binding": "text-tertiary" }],
+              "layoutSizingHorizontal": "FILL"
+            },
+            {
+              "type": "TEXT",
+              "name": "cta",
+              "textStyle": "Text/caption-medium",
+              "characters": "수정사항 제출하기 →",
+              "fills": [{ "type": "SOLID", "binding": "text-accent" }]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "_comment": "=== A-30: 제출완료 카드 (Card-SUBMITTED) ===",
+      "type": "FRAME",
+      "name": "Card-SUBMITTED",
+      "parentId": "1:23008",
+      "x": 1175,
+      "y": 2060,
+      "width": 855,
+      "height": 144,
+      "layout": {
+        "mode": "VERTICAL",
+        "primaryAxisSizingMode": "AUTO",
+        "counterAxisSizingMode": "FIXED",
+        "primaryAxisAlignItems": "MIN",
+        "counterAxisAlignItems": "MIN"
+      },
+      "metrics": {
+        "paddingTop": 24,
+        "paddingRight": 24,
+        "paddingBottom": 24,
+        "paddingLeft": 24,
+        "itemSpacing": 12,
+        "topLeftRadius": 16,
+        "topRightRadius": 16,
+        "bottomLeftRadius": 16,
+        "bottomRightRadius": 16
+      },
+      "bindings": {
+        "paddingTop": "space-24",
+        "paddingRight": "space-24",
+        "paddingBottom": "space-24",
+        "paddingLeft": "space-24",
+        "itemSpacing": "space-12",
+        "topLeftRadius": "radius-16",
+        "topRightRadius": "radius-16",
+        "bottomLeftRadius": "radius-16",
+        "bottomRightRadius": "radius-16"
+      },
+      "fills": [
+        {
+          "type": "SOLID",
+          "binding": "text-inverse"
+        }
+      ],
+      "strokes": [
+        {
+          "type": "SOLID",
+          "binding": "border-disabled"
+        }
+      ],
+      "metadata": {
+        "role": "card",
+        "release": "v5",
+        "screenId": "A-30",
+        "state": "submitted"
+      },
+      "children": [
+        {
+          "type": "FRAME",
+          "name": "Top",
+          "layout": {
+            "mode": "HORIZONTAL",
+            "primaryAxisSizingMode": "FILL",
+            "counterAxisSizingMode": "AUTO",
+            "primaryAxisAlignItems": "SPACE_BETWEEN",
+            "counterAxisAlignItems": "CENTER"
+          },
+          "layoutSizingHorizontal": "FILL",
+          "metrics": { "itemSpacing": 8 },
+          "children": [
+            {
+              "type": "TEXT",
+              "name": "Title",
+              "textStyle": "Text/body-lg-bold",
+              "characters": "AI 아틀리에",
+              "fills": [{ "type": "SOLID", "binding": "text-primary" }],
+              "layoutSizingHorizontal": "FILL"
+            }
+          ]
+        },
+        {
+          "type": "FRAME",
+          "name": "Metadata",
+          "layout": {
+            "mode": "HORIZONTAL",
+            "primaryAxisSizingMode": "AUTO",
+            "counterAxisSizingMode": "AUTO",
+            "counterAxisAlignItems": "CENTER"
+          },
+          "metrics": { "itemSpacing": 8 },
+          "children": [
+            {
+              "type": "FRAME",
+              "name": "StatusPill",
+              "layout": {
+                "mode": "HORIZONTAL",
+                "primaryAxisSizingMode": "AUTO",
+                "counterAxisSizingMode": "AUTO",
+                "counterAxisAlignItems": "CENTER"
+              },
+              "metrics": {
+                "paddingTop": 4,
+                "paddingRight": 8,
+                "paddingBottom": 4,
+                "paddingLeft": 8,
+                "topLeftRadius": 4,
+                "topRightRadius": 4,
+                "bottomLeftRadius": 4,
+                "bottomRightRadius": 4
+              },
+              "fills": [{ "type": "SOLID", "color": "#DCFCE7" }],
+              "children": [
+                {
+                  "type": "TEXT",
+                  "name": "pill-text",
+                  "textStyle": "Text/micro",
+                  "characters": "제출완료",
+                  "fills": [{ "type": "SOLID", "binding": "status-success-s" }]
+                }
+              ]
+            },
+            {
+              "type": "TEXT",
+              "name": "team",
+              "textStyle": "Text/caption",
+              "characters": "Team Atelier",
+              "fills": [{ "type": "SOLID", "binding": "text-tertiary" }]
+            },
+            {
+              "type": "TEXT",
+              "name": "dot",
+              "textStyle": "Text/caption",
+              "characters": "·",
+              "fills": [{ "type": "SOLID", "binding": "text-disabled" }]
+            },
+            {
+              "type": "TEXT",
+              "name": "submitted-at",
+              "textStyle": "Text/caption",
+              "characters": "제출일시 26.10.14 11:23",
+              "fills": [{ "type": "SOLID", "binding": "text-disabled" }]
+            }
+          ]
+        },
+        {
+          "type": "RECTANGLE",
+          "name": "Divider",
+          "height": 1,
+          "layoutSizingHorizontal": "FILL",
+          "fills": [{ "type": "SOLID", "binding": "border-disabled" }]
+        },
+        {
+          "type": "FRAME",
+          "name": "Bottom",
+          "layout": {
+            "mode": "HORIZONTAL",
+            "primaryAxisSizingMode": "FILL",
+            "counterAxisSizingMode": "AUTO",
+            "primaryAxisAlignItems": "SPACE_BETWEEN",
+            "counterAxisAlignItems": "CENTER"
+          },
+          "layoutSizingHorizontal": "FILL",
+          "children": [
+            {
+              "type": "TEXT",
+              "name": "note",
+              "textStyle": "Text/caption",
+              "characters": "마감 전까지 수정 후 재제출할 수 있습니다.",
+              "fills": [{ "type": "SOLID", "binding": "text-tertiary" }],
+              "layoutSizingHorizontal": "FILL"
+            },
+            {
+              "type": "TEXT",
+              "name": "cta",
+              "textStyle": "Text/caption-medium",
+              "characters": "제출 내용 보기 →",
+              "fills": [{ "type": "SOLID", "binding": "text-accent" }]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

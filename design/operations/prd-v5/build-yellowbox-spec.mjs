@@ -60,7 +60,7 @@ const spec = {
       height: 3020,
       layout: { mode: 'VERTICAL', primaryAxisSizingMode: 'AUTO', counterAxisSizingMode: 'FIXED' },
       metrics: { paddingTop: 48, paddingRight: 48, paddingBottom: 48, paddingLeft: 48, itemSpacing: 20 },
-      fills: [{ type: 'SOLID', color: '#FFCC00', binding: 'accent-yellow' }],
+      fills: [{ type: 'SOLID', color: '#F59E0B', binding: 'status-warning' }],
       children: children.map((c) => ({ ...c, fills: [{ type: 'SOLID', color: '#111111', binding: 'text-primary' }], layoutSizingHorizontal: 'FILL' })),
       metadata: { role: 'prd-note', release: 'v5', screenId: 'v5-prd-yellowbox' },
     },
