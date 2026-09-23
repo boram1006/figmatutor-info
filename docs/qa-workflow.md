@@ -42,10 +42,10 @@ QA 항목을 만들 때 근거 채택 순서:
 
 | 우선순위 | 근거 | sourceType |
 |---|---|---|
-| 1 | 릴리즈별 PDF 안의 노란색 PRD 박스 (역방향 복원 포함) | `PRD` |
+| 1 | 릴리즈별 PDF 안의 **원본 노란색 PRD 박스** | `PRD` |
 | 2 | 실제 해당 Figma 화면 | `SCREEN` |
 | 3 | 명시적으로 확정된 프로젝트 문서 (SITEMAP, workflow 등) | `CONFIRMED_PROJECT_RULE` |
-| 4 | 위 3종에서 논리적으로 유추 가능한 항목 | `INFERRED` |
+| 4 | 역방향 복원 PRD 또는 위 source에서 논리적으로 유추한 항목 | `INFERRED` |
 
 **5번(일반 UX/QA 관례)은 근거로 사용하지 않는다.**
 관례상 필요해 보여도 source에 없는 product rule은 만들지 않는다.
@@ -70,14 +70,15 @@ QA 항목을 만들 때 근거 채택 순서:
 대상 릴리즈의 PRD를 우선 읽는다.
 
 ```
-design/operations/prd-<release>/PRD.md    ← 역방향 복원 PRD (있는 경우)
-design/operations/prd-pdf/v<n>.txt        ← 원본 텍스트 추출 (인코딩 깨짐 주의)
-design/operations/prd-pdf/img/            ← 렌더 이미지
-design/02-structure/SITEMAP.md            ← 권한·상태·의존관계
+design/operations/prd-pdf/img/            ← 원본 PDF 렌더. 노란 PRD 박스 우선 확인
+design/operations/prd-pdf/v<n>.txt         ← 원본 텍스트 추출 보조자료
+design/operations/prd-<release>/PRD.md     ← 역방향 복원본이면 보조자료(INFERRED)로 취급
+design/02-structure/SITEMAP.md             ← 권한·상태·의존관계
 ```
 
-PRD가 없는 릴리즈(v4 등)는 Figma 화면을 sourceType=`SCREEN`으로 읽고,
-PRD를 먼저 역방향 복원(`docs/prd-authoring-workflow.md`)한 뒤 QA를 생성한다.
+원본 노란 PRD가 없는 경우에는 실제 Figma 화면을 sourceType=`SCREEN`으로 사용한다.
+역방향 복원 PRD는 탐색·정리에는 사용할 수 있지만 원본 PRD와 같은 권위로 승격하지 않는다.
+복원 과정에서 추가된 해석은 `INFERRED`로 남기고 자동화 대상에서 제외한다.
 
 ### 2단계 — Requirement Extraction
 
