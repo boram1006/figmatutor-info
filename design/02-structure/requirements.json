@@ -1,9 +1,97 @@
 {
   "schemaVersion": 1,
-  "status": "draft",
+  "status": "ready",
   "prd": "PRD.md",
-  "audience": "",
-  "screens": [],
-  "flows": [],
+  "audience": "LGE AX Hackathon 2026 참가자·심사위원·사내 임직원. 해커톤 공지, 최종 합격팀 발표, 수상작 소개를 웹(데스크탑)에서 확인한다.",
+  "screens": [
+    {
+      "id": "notice",
+      "name": "공지사항",
+      "purpose": "참가자가 해커톤 일정·규칙·안내를 확인하고 팀빌딩/FAQ 등 주요 메뉴로 이동한다.",
+      "primaryAction": { "id": "notice-open-detail", "label": "공지 상세 보기", "kind": "navigate" },
+      "origin": "existing",
+      "sourceFrame": "1_Notice (Updated)@design",
+      "states": [
+        { "id": "default", "primaryRequired": true }
+      ],
+      "componentIds": ["Button", "Tag"],
+      "viewportIds": ["desktop"],
+      "contentCases": [
+        "공지 제목이 길어 두 줄로 넘치는 경우",
+        "공지 목록이 비어 있는 경우",
+        "새 공지 뱃지가 여러 개 표시되는 경우"
+      ],
+      "imageSlots": []
+    },
+    {
+      "id": "winners",
+      "name": "최종 합격팀 발표",
+      "purpose": "본선 결과로 선정된 최종 수상팀을 순위·상금과 함께 공개한다.",
+      "primaryAction": { "id": "winners-open-team", "label": "수상팀 상세 보기", "kind": "navigate" },
+      "origin": "existing",
+      "sourceFrame": "LGE AX Hackathon - 최종 합격팀 발표 v2@design",
+      "states": [
+        { "id": "default", "primaryRequired": true }
+      ],
+      "componentIds": ["Tag"],
+      "viewportIds": ["desktop"],
+      "contentCases": [
+        "팀명이 긴 경우 카드 줄바꿈",
+        "수상팀이 다수여서 목록이 길게 스크롤되는 경우",
+        "상금 표기 자릿수가 큰 경우"
+      ],
+      "imageSlots": []
+    },
+    {
+      "id": "awards-landing",
+      "name": "수상작 발표 랜딩",
+      "purpose": "수상작들을 소개하고 실제 사용해 볼 수 있는 서비스로 연결하는 발표 랜딩 페이지.",
+      "primaryAction": { "id": "awards-open-service", "label": "수상작 사용해보기", "kind": "navigate" },
+      "origin": "existing",
+      "sourceFrame": "Frame(1920x5482)@design",
+      "states": [
+        { "id": "default", "primaryRequired": true }
+      ],
+      "componentIds": ["Button", "Tag"],
+      "viewportIds": ["desktop"],
+      "contentCases": [
+        "수상작 설명 문단이 긴 경우",
+        "수상작 카드가 여러 개 나열되는 경우",
+        "이미지가 아직 로드되지 않은 경우"
+      ],
+      "imageSlots": []
+    },
+    {
+      "id": "award-card",
+      "name": "수상작 카드",
+      "purpose": "개별 수상작을 제목·설명·서비스명과 함께 카드 형태로 보여준다.",
+      "primaryAction": { "id": "card-open-service", "label": "서비스 바로가기", "kind": "navigate" },
+      "origin": "existing",
+      "sourceFrame": "AX Hackathon — Card Redesign@design",
+      "states": [
+        { "id": "default", "primaryRequired": true }
+      ],
+      "componentIds": ["Button", "Tag"],
+      "viewportIds": ["desktop"],
+      "contentCases": [
+        "수상작 설명이 여러 줄로 긴 경우",
+        "서비스명이 여러 개 태그로 붙는 경우",
+        "제목이 길어 줄바꿈되는 경우"
+      ],
+      "imageSlots": []
+    }
+  ],
+  "flows": [
+    {
+      "id": "flow-announce",
+      "goal": "참가자가 결과를 확인한다: 공지에서 최종 합격팀 발표로 이동한다.",
+      "screenIds": ["notice", "winners"]
+    },
+    {
+      "id": "flow-showcase",
+      "goal": "수상작을 둘러본다: 발표 랜딩에서 개별 수상작 카드로 이동한다.",
+      "screenIds": ["awards-landing", "award-card"]
+    }
+  ],
   "openQuestions": []
 }

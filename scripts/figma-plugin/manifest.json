@@ -1,0 +1,13 @@
+{
+  "name": "Design Flow Harness",
+  "id": "design-flow-harness-plugin",
+  "api": "1.0.0",
+  "main": "code.js",
+  "ui": "ui.html",
+  "editorType": ["figma"],
+  "networkAccess": {
+    "allowedDomains": ["none"],
+    "reasoning": "클립보드 왕복만 사용한다. 로컬 브릿지는 이후 확장 시 도메인을 추가한다."
+  },
+  "documentAccess": "dynamic-page"
+}

@@ -1,0 +1,57 @@
+{
+  "op": "rebind",
+  "dryRun": false,
+  "fileKey": "HscNdM20Gvs2hBwSjU5OBc",
+  "ensured": {
+    "collections": {
+      "primitives": "VariableCollectionId:3:891",
+      "semantic": "VariableCollectionId:3:947"
+    },
+    "variables": {},
+    "textStyles": {
+      "Text/display": "S:81be99b465efef1e30c3473a8954ce8cf7613fb5,",
+      "Text/title": "S:45dfad7c1429e31c28a221b71708654e0bb470a5,",
+      "Text/h1": "S:8a27a2c60ee0a2c436ca7fe6940899622dd1f16a,",
+      "Text/h1-bold": "S:5627c563b9c36b6e25a1e9978501cc03c6897c2f,",
+      "Text/h2": "S:e05699a1f432fdbf97b242d855ea959164ff3c14,",
+      "Text/h3-bold": "S:1be290515513c6b181cde9fc6384d846f563b87e,",
+      "Text/h3-medium": "S:bc69871307b10704b413b4b67e2b76ce6db074f3,",
+      "Text/h3": "S:5fea904a94f6b53653b6894fefb5ac0bfc4177e9,",
+      "Text/h4": "S:57e02bc08dcfc7c03c5e2f7de459935ba4921d81,",
+      "Text/h4-medium": "S:e3a4a2a206a7897360664d3b7085885147bfdc0c,",
+      "Text/body-lg-bold": "S:2ec4e19f16968f2ab9622422e032ec953bcf30cf,",
+      "Text/body-lg-medium": "S:c42a47abd301339ca78b525583962fe0331d1ee7,",
+      "Text/body-lg": "S:20e7641e5bc738e6f09c93ac36bf3d17995e762b,",
+      "Text/body": "S:541db7ad7a2c9cfe6f99a107646e46b3b264f5d4,",
+      "Text/body-sm-semibold": "S:4d5f14b5d0865d243f64c4216f698482d6a2dfc2,",
+      "Text/body-sm-medium": "S:fcc283944af50f435860e55f0b15163eebc398fa,",
+      "Text/body-sm": "S:cf8ee196ad5a2ac61c78d715d293cc93892ff864,",
+      "Text/caption-medium": "S:ac1c780d21141022b3a870de3e052b89ab3da40d,",
+      "Text/caption": "S:cef52b78543160b36e87591537356902b27b44fd,",
+      "Text/micro": "S:71138dff216747c9626bc56afb24f88ff80f8ed6,"
+    }
+  },
+  "counts": {
+    "fillsBound": 442,
+    "strokesBound": 51,
+    "textStylesSwapped": 0,
+    "nodesTouched": 466,
+    "metricsSnapped": 0,
+    "metricsBound": 0
+  },
+  "unmappedColors": {},
+  "unsnappable": {
+    "topLeftRadius=4": 16,
+    "topRightRadius=4": 16,
+    "bottomLeftRadius=4": 16,
+    "bottomRightRadius=4": 16,
+    "paddingBottom=28": 4,
+    "topLeftRadius=5": 1,
+    "topRightRadius=5": 1,
+    "bottomLeftRadius=5": 1,
+    "bottomRightRadius=5": 1,
+    "paddingBottom=40": 1,
+    "itemSpacing=28": 1
+  },
+  "warnings": []
+}

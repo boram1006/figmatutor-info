@@ -1,28 +1,25 @@
 {
   "schemaVersion": 1,
-  "project": "허들링",
-  "target": "figma-mobile",
+  "project": "LGE AX Hackathon",
+  "target": "figma-desktop",
   "viewports": [
     {
-      "id": "mobile",
-      "width": 390,
-      "height": 844,
-      "safeAreaTop": 44,
-      "safeAreaBottom": 34
+      "id": "desktop",
+      "width": 1920,
+      "height": 1080,
+      "safeAreaTop": 0,
+      "safeAreaBottom": 0
     }
   ],
-  "conceptCount": {
-    "min": 2,
-    "max": 3
-  },
-  "representativeScreenId": "home",
   "grid": 4,
-  "minimumTapSize": 44,
+  "minimumTapSize": 24,
   "minimumReuseRate": 0.8,
   "figma": {
-    "fileKey": ""
+    "fileKey": "HscNdM20Gvs2hBwSjU5OBc"
   },
-  "approvalPolicy": "direction-only",
+  "extractPages": [
+    "Design System"
+  ],
   "notes": [],
   "imagePolicy": {
     "mode": "local-characters",

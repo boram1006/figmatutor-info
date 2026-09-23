@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body { font: 12px -apple-system, 'Segoe UI', sans-serif; margin: 0; padding: 12px; color: #333; }
+      h1 { font-size: 13px; margin: 0 0 8px; }
+      p.hint { margin: 0 0 8px; color: #777; }
+      label { display: block; font-weight: 600; margin: 8px 0 4px; }
+      textarea { width: 100%; box-sizing: border-box; font-family: ui-monospace, Consolas, monospace; font-size: 11px; resize: vertical; }
+      #spec { height: 200px; }
+      #out { height: 160px; background: #f5f5f5; }
+      .row { display: flex; gap: 8px; margin: 8px 0; }
+      button { flex: 1; padding: 8px; border: 0; border-radius: 6px; cursor: pointer; font-weight: 600; }
+      #run { background: #18a0fb; color: #fff; }
+      #copy { background: #e5e5e5; color: #333; }
+      #status { margin-top: 6px; min-height: 16px; }
+      #status.error { color: #d13438; }
+      #status.ok { color: #107c10; }
+    </style>
+  </head>
+  <body>
+    <h1>Design Flow Harness</h1>
+    <p class="hint">스펙 JSON을 붙여넣고 Run. 결과 JSON을 복사해 저장 경로에 저장하세요. (op: create/extract/screenshot)</p>
+
+    <label for="spec">스펙 JSON 붙여넣기</label>
+    <textarea id="spec" placeholder='{ "op": "extract", "fileKey": "...", "pageName": "02 Components", "stage": "components", "inputDigest": "..." }'></textarea>
+
+    <div class="row">
+      <button id="run">Run</button>
+    </div>
+
+    <label for="out">결과 JSON</label>
+    <textarea id="out" readonly></textarea>
+    <div class="row">
+      <button id="copy">결과 복사</button>
+    </div>
+    <div id="status"></div>
+
+    <script>
+      const $spec = document.getElementById('spec');
+      const $out = document.getElementById('out');
+      const $status = document.getElementById('status');
+
+      document.getElementById('run').onclick = () => {
+        $status.className = '';
+        $status.textContent = '실행 중…';
+        parent.postMessage({ pluginMessage: { type: 'run', spec: $spec.value } }, '*');
+      };
+
+      document.getElementById('copy').onclick = () => {
+        $out.select();
+        document.execCommand('copy');
+        $status.className = 'ok';
+        $status.textContent = '클립보드에 복사됨';
+      };
+
+      onmessage = (event) => {
+        const msg = event.data.pluginMessage;
+        if (!msg) return;
+        if (msg.type === 'error') {
+          $status.className = 'error';
+          $status.textContent = '오류: ' + msg.message;
+          return;
+        }
+        if (msg.type === 'result') {
+          $out.value = JSON.stringify(msg.result, null, 2);
+          $status.className = 'ok';
+          $status.textContent = msg.op + ' 완료. 결과를 복사해 저장하세요.';
+        }
+      };
+    </script>
+  </body>
+</html>
