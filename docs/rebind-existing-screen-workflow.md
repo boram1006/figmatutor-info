@@ -88,42 +88,49 @@ v5 「최종보고서 제출」 섹션(화면 5개)을 이 절차로 바인딩�
 
 ---
 
-## 4. 타이포 rebind — size 기반 배정 (2차)
+## 4. 타이포 rebind — 비파괴 원칙 (2차)
 
-스타일 없는 텍스트에 `Text/*`를 배정한다. `code.js` rebind가 `textSizeMap`을 지원한다(수정 완료).
+기존 화면 rebind의 기본 원칙은 **시각 보존**이다.
 
-**동작**: unstyled 텍스트 → `fontSize`를 정규 스텝으로 반올림 → weight class(Regular/Medium/SemiBold/Bold) 판정
-→ 매핑표에서 스타일 선택. styled 텍스트는 기존 `textStyleMap` 이름 스왑 유지. **mixed 폰트는 자동 스킵.**
+unstyled 텍스트에 스타일이 없다는 이유만으로 font size를 반올림하거나 weight를 다른 스타일에 맞춰 바꾸지 않는다.
+텍스트 스타일을 붙이는 순간 font family / weight / size / line-height가 함께 바뀔 수 있으므로, 이는 단순 binding이 아니라 **visual migration**이다.
 
-`textSizeMap` 형태:
+### 기본 모드: non-destructive
+
+- 기존에 style이 있는 텍스트: `textStyleMap`으로 명시적 이름 교체 가능
+- style이 없는 텍스트: **자동 스타일 지정 금지**
+- `textSizeMap`이 스펙에 있어도 기본 모드에서는 unstyled text에 적용하지 않는다
+- unstyled/mixed text는 재추출 리포트에 남겨 수동 확인 또는 별도 migration 대상으로 처리
+- 기존 화면 수정/보존 작업에서는 이 기본 모드를 사용한다
+
+### 명시적 Typography Migration 모드
+
+기존 화면의 typography를 새 `Text/*` 체계로 **의도적으로 정규화하는 별도 작업**일 때만 다음 플래그를 켠다:
+
 ```json
-"textSizeMap": {
-  "steps":[10,12,14,15,16,18,20,24,36,40,54,64],
-  "map":{
-    "10":{"Regular":"Text/micro","Medium":"Text/micro","SemiBold":"Text/micro","Bold":"Text/micro"},
-    "12":{"Regular":"Text/caption","Medium":"Text/caption-medium","SemiBold":"Text/caption-medium","Bold":"Text/caption-medium"},
-    "14":{"Regular":"Text/body-sm","Medium":"Text/body-sm-medium","SemiBold":"Text/body-sm-semibold","Bold":"Text/body-sm-semibold"},
-    "15":{"Regular":"Text/body","Medium":"Text/body","SemiBold":"Text/body","Bold":"Text/body"},
-    "16":{"Regular":"Text/body-lg","Medium":"Text/body-lg-medium","SemiBold":"Text/body-lg-medium","Bold":"Text/body-lg-bold"},
-    "18":{"Regular":"Text/h4","Medium":"Text/h4-medium","SemiBold":"Text/h4","Bold":"Text/h4"},
-    "20":{"Regular":"Text/h3","Medium":"Text/h3-medium","SemiBold":"Text/h3","Bold":"Text/h3-bold"},
-    "24":{"Regular":"Text/h2","Medium":"Text/h2","SemiBold":"Text/h2","Bold":"Text/h2"},
-    "36":{"Regular":"Text/h1-bold","Medium":"Text/h1-bold","SemiBold":"Text/h1-bold","Bold":"Text/h1-bold"},
-    "40":{"Regular":"Text/h1","Medium":"Text/h1","SemiBold":"Text/h1","Bold":"Text/h1"},
-    "54":{"Regular":"Text/title","Medium":"Text/title","SemiBold":"Text/title","Bold":"Text/title"},
-    "64":{"Regular":"Text/display","Medium":"Text/display","SemiBold":"Text/display","Bold":"Text/display"}
-  }
-}
+"allowVisualTypographyNormalization": true
 ```
 
-절차:
-1. 텍스트 전용 rebind 스펙 작성: `colorMap:{}`(색은 1차에서 끝), `textStyleMap` 유지, `ensure.textStyles` 유지
-   (대상 스타일이 파일에 없으면 생성), `textSizeMap` 위 표, `dryRun:true`
-2. 실행 → `textStylesSwapped` 개수·`warnings` 확인. "전환 대상 스타일 없음" 경고가 있으면 그 스타일을 `ensure`에 추가
-3. `dryRun:false`로 적용
+이 플래그가 있을 때만 `textSizeMap` 기반 size/weight normalization이 동작한다.
+이 모드는 font size/weight/line-height를 바꿀 수 있으므로 다음 조건을 모두 지킨다.
 
-**주의(배정 규칙)**: 12px에는 Bold 스타일이 없어 `caption-medium`으로 내려 배정한다(굵기 한 단계 약화, 크기 유지).
-필요하면 이 매핑을 릴리즈 특성에 맞게 조정한다.
+1. 사용자 또는 작업 범위에서 typography migration이 명시적으로 승인되어야 한다.
+2. 반드시 `dryRun:true`로 변경 대상과 개수를 먼저 확인한다.
+3. 적용 전후 screenshot 또는 visual diff로 위계 변화가 의도한 범위인지 확인한다.
+4. 기존 화면 기능 수정 작업과 typography migration을 같은 작업으로 섞지 않는다.
+5. 의미가 모호한 텍스트는 자동 정규화하지 않고 수동 처리한다.
+
+### 기존 `textSizeMap` 사용 시 주의
+
+`textSizeMap`은 과거 v5 정리 과정에서 scale-distorted font size를 정규 step으로 맞추기 위해 사용했다.
+예를 들어 13.6px → 14px 같은 snapping이 가능하지만, 이는 **원형 보존 rebind의 기본 동작이 아니다.**
+
+따라서 앞으로:
+
+- 기존 화면 보존/rebind → normalization flag **OFF**
+- 디자인시스템 migration 작업 → 명시 승인 후 normalization flag **ON**
+
+으로 구분한다.
 
 ---
 
@@ -142,7 +149,8 @@ v5 「최종보고서 제출」 섹션(화면 5개)을 이 절차로 바인딩�
 1. 검증 extract 실행 → 새 `snapshot-verify.json` 저장
 2. 집계 재실행 → 목표:
    - raw fill / raw stroke ≈ **0**
-   - unstyled 텍스트 = **mixed 개수만** (그 외 0)
+   - 기존 화면 보존 모드에서는 unstyled 텍스트가 남아도 실패로 간주하지 않는다. 시각 보존이 우선이다.
+   - Typography Migration 모드에서만 승인된 범위의 unstyled 텍스트 0을 목표로 한다.
 3. 목표 미달이면 남은 raw 색은 colorMap 보완, 남은 unstyled는 textSizeMap 보완 후 3~4단계 반복
 
 ---
@@ -164,6 +172,6 @@ v5 「최종보고서 제출」 섹션(화면 5개)을 이 절차로 바인딩�
 
 - extract/screenshot 최상위 필터에 `'SECTION'` 포함
 - extract 텍스트 노드에 `font{size,family,style,weight,lineHeight,mixed}` 수집
-- rebind에 `textSizeMap` 기반 unstyled 텍스트 스타일 배정(`snapSize`/`weightClass`/`assignBySize`)
+- rebind의 `textSizeMap` 기반 unstyled 텍스트 스타일 배정은 `allowVisualTypographyNormalization:true`인 명시적 migration에서만 동작 (`snapSize`/`weightClass`/`assignBySize`)
 
 `code.js`를 고친 뒤에는 **Figma에서 플러그인을 반드시 재로드**한 후 실행한다.
