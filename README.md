@@ -1,6 +1,6 @@
-# Design Flow Harness — Codex
+# Design Flow Harness — Kiro
 
-Codex에서 모바일 Figma UI를 만드는 프로젝트 전용 하네스입니다.
+Kiro에서 데스크탑/모바일 Figma UI를 만드는 프로젝트 전용 하네스입니다.
 하네스 구조 관련된 내용은 이 영상을 참고해 보세요.
 https://youtu.be/yQcR1Dz5UDA?si=rnqF6nlvn7TSfW2O
 
