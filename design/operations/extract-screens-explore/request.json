@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "taskId": "extract-screens-explore",
+  "op": "extract",
+  "fileKey": "HscNdM20Gvs2hBwSjU5OBc",
+  "pageName": "design",
+  "stage": "extract-system",
+  "inputDigest": "EXPLORE-SCREENS",
+  "frameIds": [],
+  "objective": "사용자가 이미 그려둔 화면들이 있는 'design' 페이지를 탐색 추출한다. 목적은 게이트 판정이 아니라, 이 화면들이 실제로 사용하는 색/타이포/스페이싱/컴포넌트를 파악해 손봐야 할 디자인시스템의 범위를 결정하는 것. 결과가 크면 frameIds로 나눠 여러 번 추출하고 merge-snapshots로 병합한다.",
+  "authorization": "read-only",
+  "note": "탐색 패스. 정식 스냅샷 경로가 아니라 이 operations 폴더에 snapshot.json으로 저장한다. inputDigest는 판정에 쓰지 않는 임시 표식이다. 플러그인 UI 출력이 잘리면 frameIds에 'design' 페이지의 top-level 프레임 ID 일부를 넣어 여러 번 추출한다."
+}

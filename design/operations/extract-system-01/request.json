@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "taskId": "extract-system-01",
+  "op": "extract",
+  "fileKey": "HscNdM20Gvs2hBwSjU5OBc",
+  "pageName": "Design System",
+  "stage": "extract-system",
+  "inputDigest": "PASS-1-EXPLORATORY",
+  "frameIds": [],
+  "objective": "Design System 페이지의 변수·텍스트 스타일·컴포넌트 마스터를 추출한다(탐색 패스). 이 결과로 tokens.json/catalog.json을 채운 뒤 2차 추출에서 실제 inputDigest로 확정한다.",
+  "authorization": "read-only",
+  "note": "플러그인 UI 출력이 잘리면 frameIds에 Design System 페이지의 top-level 프레임 ID 일부를 넣어 여러 번 추출하고 scripts/merge-snapshots.mjs로 병합한다."
+}

@@ -194,9 +194,26 @@ async function runExtract(spec) {
           bindings[prop] = await variable(n.boundVariables[prop].id);
         }
       let style = null;
-      if (n.type === 'TEXT' && typeof n.textStyleId === 'string' && n.textStyleId) {
-        const s = await figma.getStyleByIdAsync(n.textStyleId);
-        style = s?.name || null;
+      let font = null;
+      if (n.type === 'TEXT') {
+        if (typeof n.textStyleId === 'string' && n.textStyleId) {
+          const s = await figma.getStyleByIdAsync(n.textStyleId);
+          style = s?.name || null;
+        }
+        // Capture font properties for unstyled text so styles can be assigned by size/weight.
+        // Figma returns figma.mixed when a text run has multiple values; guard against that.
+        const fs = n.fontSize;
+        const fn = n.fontName;
+        const lh = n.lineHeight;
+        const fw = n.fontWeight;
+        font = {
+          size: typeof fs === 'number' ? fs : null,
+          family: fn && fn !== figma.mixed ? fn.family : null,
+          style: fn && fn !== figma.mixed ? fn.style : null,
+          weight: typeof fw === 'number' ? fw : null,
+          lineHeight: lh && lh !== figma.mixed && lh.unit !== 'AUTO' ? lh.value : null,
+          mixed: fs === figma.mixed || fn === figma.mixed,
+        };
       }
       nodes.push({
         id: n.id,
@@ -209,6 +226,7 @@ async function runExtract(spec) {
         metrics,
         bindings,
         textStyle: style,
+        font,
         layout: {
           mode: 'layoutMode' in n ? n.layoutMode : 'NONE',
           vertical: 'layoutSizingVertical' in n ? n.layoutSizingVertical : null,
@@ -241,7 +259,7 @@ async function runExtract(spec) {
   }
 
   const all = page.children.filter(
-    (n) => n.visible !== false && ['FRAME', 'COMPONENT', 'COMPONENT_SET', 'INSTANCE'].includes(n.type)
+    (n) => n.visible !== false && ['FRAME', 'COMPONENT', 'COMPONENT_SET', 'INSTANCE', 'SECTION'].includes(n.type)
   );
   const targets = CONFIG.frameIds.length ? all.filter((n) => CONFIG.frameIds.includes(n.id)) : all;
   if (CONFIG.frameIds.length && targets.length !== new Set(CONFIG.frameIds).size)
@@ -349,6 +367,18 @@ async function runCreate(spec) {
   // 4) Node tree(s)
   const textStyleByName = new Map((await figma.getLocalTextStylesAsync()).map((s) => [s.name, s]));
   const semanticByName = new Map();
+  // Load EXISTING local semantic variables so nodes can bind to already-extracted tokens.
+  {
+    const cols = await figma.variables.getLocalVariableCollectionsAsync();
+    for (const c of cols) {
+      if (c.name !== 'semantic') continue;
+      for (const id of c.variableIds) {
+        const v = await figma.variables.getVariableByIdAsync(id);
+        if (v) semanticByName.set(v.name, v);
+      }
+    }
+  }
+  // Newly created semantic vars (this run) override/add.
   for (const [key, v] of varRef) if (key.startsWith('semantic/')) semanticByName.set(key.slice('semantic/'.length), v);
 
   async function build(node, parent) {
@@ -419,7 +449,17 @@ async function runCreate(spec) {
   }
 
   const roots = spec.nodes || spec.frames || [];
-  for (const node of roots) await build(node, null);
+  for (const node of roots) {
+    // If a top-level node names an existing parent (e.g. a SECTION), append into it.
+    let parent = null;
+    if (node.parentId) {
+      const p = await figma.getNodeByIdAsync(node.parentId);
+      if (!p) throw new Error('parentId 노드 없음: ' + node.parentId);
+      if (!('appendChild' in p)) throw new Error('parentId 노드가 자식을 가질 수 없음: ' + node.parentId);
+      parent = p;
+    }
+    await build(node, parent);
+  }
 
   return {
     op: 'create',
@@ -494,7 +534,7 @@ async function runScreenshot(spec) {
   const scale = spec.scale || 2;
   const ids = Array.isArray(spec.frameIds) && spec.frameIds.length ? spec.frameIds : null;
   const targets = page.children.filter(
-    (n) => ['FRAME', 'COMPONENT', 'COMPONENT_SET'].includes(n.type) && (!ids || ids.includes(n.id))
+    (n) => ['FRAME', 'COMPONENT', 'COMPONENT_SET', 'SECTION'].includes(n.type) && (!ids || ids.includes(n.id))
   );
   const shots = [];
   for (const t of targets) {
@@ -656,6 +696,44 @@ async function runRebind(spec) {
   const textStyleMap = spec.textStyleMap || {};
   const textStyleByName = new Map((await figma.getLocalTextStylesAsync()).map((s) => [s.name, s]));
 
+  // ---- Size-based text style assignment (for UNSTYLED text) -----------------
+  // textSizeMap: { steps:[10,12,14,...], map:{ "12":{Regular,Medium,SemiBold,Bold}, ... } }
+  // Unstyled text gets a style by rounding its fontSize to the nearest step,
+  // then picking by weight class. Handles scale-distorted sizes (e.g. 13.6 -> 14).
+  const textSizeMap = spec.textSizeMap && spec.textSizeMap.map ? spec.textSizeMap : null;
+  const sizeSteps = textSizeMap && Array.isArray(textSizeMap.steps) && textSizeMap.steps.length
+    ? textSizeMap.steps.slice().sort((a, b) => a - b)
+    : null;
+  function snapSize(x) {
+    if (!sizeSteps) return null;
+    return sizeSteps.reduce((a, b) => (Math.abs(b - x) < Math.abs(a - x) ? b : a));
+  }
+  function weightClass(styleStr, weightNum) {
+    const s = String(styleStr || '').toLowerCase();
+    if (s.includes('black') || (s.includes('bold') && !s.includes('semi'))) return 'Bold';
+    if (s.includes('semi')) return 'SemiBold';
+    if (s.includes('medium')) return 'Medium';
+    if (typeof weightNum === 'number') {
+      if (weightNum >= 700) return 'Bold';
+      if (weightNum >= 600) return 'SemiBold';
+      if (weightNum >= 500) return 'Medium';
+    }
+    return 'Regular';
+  }
+  function assignBySize(node) {
+    if (!textSizeMap) return null;
+    const fs = node.fontSize;
+    const fn = node.fontName;
+    // Skip mixed-run text; those need manual handling.
+    if (fs === figma.mixed || fn === figma.mixed || typeof fs !== 'number') return null;
+    const sz = snapSize(fs);
+    if (sz == null) return null;
+    const row = textSizeMap.map[String(sz)];
+    if (!row) return null;
+    const wc = weightClass(fn && fn.style, node.fontWeight);
+    return row[wc] || row.Regular || null;
+  }
+
   // Metric snapping config. spacingTokens/radiusTokens: [{name:"semantic name", value:number}]
   // Each maps a canonical numeric value to the SEMANTIC variable name to bind.
   const spacingTokens = Array.isArray(spec.spacingTokens) ? spec.spacingTokens.slice().sort((a, b) => a.value - b.value) : [];
@@ -764,7 +842,16 @@ async function runRebind(spec) {
         const s = await figma.getStyleByIdAsync(n.textStyleId);
         currentName = s?.name || null;
       }
-      const targetName = currentName ? textStyleMap[currentName] : (textStyleMap['__unstyled__'] || null);
+      let targetName = null;
+      if (currentName) {
+        // Already styled: name-based swap.
+        targetName = textStyleMap[currentName] || null;
+      } else if (textSizeMap) {
+        // Unstyled: assign by rounded fontSize + weight class (size-based assignment).
+        targetName = assignBySize(n) || textStyleMap['__unstyled__'] || null;
+      } else {
+        targetName = textStyleMap['__unstyled__'] || null;
+      }
       if (targetName && targetName !== currentName) {
         const target = textStyleByName.get(targetName);
         if (!target) report.warnings.push('전환 대상 텍스트 스타일 없음: ' + targetName);

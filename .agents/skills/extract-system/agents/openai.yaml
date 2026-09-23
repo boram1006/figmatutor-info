@@ -1,0 +1,4 @@
+interface:
+  display_name: "시스템 추출"
+  short_description: "기존 피그마 디자인 시스템을 추출해 tokens.json/catalog.json으로 정형화하고 검증한다."
+  default_prompt: "$extract-system 스킬로 기존 피그마 디자인 시스템을 추출·정형화해줘."

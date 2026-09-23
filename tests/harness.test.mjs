@@ -5,27 +5,29 @@ import {tmpdir} from 'node:os';
 import {join,resolve,dirname} from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
-import {paths,write,read,fileHash,safePath,directionDigest,buildDigest,reviewDigest,validateTokens,reuseRate,effectiveTokens} from '../scripts/lib/core.mjs';
+import {paths,write,read,fileHash,safePath,systemDigest,buildDigest,reviewDigest,validateTokens,reuseRate,effectiveTokens} from '../scripts/lib/core.mjs';
 import {evaluate} from '../scripts/lib/gates.mjs';
 import {validateSnapshot} from '../scripts/lib/snapshot.mjs';
 import {validateCharacterAssets} from '../scripts/lib/assets.mjs';
 const repo=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+j4f8AAAAASUVORK5CYII=','base64');
 const tokens={schemaVersion:1,primitives:{blue:{type:'COLOR',value:'#2563EB'},gap:{type:'FLOAT',value:16}},semantic:{'color-primary':{ref:'blue'},'space-content':{ref:'gap'}},textStyles:{'Text/body':{fontFamily:'Inter',fontStyle:'Regular',fontSize:16,lineHeight:24}}};
+// System snapshot fixture: variables/text styles that must match the extracted tokens.json.
+function systemVariables(){return {primitives:{blue:{type:'COLOR',valuesByMode:{m:'#2563EB'},aliasesByMode:{}},gap:{type:'FLOAT',valuesByMode:{m:16},aliasesByMode:{}}},semantic:{'color-primary':{type:'COLOR',valuesByMode:{},aliasesByMode:{m:{name:'blue',collection:'primitives'}}},'space-content':{type:'FLOAT',valuesByMode:{},aliasesByMode:{m:{name:'gap',collection:'primitives'}}}}};}
 function fixture(t){
- const root=mkdtempSync(join(tmpdir(),'codex-harness-test-'));t.after(()=>rmSync(root,{recursive:true,force:true}));
+ const root=mkdtempSync(join(tmpdir(),'harness-test-'));t.after(()=>rmSync(root,{recursive:true,force:true}));
  const put=(p,v)=>write(root,p,v), text=(p,v)=>{mkdirSync(dirname(join(root,p)),{recursive:true});writeFileSync(join(root,p),v);};
- text('PRD.md','UI test fixture only');for(const p of ['ref.png','a.png','b.png','default.png','loading.png','long.png'])text(p,png);
- const config={schemaVersion:1,project:'fixture',viewports:[{id:'mobile',width:390,height:844,safeAreaTop:44,safeAreaBottom:34}],conceptCount:{min:2,max:3},representativeScreenId:'home',grid:4,minimumTapSize:44,minimumReuseRate:0.8,imagePolicy:{mode:'local-characters',directory:'characters',scaleMode:'FIT',backgroundColor:'#E3F2FD'},figma:{fileKey:'fixture'}};
+ text('PRD.md','UI test fixture only');for(const p of ['ref.png','default.png','loading.png','long.png'])text(p,png);
+ const config={schemaVersion:1,project:'fixture',viewports:[{id:'mobile',width:390,height:844,safeAreaTop:44,safeAreaBottom:34}],grid:4,minimumTapSize:44,minimumReuseRate:0.8,imagePolicy:{mode:'local-characters',directory:'characters',scaleMode:'FIT',backgroundColor:'#E3F2FD'},figma:{fileKey:'fixture'},extractPages:['01 Foundations','03 Screens']};
  text('characters/buddy.png',png);put(paths.assets,{schemaVersion:1,assets:[]});put(paths.config,config);
- const requirements={schemaVersion:1,status:'ready',prd:'PRD.md',screens:[{id:'home',name:'Home',purpose:'Learn',primaryAction:{id:'learn',label:'Learn',kind:'card'},referenceIds:['r1'],referenceCoverage:'direct',states:[{id:'default',primaryRequired:true},{id:'loading',primaryRequired:false}],componentIds:['Card'],viewportIds:['mobile'],contentCases:['long title'],imageSlots:[]}],flows:[{id:'f1',goal:'Learn',screenIds:['home']}],openQuestions:[]};
+ const requirements={schemaVersion:1,status:'ready',prd:'PRD.md',screens:[{id:'home',name:'Home',purpose:'Learn',primaryAction:{id:'learn',label:'Learn',kind:'card'},origin:'existing',sourceFrame:'Home@03 Screens',referenceIds:['r1'],states:[{id:'default',primaryRequired:true},{id:'loading',primaryRequired:false}],componentIds:['Card'],viewportIds:['mobile'],contentCases:['long title'],imageSlots:[]}],flows:[{id:'f1',goal:'Learn',screenIds:['home']}],openQuestions:[]};
  put(paths.extensions,{schemaVersion:1,primitives:{},semantic:{},textStyles:{}});
  put(paths.requirements,requirements);put(paths.references,{schemaVersion:1,references:[{id:'r1',file:'ref.png',sourceApp:'fixture'}]});put(paths.tokens,tokens);
- put(paths.concepts,{schemaVersion:1,concepts:['a','b'].map(id=>({id,screenId:'home',preview:id+'.png',layoutStrategy:id,rationale:'unit-test fixture',tradeoffs:['fixture'],primitiveOverrides:{}}))});
- put(paths.direction,{schemaVersion:1,conceptId:'a',decidedBy:'user',userMessage:'fixture approval only',decidedAt:new Date().toISOString(),inputDigest:directionDigest(root)});
  const catalog={schemaVersion:1,components:[{id:'Card',nodeId:'component',states:['default','loading'],height:'hug',semanticTokens:['color-primary','space-content']}]};put(paths.components,catalog);
  function node(id,type,parentId=null,extra={}){return {id,name:id,type,parentId,bounds:{x:16,y:60,width:350,height:100},fills:[],strokes:[],metrics:{},bindings:{},textStyle:null,layout:{mode:'VERTICAL',vertical:'HUG'},role:null,componentId:'Card',reusable:false,tapTarget:false,...extra};}
- function snapshot(stage,frames){return {schemaVersion:1,fileKey:'fixture',stage,inputDigest:buildDigest(root,stage),capturedAt:new Date().toISOString(),complete:true,variables:{primitives:{blue:{type:'COLOR',valuesByMode:{m:'#2563EB'},aliasesByMode:{}},gap:{type:'FLOAT',valuesByMode:{m:16},aliasesByMode:{}}},semantic:{'color-primary':{type:'COLOR',valuesByMode:{},aliasesByMode:{m:{name:'blue',collection:'primitives'}}},'space-content':{type:'FLOAT',valuesByMode:{},aliasesByMode:{m:{name:'gap',collection:'primitives'}}}}},textStyles:tokens.textStyles,frames};}
+ function snapshot(stage,frames){return {schemaVersion:1,fileKey:'fixture',stage,inputDigest:stage==='extract-system'?systemDigest(root):buildDigest(root,stage),capturedAt:new Date().toISOString(),complete:true,variables:systemVariables(),textStyles:tokens.textStyles,frames};}
+ // extract-system snapshot: the extracted component master + variables, matching tokens.json.
+ put(paths.systemSnapshot,snapshot('extract-system',[{id:'component',name:'Card',width:350,height:100,nodes:[node('component','COMPONENT')]}]));
  put(paths.componentSnapshot,snapshot('components',[{id:'component',name:'Card',width:350,height:100,nodes:[node('component','COMPONENT')]}]));
  put(paths.assets,{schemaVersion:1,assets:[]});
  const screens=['default','loading'].map(state=>({screenId:'home',state,viewportId:'mobile',frameId:state,screenshot:state+'.png'}));put(paths.screens,{schemaVersion:1,screens});
@@ -34,12 +36,26 @@ function fixture(t){
  return {root,put,text,config,requirements,catalog,node,snapshot};
 }
 const errors=(root,phase)=>evaluate(root,phase).at(-1).errors.join('\n');
-test('valid independent fixture passes all seven phases',t=>{const {root}=fixture(t);assert.deepEqual(evaluate(root).filter(r=>!r.passed),[]);});
-test('primary/reference repetitions cannot cover another empty screen',t=>{
- const f=fixture(t),r=read(f.root,paths.requirements);r.screens[0].notes='primary analysis.md '.repeat(20);r.screens.push({...r.screens[0],id:'missing',primaryAction:null,referenceIds:[]});f.put(paths.requirements,r);
- assert.match(errors(f.root,'inputs'),/missing:.*primaryAction/);assert.match(errors(f.root,'inputs'),/missing:.*referenceIds/);
+test('valid independent fixture passes all five phases',t=>{const {root}=fixture(t);assert.deepEqual(evaluate(root).filter(r=>!r.passed),[]);});
+test('config requires an existing Figma file key and extract page list',t=>{
+ const f=fixture(t),c={...f.config};delete c.figma;f.put(paths.config,c);assert.match(errors(f.root,'inputs'),/figma\.fileKey/);
+ const c2={...f.config,extractPages:[]};f.put(paths.config,c2);assert.match(errors(f.root,'inputs'),/extractPages/);
 });
-test('reference gap needs a reason, not extra screenshots',t=>{const f=fixture(t),r=read(f.root,paths.requirements);r.screens[0].referenceCoverage='partial';f.put(paths.requirements,r);assert.match(errors(f.root,'inputs'),/referenceDecision/);});
+test('every screen must declare origin, and existing screens need a source frame',t=>{
+ const f=fixture(t),r=read(f.root,paths.requirements);delete r.screens[0].origin;f.put(paths.requirements,r);assert.match(errors(f.root,'inputs'),/origin/);
+ r.screens[0].origin='existing';delete r.screens[0].sourceFrame;f.put(paths.requirements,r);assert.match(errors(f.root,'inputs'),/sourceFrame/);
+});
+test('new screens need a rationale for the addition',t=>{
+ const f=fixture(t),r=read(f.root,paths.requirements);r.screens[0].origin='new';delete r.screens[0].sourceFrame;f.put(paths.requirements,r);assert.match(errors(f.root,'inputs'),/rationale/);
+});
+test('references are optional but declared reference ids must exist',t=>{
+ const f=fixture(t),r=read(f.root,paths.requirements);r.screens[0].referenceIds=['ghost'];f.put(paths.requirements,r);assert.match(errors(f.root,'inputs'),/없는 참조/);
+ r.screens[0].referenceIds=[];f.put(paths.requirements,r);f.put(paths.references,{schemaVersion:1,references:[]});assert.equal(errors(f.root,'inputs'),'');
+});
+test('primary/flow repetitions cannot cover another empty screen',t=>{
+ const f=fixture(t),r=read(f.root,paths.requirements);r.screens.push({...r.screens[0],id:'missing',primaryAction:null});f.put(paths.requirements,r);
+ assert.match(errors(f.root,'inputs'),/missing:.*primaryAction/);
+});
 test('numeric primitive alias and direct semantic values rejected',()=>{
  const t=structuredClone(tokens);t.semantic['space-content']={value:16};assert.ok(validateTokens(t).length);t.semantic['space-content']={ref:'missing'};assert.ok(validateTokens(t).length);
 });
@@ -47,8 +63,15 @@ test('nested instance frames do not dilute component reuse',()=>{
  assert.equal(reuseRate([{id:'a',type:'INSTANCE',reusable:true},{id:'b',type:'FRAME',parentId:'a',reusable:true},{id:'c',type:'FRAME',parentId:'b',reusable:true}]),1);
  assert.equal(reuseRate([{id:'a',type:'FRAME',reusable:true}]),0);
 });
-test('changing a concept preview invalidates direction',t=>{const f=fixture(t);f.text('a.png',Buffer.concat([png,Buffer.from('changed')]));assert.match(errors(f.root,'direction'),/재확인/);});
-test('modified token values invalidate approval and built snapshots',t=>{const f=fixture(t),tks=read(f.root,paths.tokens);tks.primitives.blue.value='#FF0000';f.put(paths.tokens,tks);assert.match(errors(f.root,'direction'),/재확인/);assert.match(errors(f.root,'components'),/입력 변경/);assert.match(errors(f.root,'components'),/primitive 실제 값/);});
+test('extracted tokens must match the system snapshot',t=>{
+ const f=fixture(t),tks=read(f.root,paths.tokens);tks.primitives.blue.value='#FF0000';f.put(paths.tokens,tks);
+ assert.match(errors(f.root,'extract-system'),/primitive 실제 값/);
+});
+test('editing extracted tokens after building invalidates downstream snapshots',t=>{
+ const f=fixture(t),tks=read(f.root,paths.tokens);tks.primitives.blue.value='#FF0000';f.put(paths.tokens,tks);
+ // system snapshot was extracted with #2563EB; changing tokens.json must fail extract-system and components digests
+ assert.match(errors(f.root,'components'),/입력 변경/);assert.match(errors(f.root,'components'),/primitive 실제 값/);
+});
 test('forged old audit PASS is ignored by check',t=>{const f=fixture(t);f.put(paths.audit,{passed:true});const s=read(f.root,paths.screens);s.screens.pop();f.put(paths.screens,s);assert.match(errors(f.root,'screens'),/화면 상태 누락/);});
 test('a visual failure blocks final verification',t=>{const f=fixture(t),v=read(f.root,paths.visual);v.screens[0].checks.readability='fail';f.put(paths.visual,v);assert.match(errors(f.root,'verification'),/readability/);});
 test('changed screenshot invalidates visual evidence',t=>{const f=fixture(t);f.text('default.png',Buffer.concat([png,Buffer.from('changed')]));assert.match(errors(f.root,'verification'),/입력 변경/);assert.match(errors(f.root,'verification'),/스크린샷 변경/);});
@@ -81,10 +104,6 @@ test('unknown phases and malformed JSON fail closed',t=>{
 test('project file access rejects traversal and external symlinks',t=>{
  const f=fixture(t);assert.throws(()=>safePath(f.root,'../escape'),/프로젝트 밖/);symlinkSync(tmpdir(),join(f.root,'external'));assert.throws(()=>safePath(f.root,'external/new-file'),/심볼릭 링크/);
 });
-test('select CLI refuses unready inputs and does not overwrite receipt',t=>{
- const f=fixture(t),r=read(f.root,paths.requirements);r.status='draft';f.put(paths.requirements,r);const before=fileHash(f.root,paths.direction);
- const run=spawnSync(process.execPath,[join(repo,'scripts/harness.mjs'),'select','--concept','a','--user-message','fixture'],{cwd:f.root,encoding:'utf8'});assert.equal(run.status,1);assert.equal(fileHash(f.root,paths.direction),before);
-});
 test('merge rejects missing, duplicate and inconsistent frame batches',t=>{
  const f=fixture(t),base=read(f.root,paths.screenSnapshot);base.expectedFrameIds=['default','loading'];base.pageId='page';
  f.put('batch1.json',{...base,complete:false,frames:[base.frames[0]]});f.put('batch2.json',{...base,complete:false,frames:[base.frames[1]]});
@@ -101,16 +120,14 @@ test('Figma extractor parses as async body and reads a guarded API mock',async()
  const AsyncFunction=Object.getPrototypeOf(async function(){}).constructor;
  const result=await new AsyncFunction('figma',source)(api);assert.equal(result.complete,true);assert.equal(result.frames[0].nodes[0].bounds.x,0);assert.equal(result.frames[0].screenId,'home');
 });
-
-test('additive component tokens keep direction valid but rebuild affected components',t=>{
+test('additive component tokens keep the system valid but rebuild affected components',t=>{
  const f=fixture(t);f.put(paths.extensions,{schemaVersion:1,primitives:{red:{type:'COLOR',value:'#FF0000'}},semantic:{'color-error':{ref:'red'}},textStyles:{}});
- assert.equal(errors(f.root,'direction'),'');assert.ok(effectiveTokens(f.root).semantic['color-error']);assert.match(errors(f.root,'components'),/입력 변경/);
+ assert.equal(errors(f.root,'extract-system'),'');assert.ok(effectiveTokens(f.root).semantic['color-error']);assert.match(errors(f.root,'components'),/입력 변경/);
 });
-test('component refinements cannot overwrite selected primitive tokens',t=>{
+test('component refinements cannot overwrite extracted system tokens',t=>{
  const f=fixture(t);f.put(paths.extensions,{schemaVersion:1,primitives:{blue:{type:'COLOR',value:'#FF0000'}},semantic:{},textStyles:{}});
  assert.throws(()=>effectiveTokens(f.root),/덮어쓰기 금지/);
 });
-
 test('character policy rejects generation config and missing source folders',t=>{
  const f=fixture(t);f.config.imageProvider='higgsfield';f.put(paths.config,f.config);
  assert.match(errors(f.root,'inputs'),/provider\/budget/);
@@ -118,9 +135,9 @@ test('character policy rejects generation config and missing source folders',t=>
  assert.equal(evaluate(f.root,'inputs')[0].passed,false);
 });
 test('character pixels and asset registry participate in design fingerprints',t=>{
- const f=fixture(t),before=directionDigest(f.root),build=buildDigest(f.root);
+ const f=fixture(t),before=systemDigest(f.root),build=buildDigest(f.root);
  f.text('characters/buddy.png',Buffer.concat([png,Buffer.from('changed')]));
- assert.notEqual(directionDigest(f.root),before);assert.match(errors(f.root,'direction'),/재확인/);
+ assert.notEqual(systemDigest(f.root),before);assert.match(errors(f.root,'extract-system'),/입력 변경/);
  f.text('characters/buddy.png',png);f.put(paths.assets,{schemaVersion:1,assets:[{id:'buddy',file:'characters/buddy.png'}]});
  assert.notEqual(buildDigest(f.root),build);
 });

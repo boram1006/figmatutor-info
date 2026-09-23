@@ -1,6 +1,8 @@
-// Run inside Figma use_figma after loading the installed figma-use skill.
-// Replace CONFIG with JSON serialization, never shell interpolation.
+// Reference implementation of the snapshot extractor. The active path is the Figma plugin
+// (scripts/figma-plugin/code.js, op:"extract"), which uses identical logic and output schema.
+// Keep this file and the plugin's runExtract() in sync. Not a local Node script.
 // One invocation = one page. A large page may use top-level frameIds; merge with merge-snapshots.mjs.
+// See docs/kiro-figma-plugin.md for the plugin round-trip.
 const CONFIG = {fileKey:'__FILE_KEY__',pageName:'__PAGE_NAME__',stage:'__STAGE__',inputDigest:'__INPUT_DIGEST__',frameIds:[]};
 if(Object.values(CONFIG).some(v=>typeof v==='string'&&v.startsWith('__')))throw new Error('CONFIG replacement required');
 if(figma.fileKey && figma.fileKey!==CONFIG.fileKey)throw new Error('Wrong Figma file');

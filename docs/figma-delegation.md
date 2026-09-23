@@ -1,61 +1,60 @@
-# Figma 전담 에이전트 실행 계약
+# Figma 플러그인 실행 계약 (Kiro)
+
+이 워크스페이스는 Figma 무료 계정 + 데스크탑 플러그인을 쓴다. Dev Mode MCP도, 자식 에이전트
+위임(`spawn_agent`)도 없다. 원본(Codex)의 `figma-worker` 위임은 **플러그인 스펙 생성 +
+클립보드 왕복**으로 대체한다. 전체 방식은 [플러그인 방식 문서](kiro-figma-plugin.md)가 원본이다.
 
 ## 역할과 경계
 
-메인은 요구사항, 사용자와의 대화, 실제 승인 기록, 로컬 JSON과 게이트를 담당한다.
-Figma 검색·메타데이터·읽기·변수·컴포넌트·화면 수정·업로드·캡처·스냅샷 추출은 모두
-전담 자식 에이전트가 수행한다. 이는 세션의 지침 기반 라우팅이며 MCP 서버의 접근 제어를
-설정하는 기능은 아니다. 스킬 파일만으로 도구 권한이 기술적으로 차단된다고 주장하지 않는다.
+- Kiro(메인)는 요구사항, 사용자와의 대화, 실제 승인 기록, 로컬 JSON과 게이트를 담당한다.
+- Figma 캔버스 생성·스냅샷 추출·캡처는 **플러그인**이 수행한다. Kiro는 플러그인이 실행할
+  스펙 JSON을 만들고, 사용자는 그 스펙을 플러그인에 붙여넣어 실행한다.
+- 이는 지침 기반 분리이며 기술적 권한 차단이 아니다. 플러그인 스킬 파일이 도구 권한을
+  차단한다고 주장하지 않는다.
+- 완료 판정의 원본은 여전히 로컬 게이트다. 플러그인 실행 성공은 해당 작업의 완료일 뿐
+  전체 디자인 완료가 아니다. 전체 완료는 `npm run audit`, `npm run check`로 판정한다.
 
-메인은 `collaboration.spawn_agent`의 `fork_turns: "none"`을 사용하고 모델 설정은 상속한다.
-읽기 조사는 로컬 하네스 개선과 함께 진행할 수 있지만 같은 Figma 파일의 작업은 한 명씩
-순차 실행한다. 지속 작업은 같은 전담 에이전트에 followup_task로 전달한다.
-메인이 `wait_agent`로 대기하는 동안 원본 Figma 출력을 대신 가져오지 않는다.
+## 작업 전달 (스펙)
 
-전담 에이전트는 다시 위임하지 않는다. 자식임을 명시한 작업 계약을 받으면 직접 Figma
-도구를 실행한다. 이 규칙으로 AGENTS의 위임 지침이 재귀적으로 적용되는 것을 방지한다.
-스킬·필수 도구가 없으면 실패 사유와 가능한 로컬 작업만 반환한다. 메인 직접 호출로
-조용히 전환하지 않는다. 사용자가 명시적으로 예외를 지시할 때만 예외 범위를 기록한다.
-
-## 작업 전달
-
-메인은 `design/operations/<task-id>/request.json`을 작성한 뒤 경로만 전달한다.
-이 운영 기록은 승인 지문의 디자인 입력이 아니며 단계 완료 증거를 대신하지 않는다.
+Kiro는 `design/operations/<task-id>/request.json`에 플러그인 스펙을 작성하고 경로를 사용자에게
+알린다. 이 운영 기록은 왕복 원문 보관용이며 승인 지문의 디자인 입력이 아니고 단계 완료 증거를
+대신하지 않는다. 스펙의 `op`는 create/extract/screenshot 중 하나다(필드는 플러그인 문서 참고).
 
 ```json
 {
   "schemaVersion": 1,
-  "taskId": "inspect-token-guide",
-  "mode": "read-only",
+  "taskId": "extract-components",
+  "op": "extract",
   "fileKey": "실제 파일 키",
-  "nodeIds": ["실제 노드 ID"],
-  "objective": "구체적인 결과",
-  "authorization": "사용자가 허용한 변경 범위 또는 읽기 전용",
-  "inputs": ["필요한 원본 계약/지침의 프로젝트 상대 경로"],
-  "allowedWrites": ["design/operations/inspect-token-guide/"],
-  "acceptance": ["원문과 실제 캡처를 저장하고 관찰/해석을 구분"],
-  "resultPath": "design/operations/inspect-token-guide/result.json"
+  "pageName": "02 Components",
+  "stage": "components",
+  "inputDigest": "npm run fingerprint -- --scope components 출력",
+  "frameIds": [],
+  "objective": "컴포넌트 페이지 스냅샷 추출",
+  "authorization": "사용자가 허용한 변경 범위 또는 읽기 전용"
 }
 ```
 
-요청에 필요한 Figma 필수 스킬의 로컬 경로 또는 발견 방법도 전달한다. 사용자 발언을
-승인 범위에 포함하되 전체 대화, base64 이미지, 전체 스냅샷을 복제하지 않는다.
-큰 화면 작업은 페이지/컴포넌트/상태 단위로 나누되 중간 수정 중 스냅샷 배치를 섞지 않는다.
+큰 화면 작업은 페이지/컴포넌트/상태 단위로 나눈다. extract가 크면 `frameIds`로 나눠 여러 번
+받아 `scripts/merge-snapshots.mjs`로 병합한다. 중간 수정 중 스냅샷 배치를 섞지 않는다.
 
 ## 결과 반환
 
-전담 에이전트는 도구 원문, 실제 캡처, 추출 JSON, 체크섬 검증과 ID 목록을 허용된 파일에
-저장한다. 도구 응답이 잘리면 제공된 추출기의 분할 전송과 병합 절차를 따른다.
-시각 검토는 전담 에이전트가 실제 이미지를 열어 수행한다. 메인은 검토하지 않은 이미지를
-봤다고 쓰지 않으며, 이미지 전체를 메인에 다시 로드하지 않는다. 필요한 경우 대표 이미지
-하나만 메인이 검토할 수 있지만 도구 호출은 여전히 전담 에이전트에 맡긴다.
+사용자는 플러그인 결과 JSON을 저장한다. 원문·캡처·스냅샷·노드 트리는 메인 대화에 붙이지 않고
+`design/operations/<task-id>/`(또는 정식 스냅샷 경로)에 파일로 보존한다.
 
-`result.json`에는 schemaVersion, taskId, status(completed/partial/blocked/failed), summary,
-artifacts(경로·종류·sha256), figma(파일 키·실제 생성/수정 노드 ID), checks(실행한 검사와 결과),
-observations, unresolved를 기록한다. 읽기 전용 작업은 생성/수정 ID를 빈 배열로 둔다.
-에이전트의 최종 응답은 10줄 이내로 결과 경로, 핵심 결과, 미해결 사항만 전달한다.
-원문 JSON·노드 트리·base64·스크린샷 전체를 최종 답변이나 메시지에 붙이지 않는다.
+- create 결과: `design/operations/<task-id>/result.json`. Kiro는 반환된 실제 노드 ID를
+  `catalog.json`·`screens.json` 등에 기록한다.
+- extract 결과: `npm run save-snapshot -- --stage <components|screens> --from <경로>`로 정식
+  스냅샷 경로에 저장한다. 저장은 검증이 아니며, 이어서 `npm run check -- --phase <stage>`로 판정한다.
+- screenshot 결과: base64 PNG를 사용자가 파일로 저장한다. 저장 경로·해시는 검증 계약을 따른다.
 
-메인은 결과 JSON과 필요한 요약만 읽고 경로·해시·로컬 게이트를 확인한다. 전담 에이전트의
-completed는 해당 작업의 완료일 뿐 전체 디자인 완료가 아니다. 전체 완료는 기존
-`npm run audit`와 `npm run check`로 판정하며 도구 부재/미검토/미완료를 PASS로 만들지 않는다.
+시각 검토는 실제 캡처 이미지를 열어 수행한다. 검토하지 않은 이미지를 봤다고 쓰지 않는다.
+대표 이미지 하나 정도는 메인이 직접 검토할 수 있으나 전체 이미지를 대화에 반복 로드하지 않는다.
+
+## 금지
+
+- 스냅샷·검사 결과·시각 관찰을 손으로 만들어 게이트를 통과시키지 않는다. 규칙 위반은
+  스펙/캔버스를 고쳐 해결한다.
+- 폴더 존재·체크표시·이전 PASS만으로 완료를 판정하지 않는다.
+- 사용자 승인을 임의로 만들거나 기존 승인 범위를 확장하지 않는다.

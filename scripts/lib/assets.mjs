@@ -1,5 +1,5 @@
 import {readdirSync,realpathSync} from 'node:fs';
-import {relative,join} from 'node:path';
+import {relative,join,sep} from 'node:path';
 import {array,nonempty,safePath,imageExists,fileHash} from './core.mjs';
 
 export function characterFiles(root,config){
@@ -7,7 +7,7 @@ export function characterFiles(root,config){
  if(policy?.mode!=='local-characters'||policy.scaleMode!=='FIT'||!/^#[\da-f]{6}$/i.test(policy.backgroundColor||'')||!nonempty(policy.directory))throw new Error('imagePolicy: local-characters / directory / FIT / backgroundColor 필요');
  if('imageProvider' in config||'assetBudget' in config)throw new Error('이미지 생성 provider/budget 설정을 제거하세요');
  const dir=safePath(root,policy.directory);
- const files=readdirSync(dir,{withFileTypes:true}).filter(e=>e.isFile()&&/\.(png|jpe?g|webp)$/i.test(e.name)).map(e=>join(policy.directory,e.name)).sort();
+ const files=readdirSync(dir,{withFileTypes:true}).filter(e=>e.isFile()&&/\.(png|jpe?g|webp)$/i.test(e.name)).map(e=>join(policy.directory,e.name).split(sep).join('/')).sort();
  if(!files.length)throw new Error('캐릭터 에셋 폴더가 비어 있음');
  for(const file of files)imageExists(root,file);
  return files;

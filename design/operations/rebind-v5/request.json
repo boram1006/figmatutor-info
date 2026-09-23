@@ -1,0 +1,13 @@
+{
+  "task": "rebind-v5",
+  "goal": "v5 최종보고서 화면(내 지원 현황 / 스텝 폼 / 최종 심사 제출 패키지)의 독립(비인스턴스) 요소에 남은 raw hex 색·미적용 텍스트 스타일을 semantic 토큰에 바인딩한다.",
+  "why": "rebind-01 배치들이 frameNames 정확일치로 특정 프레임만 대상으로 삼았고, v5 프레임은 어느 목록에도 포함되지 않아 rebind가 아예 실행되지 않았다. 그래서 raw hex가 생짜로 남았다. (깊이 문제·매핑 누락 아님)",
+  "constraint": "프레임 이름이 사용자 관리 밖이라 동명이인이 많음 → frameNames(정확일치+동명 전부매칭)는 부적합. frameIds(노드 ID, 유일)로 대상 지정한다.",
+  "notInScope": "컴포넌트 인스턴스 내부의 raw 값은 이 rebind로 못 바꾼다(Figma API 제약). 마스터 컴포넌트 바인딩으로 별도 처리.",
+  "steps": [
+    "1. spec-extract.json 실행 → design 페이지 최상위 프레임 id/name/bounds + 노드 fills/bindings 획득 (snapshot으로 저장)",
+    "2. 결과에서 v5 프레임 3개의 id 확정 (좌표·크기·미바인딩 raw fills로 식별)",
+    "3. 확정 id로 spec-rebind.json(frameIds) 생성 → 실행",
+    "4. 리포트의 unmapped 색 확인 → colorMap 보완 후 재실행"
+  ]
+}

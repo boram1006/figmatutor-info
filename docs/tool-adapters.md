@@ -1,21 +1,21 @@
 # 런타임 도구 연결
 
-이 프로젝트는 MCP 클라이언트를 직접 띄우지 않는다. Codex 세션에 노출된 도구를 사용한다.
+이 프로젝트는 MCP 클라이언트를 직접 띄우지 않는다. Kiro가 만든 스펙을 사용자가 Figma
+데스크탑 플러그인에서 실행하는 방식으로 캔버스를 다룬다.
 `npm run doctor`와 실제 도구 목록은 서로 다른 검사다. 도구 제공·인증·파일 편집 권한을 구분해 보고한다.
 
 ## Figma
 
-- 모든 Figma MCP 호출은 `figma-worker` 자식 에이전트에서 수행한다. 메인은 [위임 계약](figma-delegation.md)에 따라 요청을 전달하고 요약·로컬 파일만 확인한다.
-- 아래 도구 절차와 필수 Figma 스킬 로드는 전담 에이전트에 적용된다. 읽기 전용 참고 가이드 조사도 같은 방식으로 위임한다.
+이 워크스페이스는 Figma 무료 계정 + 데스크탑 플러그인을 쓴다. Dev Mode MCP를 쓰지 않는다.
+캔버스 생성·스냅샷 추출·캡처는 Kiro가 만든 스펙을 사용자가 [플러그인](../scripts/figma-plugin/)에서
+실행하는 방식이다. 전체 방식은 [플러그인 방식 문서](kiro-figma-plugin.md), 실행 계약은
+[플러그인 실행 계약](figma-delegation.md)을 따른다.
 
-- 시안/화면 생성: 설치된 figma-use 및 figma-generate-design 스킬을 읽고 use_figma.
-- 토큰/컴포넌트 생성: figma-use + figma-generate-library.
-- 새 파일이 필요한 경우 사용자의 생성 요청 범위가 있으면 설치된 figma-create-new-file 스킬부터 읽는다.
-  기존 파일이 주어졌으면 그 파일을 쓴다. 매번 수동으로 빈 파일을 만들라고 요구하지 않는다.
-- 결과 파일 키는 harness.config.json의 figma.fileKey에 기록하고 metadata로 대상을 확인한다.
-- 스킬은 설치된 위치/도구 메타데이터로 발견한다. 존재를 확인하지 않은 skill:// URI를 호출하지 않는다.
-- 승인된 컴포넌트·화면의 추출은 scripts/figma/extract-snapshot.js 사용. 자세한 절차는 figma-contract.md.
-- 외부 도구 연결이 없으면 로컬 시안 검토 자료까지 진행 가능. 실제 Figma 빌드 완료로 기록하지 않는다.
+- 시안/화면/토큰/컴포넌트 생성: `op:create` 스펙을 만들어 플러그인이 캔버스를 그린다. MCP 스킬(use_figma 등)이나 skill:// URI를 쓰지 않는다.
+- 새 페이지가 필요하면 create 스펙의 `pageName`으로 지정한다. 플러그인이 없는 페이지만 새로 만든다. 매번 수동으로 빈 페이지를 만들라고 요구하지 않는다.
+- 파일 키는 harness.config.json의 figma.fileKey에 기록한다. 무료 계정에서는 파일 URL(`/design/<fileKey>/...` 또는 `/file/<fileKey>/...`)의 fileKey를 그대로 쓰고, 플러그인이 읽은 `figma.fileKey`를 스냅샷에 기록해 게이트가 config와 대조한다.
+- 승인된 컴포넌트·화면의 추출은 `op:extract` 스펙 + 플러그인이다. 추출 로직은 `scripts/figma/extract-snapshot.js`와 동일하며 결과 스키마도 같다. 자세한 절차는 figma-contract.md.
+- 플러그인 없이(또는 캔버스 착수 전) 로컬 시안 검토 자료까지 진행할 수 있으나 실제 Figma 빌드 완료로 기록하지 않는다.
 
 ## 레퍼런스
 

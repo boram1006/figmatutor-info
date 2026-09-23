@@ -43,6 +43,7 @@ inclusion: always
 | "화면 구조 잡아줘" | `build-structure` |
 | "컴포넌트/화면 만들어줘/추가해줘" | `create-figma` |
 | "새 PRD로 화면 만들어줘", "이 PRD대로 그려줘" | `docs/new-screen-workflow.md` 절차 (PRD→requirements→그리기→screens/verification) |
+| "기존 화면 토큰 바인딩해줘", "색·폰트가 안 붙었어", "raw 값 정리해줘" | `docs/rebind-existing-screen-workflow.md` 절차 (진단→색 rebind→타이포 size 배정→재추출 검증) |
 | "이런 기능 필요해", "PRD 뽑아줘", "기획 정리해줘" | `docs/prd-authoring-workflow.md` 절차 (요청→8블록 PRD 초안→부족분 질문→확정) |
 | "검증해줘", "결함 찾아줘" | `audit-design` |
 

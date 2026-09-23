@@ -9,9 +9,7 @@ description: "생성된 Figma UI를 구조 검사와 실제 스크린샷 관찰�
 
 이 프로젝트 루트에서 실행한다. 공통 규칙은 AGENTS.md를 따른다.
 
-Figma MCP가 필요한 작업은 메인에서 직접 호출하지 않고 `figma-worker`에 위임한다.
-[작업 계약](../../../docs/figma-delegation.md)에 따라 원본 응답·이미지는 전담 에이전트가 파일로 보존하고 메인에는 요약만 반환한다.
-메인은 로컬 게이트와 사용자 선택을 관리하며 전담 자식은 재위임하지 않는다.
+Figma 캡처·추출은 [플러그인 방식](../../../docs/kiro-figma-plugin.md)의 `op:screenshot`/`op:extract`를 쓴다. Kiro가 스펙을 만들고 사용자가 플러그인에서 실행하며, 원본 응답·이미지는 `design/operations/<task-id>/`에 보존한다. MCP를 쓰지 않는다.
 
 브랜드 헤더는 [헤더 로고 계약](../../../docs/figma-contract.md#헤더-로고)에 따라 원본 SVG 경로·해시와 실제 로고 노드·캡처를 대조한다. 텍스트 대체, 비율/색상 변경, 잘림을 확인하며 자동 게이트 PASS만으로 로고 검토를 대신하지 않는다.
 

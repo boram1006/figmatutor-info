@@ -6,13 +6,13 @@ import {characterFiles} from './assets.mjs';
 export const paths = {
   config: 'harness.config.json', requirements: 'design/02-structure/requirements.json',
   references: 'design/01-references/index.json', tokens: 'design/03-design-rules/tokens/tokens.json',
-  concepts: 'design/03-design-rules/concepts/concepts.json', direction: 'design/03-design-rules/direction/selection.json',
+  systemSnapshot: 'design/03-design-rules/system/snapshot.json',
   extensions: 'design/03-design-rules/components/token-extensions.json', components: 'design/03-design-rules/components/catalog.json', componentSnapshot: 'design/03-design-rules/components/snapshot.json',
   screens: 'design/04-screens/screens.json', assets: 'design/04-screens/assets.json',
   screenSnapshot: 'design/04-screens/snapshot.json', visual: 'design/04-screens/verification/visual-review.json',
   audit: 'design/04-screens/verification/audit.json',
 };
-export const phases = ['inputs', 'tokens', 'concepts', 'direction', 'components', 'screens', 'verification'];
+export const phases = ['inputs', 'extract-system', 'components', 'screens', 'verification'];
 export const nonempty = x => typeof x === 'string' && x.trim().length > 0;
 export const array = x => Array.isArray(x) ? x : [];
 export const object = x => x !== null && typeof x === 'object' && !Array.isArray(x);
@@ -44,15 +44,18 @@ export function digest(root, names) {
   for (const name of [...new Set(names)].sort()) hash.update(`${name}\0${fileHash(root, name)}\0`);
   return hash.digest('hex');
 }
-export function approvalFiles(root) {
-  const req = read(root, paths.requirements), refs = read(root, paths.references), concepts = read(root, paths.concepts);
-  return [paths.config, paths.requirements, req.prd, paths.references, paths.tokens, paths.concepts,
-    ...array(refs.references).map(r=>r.file), ...array(concepts.concepts).map(c=>c.preview),
+// Baseline design inputs shared by every downstream stage.
+// No concept previews or direction selection in the extract-extend flow.
+export function baseFiles(root) {
+  const req = read(root, paths.requirements), refs = read(root, paths.references);
+  return [paths.config, paths.requirements, req.prd, paths.references, paths.tokens,
+    ...array(refs.references).map(r=>r.file),
     ...characterFiles(root,read(root,paths.config))];
 }
-export const directionDigest = root => digest(root, approvalFiles(root));
+// Fingerprint of the extracted design system baseline (config + requirements + tokens + references).
+export const systemDigest = root => digest(root, baseFiles(root));
 export function buildDigest(root, stage = 'components') {
-  const files = [...approvalFiles(root), paths.direction, paths.components, paths.extensions, paths.assets];
+  const files = [...baseFiles(root), paths.extensions, paths.components, paths.assets];
   for (const a of array(read(root, paths.assets).assets)) files.push(a.file);
   if (stage === 'screens') {
     files.push(paths.componentSnapshot, paths.assets);
@@ -62,7 +65,7 @@ export function buildDigest(root, stage = 'components') {
 }
 export function reviewDigest(root) {
   const manifest = read(root, paths.screens);
-  return digest(root, [...approvalFiles(root), paths.direction, paths.components, paths.extensions,
+  return digest(root, [...baseFiles(root), paths.extensions, paths.components,
     paths.componentSnapshot, paths.assets, paths.screens, paths.screenSnapshot,
     ...array(read(root, paths.assets).assets).map(a=>a.file), ...array(manifest.screens).map(s=>s.screenshot)]);
 }
@@ -101,16 +104,16 @@ export function validateTokens(t) {
   }
   return e;
 }
+// Effective tokens = extracted baseline tokens + additive component extensions.
+// The extension file may only ADD tokens; it cannot overwrite the extracted system.
 export function effectiveTokens(root) {
-  const base=read(root,paths.tokens), selection=read(root,paths.direction);
-  const concept=array(read(root,paths.concepts).concepts).find(c=>c.id===selection.conceptId);
-  if (!concept) throw new Error('선택한 시안이 없음');
-  const selected={...base, primitives:{...base.primitives,...(concept.primitiveOverrides||{})}};
+  const base=read(root,paths.tokens);
+  const selected={...base, primitives:{...base.primitives}, semantic:{...base.semantic}, textStyles:{...base.textStyles}};
   const extension=read(root,paths.extensions);
   if(extension.schemaVersion!==1) throw new Error('token extension 버전 오류');
   for(const group of ['primitives','semantic','textStyles']) {
     if(!object(extension[group])) throw new Error(`token extension ${group} 객체 필요`);
-    for(const key of Object.keys(extension[group])) if(key in selected[group]) throw new Error(`선택한 토큰 덮어쓰기 금지: ${group}/${key}. 방향 변경 절차 필요`);
+    for(const key of Object.keys(extension[group])) if(key in selected[group]) throw new Error(`추출한 시스템 토큰 덮어쓰기 금지: ${group}/${key}. 원본(피그마)에서 수정 후 재추출`);
     selected[group]={...selected[group],...extension[group]};
   }
   const errors=validateTokens(selected); if(errors.length)throw new Error(errors.join(' / '));

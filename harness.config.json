@@ -15,12 +15,15 @@
   "minimumTapSize": 24,
   "minimumReuseRate": 0.8,
   "figma": {
-    "fileKey": "HscNdM20Gvs2hBwSjU5OBc"
+    "fileKey": "t00UvcVe1M6llSJFyXcDkG"
   },
   "extractPages": [
-    "Design System"
+    "Design System",
+    "design"
   ],
-  "notes": [],
+  "notes": [
+    "fileKey 변경 2026-09-23: 이전 HscNdM20Gvs2hBwSjU5OBc → t00UvcVe1M6llSJFyXcDkG. v5 최종보고서 등 실제 작업 화면이 후자 파일의 design 페이지에 있음. 이전 rebind-01/extract 스냅샷(HscN 파일 기준)은 대상 파일이 달라 v5를 포함하지 않았음."
+  ],
   "imagePolicy": {
     "mode": "local-characters",
     "directory": "design/characters",

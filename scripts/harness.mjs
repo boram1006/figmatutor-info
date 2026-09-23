@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
-import { paths, read, write, safePath, phases, directionDigest, buildDigest, reviewDigest, effectiveTokens, validateTokens, nonempty } from './lib/core.mjs';
+import { paths, read, write, safePath, phases, systemDigest, buildDigest, reviewDigest, effectiveTokens, validateTokens, nonempty } from './lib/core.mjs';
 import { evaluate } from './lib/gates.mjs';
 import {characterFiles} from './lib/assets.mjs';
 
@@ -27,34 +27,42 @@ try {
       write(root,paths.audit,{schemaVersion:1,auditedAt:new Date().toISOString(),inputDigest,passed:results.every(r=>r.passed),results});
     }
     if(command!=='status' && results.some(r=>!r.passed)) process.exitCode=1;
-  } else if(command==='select') {
-    const results=evaluate(root,'concepts');
-    if(results.some(r=>!r.passed)){report(results);throw new Error('방향 선택 전 inputs/tokens/concepts 게이트 필요');}
-    const conceptId=arg('--concept'),userMessage=arg('--user-message');
-    if(!read(root,paths.concepts).concepts.some(c=>c.id===conceptId)||!nonempty(userMessage)) throw new Error('--concept ID --user-message "실제 사용자 선택 발언" 필요');
-    write(root,paths.direction,{schemaVersion:1,conceptId,decidedBy:'user',userMessage,decidedAt:new Date().toISOString(),inputDigest:directionDigest(root)});
-    console.log(`방향 선택 기록: ${conceptId}. 선택 권한의 진위는 호출자가 실제 대화로 확인해야 합니다.`);
   } else if(command==='fingerprint') {
     const scope=arg('--scope','components');
-    if(!['direction','components','screens','review'].includes(scope))throw new Error('scope: direction/components/screens/review');
-    console.log(scope==='direction'?directionDigest(root):scope==='review'?reviewDigest(root):buildDigest(root,scope));
+    if(!['system','components','screens','review'].includes(scope))throw new Error('scope: system/components/screens/review');
+    console.log(scope==='system'?systemDigest(root):scope==='review'?reviewDigest(root):buildDigest(root,scope));
   } else if(command==='export-tokens') {
-    const hasSelection=existsSync(safePath(root,paths.direction));
-    if(hasSelection && evaluate(root,'direction').some(r=>!r.passed))throw new Error('오래되었거나 유효하지 않은 방향 선택');
-    const t=hasSelection?effectiveTokens(root):read(root,paths.tokens),errors=validateTokens(t);
+    // 추출한 시스템 토큰 + 컴포넌트 확장을 병합해 파생 산출물을 만든다. 확장 파일이 있으면 병합한다.
+    const hasExtension=existsSync(safePath(root,paths.extensions));
+    const t=hasExtension?effectiveTokens(root):read(root,paths.tokens),errors=validateTokens(t);
     if(errors.length)throw new Error(errors.join('\n'));
     write(root,'design/03-design-rules/tokens/generated/tokens.resolved.json',t);
-    const css=['/* GENERATED: edit tokens.json or selected concept overrides */',':root {'];
+    const css=['/* GENERATED: edit tokens.json (extracted) or token-extensions.json */',':root {'];
     for(const [name,token] of Object.entries(t.semantic)) {const p=t.primitives[token.ref];css.push(`  --${name}: ${p.value}${p.type==='FLOAT'?'px':''};`);}
     css.push('}');
     const p=safePath(root,'design/03-design-rules/tokens/generated/tokens.css');mkdirSync(dirname(p),{recursive:true});writeFileSync(p,css.join('\n')+'\n');
     console.log('토큰 JSON/CSS 생성 완료 (generated/는 원본 아님)');
+  } else if(command==='save-snapshot') {
+    // Figma 플러그인(op:extract) 결과를 정식 스냅샷 경로에 저장한다. 붙여넣기 실수를 줄이는 헬퍼.
+    const stage=arg('--stage');
+    const targets={'extract-system':paths.systemSnapshot,components:paths.componentSnapshot,screens:paths.screenSnapshot};
+    if(!targets[stage]) throw new Error('--stage extract-system|components|screens 필요');
+    const from=arg('--from');
+    const src=safePath(root,from);
+    if(!existsSync(src)) throw new Error(`--from 파일 없음: ${from}`);
+    let snap;
+    try{snap=JSON.parse(readFileSync(src,'utf8'));}catch(e){throw new Error(`스냅샷 JSON 파싱 실패: ${e.message}`);}
+    if(snap.schemaVersion!==1) throw new Error('스냅샷 schemaVersion은 1이어야 함');
+    if(snap.stage!==stage) throw new Error(`스냅샷 stage 불일치: 파일=${snap.stage}, 요청=${stage}`);
+    if(snap.complete!==true) throw new Error('불완전한 스냅샷(complete!==true). frameIds로 나눴다면 merge-snapshots.mjs로 병합 후 저장');
+    write(root,targets[stage],snap);
+    console.log(`스냅샷 저장: ${targets[stage]}. 이제 npm run check -- --phase ${stage} 로 판정하세요. (저장은 검증이 아닙니다.)`);
   } else if(command==='assets-list') {
     console.log(JSON.stringify({source:'local-character',files:characterFiles(root,read(root,paths.config))},null,2));
   } else if(command==='doctor') {
     const c=read(root,paths.config);
-    const local={node:process.versions.node,nodeSupported:Number(process.versions.node.split('.')[0])>=18,agents:existsSync(safePath(root,'AGENTS.md')),skills:existsSync(safePath(root,'.agents/skills')),figmaFileKeyConfigured:nonempty(c.figma?.fileKey),runtimeTools:'NOT_PROBED: Codex 세션의 실제 도구 목록과 인증을 확인하세요. 로컬 CLI는 MCP 연결을 판정하지 않습니다.'};
+    const local={node:process.versions.node,nodeSupported:Number(process.versions.node.split('.')[0])>=18,agents:existsSync(safePath(root,'AGENTS.md')),skills:existsSync(safePath(root,'.agents/skills')),figmaPlugin:existsSync(safePath(root,'scripts/figma-plugin/manifest.json')),figmaFileKeyConfigured:nonempty(c.figma?.fileKey),extractPagesConfigured:Array.isArray(c.extractPages)&&c.extractPages.length>0,runtimeTools:'NOT_PROBED: Figma 데스크탑에 플러그인(scripts/figma-plugin/manifest.json)을 설치했는지 확인하세요. 로컬 CLI는 플러그인 실행/연결을 판정하지 않습니다.'};
     console.log(JSON.stringify(local,null,2));
     if(!local.nodeSupported||!local.agents||!local.skills)process.exitCode=1;
-  } else throw new Error(`명령: status, check, select, fingerprint, export-tokens, assets-list, audit, doctor. 단계: ${phases.join(', ')}`);
+  } else throw new Error(`명령: status, check, fingerprint, export-tokens, save-snapshot, assets-list, audit, doctor. 단계: ${phases.join(', ')}`);
 } catch(err) {console.error(err.message);process.exitCode=1;}
