@@ -27,10 +27,10 @@ source: "{PRD 위치 또는 문서 위치}"
 #   "SITEMAP §5 공통 규칙"
 
 sourceType: PRD | SCREEN | CONFIRMED_PROJECT_RULE | INFERRED
-# PRD: 릴리즈 PRD (노란 박스 또는 역방향 복원)
+# PRD: 릴리즈 PDF/Figma의 원본 노란색 PRD 박스
 # SCREEN: Figma 실제 화면에서 직접 확인
-# CONFIRMED_PROJECT_RULE: SITEMAP/workflow 등 확정 문서
-# INFERRED: 위 3종에서 논리적으로 유추. 자동화 금지.
+# CONFIRMED_PROJECT_RULE: SITEMAP/workflow 등 명시적으로 확정된 문서
+# INFERRED: 역방향 복원 PRD 또는 위 source에서 논리적으로 유추한 내용. 자동화 금지.
 
 precondition: |
   테스트 시작 전 시스템 상태를 서술한다.
