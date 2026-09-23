@@ -4,7 +4,7 @@ Kiro에서 데스크탑/모바일 Figma UI를 만드는 프로젝트 전용 하�
 하네스 구조 관련된 내용은 이 영상을 참고해 보세요.
 https://youtu.be/yQcR1Dz5UDA?si=rnqF6nlvn7TSfW2O
 
-**요구사항 → 기존 시스템 추출·정형화 → 컴포넌트(재사용+신규) → 전체 화면·상태 확장(기존+신규) → 검증**
+**요구사항 → 기존 시스템 추출·정형화 → 컴포넌트(재사용+신규) → 전체 화면·상태 확장(기존+신규) → Figma 최신 상태 동기화 → 디자인 커버리지/구조·시각 검증**
 
 기존 피그마 시스템(변수·컴포넌트·양산 화면)을 추출해 정형화한 뒤 그 위에 새 화면을 추가하는
 하네스입니다(extract-extend). 컨셉 탐색·방향 선택 단계는 없습니다. 지침·스킬·검증기와 빈 JSON 초안을 포함합니다.
@@ -99,6 +99,8 @@ Figma/API 연결은 실제 디자인 작업 시 확인합니다. 로컬 테스�
 Figma 무료 계정 + 데스크탑 플러그인을 씁니다. Dev Mode MCP를 쓰지 않습니다. Kiro가 스펙 JSON
 (`op`: create/extract/screenshot)을 만들고 사용자가 플러그인에서 실행합니다. 원본·캡처·스냅샷은
 `design/operations/<task-id>/`에 파일로 보존하고, extract 결과는 `npm run save-snapshot`으로 저장합니다.
+새 화면 생성/수정 후에는 `docs/figma-design-sync-workflow.md`를 따라 extract(JSON)와 screenshot(PNG)을 모두 최신화하고,
+PRD 대비 실제 화면/state 누락을 Design Coverage Audit으로 확인합니다.
 자세한 방식은 [플러그인 문서](docs/kiro-figma-plugin.md)와 [실행 계약](docs/figma-delegation.md)을 참고하세요.
 
 토큰 라이브러리 문서는 [제작 가이드](docs/token-library-guide.md)를 따릅니다.
