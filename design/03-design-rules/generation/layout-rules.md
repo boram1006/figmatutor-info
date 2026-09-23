@@ -75,20 +75,22 @@ Evidence: 지원하기, 최종보고서.
 
 ---
 
-## L6. Evaluation workspace는 list → content → evaluation 순으로 공간을 배분한다
+## L6. Evaluation workspace는 queue / source / evaluation의 작업 관계를 유지한다
 **Confidence: HIGH**
 
-### Preferred spatial hierarchy
-- Left: entity queue / navigation
-- Center: artifact/document/main content
-- Right: score/summary/action
+핵심은 세 기능의 **동시 접근성**이지 고정 3-pane 배치가 아니다.
 
-Center가 가장 넓다.
+- entity queue / navigation
+- artifact/document/main source
+- score/summary/action
 
-IF right evaluation pane이 접힐 수 있어도,
-현재 대상/진행률/주요 action 접근성은 유지한다.
+실제 배치는 closest existing screen과 task에 따라 달라질 수 있다.
+예: 좌측 queue + 우측 artifact + bottom-sheet evaluation, 또는 multi-pane workspace.
 
-Evidence: 심사 페이지, 최종 심사.
+primary artifact/source가 중심인 경우 가장 많은 공간을 주되,
+현재 대상/진행률/평가 action의 접근성은 유지한다.
+
+Evidence: 1차 심사, 최종 심사, AI 심사 결과 상세.
 
 ---
 
