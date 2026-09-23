@@ -145,7 +145,23 @@ Figma는 무료 계정 + 플러그인 왕복으로 다룬다(MCP 없음). 상세
 
 ---
 
-## 5. 추출 + 판정 (screens → verification)
+## 5. 최신 Figma 상태 동기화 + 판정
+
+화면 생성이 끝나면 `docs/figma-design-sync-workflow.md`를 따라 최신 Figma를 repository에 동기화한다.
+
+필수:
+1. `op:extract`로 구조 snapshot 갱신
+2. `op:screenshot`으로 각 screen/state의 최신 PNG 갱신
+3. `screens.json`에서 screenId/state/frameId/screenshot 연결
+4. PRD/requirements 대비 Design Coverage Audit 수행
+
+화면을 그렸다는 사실만으로 완료 처리하지 않는다.
+최신 extract + screenshot이 모두 있어야 이후 작업에서 현재 디자인 source로 사용한다.
+
+Design Coverage Audit 결과에 `MISSING_DESIGN` / `MISSING_STATE`가 있으면
+이를 자동으로 새로 그리지 않고 먼저 누락 목록을 사용자에게 보여준다.
+
+### 기존 screens → verification 절차
 
 1. 화면 페이지를 `op:extract`로 추출 (stage=screens, inputDigest는 `fingerprint --scope screens` 값).
 2. 결과를 `design/04-screens/snapshot.json`에 저장:
