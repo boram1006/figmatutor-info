@@ -12,7 +12,7 @@
 
 ### Structure
 1. Title / context selector
-2. 3~4개의 summary metric card
+2. 업무 판단에 필요한 제한된 summary metric
 3. Table toolbar
 4. Dense table
 5. Pagination
@@ -110,7 +110,7 @@ Evidence: 팀빌딩.
 긴 multi-section form을 진행하면서 전체 위치를 잃지 않게 함.
 
 ### Trigger
-3개 이상의 명확한 sequential sections, 특히 저장/재진입 가능 workflow.
+여러 sequential section으로 구성되어 사용자가 현재 위치를 잃기 쉽고, step 간 진행·저장·재진입 맥락을 유지해야 하는 workflow.
 
 ### Structure
 Left:
