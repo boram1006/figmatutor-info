@@ -46,6 +46,8 @@ inclusion: always
 | "기존 화면 토큰 바인딩해줘", "색·폰트가 안 붙었어", "raw 값 정리해줘" | `docs/rebind-existing-screen-workflow.md` 절차 (진단→색 rebind→타이포 size 배정→재추출 검증) |
 | "이런 기능 필요해", "PRD 뽑아줘", "기획 정리해줘" | `docs/prd-authoring-workflow.md` 절차 (요청→8블록 PRD 초안→부족분 질문→확정) |
 | "검증해줘", "결함 찾아줘" | `audit-design` |
+| "Figma 최신 상태 동기화해줘", "최신 화면 반영해줘" | `docs/figma-design-sync-workflow.md` 절차 (extract + screenshot + manifest/snapshot 갱신) |
+| "PRD 대비 빠진 화면 찾아줘", "디자인 누락 확인해줘", "상태 디자인 빠진 거 찾아줘" | `docs/figma-design-sync-workflow.md`의 Design Coverage Audit 절차 |
 | "QA 리스트 만들어줘", "QA 케이스 생성해줘", "테스트 케이스 뽑아줘" | `docs/qa-workflow.md` 절차 (PRD source 읽기→requirement extraction→케이스 생성→state/permission matrix→automation 분류) |
 | "QA 실행 결과 기록해줘", "Pass/Fail 정리해줘" | `docs/qa-list-workflow.md` 절차 (TC 패턴 생성→design/operations/qa/ 파일 저장) |
 
@@ -75,6 +77,17 @@ inclusion: always
 - **기존 화면 수정/기능 추가**: 반드시 `design/03-design-rules/generation/existing-screen-modification.md`를 먼저 읽고, 기존 화면을 baseline으로 유지한 채 ADD/MODIFY/REMOVE delta만 적용한다. PRD에 언급되지 않은 영역은 변경하지 않는다.
 - 기존 component instance/JSON 구조가 있으면 새로 비슷하게 만들지 말고 동일 component reference/instance structure를 재사용한다.
 - 근거 없는 Card/Table 변환, 고정 pane 비율, 속성 개수 기반 threshold, 임의의 spacing/width 재설계를 하지 않는다.
+
+## Figma 최신 디자인 동기화 (필수)
+
+새 화면 생성/기존 화면 수정 후에는 `docs/figma-design-sync-workflow.md`를 따라
+현재 Figma의 실제 화면을 repository에 다시 동기화한다.
+
+- `op:extract` = Figma 구조 JSON
+- `op:screenshot` = 실제 frame PNG
+- 둘을 모두 최신화해야 이후 기획/QA/coverage 판단의 current source로 사용한다.
+- PRD에 정의된 화면/state와 실제 Figma를 비교해 `COVERED / MISSING_DESIGN / MISSING_STATE / MISMATCH / UNVERIFIED`로 판정한다.
+- 과거 PDF나 이전 screenshot만으로 현재 디자인이 존재한다고 판단하지 않는다.
 
 ## 새 화면 생성 (PRD 기반)
 
