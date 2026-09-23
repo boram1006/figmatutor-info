@@ -10,6 +10,8 @@
 **이 워크플로우는 "지금부터 새로 만드는 화면"에만 적용한다.**
 
 > PRD가 아직 없고 기능 요청만 있으면, 먼저 **`docs/prd-authoring-workflow.md`** 로 PRD를 생성한 뒤 이 문서로 온다.
+> 기존 화면 유형으로 설명되지 않는 완전히 새로운 기획이면 화면을 그리기 전에 **`design/03-design-rules/generation/novel-screen-reasoning.md`** 를 적용한다.
+> 이때 Product Decision은 임의로 만들지 않고, Design Decision만 기존 archetype/pattern 근거를 조합해 판단한다.
 > 새 릴리즈면 그 PRD를 Figma 프레임 맨 앞 **노란색 박스**에도 싣는다(릴리즈 PRD 게시 규칙).
 
 ---
@@ -71,6 +73,19 @@
 - 카드 리스트(정렬 우선순위 규칙) / 좌측 스텝 네비가 있는 단계별 폼
 - 다크+골드 발표 화면(합격 축하) + 카운트다운 타이머
 - 빈 상태 + CTA는 화면마다 필수 정의
+
+---
+
+## 1.5. 신규 UX 구조 판단
+
+PRD의 사용자 목표와 task를 기존 archetype 하나가 충분히 설명하는지 먼저 확인한다.
+
+- 충분함 → 해당 archetype + 기존 pattern을 사용한다.
+- 일부만 맞음 → primary archetype을 정하고 필요한 supporting pattern을 조합한다.
+- 맞는 유형이 없음 → `novel-screen-reasoning.md`에 따라 Candidate Pattern을 정의한다.
+
+Candidate Pattern은 현재 화면을 만들기 위한 설계 가설이며 전역 generation rule이 아니다.
+새 정보 공개 범위·권한·상태·점수 정책처럼 제품 정책에 해당하는 빈칸은 사용자 확인 없이 채우지 않는다.
 
 ---
 
