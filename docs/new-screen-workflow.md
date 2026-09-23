@@ -13,6 +13,8 @@
 > 기존 화면 유형으로 설명되지 않는 완전히 새로운 기획이면 화면을 그리기 전에 **`design/03-design-rules/generation/novel-screen-reasoning.md`** 를 적용한다.
 > 이때 Product Decision은 임의로 만들지 않고, Design Decision만 기존 archetype/pattern 근거를 조합해 판단한다.
 > 새 릴리즈면 그 PRD를 Figma 프레임 맨 앞 **노란색 박스**에도 싣는다(릴리즈 PRD 게시 규칙).
+>
+> **PRD source 확인**: 기존 릴리즈에 대한 작업이라면 repo의 역복원 PRD(`design/operations/prd-*/PRD.md`)를 requirement source로 바로 사용하지 않는다. Figma 캔버스의 노란 박스 원본 PRD(`ORIGINAL_PRD`)가 있으면 그것을 우선한다. 상세: `docs/coverage-audit-rules.md` Section 1.
 
 ---
 
