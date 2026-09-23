@@ -701,6 +701,10 @@ async function runRebind(spec) {
   // Unstyled text gets a style by rounding its fontSize to the nearest step,
   // then picking by weight class. Handles scale-distorted sizes (e.g. 13.6 -> 14).
   const textSizeMap = spec.textSizeMap && spec.textSizeMap.map ? spec.textSizeMap : null;
+  // Existing-screen rebind must be non-destructive by default.
+  // Size-based assignment can change font size/weight/line-height when a style is applied,
+  // so it is allowed only in an explicitly approved typography migration.
+  const allowVisualTypographyNormalization = spec.allowVisualTypographyNormalization === true;
   const sizeSteps = textSizeMap && Array.isArray(textSizeMap.steps) && textSizeMap.steps.length
     ? textSizeMap.steps.slice().sort((a, b) => a - b)
     : null;
@@ -846,11 +850,15 @@ async function runRebind(spec) {
       if (currentName) {
         // Already styled: name-based swap.
         targetName = textStyleMap[currentName] || null;
-      } else if (textSizeMap) {
-        // Unstyled: assign by rounded fontSize + weight class (size-based assignment).
+      } else if (allowVisualTypographyNormalization && textSizeMap) {
+        // Explicit migration mode only: may normalize visual typography.
         targetName = assignBySize(n) || textStyleMap['__unstyled__'] || null;
-      } else {
+      } else if (allowVisualTypographyNormalization) {
         targetName = textStyleMap['__unstyled__'] || null;
+      } else {
+        // Default existing-screen mode: preserve unstyled typography exactly.
+        // Report it for manual/explicit migration instead of changing visual hierarchy.
+        targetName = null;
       }
       if (targetName && targetName !== currentName) {
         const target = textStyleByName.get(targetName);
