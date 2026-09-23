@@ -56,7 +56,7 @@ inclusion: always
 이 웹서비스의 전체 메뉴 트리·권한(일반/관리자)·상태 머신·릴리즈 이력·의존관계는
 **`design/02-structure/SITEMAP.md`** 에 종합돼 있다(v1~v5 PRD 노란 박스 정독 기반).
 새 기획 요청이 오면 먼저 SITEMAP의 "의존관계"로 영향 범위를 파악한 뒤 작업 범위를 잡는다.
-화면 ID 체계: 일반 지원 흐름=A 시리즈, 심사자/관리자=J 시리즈.
+화면 ID 체계: 일반 지원 흐름=A 시리즈, AI 심사 관리 기능=J 시리즈. 사람 심사 화면은 J 시리즈와 별개다.
 
 ## PRD 생성 (기능 요청 기반)
 
@@ -71,7 +71,7 @@ inclusion: always
 화면 목적에 맞는 archetype·density·layout·component usage·pattern·visual hierarchy·state 규칙을 선택해서 적용한다.
 일반적인 SaaS 관습보다 실제 기존 화면과 PRD 근거를 우선한다.
 
-- **신규 화면 생성**: PRD → page archetype/pattern → 유사 기존 화면 → 기존 component/token 순으로 판단한다.
+- **신규 화면 생성**: 먼저 사용자/task/outcome을 분석한다. 기존 유형이면 archetype/pattern을 재사용하고, 기존 유형으로 설명되지 않는 신규 기획이면 `design/03-design-rules/generation/novel-screen-reasoning.md`를 따라 pattern 조합 → Candidate Pattern 순으로 판단한다. Product Decision은 근거 없이 발명하지 않는다.
 - **기존 화면 수정/기능 추가**: 반드시 `design/03-design-rules/generation/existing-screen-modification.md`를 먼저 읽고, 기존 화면을 baseline으로 유지한 채 ADD/MODIFY/REMOVE delta만 적용한다. PRD에 언급되지 않은 영역은 변경하지 않는다.
 - 기존 component instance/JSON 구조가 있으면 새로 비슷하게 만들지 말고 동일 component reference/instance structure를 재사용한다.
 - 근거 없는 Card/Table 변환, 고정 pane 비율, 속성 개수 기반 threshold, 임의의 spacing/width 재설계를 하지 않는다.
