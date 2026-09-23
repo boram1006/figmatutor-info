@@ -123,6 +123,32 @@ J-01 AI 심사 대시보드              GNB 'AI 심사'로 접근 (관리자 �
 - **상단 네비**: 홈/공지사항/팀빌딩/FAQ/로그인(+관리자는 'AI 심사') + 우측 붉은 CTA.
 - **채점**: 지원서 60(6항목×10, 5회 반복 평균) + 산출물 40 = 100점. 구간 상/중/하로 권고.
 
+### 5-1. 화면 Archetype 매핑
+
+화면 생성·수정 시 아래 Archetype을 참조한다. 상세: `design/03-design-rules/generation/page-archetypes.md`
+기존 화면 수정 시 반드시 `design/03-design-rules/generation/existing-screen-modification.md`를 먼저 읽는다.
+
+| 화면 | Archetype | 밀도 |
+|---|---|---|
+| 홈(랜딩) | A2 Campaign / Celebration | Low~Medium |
+| 공지사항 목록/상세 | A1 Editorial / Information | Low~Medium |
+| FAQ | A1 Editorial / Information | Low~Medium |
+| 팀빌딩 목록 | A3 Entity Browse / Selection | Medium |
+| A-01 내 지원서 리스트 | A4 Personal Status / Work Hub | Medium |
+| A-02 지원서 입력 폼 | A5 Step Workflow / Form | Medium |
+| 1차 심사 결과 발표 | A2 Campaign / Celebration | Low~Medium |
+| 최종 합격팀 발표 | A2 Campaign / Celebration | Low~Medium |
+| 수상작 발표 랜딩 / 카드 | A2 Campaign / Celebration | Low~Medium |
+| A-30 내 지원 현황 | A4 Personal Status / Work Hub | Medium |
+| A-31 최종보고서 스텝 폼 | A5 Step Workflow / Form | Medium |
+| A-32 최종 심사 제출 패키지 | A9 Submission Package / Readiness | Medium~High |
+| J-01 AI 심사 대시보드 | A6 Operational Dashboard | High |
+| **J-02 AI 심사 결과 목록/상세** | **A7 Evaluation Workspace** | Very High |
+| J-03 AI 심사 템플릿 목록 | A6 Operational Dashboard | High |
+| J-04 심사 템플릿 편집 | A5 Step Workflow / Form | Medium |
+
+> J-02 핵심: A7 Evaluation Workspace는 고정 pane 비율을 규칙으로 만들지 않는다. 기존 화면의 geometry를 따른다. 심사 화면을 token/component QA용으로 재해석하지 않는다.
+
 ---
 
 ## 6. 릴리즈별 추가/변경 이력

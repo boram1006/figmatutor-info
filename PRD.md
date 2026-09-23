@@ -64,12 +64,16 @@ LG전자 AX Hackathon 2026의 공지, 결과 발표, 수상작 쇼케이스를 �
 
 본 하네스에서는 실제 제작된 데스크탑 화면을 대상으로 디자인시스템 정합을 검증한다.
 
+> 각 화면의 **Page Archetype**은 `design/03-design-rules/generation/page-archetypes.md` 기준(A1~A9).
+> 수정 작업 시 `design/03-design-rules/generation/existing-screen-modification.md`를 먼저 읽는다.
+
 ### 화면 1 · 공지사항 (notice)
 
 **목적:** 참가자가 일정·규칙·안내를 확인하고 주요 메뉴로 이동.
 **주요 요소:** 상단 네비(홈/공지사항/팀빌딩/FAQ/로그인), 공지 본문, 안내 카드.
 **Primary 액션:** 공지 상세 보기.
 **원본 프레임:** `1_Notice (Updated)` (1920 폭).
+**Page Archetype:** A1 (Editorial / Information) — 중앙 정렬 content column, 낮은~중간 밀도.
 
 ### 화면 2 · 최종 합격팀 발표 (winners)
 
@@ -77,6 +81,7 @@ LG전자 AX Hackathon 2026의 공지, 결과 발표, 수상작 쇼케이스를 �
 **주요 요소:** 헤더(LGE AX Hackathon 2026 / FINAL WINNERS), 수상팀 카드, 순위·상금 표기.
 **Primary 액션:** 수상팀 상세 보기.
 **원본 프레임:** `LGE AX Hackathon - 최종 합격팀 발표 v2` (1440 폭, 긴 스크롤).
+**Page Archetype:** A2 (Campaign / Celebration) — dark/gold 이벤트 모드, 결과 발표 특화, 장식 허용.
 
 ### 화면 3 · 수상작 발표 랜딩 (awards-landing)
 
@@ -84,6 +89,7 @@ LG전자 AX Hackathon 2026의 공지, 결과 발표, 수상작 쇼케이스를 �
 **주요 요소:** 히어로 문구, 수상작 섹션/컨테이너, 서비스 연결 버튼.
 **Primary 액션:** 수상작 사용해보기.
 **원본 프레임:** `Frame` (1920×5482, 발표 랜딩 대표 시안).
+**Page Archetype:** A2 (Campaign / Celebration) — 이벤트 랜딩. 히어로+수상작 섹션 복합 구조.
 
 ### 화면 4 · 수상작 카드 (award-card)
 
@@ -91,6 +97,7 @@ LG전자 AX Hackathon 2026의 공지, 결과 발표, 수상작 쇼케이스를 �
 **주요 요소:** 수상작 제목, 설명, 서비스명 태그(예: Autopack, Lvis, Shiptalk AI, SQM AI).
 **Primary 액션:** 서비스 바로가기.
 **원본 프레임:** `AX Hackathon — Card Redesign` (720 폭).
+**Page Archetype:** A2 (Campaign / Celebration) — 독립 entity card. 각 수상작이 독립 상태·액션 보유.
 
 ---
 
