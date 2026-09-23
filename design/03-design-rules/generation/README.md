@@ -15,14 +15,19 @@
 
 새 화면을 생성하기 전에 다음 순서로 판단한다.
 
-1. `page-archetypes.md`에서 화면 목적에 가장 가까운 archetype을 선택한다.
-2. `density-rules.md`에서 필요한 정보 밀도를 결정한다.
-3. `layout-rules.md`에서 페이지 구조와 주요 영역 배치를 선택한다.
-4. `component-usage.md`에서 Card / Table / List / Banner / Modal 등의 표현 방식을 결정한다.
-5. `patterns.md`에서 기존 복합 패턴을 우선 재사용한다.
-6. `visual-hierarchy.md`의 강조·상태·시각 언어를 적용한다.
-7. `exceptions.md`의 예외 조건을 확인한다.
-8. 판단 근거가 부족하면 `unresolved.md`를 확인하고 임의의 서비스 규칙을 발명하지 않는다.
+1. 사용자 / task / desired outcome을 먼저 정의한다.
+2. 기존 화면과 동일 유형이 없는 신규 기획이면 `novel-screen-reasoning.md`를 먼저 읽는다.
+3. `page-archetypes.md`에서 화면 목적을 설명할 수 있는 primary archetype이 있는지 확인한다.
+4. 하나의 archetype으로 충분하지 않으면 검증된 pattern을 조합한다. 억지로 하나에 끼워 맞추지 않는다.
+5. `density-rules.md`에서 필요한 정보 밀도를 결정한다.
+6. `layout-rules.md`에서 페이지 구조와 주요 영역 배치를 선택한다.
+7. `component-usage.md`에서 Card / Table / List / Banner / Modal 등의 표현 방식을 결정한다.
+8. `patterns.md`에서 기존 복합 패턴을 우선 재사용한다.
+9. `visual-hierarchy.md`의 강조·상태·시각 언어를 적용한다.
+10. `exceptions.md`의 예외 조건을 확인한다.
+11. 판단 근거가 부족하면 `unresolved.md`를 확인하고 임의의 서비스 규칙을 발명하지 않는다.
+
+신규 구조가 필요하면 바로 전역 규칙으로 만들지 않고 `CANDIDATE/HYPOTHESIS`로 기록한다.
 
 ## Confidence
 
@@ -40,6 +45,7 @@
 일반적인 "깔끔한 SaaS UI" 관습을 적용해 기존 화면의 정보량을 임의로 줄이거나,
 모든 정보를 Card로 쪼개거나, 작업 컨텍스트를 여러 페이지로 분리하지 않는다.
 
-## 기존 화면 수정
+## 신규 기획과 기존 화면 수정
 
-기존 화면에 기능을 추가하거나 일부를 수정하는 작업은 `existing-screen-modification.md`를 먼저 따른다. 기존 화면을 baseline으로 보존하고 PRD delta만 최소 변경한다.
+- **완전히 새로운 기획**: `novel-screen-reasoning.md`를 따라 Product Decision과 Design Decision을 분리하고, 기존 archetype 재사용 → pattern 조합 → Candidate Pattern 순으로 판단한다.
+- **기존 화면 수정**: `existing-screen-modification.md`를 먼저 따른다. 기존 화면을 baseline으로 보존하고 PRD delta만 최소 변경한다.
