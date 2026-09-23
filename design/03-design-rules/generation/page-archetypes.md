@@ -1,7 +1,12 @@
 # Page Archetypes
 
-새 화면은 먼저 아래 archetype 중 하나를 선택한다.
-둘 이상이 섞이면 **주요 사용자 목표**를 기준으로 primary archetype을 정한다.
+아래 archetype은 **화면 목적을 분류하고 판단을 돕는 모델**이지 고정 템플릿이 아니다.
+
+먼저 사용자 / task / desired outcome을 정의한다.
+기존 archetype 하나가 충분히 설명하면 primary archetype으로 사용한다.
+둘 이상의 성격이 필요하면 주요 사용자 목표를 primary로 두고 supporting pattern을 조합한다.
+기존 archetype에 맞지 않는 새로운 task를 억지로 끼워 맞추지 않는다.
+그 경우 `novel-screen-reasoning.md`에 따라 Candidate Pattern을 만든다.
 
 ## A1. Editorial / Information
 **Confidence: HIGH**
