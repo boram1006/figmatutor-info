@@ -46,10 +46,11 @@
 
 - 형태: HORIZONTAL auto-layout, `padding 4/8`, `radius 4`, HUG.
 - 색 조합(상태색 규칙, SITEMAP §5와 일치):
-  - 완료/성공 = 글자 `status-success-s` / 배경 `background-surface`(연녹)
+  - 완료/성공 = 글자 `status-success-s`(Green) / 배경 `background-surface`(neutral surface, 현재 토큰 `#F3F4F6`)
   - 강조/경고/재제출 = 글자 `text-accent` / 배경 `background-subtle`(연적)
   - 진행중 = 글자 `text-accent`(Red 계열) / 배경 `background-subtle`
   - 미진출/비활성 = 글자 `text-disabled` / 배경 `background-surface`
+- **주의:** 상태 의미는 badge의 semantic text/status token + label 조합으로 전달한다. `background-surface` 자체를 성공/Green 배경으로 해석하지 않는다.
 - 텍스트 스타일: `Text/caption` 또는 `Text/caption-medium`.
 
 ---
