@@ -352,7 +352,7 @@ async function runCreate(spec) {
   }
   await figma.setCurrentPageAsync(page);
 
-  const created = { page: { id: page.id, name: page.name }, collections: {}, variables: {}, textStyles: {}, nodes: {}, instances: {} };
+  const created = { page: { id: page.id, name: page.name }, collections: {}, variables: {}, textStyles: {}, nodes: {}, instances: {}, clones: {} };
   const reused = { collections: {}, variables: {}, textStyles: {} };
   const varRef = new Map(); // logical name -> Variable
 
@@ -614,12 +614,45 @@ async function runCreate(spec) {
         instanceSource = await resolveInstanceComponent(node);
         n = instanceSource.createInstance();
         break;
+      case 'CLONE': {
+        if (!node.sourceNodeId)
+          throw new Error('CLONE에 sourceNodeId 필요: ' + (node.name || node.key || '(unnamed)'));
+        if ((node.children || []).length)
+          throw new Error('CLONE은 원본 children을 그대로 보존함. children 직접 생성 금지: ' + node.sourceNodeId);
+        if (node.fills || node.strokes || node.metrics)
+          throw new Error('CLONE visual을 직접 재구성하지 않음. patches만 사용: ' + node.sourceNodeId);
+        const sourceNode = await figma.getNodeByIdAsync(node.sourceNodeId);
+        if (!sourceNode)
+          throw new Error('sourceNodeId 노드 없음: ' + node.sourceNodeId);
+        const cloned = await cloneAndPatchNode(sourceNode, {
+          name: node.name || null,
+          patches: node.patches || [],
+        });
+        n = cloned.clone;
+        n.__designHarnessCloneResult = {
+          sourceNodeId: node.sourceNodeId,
+          patchReport: cloned.patchReport,
+          verification: cloned.verification,
+        };
+        break;
+      }
       default: throw new Error('지원하지 않는 노드 타입: ' + node.type);
     }
     if (node.name) n.name = node.name;
     // Attach to parent BEFORE sizing so auto-layout sizing applies correctly.
     if (parent) parent.appendChild(n);
     else page.appendChild(n);
+
+    if (node.type === 'CLONE') {
+      const cloneKey = node.key || node.name || n.id;
+      created.clones[cloneKey] = {
+        id: n.id,
+        sourceNodeId: node.sourceNodeId,
+        patches: n.__designHarnessCloneResult?.patchReport || [],
+        verification: n.__designHarnessCloneResult?.verification || null,
+      };
+      try { delete n.__designHarnessCloneResult; } catch {}
+    }
 
     if (node.type === 'INSTANCE') {
       if (node.componentProperties !== undefined) {
@@ -657,44 +690,50 @@ async function runCreate(spec) {
       }
     }
 
-    // Auto layout
-    if (node.layout && 'layoutMode' in n) {
-      n.layoutMode = node.layout.mode || 'NONE';
-      if (node.layout.mode && node.layout.mode !== 'NONE') {
-        if (node.layout.primaryAxisSizingMode) n.primaryAxisSizingMode = node.layout.primaryAxisSizingMode;
-        if (node.layout.counterAxisSizingMode) n.counterAxisSizingMode = node.layout.counterAxisSizingMode;
+    // Auto layout / visual construction rules.
+    // CLONE은 exact source geometry/layout/style을 보존하고 generic create 속성으로 재설정하지 않는다.
+    if (node.type !== 'CLONE') {
+      if (node.layout && 'layoutMode' in n) {
+        n.layoutMode = node.layout.mode || 'NONE';
+        if (node.layout.mode && node.layout.mode !== 'NONE') {
+          if (node.layout.primaryAxisSizingMode) n.primaryAxisSizingMode = node.layout.primaryAxisSizingMode;
+          if (node.layout.counterAxisSizingMode) n.counterAxisSizingMode = node.layout.counterAxisSizingMode;
+        }
       }
+
+      // Size (before HUG/FILL constraints)
+      // INSTANCE는 명시적으로 allowResize:true인 경우만 resize한다. 기본은 component geometry 보존.
+      if (typeof node.width === 'number' && typeof node.height === 'number') {
+        if (node.type === 'INSTANCE' && node.allowResize !== true)
+          throw new Error('INSTANCE width/height 직접 resize 금지. 필요하면 allowResize:true를 명시: ' + (node.name || node.key || n.id));
+        n.resize(node.width, node.height);
+      }
+
+      if (node.fills) n.fills = node.fills.map((p) => paintFrom(p, semanticByName, imageHashes));
+      if (node.strokes) n.strokes = node.strokes.map((p) => paintFrom(p, semanticByName, imageHashes));
+      applyMetrics(n, node.metrics, node.bindings, semanticByName);
+    } else if (typeof node.width === 'number' || typeof node.height === 'number' || node.layout) {
+      throw new Error('CLONE geometry/layout 직접 재설정 금지. 원본 패턴 geometry를 보존: ' + node.sourceNodeId);
     }
-
-    // Size (before HUG/FILL constraints)
-    // INSTANCE는 명시적으로 allowResize:true인 경우만 resize한다. 기본은 component geometry 보존.
-    if (typeof node.width === 'number' && typeof node.height === 'number') {
-      if (node.type === 'INSTANCE' && node.allowResize !== true)
-        throw new Error('INSTANCE width/height 직접 resize 금지. 필요하면 allowResize:true를 명시: ' + (node.name || node.key || n.id));
-      n.resize(node.width, node.height);
-    }
-
-    // Fills
-    if (node.fills) n.fills = node.fills.map((p) => paintFrom(p, semanticByName, imageHashes));
-    if (node.strokes) n.strokes = node.strokes.map((p) => paintFrom(p, semanticByName, imageHashes));
-
-    // Metric bindings (padding/spacing/radius)
-    applyMetrics(n, node.metrics, node.bindings, semanticByName);
 
     // clip / scroll
     if (typeof node.clipsContent === 'boolean' && 'clipsContent' in n) n.clipsContent = node.clipsContent;
     if (node.overflowDirection && 'overflowDirection' in n) n.overflowDirection = node.overflowDirection;
 
     // Sizing constraints (HUG/FILL) after append
-    if (node.layoutSizingVertical && 'layoutSizingVertical' in n) n.layoutSizingVertical = node.layoutSizingVertical;
-    if (node.layoutSizingHorizontal && 'layoutSizingHorizontal' in n) n.layoutSizingHorizontal = node.layoutSizingHorizontal;
+    if (node.type !== 'CLONE') {
+      if (node.layoutSizingVertical && 'layoutSizingVertical' in n) n.layoutSizingVertical = node.layoutSizingVertical;
+      if (node.layoutSizingHorizontal && 'layoutSizingHorizontal' in n) n.layoutSizingHorizontal = node.layoutSizingHorizontal;
+    }
 
     // Metadata (shared plugin data)
     if (node.metadata) n.setSharedPluginData('designHarness', 'metadata', JSON.stringify(node.metadata));
 
     if (node.key) created.nodes[node.key] = n.id;
 
-    for (const child of node.children || []) await build(child, n);
+    if (node.type !== 'CLONE') {
+      for (const child of node.children || []) await build(child, n);
+    }
     return n;
   }
 
@@ -1242,6 +1281,180 @@ function round2(x) {
 //   ]
 // }
 // ===========================================================================
+async function cloneAndPatchNode(source, options = {}) {
+  if (!source || typeof source.clone !== 'function')
+    throw new Error('clone 가능한 source 노드 필요');
+
+  let clone = null;
+  try {
+    const sourceBefore = await captureCloneVerificationTree(source);
+
+    clone = source.clone();
+
+    const cloneBefore = await captureCloneVerificationTree(clone);
+    const prePatchDiffs = compareCloneTrees(sourceBefore, cloneBefore, {
+      mode: 'prePatch',
+      allowed: new Map(),
+    });
+    if (prePatchDiffs.length) {
+      throw new Error(
+        'clone 보존 검증 실패(patch 전): ' +
+        summarizeVerificationDiffs(prePatchDiffs)
+      );
+    }
+
+    const patches = Array.isArray(options.patches) ? options.patches : [];
+    const patchPlans = [];
+
+    for (let index = 0; index < patches.length; index++) {
+      const patch = patches[index];
+      if (!patch || typeof patch.nodeName !== 'string' || !patch.nodeName.trim())
+        throw new Error('patch[' + index + '] nodeName 필요');
+
+      const targets = findNodesByName(clone, patch.nodeName);
+      const expectedMatches = patch.expectedMatches;
+
+      if (!targets.length)
+        throw new Error(
+          'patch 대상 노드 없음: ' + patch.nodeName +
+          ' (sourceId=' + source.id + ', patchIndex=' + index + ')'
+        );
+
+      if (
+        expectedMatches !== undefined &&
+        (!Number.isInteger(expectedMatches) || expectedMatches < 1)
+      ) throw new Error('expectedMatches는 1 이상의 정수여야 함: ' + patch.nodeName);
+
+      if (expectedMatches !== undefined && targets.length !== expectedMatches)
+        throw new Error(
+          'patch 대상 개수 불일치: ' + patch.nodeName +
+          ' expected=' + expectedMatches + ' actual=' + targets.length
+        );
+
+      patchPlans.push({ index, patch, targets });
+    }
+
+    const clonePathById = buildRelativePathMap(clone);
+    const allowedChanges = new Map();
+    if (options.name) allowCloneChange(allowedChanges, '0', 'name');
+
+    for (const plan of patchPlans) {
+      for (const target of plan.targets) {
+        const path = clonePathById.get(target.id);
+        if (!path) throw new Error('patch 대상 path 계산 실패: ' + target.id);
+        if (plan.patch.rename !== undefined) allowCloneChange(allowedChanges, path, 'name');
+        if (plan.patch.visible !== undefined) allowCloneChange(allowedChanges, path, 'visible');
+        if (plan.patch.characters !== undefined) allowCloneChange(allowedChanges, path, 'characters');
+        if (plan.patch.fillBinding !== undefined || plan.patch.fillColor !== undefined)
+          allowCloneChange(allowedChanges, path, 'fills');
+      }
+    }
+
+    if (options.name) clone.name = options.name;
+
+    const patchReport = [];
+    for (const plan of patchPlans) {
+      const { index, patch, targets } = plan;
+      const targetIds = [];
+
+      for (const target of targets) {
+        targetIds.push(target.id);
+
+        if (patch.rename !== undefined) target.name = patch.rename;
+        if (patch.visible !== undefined && 'visible' in target) target.visible = patch.visible;
+
+        if (patch.characters !== undefined) {
+          if (target.type !== 'TEXT')
+            throw new Error('characters patch 대상이 TEXT가 아님: ' + patch.nodeName + ' (' + target.type + ')');
+          if (target.fontName === figma.mixed) {
+            const len = target.characters.length;
+            for (let i = 0; i < len; i++)
+              await figma.loadFontAsync(target.getRangeFontName(i, i + 1));
+          } else {
+            await figma.loadFontAsync(target.fontName);
+          }
+          target.characters = patch.characters;
+        }
+
+        if (patch.fillBinding !== undefined) {
+          if (!('fills' in target))
+            throw new Error('fillBinding patch 대상에 fills 없음: ' + patch.nodeName);
+          const v = await resolveSemanticVar(patch.fillBinding);
+          if (!v) throw new Error('fillBinding semantic 변수 없음: ' + patch.fillBinding);
+          const base =
+            (Array.isArray(target.fills) && target.fills[0] && target.fills[0].type === 'SOLID')
+              ? {
+                  type: 'SOLID',
+                  color: target.fills[0].color,
+                  opacity: target.fills[0].opacity ?? 1,
+                }
+              : {
+                  type: 'SOLID',
+                  color: { r: 0, g: 0, b: 0 },
+                  opacity: 1,
+                };
+          target.fills = [figma.variables.setBoundVariableForPaint(base, 'color', v)];
+        } else if (patch.fillColor !== undefined) {
+          if (!('fills' in target))
+            throw new Error('fillColor patch 대상에 fills 없음: ' + patch.nodeName);
+          const color = hexToRgb(patch.fillColor);
+          target.fills = [{
+            type: 'SOLID',
+            color: { r: color.r, g: color.g, b: color.b },
+            opacity: color.a ?? 1,
+          }];
+        }
+      }
+
+      patchReport.push({
+        patchIndex: index,
+        nodeName: patch.nodeName,
+        expectedMatches: patch.expectedMatches ?? null,
+        matchedCount: targets.length,
+        targetIds,
+        applied: true,
+      });
+    }
+
+    const cloneAfter = await captureCloneVerificationTree(clone);
+    const postPatchDiffs = compareCloneTrees(sourceBefore, cloneAfter, {
+      mode: 'postPatch',
+      allowed: allowedChanges,
+    });
+    const unexpectedChanges = postPatchDiffs.filter((d) => d.category !== 'geometry');
+    const geometryChanges = postPatchDiffs.filter((d) => d.category === 'geometry');
+
+    if (unexpectedChanges.length) {
+      throw new Error(
+        'clone 보존 검증 실패(patch 후): ' +
+        summarizeVerificationDiffs(unexpectedChanges)
+      );
+    }
+
+    return {
+      clone,
+      patchReport,
+      verification: {
+        prePatch: {
+          passed: true,
+          comparedNodes: sourceBefore.nodes.length,
+          differences: [],
+        },
+        postPatch: {
+          passed: true,
+          unexpectedChanges: [],
+          geometryChanges,
+        },
+      },
+    };
+  } catch (error) {
+    if (clone && !clone.removed) {
+      try { clone.remove(); } catch {}
+    }
+    throw error;
+  }
+}
+
 async function runDuplicate(spec) {
   if (!spec.pageName) throw new Error('duplicate 스펙에 pageName 필요');
   if (figma.fileKey && spec.fileKey && figma.fileKey !== spec.fileKey)
