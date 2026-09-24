@@ -100,6 +100,35 @@ Candidate Pattern은 현재 화면을 만들기 위한 설계 가설이며 전�
 - machine-readable registry: `design/03-design-rules/patterns/registry.json`
 - 최신 snapshot 기반 resolved registry: `design/03-design-rules/patterns/resolved-registry.json`
 
+### v1~v4 source scan
+
+현재 repo에는 v5 partial extract는 있으나 v1~v4의 최신 구조 snapshot은 없다.
+따라서 legacy pattern의 nodeId를 문서/PDF에서 추측하지 않는다.
+
+준비된 Plugin extract spec:
+
+- `design/operations/pattern-source-scan/spec-extract-legacy-1.json`
+- `design/operations/pattern-source-scan/spec-extract-legacy-2.json`
+- `design/operations/pattern-source-scan/spec-extract-legacy-3.json`
+
+각 스펙을 Figma Desktop Plugin에서 실행하고 결과를 같은 폴더에
+`result-legacy-1.json`, `result-legacy-2.json`, `result-legacy-3.json`으로 저장한 뒤:
+
+```sh
+npm run patterns:refresh -- --inputs \
+design/operations/pattern-source-scan/result-legacy-1.json,design/operations/pattern-source-scan/result-legacy-2.json,design/operations/pattern-source-scan/result-legacy-3.json
+```
+
+이 명령은:
+1. 세 snapshot을 merge
+2. discovery 후보 생성
+3. exact selector resolve
+4. clone-ready pattern 목록 출력
+
+까지 수행한다.
+
+전체 서비스 snapshot이 없을 때는 partial snapshot 결과를 전역 clone source로 가장하지 않는다.
+
 ### 1) 최신 snapshot으로 clone source 해석
 
 Pattern Registry의 `sourceSelectors`에는 node 이름/타입 같은 **검증 가능한 selector**만 둔다.
