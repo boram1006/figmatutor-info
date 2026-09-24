@@ -71,6 +71,8 @@ Kiro가 result/snapshot 을 읽고 로컬 게이트로 검증
 - 스펙에 `pageName`, `stage`(`components`|`screens`), `inputDigest`, 선택적 `frameIds`를 담는다.
 - `inputDigest`는 `npm run fingerprint -- --scope <components|screens>` 출력값을 그대로 쓴다.
 - 응답이 크면 `frameIds`로 나눠 여러 번 추출하고 `scripts/merge-snapshots.mjs`로 병합한다.
+- snapshot node에는 기본 bounds/token binding 외에 신규 생성·복제 검증에 필요한 원본 정보도 보존한다: horizontal/vertical sizing, primary/counter axis sizing·alignment, wrap, constraints, opacity/blend, stroke, effects, text auto-resize/alignment/letter-spacing, instance main-component 및 component/variant properties.
+- 이 정보는 **원본을 더 정확히 이해하기 위한 evidence**이며, 추출 값을 보고 기존 화면을 임의로 normalize하라는 의미가 아니다.
 - 이 단계에서는 캔버스를 수정하지 않는다.
 
 ### `op: "duplicate"` — 기존 노드 복제 + 최소 패치 (Exact Clone → Minimal Patch)
