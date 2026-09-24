@@ -23,6 +23,7 @@
     "assets:list": "node scripts/harness.mjs assets-list",
     "patterns:resolve": "node scripts/pattern-registry.mjs resolve",
     "patterns:search": "node scripts/pattern-registry.mjs search",
-    "patterns:discover": "node scripts/pattern-registry.mjs discover"
+    "patterns:discover": "node scripts/pattern-registry.mjs discover",
+    "patterns:refresh": "node scripts/refresh-pattern-sources.mjs"
   }
 }
