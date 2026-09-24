@@ -186,7 +186,17 @@
         "지원하기 8-step",
         "최종보고서 9-step"
       ],
-      "sourceSelectors": [],
+      "sourceSelectors": [
+        {
+          "id": "v5-step-form-shell",
+          "nodeName": "A-31_report-step-form",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "multi-step-form",
+            "report-step-form"
+          ]
+        }
+      ],
       "discoveryHints": {
         "minScore": 6,
         "requiredAny": [
@@ -311,7 +321,32 @@
       "evidence": [
         "최종보고서 SECTION 9"
       ],
-      "sourceSelectors": [],
+      "sourceSelectors": [
+        {
+          "id": "v5-package-complete",
+          "nodeName": "A-32_submission-package",
+          "nodeType": "FRAME",
+          "excludedDescendantText": [
+            "미등록"
+          ],
+          "preferredFor": [
+            "ready",
+            "pre-submit-complete"
+          ]
+        },
+        {
+          "id": "v5-package-incomplete",
+          "nodeName": "A-32_submission-package",
+          "nodeType": "FRAME",
+          "requiredDescendantText": [
+            "미등록"
+          ],
+          "preferredFor": [
+            "incomplete",
+            "missing-artifact"
+          ]
+        }
+      ],
       "discoveryHints": {
         "minScore": 7,
         "requiredAny": [
