@@ -48,12 +48,13 @@ Evidence: AI 심사 대시보드.
 ### Structure
 Top/primary:
 - entity title
-- primary status badge
+- primary workflow status badge
 
 Supporting:
 - team/category or supporting metadata
 - timestamp
 - progress/result if relevant
+- secondary action-needed state if relevant
 
 Bottom:
 - status-dependent information
@@ -64,10 +65,16 @@ Bottom:
 - SUBMITTED: submit time + view
 - REVIEWING: review status + read-only
 - REVIEWED: result + view
-- changed-after-submit: secondary warning + re-submit action
+- SUBMITTED + CHANGED_AFTER_SUBMIT: submitted 상태는 유지 + secondary warning + re-submit action
+
+### Dual-state rule
+완료/제출 같은 primary state와 "재제출 필요" 같은 secondary action-needed state가 동시에 존재할 수 있다.
+secondary warning을 보여주기 위해 primary state를 다른 상태로 덮어쓰지 않는다.
 
 ### Anti-pattern
-모든 상태에서 동일 CTA를 유지하지 않는다.
+- 모든 상태에서 동일 CTA 유지
+- `제출완료 + 변경 발생`을 단일 Red 상태로 단순화
+- badge만 바꾸고 metadata/CTA는 이전 상태 그대로 유지
 
 Evidence: 지원하기 A-01, 최종보고서 진입점.
 
@@ -158,6 +165,16 @@ Evidence: 지원하기 8-step, 최종보고서 9-step.
 이 세 영역의 기능적 관계가 핵심이다.
 panel 위치와 비율은 실제 closest screen을 따른다.
 
+### Work loop
+화면 구성보다 아래 반복 흐름을 끊지 않는 것이 우선이다.
+
+**대상 선택 → source 확인 → 평가 입력 → 저장 → 다음 대상**
+
+- 현재 선택 대상은 항상 식별 가능해야 한다.
+- 저장 이후 다음 대상으로 이동하기 쉬워야 한다.
+- evaluation UI가 bottom sheet / right panel / floating panel로 바뀌어도 source와 queue context를 잃지 않는다.
+- 특정 local 영역 오류가 전체 loop를 불필요하게 중단시키지 않도록 한다.
+
 ### Persistent information
 - current entity
 - review progress
@@ -171,10 +188,11 @@ panel 위치와 비율은 실제 closest screen을 따른다.
 
 ### Anti-pattern
 - artifact를 새 탭/새 페이지로 보내고 scoring form만 남긴다.
+- 평가 입력마다 queue/source context를 초기화한다.
 - 심사 화면을 design token/component 검수용 inspector로 재해석한다.
 - 근거 없이 고정 pane 비율을 만든다.
 
-Evidence: 심사 페이지, 최종 심사.
+Evidence: 심사 페이지, 최종 심사, AI 심사 결과 상세.
 
 ---
 
@@ -219,14 +237,29 @@ report + file + URL + repository처럼 heterogeneous artifacts가 함께 필요.
 ### Structure
 1. stage title/description
 2. package status summary
-3. 2-column artifact card grid
+3. artifact card/grid
 4. warning/deadline
-5. final action area
+5. Final Action Region
+
+정확한 column 수나 action bar 위치는 고정 규칙으로 만들지 않고 closest existing screen의 geometry를 따른다.
 
 ### Card content
 - artifact label
 - readiness/status
 - artifact-specific input or view action
+
+### Final Action Region
+여러 artifact의 readiness와 workflow state를 종합해 최종 state transition을 실행하는 영역이다.
+
+가능한 state:
+- incomplete → submit disabled
+- ready → submit enabled
+- submitted unchanged → submitted/read-only
+- submitted + changed → re-submit action
+- deadline passed → locked/disabled
+
+Final Action Region은 반드시 fixed bottom bar일 필요는 없다.
+다만 개별 artifact action과 전체 package submit/re-submit action은 시각적으로 구분한다.
 
 ### State
 submitted → changed → re-submit required를 별도 표시.
