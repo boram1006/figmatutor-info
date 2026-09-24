@@ -2,7 +2,7 @@
 
 이 저장소는 Codex에서 사용하는 Figma UI 생성 하네스다. 시작할 때 `npm run status`와
 `harness.config.json`을 읽는다. 이 저장소의 AGENTS.md, 프로젝트 스킬, JSON 계약만
-활성 지침·명령·완료 판정으로 사용한다. 원본 프로젝트 경로에 쓰지 않는다.
+활성 지침·명령·완료 판정으로 사용한다. 규칙 간 정본 우선순위는 `docs/source-of-truth.md`를 따른다. 원본 프로젝트 경로에 쓰지 않는다.
 
 ## 흐름
 
@@ -47,7 +47,7 @@
 ## Figma·이미지 도구
 
 Figma 캔버스 생성·추출·캡처는 [플러그인 방식](docs/kiro-figma-plugin.md)으로 한다. Kiro가 스펙
-JSON(`op`: create/extract/screenshot)을 만들고 사용자가 데스크탑 플러그인(`scripts/figma-plugin/`)에서
+JSON(`op`: create/extract/screenshot/rebind/duplicate)을 만들고 사용자가 데스크탑 플러그인(`scripts/figma-plugin/`)에서
 실행한다. Dev Mode MCP를 쓰지 않는다. 도구 절차는 `docs/tool-adapters.md`, 메타데이터·스냅샷 계약은
 `docs/figma-contract.md`.
 
