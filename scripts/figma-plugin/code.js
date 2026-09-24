@@ -351,7 +351,7 @@ async function runCreate(spec) {
   }
   await figma.setCurrentPageAsync(page);
 
-  const created = { page: { id: page.id, name: page.name }, collections: {}, variables: {}, textStyles: {}, nodes: {} };
+  const created = { page: { id: page.id, name: page.name }, collections: {}, variables: {}, textStyles: {}, nodes: {}, instances: {} };
   const reused = { collections: {}, variables: {}, textStyles: {} };
   const varRef = new Map(); // logical name -> Variable
 
@@ -541,8 +541,63 @@ async function runCreate(spec) {
   // Newly created semantic vars (this run) override/add.
   for (const [key, v] of varRef) if (key.startsWith('semantic/')) semanticByName.set(key.slice('semantic/'.length), v);
 
+  async function resolveInstanceComponent(node) {
+    if (!node.componentNodeId)
+      throw new Error('INSTANCE에 componentNodeId 필요: ' + (node.name || node.key || '(unnamed)'));
+
+    const source = await figma.getNodeByIdAsync(node.componentNodeId);
+    if (!source)
+      throw new Error('componentNodeId 노드 없음: ' + node.componentNodeId);
+
+    if (source.type === 'COMPONENT') return source;
+
+    if (source.type !== 'COMPONENT_SET')
+      throw new Error('componentNodeId는 COMPONENT 또는 COMPONENT_SET이어야 함: ' + node.componentNodeId + ' (' + source.type + ')');
+
+    const variants = source.children.filter((child) => child.type === 'COMPONENT');
+    if (!variants.length)
+      throw new Error('COMPONENT_SET에 variant COMPONENT가 없음: ' + node.componentNodeId);
+
+    if (node.variantName) {
+      const exact = variants.filter((child) => child.name === node.variantName);
+      if (exact.length !== 1)
+        throw new Error(
+          'variantName 매칭 실패/중복: ' + node.variantName +
+          ' actual=' + exact.length + ' componentSet=' + node.componentNodeId
+        );
+      return exact[0];
+    }
+
+    if (node.variantProperties && typeof node.variantProperties === 'object') {
+      const entries = Object.entries(node.variantProperties);
+      if (!entries.length)
+        throw new Error('variantProperties는 최소 1개 속성이 필요: ' + node.componentNodeId);
+
+      const matched = variants.filter((child) => {
+        const props = child.variantProperties || {};
+        return entries.every(([key, value]) => String(props[key]) === String(value));
+      });
+
+      if (matched.length !== 1)
+        throw new Error(
+          'variantProperties 매칭 실패/중복: componentSet=' + node.componentNodeId +
+          ' actual=' + matched.length +
+          ' requested=' + JSON.stringify(node.variantProperties)
+        );
+      return matched[0];
+    }
+
+    if (variants.length === 1) return variants[0];
+
+    throw new Error(
+      'COMPONENT_SET instance 생성에는 variantName 또는 variantProperties 필요: ' +
+      node.componentNodeId + ' variants=' + variants.length
+    );
+  }
+
   async function build(node, parent) {
     let n;
+    let instanceSource = null;
     switch (node.type) {
       case 'FRAME': n = figma.createFrame(); break;
       case 'TEXT': n = figma.createText(); break;
@@ -550,12 +605,41 @@ async function runCreate(spec) {
       case 'ELLIPSE': n = figma.createEllipse(); break;
       case 'LINE': n = figma.createLine(); break;
       case 'COMPONENT': n = figma.createComponent(); break;
+      case 'INSTANCE':
+        if ((node.children || []).length)
+          throw new Error('INSTANCE는 children을 직접 생성하지 않음. componentProperties를 사용: ' + (node.name || node.key || node.componentNodeId));
+        if (node.fills || node.strokes || node.metrics)
+          throw new Error('INSTANCE visual을 직접 재구성하지 않음. 기존 component를 그대로 재사용: ' + (node.name || node.key || node.componentNodeId));
+        instanceSource = await resolveInstanceComponent(node);
+        n = instanceSource.createInstance();
+        break;
       default: throw new Error('지원하지 않는 노드 타입: ' + node.type);
     }
     if (node.name) n.name = node.name;
     // Attach to parent BEFORE sizing so auto-layout sizing applies correctly.
     if (parent) parent.appendChild(n);
     else page.appendChild(n);
+
+    if (node.type === 'INSTANCE') {
+      if (node.componentProperties !== undefined) {
+        if (!node.componentProperties || typeof node.componentProperties !== 'object' || Array.isArray(node.componentProperties))
+          throw new Error('componentProperties는 객체여야 함: ' + (node.name || node.key || node.componentNodeId));
+        if (typeof n.setProperties !== 'function')
+          throw new Error('INSTANCE setProperties 미지원: ' + n.id);
+        n.setProperties(node.componentProperties);
+      }
+      const instanceKey = node.key || node.name || n.id;
+      created.instances[instanceKey] = {
+        id: n.id,
+        componentNodeId: node.componentNodeId,
+        resolvedComponentId: instanceSource?.id || null,
+        resolvedComponentName: instanceSource?.name || null,
+        componentSetId: instanceSource?.parent?.type === 'COMPONENT_SET' ? instanceSource.parent.id : null,
+        requestedVariantName: node.variantName || null,
+        requestedVariantProperties: node.variantProperties || null,
+        appliedComponentProperties: node.componentProperties || null,
+      };
+    }
 
     if (node.type === 'TEXT') {
       const styleName = node.textStyle;
@@ -582,7 +666,12 @@ async function runCreate(spec) {
     }
 
     // Size (before HUG/FILL constraints)
-    if (typeof node.width === 'number' && typeof node.height === 'number') n.resize(node.width, node.height);
+    // INSTANCE는 명시적으로 allowResize:true인 경우만 resize한다. 기본은 component geometry 보존.
+    if (typeof node.width === 'number' && typeof node.height === 'number') {
+      if (node.type === 'INSTANCE' && node.allowResize !== true)
+        throw new Error('INSTANCE width/height 직접 resize 금지. 필요하면 allowResize:true를 명시: ' + (node.name || node.key || n.id));
+      n.resize(node.width, node.height);
+    }
 
     // Fills
     if (node.fills) n.fills = node.fills.map((p) => paintFrom(p, semanticByName, imageHashes));
