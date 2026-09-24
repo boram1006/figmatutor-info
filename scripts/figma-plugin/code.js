@@ -1485,6 +1485,7 @@ async function runDuplicate(spec) {
   if (!spec.pageName) throw new Error('duplicate 스펙에 pageName 필요');
   if (figma.fileKey && spec.fileKey && figma.fileKey !== spec.fileKey)
     throw new Error('다른 Figma 파일');
+
   const page = figma.root.children.find((p) => p.name === spec.pageName);
   if (!page) throw new Error('페이지 없음: ' + spec.pageName);
   await figma.setCurrentPageAsync(page);
@@ -1501,161 +1502,34 @@ async function runDuplicate(spec) {
 
     let clone = null;
     try {
-      // Source baseline은 clone 전에 잡는다.
-      // path는 node id/name이 아니라 child index 기반이라 clone의 새 ID와 무관하게 비교 가능하다.
-      const sourceBefore = await captureCloneVerificationTree(source);
+      const cloned = await cloneAndPatchNode(source, {
+        name: item.name || null,
+        patches: item.patches || [],
+      });
+      clone = cloned.clone;
 
-      // Exact Clone. 이후 patch 전까지 구조/레이아웃/바인딩을 재설정하지 않는다.
-      clone = source.clone();
+      // destination page로 이동하기 전 baseline.
+      const beforeAttach = await captureCloneVerificationTree(clone);
       page.appendChild(clone);
 
-      // 1) PATCH 전 exact-clone 검증.
-      // root position은 parent가 달라질 수 있어 비교하지 않지만,
-      // 트리/타입/크기/layout/constraints/component 연결/style/fill/effect 등은 동일해야 한다.
-      const cloneBefore = await captureCloneVerificationTree(clone);
-      const prePatchDiffs = compareCloneTrees(sourceBefore, cloneBefore, {
-        mode: 'prePatch',
+      // reparent 후에도 구조/style invariant는 동일해야 한다.
+      const afterAttach = await captureCloneVerificationTree(clone);
+      const compositionDiffs = compareCloneTrees(beforeAttach, afterAttach, {
+        mode: 'postPatch',
         allowed: new Map(),
       });
-      if (prePatchDiffs.length) {
+      const compositionUnexpected = compositionDiffs.filter((d) => d.category !== 'geometry');
+      const compositionGeometry = compositionDiffs.filter((d) => d.category === 'geometry');
+
+      if (compositionUnexpected.length) {
         throw new Error(
-          'clone 보존 검증 실패(patch 전): ' +
-          summarizeVerificationDiffs(prePatchDiffs)
+          'duplicate compose 보존 검증 실패(reparent 후): ' +
+          summarizeVerificationDiffs(compositionUnexpected)
         );
       }
 
-      const patchPlans = [];
-      const patches = Array.isArray(item.patches) ? item.patches : [];
-
-      // Preflight: 모든 patch target을 먼저 확인한다.
-      // 기본 정책은 silent skip 금지. 하나라도 0건 매칭이면 이 item 전체를 실패시키고 clone을 롤백한다.
-      for (let index = 0; index < patches.length; index++) {
-        const patch = patches[index];
-        if (!patch || typeof patch.nodeName !== 'string' || !patch.nodeName.trim())
-          throw new Error('patch[' + index + '] nodeName 필요');
-
-        const targets = findNodesByName(clone, patch.nodeName);
-        const expectedMatches = patch.expectedMatches;
-
-        if (!targets.length)
-          throw new Error(
-            'patch 대상 노드 없음: ' + patch.nodeName +
-            ' (sourceId=' + item.sourceId + ', patchIndex=' + index + ')'
-          );
-
-        if (
-          expectedMatches !== undefined &&
-          (!Number.isInteger(expectedMatches) || expectedMatches < 1)
-        ) throw new Error('expectedMatches는 1 이상의 정수여야 함: ' + patch.nodeName);
-
-        if (expectedMatches !== undefined && targets.length !== expectedMatches)
-          throw new Error(
-            'patch 대상 개수 불일치: ' + patch.nodeName +
-            ' expected=' + expectedMatches + ' actual=' + targets.length
-          );
-
-        patchPlans.push({ index, patch, targets });
-      }
-
-      // patch 전 clone의 path map. patch 허용 필드를 path 단위로 기록한다.
-      const clonePathById = buildRelativePathMap(clone);
-      const allowedChanges = new Map();
-      if (item.name) allowCloneChange(allowedChanges, '0', 'name');
-
-      for (const plan of patchPlans) {
-        for (const target of plan.targets) {
-          const path = clonePathById.get(target.id);
-          if (!path) throw new Error('patch 대상 path 계산 실패: ' + target.id);
-          if (plan.patch.rename !== undefined) allowCloneChange(allowedChanges, path, 'name');
-          if (plan.patch.visible !== undefined) allowCloneChange(allowedChanges, path, 'visible');
-          if (plan.patch.characters !== undefined) allowCloneChange(allowedChanges, path, 'characters');
-          if (plan.patch.fillBinding !== undefined || plan.patch.fillColor !== undefined)
-            allowCloneChange(allowedChanges, path, 'fills');
-        }
-      }
-
-      // 이름/위치는 patch target 검증이 끝난 뒤에만 변경한다.
-      if (item.name) clone.name = item.name;
       if (typeof item.x === 'number') clone.x = item.x;
       if (typeof item.y === 'number') clone.y = item.y;
-
-      const patchReport = [];
-
-      // Preflight를 통과한 patch만 적용한다.
-      for (const plan of patchPlans) {
-        const { index, patch, targets } = plan;
-        const targetIds = [];
-
-        for (const target of targets) {
-          targetIds.push(target.id);
-
-          // 노드 이름 변경 (optional)
-          if (patch.rename !== undefined) target.name = patch.rename;
-
-          // 노드 표시/숨김 (optional) — PRD 상태에 없는 요소 제거용
-          if (patch.visible !== undefined && 'visible' in target) target.visible = patch.visible;
-
-          // 텍스트 변경 (원본 폰트/스타일 유지, 문자열만 교체)
-          if (patch.characters !== undefined) {
-            if (target.type !== 'TEXT')
-              throw new Error('characters patch 대상이 TEXT가 아님: ' + patch.nodeName + ' (' + target.type + ')');
-            if (target.fontName === figma.mixed) {
-              const len = target.characters.length;
-              for (let i = 0; i < len; i++) await figma.loadFontAsync(target.getRangeFontName(i, i + 1));
-            } else {
-              await figma.loadFontAsync(target.fontName);
-            }
-            target.characters = patch.characters;
-          }
-
-          // fill을 semantic 토큰에 바인딩 (권장 — harness 규칙 준수)
-          if (patch.fillBinding !== undefined) {
-            if (!('fills' in target))
-              throw new Error('fillBinding patch 대상에 fills 없음: ' + patch.nodeName);
-            const v = await resolveSemanticVar(patch.fillBinding);
-            if (!v) throw new Error('fillBinding semantic 변수 없음: ' + patch.fillBinding);
-            const base = (Array.isArray(target.fills) && target.fills[0] && target.fills[0].type === 'SOLID')
-              ? { type: 'SOLID', color: target.fills[0].color, opacity: target.fills[0].opacity ?? 1 }
-              : { type: 'SOLID', color: { r: 0, g: 0, b: 0 }, opacity: 1 };
-            target.fills = [figma.variables.setBoundVariableForPaint(base, 'color', v)];
-          }
-          // fill 색상 변경 (raw hex, 바인딩 제거) — fillBinding이 없을 때만
-          else if (patch.fillColor !== undefined) {
-            if (!('fills' in target))
-              throw new Error('fillColor patch 대상에 fills 없음: ' + patch.nodeName);
-            const color = hexToRgb(patch.fillColor);
-            target.fills = [{ type: 'SOLID', color: { r: color.r, g: color.g, b: color.b }, opacity: color.a ?? 1 }];
-          }
-        }
-
-        patchReport.push({
-          patchIndex: index,
-          nodeName: patch.nodeName,
-          expectedMatches: patch.expectedMatches ?? null,
-          matchedCount: targets.length,
-          targetIds,
-          applied: true,
-        });
-      }
-
-      // 2) PATCH 후 invariant 검증.
-      // 명시적으로 허용한 name/visible/characters/fills 외의 구조적 변화가 있으면 실패한다.
-      // width/height는 텍스트 길이 + Auto Layout에 의해 파생 변경될 수 있으므로
-      // strict failure에서는 제외하고 geometryChanges로 별도 보고한다.
-      const cloneAfter = await captureCloneVerificationTree(clone);
-      const postPatchDiffs = compareCloneTrees(sourceBefore, cloneAfter, {
-        mode: 'postPatch',
-        allowed: allowedChanges,
-      });
-      const unexpectedChanges = postPatchDiffs.filter((d) => d.category !== 'geometry');
-      const geometryChanges = postPatchDiffs.filter((d) => d.category === 'geometry');
-
-      if (unexpectedChanges.length) {
-        throw new Error(
-          'clone 보존 검증 실패(patch 후): ' +
-          summarizeVerificationDiffs(unexpectedChanges)
-        );
-      }
 
       const key = item.name || clone.id;
       created[key] = clone.id;
@@ -1663,25 +1537,20 @@ async function runDuplicate(spec) {
         sourceId: item.sourceId,
         cloneId: clone.id,
         name: clone.name,
-        requestedPatchCount: patches.length,
-        appliedPatchCount: patchReport.length,
-        patches: patchReport,
+        requestedPatchCount: Array.isArray(item.patches) ? item.patches.length : 0,
+        appliedPatchCount: cloned.patchReport.length,
+        patches: cloned.patchReport,
         verification: {
-          prePatch: {
-            passed: true,
-            comparedNodes: sourceBefore.nodes.length,
-            differences: [],
-          },
-          postPatch: {
+          ...cloned.verification,
+          composition: {
             passed: true,
             unexpectedChanges: [],
-            geometryChanges,
+            geometryChanges: compositionGeometry,
           },
         },
         success: true,
       });
     } catch (error) {
-      // 한 item의 patch/검증이 실패하면 부분 수정된 clone을 남기지 않는다.
       if (clone && !clone.removed) {
         try { clone.remove(); } catch {}
       }
@@ -1703,7 +1572,12 @@ async function runDuplicate(spec) {
       createdItems: items.length,
       requestedPatches: items.reduce((sum, item) => sum + item.requestedPatchCount, 0),
       appliedPatches: items.reduce((sum, item) => sum + item.appliedPatchCount, 0),
-      verifiedItems: items.filter((item) => item.verification?.prePatch?.passed && item.verification?.postPatch?.passed).length,
+      verifiedItems: items.filter(
+        (item) =>
+          item.verification?.prePatch?.passed &&
+          item.verification?.postPatch?.passed &&
+          item.verification?.composition?.passed
+      ).length,
     },
   };
 }
