@@ -80,6 +80,8 @@ docs/                          계약, Figma 절차, 도구 어댑터
 | `npm run audit` | 구조·시각·콘텐츠 검토를 종합해 audit.json 기록 |
 | `npm run doctor` | 로컬 전제 조건 확인; 플러그인 실행/연결 판정은 하지 않음 |
 | `npm run assets:list` | 사용 가능한 보유 캐릭터 원본 목록 |
+| `npm run patterns:resolve -- --snapshot <path>` | 최신 extract에서 Pattern Registry의 clone source를 exact-match로 해석 |
+| `npm run patterns:search -- --intent <text> ...` | PRD/task와 맞는 pattern 후보·근거·clone-ready source 검색 |
 | `npm test` | 외부 서비스 호출 없는 회귀 테스트 |
 
 `npm run check -- --json`으로 기계 판정 JSON을 받을 수 있습니다.
