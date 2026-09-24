@@ -108,7 +108,8 @@ Kiro가 result/snapshot 을 읽고 로컬 게이트로 검증
 ```
 
 patch 필드:
-- `nodeName` — 복제본 트리에서 이름으로 찾을 대상(DFS, 동명 다수 매칭). **원본의 실제 노드 이름을 snapshot에서 확인해 쓴다.** 추측한 이름(`pill-text`, `cta`)은 매칭 실패로 조용히 스킵된다.
+- `nodeName` — 복제본 트리에서 이름으로 찾을 대상(DFS, 동명 다수 매칭). **원본의 실제 노드 이름을 snapshot에서 확인해 쓴다.** 기본 정책은 strict이며 0건 매칭이면 해당 duplicate item 전체가 실패하고 생성된 clone도 제거된다.
+- `expectedMatches` — optional. 같은 이름의 노드가 여러 개 있을 때 정확히 몇 개가 매칭되어야 하는지 지정한다. 실제 매칭 수가 다르면 해당 item 전체를 실패시킨다.
 - `characters` — TEXT 노드 문자열 교체(원본 폰트/스타일 유지, `figma.mixed` 폰트 안전 로드).
 - `fillBinding` — fill을 **semantic 토큰에 바인딩**(권장, harness 색 규칙 준수).
 - `fillColor` — raw hex fill(바인딩 제거, `fillBinding` 없을 때만).
@@ -117,7 +118,10 @@ patch 필드:
 
 주의:
 - 결과 `created`에 복제본 노드 ID가 담긴다.
-- 패치 nodeName이 안 맞으면 에러 없이 스킵되므로, 실행 후 결과에서 실제 반영 여부를 확인한다.
+- `items[].patches[]`에는 각 patch의 `matchedCount`, `targetIds`, `applied`가 기록된다. `counts`에는 요청/적용 item·patch 수가 집계된다.
+- 패치 대상이 0건이면 **silent skip하지 않고 실패**한다. 해당 item에서 이미 만든 clone도 제거해 부분 결과를 남기지 않는다.
+- 동일 이름이 여러 곳에 존재할 수 있고 정확한 개수가 중요하면 `expectedMatches`를 반드시 지정한다.
+- `characters`를 TEXT가 아닌 노드에 적용하거나 fill patch를 fills가 없는 노드에 적용하는 등 타입이 맞지 않는 patch도 실패한다.
 - 상태 카드를 만들 땐 배지·CTA뿐 아니라 **PRD 상태별 UI 매트릭스의 모든 요소**(부가 표시·시간 표기·진행률 유무)를 patch 목록에 포함했는지 대조한다.
 
 ### `op: "screenshot"` — 캡처 저장 (검증 단계)
