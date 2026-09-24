@@ -90,6 +90,8 @@ Evidence: 지원하기, 최종보고서.
 primary artifact/source가 중심인 경우 가장 많은 공간을 주되,
 현재 대상/진행률/평가 action의 접근성은 유지한다.
 
+레이아웃 형태보다 `대상 선택 → source 확인 → 평가 → 저장 → 다음 대상`의 반복 흐름이 끊기지 않는 것을 우선한다.
+
 Evidence: 1차 심사, 최종 심사, AI 심사 결과 상세.
 
 ---
@@ -105,7 +107,12 @@ Evidence: 1차 심사, 최종 심사, AI 심사 결과 상세.
 같은 사용자의 진행 중 업무를 상태 순서로 확인하는 경우.
 예: 내 지원 현황.
 
+### Table
+같은 사용자의 데이터라도 여러 회차/과거 이력을 동일 schema로 비교·조회하는 경우.
+예: 마이페이지 통합 지원 현황.
+
 Grid를 모든 카드형 데이터의 기본값으로 사용하지 않는다.
+개인 화면이라는 이유만으로 history data까지 card로 만들지 않는다.
 
 ---
 
@@ -129,15 +136,23 @@ Evidence: 지원하기, 최종보고서, 팀빌딩.
 
 ---
 
-## L10. Bottom action bar는 finalization에 사용한다
-**Confidence: MEDIUM**
+## L10. Final Action Region은 finalization에 사용한다
+**Confidence: HIGH**
 
-여러 준비 항목을 검토한 뒤 전체를 제출/재제출하는 화면에서는
-하단에 전체 package/action scope의 버튼을 둔다.
+여러 준비 항목을 검토한 뒤 전체를 제출/재제출/확정하는 화면에서는
+전체 workflow state transition을 담당하는 action 영역을 명확히 구분한다.
 
-개별 카드 action과 final package action을 같은 위치/강도로 섞지 않는다.
+이 영역은 bottom action bar일 수 있지만 고정 위치를 일반 규칙으로 만들지 않는다.
 
-Evidence: 최종 패키지 제출.
+- incomplete → final action disabled
+- ready → submit/confirm enabled
+- submitted unchanged → completed/read-only
+- submitted + changed → re-submit
+- deadline passed → locked/disabled
+
+개별 카드/field action과 전체 package/finalization action을 같은 위치·강도로 섞지 않는다.
+
+Evidence: 최종 패키지 제출, 심사 최종 검토.
 
 ---
 
@@ -162,7 +177,8 @@ Evidence: 최종 패키지 제출.
 
 같은 domain entity도 사용 목적에 따라 표현이 달라진다.
 
-- 개인 지원서 상태 확인 → status card/list
+- 개인의 현재 지원서 상태/next action 확인 → status card/list
+- 개인의 여러 회차 지원 이력 비교 → table
 - 관리자 다수 지원서 비교 → table
 - 심사위원 한 지원서 평가 → evaluation workspace
 
