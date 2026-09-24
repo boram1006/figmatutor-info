@@ -161,3 +161,77 @@ test('Figma plugin source remains syntactically valid',()=>{
  const source=readFileSync(join(repo,'scripts/figma-plugin/code.js'),'utf8');
  assert.doesNotThrow(()=>new Function(source));
 });
+
+
+function duplicatePluginHarness(){
+ const sourceCode=readFileSync(join(repo,'scripts/figma-plugin/code.js'),'utf8');
+ const messages=[];
+ let cloneSeq=0,lastClone=null;
+ const makeText=(id,name,characters)=>({
+  id,name,type:'TEXT',visible:true,width:120,height:24,characters,
+  fontName:{family:'Inter',style:'Regular'},fontSize:16,fontWeight:400,
+  lineHeight:{unit:'PIXELS',value:24},letterSpacing:{unit:'PIXELS',value:0},
+  textAlignHorizontal:'LEFT',textAlignVertical:'TOP',textAutoResize:'WIDTH_AND_HEIGHT',
+  fills:[],strokes:[],effects:[],opacity:1,blendMode:'PASS_THROUGH',
+  children:[],
+ });
+ const makeSource=()=>{
+  const child=makeText('text-source','Title','Before');
+  const root={
+   id:'source',name:'Card',type:'FRAME',visible:true,width:300,height:100,
+   children:[child],fills:[],strokes:[],effects:[],opacity:1,blendMode:'PASS_THROUGH',
+   layoutMode:'VERTICAL',layoutSizingHorizontal:'FIXED',layoutSizingVertical:'HUG',
+   primaryAxisSizingMode:'AUTO',counterAxisSizingMode:'FIXED',
+   primaryAxisAlignItems:'MIN',counterAxisAlignItems:'MIN',layoutWrap:'NO_WRAP',
+   itemSpacing:8,paddingTop:16,paddingRight:16,paddingBottom:16,paddingLeft:16,
+   constraints:{horizontal:'MIN',vertical:'MIN'},clipsContent:false,
+   clone(){
+    cloneSeq++;
+    const cchild=makeText('text-clone-'+cloneSeq,'Title','Before');
+    const clone={
+     ...this,id:'clone-'+cloneSeq,children:[cchild],removed:false,
+     remove(){this.removed=true;},
+    };
+    delete clone.clone;
+    lastClone=clone;
+    return clone;
+   },
+  };
+  return root;
+ };
+ const original=makeSource();
+ const page={id:'page',name:'design',children:[],appendChild(n){this.children.push(n);}};
+ const figma={
+  fileKey:'f',mixed:Symbol('mixed'),showUI(){},ui:{onmessage:null,postMessage(m){messages.push(m);}},
+  root:{children:[page]},setCurrentPageAsync:async()=>{},
+  getNodeByIdAsync:async(id)=>id==='source'?original:null,
+  loadFontAsync:async()=>{},
+  variables:{getLocalVariablesAsync:async()=>[]},
+ };
+ const init=new Function('figma','__html__',sourceCode+'\nreturn figma.ui.onmessage;');
+ const onmessage=init(figma,'');
+ return {figma,onmessage,messages,getLastClone:()=>lastClone};
+}
+
+test('duplicate op reports matched patches and passes clone verification',async()=>{
+ const h=duplicatePluginHarness();
+ await h.onmessage({type:'run',spec:{op:'duplicate',fileKey:'f',pageName:'design',items:[{sourceId:'source',name:'Card-After',patches:[{nodeName:'Title',characters:'After',expectedMatches:1}]}]}});
+ const msg=h.messages.at(-1);
+ assert.equal(msg.type,'result');
+ assert.equal(msg.result.counts.createdItems,1);
+ assert.equal(msg.result.counts.appliedPatches,1);
+ assert.equal(msg.result.counts.verifiedItems,1);
+ assert.equal(msg.result.items[0].patches[0].matchedCount,1);
+ assert.equal(msg.result.items[0].verification.prePatch.passed,true);
+ assert.equal(msg.result.items[0].verification.postPatch.passed,true);
+ assert.equal(h.getLastClone().children[0].characters,'After');
+});
+
+test('duplicate op fails closed and removes clone when patch target is missing',async()=>{
+ const h=duplicatePluginHarness();
+ await h.onmessage({type:'run',spec:{op:'duplicate',fileKey:'f',pageName:'design',items:[{sourceId:'source',patches:[{nodeName:'Missing',characters:'After'}]}]}});
+ const msg=h.messages.at(-1);
+ assert.equal(msg.type,'error');
+ assert.match(msg.message,/patch 대상 노드 없음/);
+ assert.equal(h.getLastClone().removed,true);
+});
