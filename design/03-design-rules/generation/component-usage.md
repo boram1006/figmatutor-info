@@ -11,7 +11,7 @@
 - KPI처럼 하나의 summary 의미 단위다.
 
 Examples:
-팀빌딩 팀 카드, 지원 현황 카드, dashboard KPI, 제출 package artifact.
+팀빌딩 팀 카드, 현재 진행 중인 지원 현황 카드, dashboard KPI, 제출 package artifact.
 
 ### Use Table when
 - 동일 schema의 행이 많다.
@@ -19,12 +19,21 @@ Examples:
 - 정렬/필터가 중요하다.
 - 운영자가 많은 항목을 빠르게 scan한다.
 - inline edit/review가 중요하다.
+- 동일 사용자의 여러 회차/과거 기록처럼 history를 비교·조회하는 목적이 중심이다.
 
 Examples:
 AI 심사 지원서 목록, 마이페이지 통합 지원 현황, 심사 최종 검토.
 
+### Same user/domain에서도 목적에 따라 달라진다
+
+개인 데이터라는 이유만으로 항상 Card를 쓰지 않는다.
+
+- **현재 active workflow + next action 중심** → Card / status list
+- **여러 회차·과거 이력 + 동일 schema 비교 중심** → Table
+- **한 건의 산출물을 보며 평가** → Evaluation Workspace
+
 ### Anti-rule
-"정보가 많다"는 이유만으로 Card로 분리하지 않는다.
+"정보가 많다" 또는 "개인 화면이다"라는 이유만으로 Card로 분리하지 않는다.
 
 ---
 
@@ -43,6 +52,10 @@ Observed semantic roles:
 - Blue: secondary informational/editing cue in 일부 상태
 
 정확한 color token은 기존 system token을 사용한다.
+
+완료 상태와 후속 행동 필요 상태가 동시에 존재할 수 있다.
+예: Green `제출완료` + Red `재제출 필요`.
+이 경우 하나의 badge 색으로 전체 상태를 단순화하지 않는다.
 
 ---
 
@@ -169,9 +182,9 @@ Empty state는 현재 상태를 설명하고,
 Examples:
 - 지원서 없음 → 지원서 작성
 - 모집 중 팀 없음 → 상태 안내
-- data load failure → retry
 
 빈 화면만 보여주지 않는다.
+실행 가능한 다음 행동이 없는 경우에는 상태 설명만 명확히 제공하고 억지 CTA를 만들지 않는다.
 
 ---
 
@@ -191,3 +204,17 @@ workspace에서 pane별 context를 유지하기 위해 제한적으로 사용한
 일반 public/service page에서는 dark footer가 반복된다.
 고밀도 workspace에서는 footer보다 작업 공간이 우선될 수 있으므로
 모든 내부 업무 화면에서 강제하지 않는다.
+
+---
+
+## C13. Loading / Error Feedback
+**Confidence: HIGH**
+
+Loading/Error UI는 실패 범위와 같은 scope에 둔다.
+
+- page 전체 load 실패 → page-level error
+- document/pane/card만 실패 → 해당 local 영역 error
+- save/submit 실패 → 입력 context를 유지한 toast 또는 local feedback
+- retry가 가능한 경우 retry action 제공
+
+Local failure 하나 때문에 정상적으로 사용할 수 있는 queue/navigation/주변 정보를 모두 error state로 치환하지 않는다.
