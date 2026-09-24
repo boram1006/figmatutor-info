@@ -142,6 +142,36 @@ async function runExtract(spec) {
     return result;
   }
 
+  function effects(list) {
+    if (!Array.isArray(list)) return [];
+    return list
+      .filter((e) => e.visible !== false)
+      .map((e) => ({
+        type: e.type,
+        radius: typeof e.radius === 'number' ? e.radius : null,
+        spread: typeof e.spread === 'number' ? e.spread : null,
+        offset: e.offset ? { x: e.offset.x, y: e.offset.y } : null,
+        color: e.color ? rgba(e.color) : null,
+        blendMode: e.blendMode || null,
+      }));
+  }
+
+  async function instanceInfo(node) {
+    if (node.type !== 'INSTANCE') return null;
+    let mainComponentId = null;
+    if (typeof node.getMainComponentAsync === 'function') {
+      const main = await node.getMainComponentAsync();
+      mainComponentId = main?.id || null;
+    } else if ('mainComponent' in node) {
+      mainComponentId = node.mainComponent?.id || null;
+    }
+    return {
+      mainComponentId,
+      componentProperties: 'componentProperties' in node ? node.componentProperties : null,
+      variantProperties: 'variantProperties' in node ? node.variantProperties : null,
+    };
+  }
+
   function metadata(node) {
     const shared =
       'getSharedPluginData' in node && typeof node.getSharedPluginData === 'function'
@@ -216,6 +246,7 @@ async function runExtract(spec) {
           mixed: fs === figma.mixed || fn === figma.mixed,
         };
       }
+      const instance = await instanceInfo(n);
       nodes.push({
         id: n.id,
         name: n.name,
@@ -224,17 +255,39 @@ async function runExtract(spec) {
         bounds: { x: b.x - origin.x, y: b.y - origin.y, width: n.width, height: n.height },
         fills: await paints('fills' in n ? n.fills : []),
         strokes: await paints('strokes' in n ? n.strokes : []),
+        effects: effects('effects' in n ? n.effects : []),
+        opacity: 'opacity' in n && typeof n.opacity === 'number' ? n.opacity : null,
+        blendMode: 'blendMode' in n ? n.blendMode : null,
+        strokeWeight: 'strokeWeight' in n && typeof n.strokeWeight === 'number' ? n.strokeWeight : null,
+        strokeAlign: 'strokeAlign' in n ? n.strokeAlign : null,
         metrics,
         bindings,
         textStyle: style,
         font,
+        text: n.type === 'TEXT'
+          ? {
+              characters: n.characters,
+              autoResize: 'textAutoResize' in n ? n.textAutoResize : null,
+              alignHorizontal: 'textAlignHorizontal' in n ? n.textAlignHorizontal : null,
+              alignVertical: 'textAlignVertical' in n ? n.textAlignVertical : null,
+              letterSpacing: n.letterSpacing && n.letterSpacing !== figma.mixed ? n.letterSpacing : null,
+            }
+          : null,
         layout: {
           mode: 'layoutMode' in n ? n.layoutMode : 'NONE',
+          horizontal: 'layoutSizingHorizontal' in n ? n.layoutSizingHorizontal : null,
           vertical: 'layoutSizingVertical' in n ? n.layoutSizingVertical : null,
+          primaryAxisSizingMode: 'primaryAxisSizingMode' in n ? n.primaryAxisSizingMode : null,
+          counterAxisSizingMode: 'counterAxisSizingMode' in n ? n.counterAxisSizingMode : null,
+          primaryAxisAlignItems: 'primaryAxisAlignItems' in n ? n.primaryAxisAlignItems : null,
+          counterAxisAlignItems: 'counterAxisAlignItems' in n ? n.counterAxisAlignItems : null,
+          layoutWrap: 'layoutWrap' in n ? n.layoutWrap : null,
         },
+        constraints: 'constraints' in n ? n.constraints : null,
         clipsContent: 'clipsContent' in n && n.clipsContent === true,
         scrollable:
           'overflowDirection' in n && ['HORIZONTAL', 'VERTICAL', 'BOTH'].includes(n.overflowDirection),
+        instance,
         role: meta.role || null,
         componentId: meta.componentId || null,
         reusable: meta.reusable === true,
