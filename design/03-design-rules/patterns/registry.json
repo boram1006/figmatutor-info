@@ -31,7 +31,20 @@
       "evidence": [
         "AI 심사 대시보드"
       ],
-      "sourceSelectors": []
+      "sourceSelectors": [],
+      "discoveryHints": {
+        "minScore": 6,
+        "requiredAny": [
+          "kpi",
+          "dashboard",
+          "심사",
+          "점수",
+          "결과",
+          "지원서"
+        ],
+        "minWidth": 700,
+        "minHeight": 180
+      }
     },
     {
       "id": "status-driven-entity-card",
@@ -89,7 +102,23 @@
             "resubmit"
           ]
         }
-      ]
+      ],
+      "discoveryHints": {
+        "minScore": 7,
+        "requiredAny": [
+          "card",
+          "pending",
+          "submitted",
+          "resubmit",
+          "작성중",
+          "제출완료",
+          "재제출",
+          "본선 진행중"
+        ],
+        "minWidth": 300,
+        "minHeight": 80,
+        "maxHeight": 400
+      }
     },
     {
       "id": "recruitable-entity-card",
@@ -116,7 +145,20 @@
       "evidence": [
         "팀빌딩"
       ],
-      "sourceSelectors": []
+      "sourceSelectors": [],
+      "discoveryHints": {
+        "minScore": 7,
+        "requiredAny": [
+          "card",
+          "팀",
+          "모집",
+          "지원",
+          "position"
+        ],
+        "minWidth": 250,
+        "minHeight": 120,
+        "maxHeight": 700
+      }
     },
     {
       "id": "persistent-step-form",
@@ -144,7 +186,20 @@
         "지원하기 8-step",
         "최종보고서 9-step"
       ],
-      "sourceSelectors": []
+      "sourceSelectors": [],
+      "discoveryHints": {
+        "minScore": 6,
+        "requiredAny": [
+          "step",
+          "section",
+          "지원서 항목",
+          "다음",
+          "이전",
+          "작성"
+        ],
+        "minWidth": 1000,
+        "minHeight": 700
+      }
     },
     {
       "id": "evaluation-workspace",
@@ -176,7 +231,20 @@
         "최종 심사",
         "AI 심사 결과 상세"
       ],
-      "sourceSelectors": []
+      "sourceSelectors": [],
+      "discoveryHints": {
+        "minScore": 6,
+        "requiredAny": [
+          "심사",
+          "score",
+          "평가",
+          "review",
+          "viewer",
+          "queue"
+        ],
+        "minWidth": 1000,
+        "minHeight": 700
+      }
     },
     {
       "id": "final-review-matrix",
@@ -202,7 +270,19 @@
       "evidence": [
         "1차 심사 최종 검토"
       ],
-      "sourceSelectors": []
+      "sourceSelectors": [],
+      "discoveryHints": {
+        "minScore": 6,
+        "requiredAny": [
+          "최종 검토",
+          "누락",
+          "matrix",
+          "confirm",
+          "평가"
+        ],
+        "minWidth": 900,
+        "minHeight": 600
+      }
     },
     {
       "id": "package-readiness-grid",
@@ -231,7 +311,20 @@
       "evidence": [
         "최종보고서 SECTION 9"
       ],
-      "sourceSelectors": []
+      "sourceSelectors": [],
+      "discoveryHints": {
+        "minScore": 7,
+        "requiredAny": [
+          "package",
+          "제출 패키지",
+          "서비스 데모",
+          "소스코드",
+          "발표자료",
+          "최종 제출"
+        ],
+        "minWidth": 1000,
+        "minHeight": 700
+      }
     },
     {
       "id": "announcement-hero-follow-up",
@@ -257,7 +350,20 @@
       "evidence": [
         "하반기 해커톤 1차 심사 합격 발표"
       ],
-      "sourceSelectors": []
+      "sourceSelectors": [],
+      "discoveryHints": {
+        "minScore": 6,
+        "requiredAny": [
+          "합격",
+          "발표",
+          "announcement",
+          "countdown",
+          "축하",
+          "결과"
+        ],
+        "minWidth": 1000,
+        "minHeight": 600
+      }
     },
     {
       "id": "read-only-article-detail",
@@ -283,7 +389,19 @@
       "evidence": [
         "공지 상세"
       ],
-      "sourceSelectors": []
+      "sourceSelectors": [],
+      "discoveryHints": {
+        "minScore": 6,
+        "requiredAny": [
+          "공지",
+          "article",
+          "breadcrumb",
+          "조회",
+          "작성일"
+        ],
+        "minWidth": 700,
+        "minHeight": 500
+      }
     }
   ]
 }
