@@ -121,8 +121,19 @@ Figma는 무료 계정 + 플러그인 왕복으로 다룬다(MCP 없음). 상세
 
 새 화면을 그릴 때 지킬 것 (screens 게이트를 처음부터 통과시키기 위해):
 
+### 생성 우선순위
+
+새 화면이라고 해서 새 visual structure를 처음부터 그리지 않는다. 아래 순서를 따른다.
+
+1. **INSTANCE_REUSE** — Design System component가 있으면 실제 `INSTANCE`를 사용한다.
+2. **CLONE_COMPOSE** — 양산 화면에 이미 존재하는 카드/섹션/복합 패턴이 있으면 실제 node를 `CLONE`해 새 화면에 조합하고 필요한 내용만 최소 patch한다.
+3. **NEW_CONSTRUCTION** — 위 두 방식으로 표현되지 않는 구조만 token/style을 사용해 primitive로 새로 만든다.
+
+앞 단계로 충분하면 뒤 단계로 내려가지 않는다. 새 화면 생성은 새 visual language를 발명하는 작업이 아니다.
+
 - **색/치수/텍스트는 반드시 토큰에서.** raw hex·임의 padding 금지. 색은 semantic 변수, 여백은 space 토큰(4px 그리드), radius는 radius 토큰, 텍스트는 `Text/*` 스타일.
-- **재사용 컴포넌트는 인스턴스로.** 버튼·태그는 마스터(Button/Tag)의 인스턴스를 배치한다. 도형으로 새로 그리지 않는다. (마스터로 관리하는 의미가 여기서 나온다.)
+- **재사용 컴포넌트는 인스턴스로.** 버튼·태그는 마스터(Button/Tag)의 실제 Figma instance를 배치한다. 도형으로 새로 그리지 않는다.
+- **복합 패턴은 CLONE으로.** 기존 카드·섹션·업무 블록을 비슷하게 재구성하지 않고 실제 source node를 `type:"CLONE"`으로 복제해 조합한다. clone 내부 구조는 직접 수정하지 않고 최소 patch만 허용한다.
 - **뷰포트 폭**: 데스크탑 1920 또는 1440. 세로는 콘텐츠 길이에 따라 자유(웹 랜딩). 카드 등 뷰포트가 아닌 부분 추출물은 별도 취급.
 - **프레임 메타데이터(pluginData `designHarness`)** 를 심는다 — screens 게이트가 읽는다:
   - 화면 프레임: `screenId`, `state`, `viewportId`
@@ -130,7 +141,7 @@ Figma는 무료 계정 + 플러그인 왕복으로 다룬다(MCP 없음). 상세
   - 탭 대상: `tapTarget`, 이미지 슬롯: `slotId`/`assetId`, 반복 UI: `reusable`
 - **레이아웃**: 고정 높이 대신 HUG(자동)를 기본으로. 자식이 부모를 넘지 않게.
 
-레이아웃 초안이 필요하면 플러그인 `op:create`로 그려줄 수 있으나, 이는 게이트 통과 조건이 아니라 초안이다.
+레이아웃 초안이 필요하면 플러그인 `op:create`를 사용한다. 이때 하나의 screen FRAME 안에서 `INSTANCE`와 `CLONE`을 우선 조합하고, 정말 없는 구조만 primitive로 만든다. `op:create` 실행 자체는 게이트 통과 조건이 아니며, 생성 후 반드시 extract + screenshot으로 실제 결과를 다시 검증한다.
 
 ---
 
