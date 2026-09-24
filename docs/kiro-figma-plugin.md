@@ -211,7 +211,7 @@ patch 필드:
 - 이 **prePatch 검증이 다르면 patch를 시작하지 않고 실패**하며 clone을 제거한다.
 - patch 후에는 스펙이 명시적으로 허용한 `name / visible / characters / fills` 외의 구조적 속성이 바뀌지 않았는지 다시 비교한다.
 - 텍스트 길이와 Auto Layout 때문에 자연스럽게 파생될 수 있는 `width / height` 변화는 실패시키지 않고 `geometryChanges`에 별도로 기록한다.
-- 결과의 `items[].verification.prePatch`와 `items[].verification.postPatch`를 확인한다. `counts.verifiedItems`는 두 검증을 모두 통과한 item 수다.
+- 결과의 `items[].verification.prePatch`, `postPatch`, `composition`을 확인한다. `composition`은 clone을 destination page/parent로 이동한 뒤 구조·style invariant가 유지되는지 검사한다. `counts.verifiedItems`는 세 검증을 모두 통과한 item 수다.
 - 검증 실패 시 부분 수정된 clone을 남기지 않는다.
 
 주의:
