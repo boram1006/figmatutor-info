@@ -235,3 +235,120 @@ test('duplicate op fails closed and removes clone when patch target is missing',
  assert.match(msg.message,/patch 대상 노드 없음/);
  assert.equal(h.getLastClone().removed,true);
 });
+
+
+function createInstancePluginHarness(sourceNode){
+ const sourceCode=readFileSync(join(repo,'scripts/figma-plugin/code.js'),'utf8');
+ const messages=[];
+ let instanceSeq=0;
+ const page={
+  id:'page',name:'design',children:[],
+  appendChild(n){this.children.push(n);n.parent=this;},
+ };
+ function makeInstance(component){
+  const instance={
+   id:'instance-'+(++instanceSeq),name:'Instance',type:'INSTANCE',visible:true,width:120,height:40,
+   parent:null,children:[],fills:[],strokes:[],effects:[],opacity:1,blendMode:'PASS_THROUGH',
+   layoutSizingHorizontal:'HUG',layoutSizingVertical:'HUG',
+   setProperties(props){this.appliedProperties={...props};},
+   resize(w,h){this.width=w;this.height=h;},
+   setSharedPluginData(){},
+  };
+  instance.mainComponent=component;
+  return instance;
+ }
+ const bindCreate=(node)=>{
+  if(node.type==='COMPONENT'){
+   node.createInstance=()=>makeInstance(node);
+  } else if(node.type==='COMPONENT_SET'){
+   for(const child of node.children) bindCreate(child);
+  }
+  return node;
+ };
+ bindCreate(sourceNode);
+
+ const figma={
+  fileKey:'f',mixed:Symbol('mixed'),showUI(){},
+  ui:{onmessage:null,postMessage(m){messages.push(m);}},
+  root:{children:[page]},setCurrentPageAsync:async()=>{},
+  getNodeByIdAsync:async(id)=>id===sourceNode.id?sourceNode:null,
+  createPage(){throw new Error('unexpected createPage');},
+  createFrame(){throw new Error('unexpected primitive FRAME');},
+  createText(){throw new Error('unexpected primitive TEXT');},
+  createRectangle(){throw new Error('unexpected primitive RECTANGLE');},
+  createEllipse(){throw new Error('unexpected primitive ELLIPSE');},
+  createLine(){throw new Error('unexpected primitive LINE');},
+  createComponent(){throw new Error('unexpected primitive COMPONENT');},
+  loadFontAsync:async()=>{},
+  variables:{
+   getLocalVariableCollectionsAsync:async()=>[],
+   getVariableByIdAsync:async()=>null,
+   createVariableCollection(){throw new Error('unexpected collection create');},
+   createVariable(){throw new Error('unexpected variable create');},
+   createVariableAlias(){throw new Error('unexpected alias create');},
+   setBoundVariableForPaint(p){return p;},
+  },
+  getLocalTextStylesAsync:async()=>[],
+  createImage(){throw new Error('unexpected image create');},
+ };
+ const init=new Function('figma','__html__',sourceCode+'\nreturn figma.ui.onmessage;');
+ const onmessage=init(figma,'');
+ return {figma,page,onmessage,messages};
+}
+
+test('create op uses a real existing COMPONENT instance and applies component properties',async()=>{
+ const component={id:'component-1',name:'Button / Default',type:'COMPONENT',parent:null};
+ const h=createInstancePluginHarness(component);
+ await h.onmessage({type:'run',spec:{
+  op:'create',fileKey:'f',pageName:'design',
+  nodes:[{type:'INSTANCE',key:'submitButton',componentNodeId:'component-1',componentProperties:{Label:'제출하기'}}],
+ }});
+ const msg=h.messages.at(-1);
+ assert.equal(msg.type,'result');
+ assert.equal(h.page.children.length,1);
+ assert.equal(h.page.children[0].type,'INSTANCE');
+ assert.deepEqual(h.page.children[0].appliedProperties,{Label:'제출하기'});
+ assert.equal(msg.result.created.instances.submitButton.resolvedComponentId,'component-1');
+ assert.equal(msg.result.created.nodes.submitButton,h.page.children[0].id);
+});
+
+test('create op resolves exactly one COMPONENT_SET variant from variantProperties',async()=>{
+ const set={id:'set-1',name:'Button',type:'COMPONENT_SET',parent:null,children:[
+  {id:'variant-a',name:'Type=Solid, State=Default',type:'COMPONENT',variantProperties:{Type:'Solid',State:'Default'}},
+  {id:'variant-b',name:'Type=Outlined, State=Default',type:'COMPONENT',variantProperties:{Type:'Outlined',State:'Default'}},
+ ]};
+ for(const child of set.children) child.parent=set;
+ const h=createInstancePluginHarness(set);
+ await h.onmessage({type:'run',spec:{
+  op:'create',fileKey:'f',pageName:'design',
+  nodes:[{type:'INSTANCE',key:'button',componentNodeId:'set-1',variantProperties:{Type:'Outlined',State:'Default'}}],
+ }});
+ const msg=h.messages.at(-1);
+ assert.equal(msg.type,'result');
+ assert.equal(msg.result.created.instances.button.resolvedComponentId,'variant-b');
+ assert.equal(msg.result.created.instances.button.componentSetId,'set-1');
+});
+
+test('create op refuses ambiguous component sets and direct INSTANCE visual reconstruction',async()=>{
+ const set={id:'set-1',name:'Button',type:'COMPONENT_SET',parent:null,children:[
+  {id:'variant-a',name:'A',type:'COMPONENT',variantProperties:{State:'A'}},
+  {id:'variant-b',name:'B',type:'COMPONENT',variantProperties:{State:'B'}},
+ ]};
+ for(const child of set.children) child.parent=set;
+ const h=createInstancePluginHarness(set);
+ await h.onmessage({type:'run',spec:{
+  op:'create',fileKey:'f',pageName:'design',
+  nodes:[{type:'INSTANCE',key:'button',componentNodeId:'set-1'}],
+ }});
+ assert.equal(h.messages.at(-1).type,'error');
+ assert.match(h.messages.at(-1).message,/variantName 또는 variantProperties 필요/);
+
+ const component={id:'component-2',name:'Tag',type:'COMPONENT',parent:null};
+ const h2=createInstancePluginHarness(component);
+ await h2.onmessage({type:'run',spec:{
+  op:'create',fileKey:'f',pageName:'design',
+  nodes:[{type:'INSTANCE',componentNodeId:'component-2',fills:[{type:'SOLID',color:'#FFFFFF'}]}],
+ }});
+ assert.equal(h2.messages.at(-1).type,'error');
+ assert.match(h2.messages.at(-1).message,/INSTANCE visual을 직접 재구성하지 않음/);
+});
