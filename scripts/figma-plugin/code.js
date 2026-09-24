@@ -352,57 +352,163 @@ async function runCreate(spec) {
   await figma.setCurrentPageAsync(page);
 
   const created = { page: { id: page.id, name: page.name }, collections: {}, variables: {}, textStyles: {}, nodes: {} };
+  const reused = { collections: {}, variables: {}, textStyles: {} };
   const varRef = new Map(); // logical name -> Variable
 
   // 1) Variable collections + primitives + semantic aliases
+  // Existing Design System assets are reused when they are identical.
+  // Same-name but different definitions fail closed instead of creating duplicates or overwriting.
   const existingCollections = await figma.variables.getLocalVariableCollectionsAsync();
-  const collectionByName = new Map(existingCollections.map((c) => [c.name, c]));
+  const collectionByName = new Map();
+  const variableByKey = new Map();
+
+  for (const c of existingCollections) {
+    if (collectionByName.has(c.name))
+      throw new Error('동일 이름 variable collection 중복: ' + c.name);
+    collectionByName.set(c.name, c);
+
+    for (const id of c.variableIds) {
+      const v = await figma.variables.getVariableByIdAsync(id);
+      if (!v) continue;
+      const key = c.name + '/' + v.name;
+      if (variableByKey.has(key))
+        throw new Error('동일 collection 내 variable 이름 중복: ' + key);
+      variableByKey.set(key, v);
+      if (c.name === 'primitives') varRef.set('primitives/' + v.name, v);
+      if (c.name === 'semantic') varRef.set('semantic/' + v.name, v);
+    }
+  }
 
   async function ensureCollection(name) {
     let c = collectionByName.get(name);
     if (!c) {
       c = figma.variables.createVariableCollection(name);
       collectionByName.set(name, c);
+      created.collections[name] = c.id;
+    } else {
+      reused.collections[name] = c.id;
     }
-    created.collections[name] = c.id;
     return c;
+  }
+
+  function colorClose(a, b) {
+    if (!a || !b) return false;
+    const aa = typeof a.a === 'number' ? a.a : 1;
+    const ba = typeof b.a === 'number' ? b.a : 1;
+    return Math.abs(a.r - b.r) < 0.0001 &&
+      Math.abs(a.g - b.g) < 0.0001 &&
+      Math.abs(a.b - b.b) < 0.0001 &&
+      Math.abs(aa - ba) < 0.0001;
+  }
+
+  function primitiveMatches(v, type, desired, modeId) {
+    if (!v || v.resolvedType !== type) return false;
+    const actual = v.valuesByMode?.[modeId];
+    if (actual?.type === 'VARIABLE_ALIAS') return false;
+    if (type === 'COLOR') return colorClose(actual, desired);
+    return typeof actual === 'number' && Math.abs(actual - desired) < 0.0001;
   }
 
   if (spec.variables?.primitives) {
     const c = await ensureCollection('primitives');
     const modeId = c.modes[0].modeId;
+
     for (const [name, def] of Object.entries(spec.variables.primitives)) {
       const type = def.type === 'COLOR' ? 'COLOR' : 'FLOAT';
-      const v = figma.variables.createVariable(name, c, type);
-      v.setValueForMode(modeId, type === 'COLOR' ? hexToRgb(def.value) : def.value);
-      if (def.scopes) v.scopes = def.scopes;
-      varRef.set('primitives/' + name, v);
-      created.variables['primitives/' + name] = v.id;
-    }
-  }
-  if (spec.variables?.semantic) {
-    const c = await ensureCollection('semantic');
-    const modeId = c.modes[0].modeId;
-    for (const [name, def] of Object.entries(spec.variables.semantic)) {
-      const target = varRef.get('primitives/' + def.ref);
-      if (!target) throw new Error('semantic ref 대상 primitive 없음: ' + def.ref);
-      const v = figma.variables.createVariable(name, c, target.resolvedType);
-      v.setValueForMode(modeId, figma.variables.createVariableAlias(target));
-      if (def.scopes) v.scopes = def.scopes;
-      varRef.set('semantic/' + name, v);
-      created.variables['semantic/' + name] = v.id;
+      const desired = type === 'COLOR' ? hexToRgb(def.value) : def.value;
+      const key = 'primitives/' + name;
+      let v = variableByKey.get(key) || null;
+
+      if (v) {
+        if (!primitiveMatches(v, type, desired, modeId))
+          throw new Error('기존 primitive와 create 스펙 충돌: ' + key);
+        reused.variables[key] = v.id;
+      } else {
+        v = figma.variables.createVariable(name, c, type);
+        v.setValueForMode(modeId, desired);
+        if (def.scopes) v.scopes = def.scopes;
+        variableByKey.set(key, v);
+        created.variables[key] = v.id;
+      }
+
+      varRef.set(key, v);
     }
   }
 
-  // 2) Text styles
+  if (spec.variables?.semantic) {
+    const c = await ensureCollection('semantic');
+    const modeId = c.modes[0].modeId;
+
+    for (const [name, def] of Object.entries(spec.variables.semantic)) {
+      const target = varRef.get('primitives/' + def.ref);
+      if (!target) throw new Error('semantic ref 대상 primitive 없음: ' + def.ref);
+
+      const key = 'semantic/' + name;
+      let v = variableByKey.get(key) || null;
+
+      if (v) {
+        const actual = v.valuesByMode?.[modeId];
+        const matches =
+          v.resolvedType === target.resolvedType &&
+          actual?.type === 'VARIABLE_ALIAS' &&
+          actual.id === target.id;
+        if (!matches)
+          throw new Error('기존 semantic과 create 스펙 충돌: ' + key);
+        reused.variables[key] = v.id;
+      } else {
+        v = figma.variables.createVariable(name, c, target.resolvedType);
+        v.setValueForMode(modeId, figma.variables.createVariableAlias(target));
+        if (def.scopes) v.scopes = def.scopes;
+        variableByKey.set(key, v);
+        created.variables[key] = v.id;
+      }
+
+      varRef.set(key, v);
+    }
+  }
+
+  // 2) Text styles — same name + same definition is reused; conflicts fail.
   if (spec.textStyles) {
+    const existingTextStyles = new Map();
+    for (const s of await figma.getLocalTextStylesAsync()) {
+      if (existingTextStyles.has(s.name))
+        throw new Error('동일 이름 text style 중복: ' + s.name);
+      existingTextStyles.set(s.name, s);
+    }
+
     for (const [name, def] of Object.entries(spec.textStyles)) {
+      const current = existingTextStyles.get(name);
+
+      if (current) {
+        const currentLineHeight =
+          current.lineHeight?.unit === 'PIXELS' ? current.lineHeight.value :
+          current.lineHeight?.unit === 'PERCENT' ? (current.fontSize * current.lineHeight.value) / 100 :
+          null;
+        const desiredLineHeight = typeof def.lineHeight === 'number' ? def.lineHeight : null;
+        const same =
+          current.fontName?.family === def.fontFamily &&
+          current.fontName?.style === def.fontStyle &&
+          current.fontSize === def.fontSize &&
+          (
+            desiredLineHeight === null
+              ? currentLineHeight === null
+              : typeof currentLineHeight === 'number' && Math.abs(currentLineHeight - desiredLineHeight) < 0.01
+          );
+
+        if (!same)
+          throw new Error('기존 text style과 create 스펙 충돌: ' + name);
+
+        reused.textStyles[name] = current.id;
+        continue;
+      }
+
       await figma.loadFontAsync({ family: def.fontFamily, style: def.fontStyle });
       const s = figma.createTextStyle();
       s.name = name;
       s.fontName = { family: def.fontFamily, style: def.fontStyle };
       s.fontSize = def.fontSize;
       if (typeof def.lineHeight === 'number') s.lineHeight = { unit: 'PIXELS', value: def.lineHeight };
+      existingTextStyles.set(name, s);
       created.textStyles[name] = s.id;
     }
   }
@@ -519,6 +625,7 @@ async function runCreate(spec) {
     op: 'create',
     fileKey: figma.fileKey || spec.fileKey || null,
     created,
+    reused,
   };
 }
 
