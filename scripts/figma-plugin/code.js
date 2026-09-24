@@ -1001,69 +1001,153 @@ async function runDuplicate(spec) {
   await figma.setCurrentPageAsync(page);
 
   const created = {};
+  const items = [];
+  const requestedItems = Array.isArray(spec.items) ? spec.items : [];
+  if (!requestedItems.length) throw new Error('duplicate 스펙에 items 필요');
 
-  for (const item of (spec.items || [])) {
+  for (const item of requestedItems) {
     if (!item.sourceId) throw new Error('sourceId 필요');
     const source = await figma.getNodeByIdAsync(item.sourceId);
     if (!source) throw new Error('sourceId 노드 없음: ' + item.sourceId);
 
-    // 복제
-    const clone = source.clone();
-    page.appendChild(clone);
+    let clone = null;
+    try {
+      // Exact Clone. 이후 패치 전까지 구조/레이아웃/바인딩을 재설정하지 않는다.
+      clone = source.clone();
+      page.appendChild(clone);
 
-    // 이름 변경
-    if (item.name) clone.name = item.name;
+      const patchPlans = [];
+      const patches = Array.isArray(item.patches) ? item.patches : [];
 
-    // 위치 이동
-    if (typeof item.x === 'number') clone.x = item.x;
-    if (typeof item.y === 'number') clone.y = item.y;
+      // Preflight: 모든 patch target을 먼저 확인한다.
+      // 기본 정책은 silent skip 금지. 하나라도 0건 매칭이면 이 item 전체를 실패시키고 clone을 롤백한다.
+      for (let index = 0; index < patches.length; index++) {
+        const patch = patches[index];
+        if (!patch || typeof patch.nodeName !== 'string' || !patch.nodeName.trim())
+          throw new Error('patch[' + index + '] nodeName 필요');
 
-    // 패치 적용
-    for (const patch of (item.patches || [])) {
-      const targets = findNodesByName(clone, patch.nodeName);
-      if (!targets.length) {
-        console.warn('patch 대상 노드를 찾지 못함: ' + patch.nodeName);
-        continue;
+        const targets = findNodesByName(clone, patch.nodeName);
+        const expectedMatches = patch.expectedMatches;
+
+        if (!targets.length)
+          throw new Error(
+            'patch 대상 노드 없음: ' + patch.nodeName +
+            ' (sourceId=' + item.sourceId + ', patchIndex=' + index + ')'
+          );
+
+        if (
+          expectedMatches !== undefined &&
+          (!Number.isInteger(expectedMatches) || expectedMatches < 1)
+        ) throw new Error('expectedMatches는 1 이상의 정수여야 함: ' + patch.nodeName);
+
+        if (expectedMatches !== undefined && targets.length !== expectedMatches)
+          throw new Error(
+            'patch 대상 개수 불일치: ' + patch.nodeName +
+            ' expected=' + expectedMatches + ' actual=' + targets.length
+          );
+
+        patchPlans.push({ index, patch, targets });
       }
-      for (const target of targets) {
-        // 노드 이름 변경 (optional)
-        if (patch.rename !== undefined) target.name = patch.rename;
-        // 노드 표시/숨김 (optional) — PRD 상태에 없는 요소 제거용
-        if (patch.visible !== undefined && 'visible' in target) target.visible = patch.visible;
-        // 텍스트 변경 (원본 폰트/스타일 유지, 문자열만 교체)
-        if (patch.characters !== undefined && target.type === 'TEXT') {
-          if (target.fontName === figma.mixed) {
-            const len = target.characters.length;
-            for (let i = 0; i < len; i++) await figma.loadFontAsync(target.getRangeFontName(i, i + 1));
-          } else {
-            await figma.loadFontAsync(target.fontName);
+
+      // 이름/위치는 patch target 검증이 끝난 뒤에만 변경한다.
+      if (item.name) clone.name = item.name;
+      if (typeof item.x === 'number') clone.x = item.x;
+      if (typeof item.y === 'number') clone.y = item.y;
+
+      const patchReport = [];
+
+      // Preflight를 통과한 patch만 적용한다.
+      for (const plan of patchPlans) {
+        const { index, patch, targets } = plan;
+        const targetIds = [];
+
+        for (const target of targets) {
+          targetIds.push(target.id);
+
+          // 노드 이름 변경 (optional)
+          if (patch.rename !== undefined) target.name = patch.rename;
+
+          // 노드 표시/숨김 (optional) — PRD 상태에 없는 요소 제거용
+          if (patch.visible !== undefined && 'visible' in target) target.visible = patch.visible;
+
+          // 텍스트 변경 (원본 폰트/스타일 유지, 문자열만 교체)
+          if (patch.characters !== undefined) {
+            if (target.type !== 'TEXT')
+              throw new Error('characters patch 대상이 TEXT가 아님: ' + patch.nodeName + ' (' + target.type + ')');
+            if (target.fontName === figma.mixed) {
+              const len = target.characters.length;
+              for (let i = 0; i < len; i++) await figma.loadFontAsync(target.getRangeFontName(i, i + 1));
+            } else {
+              await figma.loadFontAsync(target.fontName);
+            }
+            target.characters = patch.characters;
           }
-          target.characters = patch.characters;
-        }
-        // fill을 semantic 토큰에 바인딩 (권장 — harness 규칙 준수)
-        if (patch.fillBinding !== undefined && 'fills' in target) {
-          const v = await resolveSemanticVar(patch.fillBinding);
-          if (!v) throw new Error('fillBinding semantic 변수 없음: ' + patch.fillBinding);
-          const base = (Array.isArray(target.fills) && target.fills[0] && target.fills[0].type === 'SOLID')
-            ? { type: 'SOLID', color: target.fills[0].color, opacity: target.fills[0].opacity ?? 1 }
-            : { type: 'SOLID', color: { r: 0, g: 0, b: 0 }, opacity: 1 };
-          target.fills = [figma.variables.setBoundVariableForPaint(base, 'color', v)];
-        }
-        // fill 색상 변경 (raw hex, 바인딩 제거) — fillBinding이 없을 때만
-        else if (patch.fillColor !== undefined && 'fills' in target) {
-          const color = hexToRgb(patch.fillColor);
-          target.fills = [{ type: 'SOLID', color: { r: color.r, g: color.g, b: color.b }, opacity: color.a ?? 1 }];
-        }
-      }
-    }
 
-    created[item.name || clone.id] = clone.id;
+          // fill을 semantic 토큰에 바인딩 (권장 — harness 규칙 준수)
+          if (patch.fillBinding !== undefined) {
+            if (!('fills' in target))
+              throw new Error('fillBinding patch 대상에 fills 없음: ' + patch.nodeName);
+            const v = await resolveSemanticVar(patch.fillBinding);
+            if (!v) throw new Error('fillBinding semantic 변수 없음: ' + patch.fillBinding);
+            const base = (Array.isArray(target.fills) && target.fills[0] && target.fills[0].type === 'SOLID')
+              ? { type: 'SOLID', color: target.fills[0].color, opacity: target.fills[0].opacity ?? 1 }
+              : { type: 'SOLID', color: { r: 0, g: 0, b: 0 }, opacity: 1 };
+            target.fills = [figma.variables.setBoundVariableForPaint(base, 'color', v)];
+          }
+          // fill 색상 변경 (raw hex, 바인딩 제거) — fillBinding이 없을 때만
+          else if (patch.fillColor !== undefined) {
+            if (!('fills' in target))
+              throw new Error('fillColor patch 대상에 fills 없음: ' + patch.nodeName);
+            const color = hexToRgb(patch.fillColor);
+            target.fills = [{ type: 'SOLID', color: { r: color.r, g: color.g, b: color.b }, opacity: color.a ?? 1 }];
+          }
+        }
+
+        patchReport.push({
+          patchIndex: index,
+          nodeName: patch.nodeName,
+          expectedMatches: patch.expectedMatches ?? null,
+          matchedCount: targets.length,
+          targetIds,
+          applied: true,
+        });
+      }
+
+      const key = item.name || clone.id;
+      created[key] = clone.id;
+      items.push({
+        sourceId: item.sourceId,
+        cloneId: clone.id,
+        name: clone.name,
+        requestedPatchCount: patches.length,
+        appliedPatchCount: patchReport.length,
+        patches: patchReport,
+        success: true,
+      });
+    } catch (error) {
+      // 한 item의 patch가 실패하면 부분 수정된 clone을 남기지 않는다.
+      if (clone && !clone.removed) {
+        try { clone.remove(); } catch {}
+      }
+      throw new Error(
+        'duplicate item 실패 (sourceId=' + item.sourceId +
+        (item.name ? ', name=' + item.name : '') +
+        '): ' + error.message
+      );
+    }
   }
 
   return {
     op: 'duplicate',
     fileKey: figma.fileKey || spec.fileKey || null,
     created,
+    items,
+    counts: {
+      requestedItems: requestedItems.length,
+      createdItems: items.length,
+      requestedPatches: items.reduce((sum, item) => sum + item.requestedPatchCount, 0),
+      appliedPatches: items.reduce((sum, item) => sum + item.appliedPatchCount, 0),
+    },
   };
 }
 
