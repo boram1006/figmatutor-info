@@ -1,0 +1,487 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+    "stage": "screens",
+    "capturedAt": "2026-09-24T11:57:20.941Z",
+    "pageId": "1:987",
+    "complete": false,
+    "snapshotPath": "design/operations/coverage-v5/snapshot-coverage.json"
+  },
+  "patterns": [
+    {
+      "id": "kpi-summary-data-table",
+      "ruleRef": "Pattern 1. KPI Summary + Data Table",
+      "archetypes": [
+        "A6"
+      ],
+      "intents": [
+        "overview then detailed management",
+        "aggregate status with same-schema entities"
+      ],
+      "tasks": [
+        "scan metrics",
+        "filter records",
+        "sort records",
+        "export records"
+      ],
+      "keywords": [
+        "kpi",
+        "dashboard",
+        "table",
+        "filter",
+        "sort",
+        "export",
+        "운영 현황",
+        "목록"
+      ],
+      "evidence": [
+        "AI 심사 대시보드"
+      ],
+      "sourceSelectors": [],
+      "discoveryHints": {
+        "minScore": 6,
+        "requiredAny": [
+          "kpi",
+          "dashboard",
+          "심사",
+          "점수",
+          "결과",
+          "지원서"
+        ],
+        "minWidth": 700,
+        "minHeight": 180
+      },
+      "resolvedSources": [],
+      "cloneReady": false
+    },
+    {
+      "id": "status-driven-entity-card",
+      "ruleRef": "Pattern 2. Status-driven Entity Card",
+      "archetypes": [
+        "A4"
+      ],
+      "intents": [
+        "show current workflow state and next action",
+        "resume personal work",
+        "show action-needed state without losing primary state"
+      ],
+      "tasks": [
+        "resume work",
+        "view submission status",
+        "resubmit changed work"
+      ],
+      "keywords": [
+        "status card",
+        "지원 현황",
+        "제출완료",
+        "재제출",
+        "작성중",
+        "next action"
+      ],
+      "evidence": [
+        "지원하기 A-01",
+        "최종보고서 진입점"
+      ],
+      "sourceSelectors": [
+        {
+          "id": "card-pending",
+          "nodeName": "Card-PENDING",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "draft",
+            "in-progress"
+          ]
+        },
+        {
+          "id": "card-submitted-done",
+          "nodeName": "Card-SUBMITTED-DONE",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "submitted",
+            "completed"
+          ]
+        },
+        {
+          "id": "card-resubmit-needed",
+          "nodeName": "Card-RESUBMIT-NEEDED",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "changed-after-submit",
+            "resubmit"
+          ]
+        }
+      ],
+      "discoveryHints": {
+        "minScore": 7,
+        "requiredAny": [
+          "card",
+          "pending",
+          "submitted",
+          "resubmit",
+          "작성중",
+          "제출완료",
+          "재제출",
+          "본선 진행중"
+        ],
+        "minWidth": 300,
+        "minHeight": 80,
+        "maxHeight": 400
+      },
+      "resolvedSources": [
+        {
+          "selectorId": "card-pending",
+          "nodeName": "Card-PENDING",
+          "status": "resolved",
+          "preferredFor": [
+            "draft",
+            "in-progress"
+          ],
+          "matches": [
+            {
+              "frameId": "1:23008",
+              "frameName": "v5. 최종보고서 제출",
+              "nodeId": "1:23081",
+              "nodeName": "Card-PENDING",
+              "nodeType": "FRAME"
+            }
+          ]
+        },
+        {
+          "selectorId": "card-submitted-done",
+          "nodeName": "Card-SUBMITTED-DONE",
+          "status": "resolved",
+          "preferredFor": [
+            "submitted",
+            "completed"
+          ],
+          "matches": [
+            {
+              "frameId": "1:23008",
+              "frameName": "v5. 최종보고서 제출",
+              "nodeId": "49:1278",
+              "nodeName": "Card-SUBMITTED-DONE",
+              "nodeType": "FRAME"
+            }
+          ]
+        },
+        {
+          "selectorId": "card-resubmit-needed",
+          "nodeName": "Card-RESUBMIT-NEEDED",
+          "status": "resolved",
+          "preferredFor": [
+            "changed-after-submit",
+            "resubmit"
+          ],
+          "matches": [
+            {
+              "frameId": "1:23008",
+              "frameName": "v5. 최종보고서 제출",
+              "nodeId": "49:1301",
+              "nodeName": "Card-RESUBMIT-NEEDED",
+              "nodeType": "FRAME"
+            }
+          ]
+        }
+      ],
+      "cloneReady": true
+    },
+    {
+      "id": "recruitable-entity-card",
+      "ruleRef": "Pattern 3. Recruitable Entity Card",
+      "archetypes": [
+        "A3"
+      ],
+      "intents": [
+        "browse entities with variable child actions",
+        "apply to an available child position"
+      ],
+      "tasks": [
+        "browse teams",
+        "compare recruitment availability",
+        "apply or cancel"
+      ],
+      "keywords": [
+        "팀빌딩",
+        "모집",
+        "지원",
+        "position",
+        "card grid"
+      ],
+      "evidence": [
+        "팀빌딩"
+      ],
+      "sourceSelectors": [],
+      "discoveryHints": {
+        "minScore": 7,
+        "requiredAny": [
+          "card",
+          "팀",
+          "모집",
+          "지원",
+          "position"
+        ],
+        "minWidth": 250,
+        "minHeight": 120,
+        "maxHeight": 700
+      },
+      "resolvedSources": [],
+      "cloneReady": false
+    },
+    {
+      "id": "persistent-step-form",
+      "ruleRef": "Pattern 4. Persistent Step Form",
+      "archetypes": [
+        "A5"
+      ],
+      "intents": [
+        "complete a long multi-section workflow without losing position"
+      ],
+      "tasks": [
+        "edit multi-step form",
+        "resume section",
+        "review before submit"
+      ],
+      "keywords": [
+        "step",
+        "section",
+        "form",
+        "좌측 스텝",
+        "작성",
+        "resume"
+      ],
+      "evidence": [
+        "지원하기 8-step",
+        "최종보고서 9-step"
+      ],
+      "sourceSelectors": [],
+      "discoveryHints": {
+        "minScore": 6,
+        "requiredAny": [
+          "step",
+          "section",
+          "지원서 항목",
+          "다음",
+          "이전",
+          "작성"
+        ],
+        "minWidth": 1000,
+        "minHeight": 700
+      },
+      "resolvedSources": [],
+      "cloneReady": false
+    },
+    {
+      "id": "evaluation-workspace",
+      "ruleRef": "Pattern 5. Evaluation Workspace",
+      "archetypes": [
+        "A7"
+      ],
+      "intents": [
+        "review an artifact while entering evaluation",
+        "process multiple entities continuously"
+      ],
+      "tasks": [
+        "select review target",
+        "inspect source",
+        "score",
+        "save",
+        "move next"
+      ],
+      "keywords": [
+        "심사",
+        "evaluation",
+        "queue",
+        "viewer",
+        "score",
+        "review"
+      ],
+      "evidence": [
+        "심사 페이지",
+        "최종 심사",
+        "AI 심사 결과 상세"
+      ],
+      "sourceSelectors": [],
+      "discoveryHints": {
+        "minScore": 6,
+        "requiredAny": [
+          "심사",
+          "score",
+          "평가",
+          "review",
+          "viewer",
+          "queue"
+        ],
+        "minWidth": 1000,
+        "minHeight": 700
+      },
+      "resolvedSources": [],
+      "cloneReady": false
+    },
+    {
+      "id": "final-review-matrix",
+      "ruleRef": "Pattern 6. Final Review Matrix",
+      "archetypes": [
+        "A8"
+      ],
+      "intents": [
+        "review completeness before final confirmation"
+      ],
+      "tasks": [
+        "find missing evaluations",
+        "edit final values",
+        "confirm final submission"
+      ],
+      "keywords": [
+        "최종 검토",
+        "matrix",
+        "누락",
+        "confirm",
+        "submit"
+      ],
+      "evidence": [
+        "1차 심사 최종 검토"
+      ],
+      "sourceSelectors": [],
+      "discoveryHints": {
+        "minScore": 6,
+        "requiredAny": [
+          "최종 검토",
+          "누락",
+          "matrix",
+          "confirm",
+          "평가"
+        ],
+        "minWidth": 900,
+        "minHeight": 600
+      },
+      "resolvedSources": [],
+      "cloneReady": false
+    },
+    {
+      "id": "package-readiness-grid",
+      "ruleRef": "Pattern 7. Package Readiness Grid",
+      "archetypes": [
+        "A9",
+        "A8"
+      ],
+      "intents": [
+        "verify heterogeneous artifacts before one final submit"
+      ],
+      "tasks": [
+        "check artifact readiness",
+        "submit package",
+        "resubmit changed package"
+      ],
+      "keywords": [
+        "package",
+        "readiness",
+        "최종 제출",
+        "발표자료",
+        "데모 URL",
+        "소스코드",
+        "재제출"
+      ],
+      "evidence": [
+        "최종보고서 SECTION 9"
+      ],
+      "sourceSelectors": [],
+      "discoveryHints": {
+        "minScore": 7,
+        "requiredAny": [
+          "package",
+          "제출 패키지",
+          "서비스 데모",
+          "소스코드",
+          "발표자료",
+          "최종 제출"
+        ],
+        "minWidth": 1000,
+        "minHeight": 700
+      },
+      "resolvedSources": [],
+      "cloneReady": false
+    },
+    {
+      "id": "announcement-hero-follow-up",
+      "ruleRef": "Pattern 8. Announcement Hero + Follow-up Action",
+      "archetypes": [
+        "A2"
+      ],
+      "intents": [
+        "announce an important result and lead to a next action"
+      ],
+      "tasks": [
+        "read result announcement",
+        "understand next event",
+        "continue to follow-up"
+      ],
+      "keywords": [
+        "합격 발표",
+        "result",
+        "announcement",
+        "countdown",
+        "hero"
+      ],
+      "evidence": [
+        "하반기 해커톤 1차 심사 합격 발표"
+      ],
+      "sourceSelectors": [],
+      "discoveryHints": {
+        "minScore": 6,
+        "requiredAny": [
+          "합격",
+          "발표",
+          "announcement",
+          "countdown",
+          "축하",
+          "결과"
+        ],
+        "minWidth": 1000,
+        "minHeight": 600
+      },
+      "resolvedSources": [],
+      "cloneReady": false
+    },
+    {
+      "id": "read-only-article-detail",
+      "ruleRef": "Pattern 9. Read-only Article Detail",
+      "archetypes": [
+        "A1"
+      ],
+      "intents": [
+        "read a long-form operational notice or guide"
+      ],
+      "tasks": [
+        "read announcement",
+        "read guide",
+        "return to list"
+      ],
+      "keywords": [
+        "공지",
+        "article",
+        "detail",
+        "breadcrumb",
+        "long-form"
+      ],
+      "evidence": [
+        "공지 상세"
+      ],
+      "sourceSelectors": [],
+      "discoveryHints": {
+        "minScore": 6,
+        "requiredAny": [
+          "공지",
+          "article",
+          "breadcrumb",
+          "조회",
+          "작성일"
+        ],
+        "minWidth": 700,
+        "minHeight": 500
+      },
+      "resolvedSources": [],
+      "cloneReady": false
+    }
+  ]
+}
