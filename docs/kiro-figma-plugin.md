@@ -55,7 +55,9 @@ Kiro가 result/snapshot 을 읽고 로컬 게이트로 검증
 프레임·노드 트리, 각 노드의 `designHarness` 메타데이터를 담는다. 플러그인은 생성한 실제
 노드 ID를 result.json에 돌려준다. Kiro는 그 ID를 `catalog.json`·`screens.json` 등에 기록한다.
 
-- primitives 변수 → semantic alias → text style 순서로 만든다.
+- primitives 변수 → semantic alias → text style 순서로 처리한다.
+- **동일 이름의 기존 variable/text style이 이미 있으면 새로 만들지 않는다.** 정의까지 동일하면 기존 자산을 재사용하고 결과의 `reused`에 ID를 기록한다.
+- 동일 이름인데 type/value/alias/font/size/line-height 정의가 다르면 기존 Design System을 덮어쓰거나 중복 생성하지 않고 create를 실패시킨다.
 - 색·padding·spacing·radius는 semantic 변수에 바인딩한다. 타이포는 `Text/*` 스타일을 쓴다.
 - 가변 콘텐츠 컨테이너는 HUG. 고정 높이는 catalog의 토큰 값과 일치시킨다.
 - 노드 의미는 `node.setSharedPluginData('designHarness','metadata', JSON.stringify(meta))`로 기록한다.
