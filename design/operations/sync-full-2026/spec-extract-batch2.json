@@ -1,0 +1,9 @@
+{
+  "op": "extract",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "stage": "screens",
+  "inputDigest": "sync-full-2026-09-24-b2",
+  "frameIds": ["1:17912", "1:17913", "1:17915", "1:18039", "1:18235"],
+  "_note": "배치 2/4. 실행 후 결과를 design/operations/sync-full-2026/snapshot-b2.json 으로 저장."
+}

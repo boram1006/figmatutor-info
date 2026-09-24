@@ -1,0 +1,9 @@
+{
+  "op": "extract",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "stage": "screens",
+  "inputDigest": "sync-full-2026-09-24-b4",
+  "frameIds": ["1:21203", "1:21385", "1:21542", "1:23008"],
+  "_note": "배치 4/4. 1:23008(v5)은 이미 snapshot-coverage.json 최신본이 있으나 완결성을 위해 함께 재추출. 실행 후 결과를 design/operations/sync-full-2026/snapshot-b4.json 으로 저장."
+}

@@ -1,0 +1,8 @@
+{
+  "op": "extract",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "stage": "screens",
+  "inputDigest": "sync-full-2026-09-24",
+  "_note": "frameIds 미지정 = 페이지(design)의 모든 최상위 프레임/섹션을 추출한다. 사용자가 v5 외 다른 영역(H/N/F/TB/A/MY/RV/J)의 프레임 이름·화면도 정리했으므로, repo 기준 스냅샷을 최신 Figma 전체로 맞춘다. 실행 후 결과 JSON을 design/operations/sync-full-2026/snapshot-full.json 으로 저장한 뒤, npm run save-snapshot -- --stage screens --from design/operations/sync-full-2026/snapshot-full.json 을 실행한다."
+}
