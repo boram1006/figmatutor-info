@@ -23,9 +23,10 @@
 6. `layout-rules.md`에서 페이지 구조와 주요 영역 배치를 선택한다.
 7. `component-usage.md`에서 Card / Table / List / Banner / Modal 등의 표현 방식을 결정한다.
 8. `patterns.md`에서 기존 복합 패턴을 우선 재사용한다.
-9. `visual-hierarchy.md`의 강조·상태·시각 언어를 적용한다.
-10. `exceptions.md`의 예외 조건을 확인한다.
-11. 판단 근거가 부족하면 `unresolved.md`를 확인하고 임의의 서비스 규칙을 발명하지 않는다.
+9. 실제 Figma component가 존재하는 영역은 새 primitive를 만들기 전에 **기존 component INSTANCE 재사용**을 우선한다. catalog/snapshot의 실제 nodeId와 variant/property를 사용하고, 유사 외형을 재구성하지 않는다.
+10. `visual-hierarchy.md`의 강조·상태·시각 언어를 적용한다.
+11. `exceptions.md`의 예외 조건을 확인한다.
+12. 판단 근거가 부족하면 `unresolved.md`를 확인하고 임의의 서비스 규칙을 발명하지 않는다.
 
 신규 구조가 필요하면 바로 전역 규칙으로 만들지 않고 `CANDIDATE/HYPOTHESIS`로 기록한다.
 
