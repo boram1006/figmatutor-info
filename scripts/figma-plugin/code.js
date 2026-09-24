@@ -599,6 +599,8 @@ async function runCreate(spec) {
   async function build(node, parent) {
     let n;
     let instanceSource = null;
+    let cloneBuildResult = null;
+    let cloneBeforeAttach = null;
     switch (node.type) {
       case 'FRAME': n = figma.createFrame(); break;
       case 'TEXT': n = figma.createText(); break;
@@ -624,16 +626,13 @@ async function runCreate(spec) {
         const sourceNode = await figma.getNodeByIdAsync(node.sourceNodeId);
         if (!sourceNode)
           throw new Error('sourceNodeId 노드 없음: ' + node.sourceNodeId);
-        const cloned = await cloneAndPatchNode(sourceNode, {
+        cloneBuildResult = await cloneAndPatchNode(sourceNode, {
           name: node.name || null,
           patches: node.patches || [],
         });
-        n = cloned.clone;
-        n.__designHarnessCloneResult = {
-          sourceNodeId: node.sourceNodeId,
-          patchReport: cloned.patchReport,
-          verification: cloned.verification,
-        };
+        n = cloneBuildResult.clone;
+        // Composition parent로 이동하기 전 baseline. 이후 reparent가 구조/style을 바꾸지 않는지 다시 확인한다.
+        cloneBeforeAttach = await captureCloneVerificationTree(n);
         break;
       }
       default: throw new Error('지원하지 않는 노드 타입: ' + node.type);
@@ -644,14 +643,37 @@ async function runCreate(spec) {
     else page.appendChild(n);
 
     if (node.type === 'CLONE') {
+      // 새 parent로 reparent한 뒤에도 구조/style invariant가 보존되는지 확인한다.
+      const cloneAfterAttach = await captureCloneVerificationTree(n);
+      const compositionDiffs = compareCloneTrees(cloneBeforeAttach, cloneAfterAttach, {
+        mode: 'postPatch',
+        allowed: new Map(),
+      });
+      const compositionUnexpected = compositionDiffs.filter((d) => d.category !== 'geometry');
+      const compositionGeometry = compositionDiffs.filter((d) => d.category === 'geometry');
+
+      if (compositionUnexpected.length) {
+        try { n.remove(); } catch {}
+        throw new Error(
+          'CLONE compose 보존 검증 실패(reparent 후): ' +
+          summarizeVerificationDiffs(compositionUnexpected)
+        );
+      }
+
       const cloneKey = node.key || node.name || n.id;
       created.clones[cloneKey] = {
         id: n.id,
         sourceNodeId: node.sourceNodeId,
-        patches: n.__designHarnessCloneResult?.patchReport || [],
-        verification: n.__designHarnessCloneResult?.verification || null,
+        patches: cloneBuildResult?.patchReport || [],
+        verification: {
+          ...(cloneBuildResult?.verification || {}),
+          composition: {
+            passed: true,
+            unexpectedChanges: [],
+            geometryChanges: compositionGeometry,
+          },
+        },
       };
-      try { delete n.__designHarnessCloneResult; } catch {}
     }
 
     if (node.type === 'INSTANCE') {
@@ -717,8 +739,12 @@ async function runCreate(spec) {
     }
 
     // clip / scroll
-    if (typeof node.clipsContent === 'boolean' && 'clipsContent' in n) n.clipsContent = node.clipsContent;
-    if (node.overflowDirection && 'overflowDirection' in n) n.overflowDirection = node.overflowDirection;
+    if (node.type === 'CLONE' && (node.clipsContent !== undefined || node.overflowDirection !== undefined))
+      throw new Error('CLONE clip/scroll 직접 재설정 금지. 원본 패턴을 보존: ' + node.sourceNodeId);
+    if (node.type !== 'CLONE') {
+      if (typeof node.clipsContent === 'boolean' && 'clipsContent' in n) n.clipsContent = node.clipsContent;
+      if (node.overflowDirection && 'overflowDirection' in n) n.overflowDirection = node.overflowDirection;
+    }
 
     // Sizing constraints (HUG/FILL) after append
     if (node.type !== 'CLONE') {
