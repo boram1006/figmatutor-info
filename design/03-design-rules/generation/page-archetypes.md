@@ -103,7 +103,7 @@ Evidence: 팀빌딩.
 ### Structure
 1. Context title
 2. Phase/deadline banner
-3. Entity status list/cards
+3. Entity status list/cards 또는 history table
 4. 각 entity의 상태, 시간, 진행률, next action
 5. Create-new action when allowed
 
@@ -111,12 +111,14 @@ Evidence: 팀빌딩.
 Medium
 
 ### Rules
-- entity마다 현재 상태와 next action을 한 덩어리로 보여준다.
+- 현재 진행 중 업무처럼 entity별 next action이 중요한 경우 status card/list를 우선한다.
+- 여러 회차의 과거 지원 이력처럼 동일 schema를 비교/조회하는 목적이면 table을 사용할 수 있다.
 - 상태에 따라 CTA가 달라진다.
 - 진행 중인 항목은 progress와 last modified를 함께 보여준다.
 - 완료 항목은 submitted timestamp와 read-only/view action을 우선한다.
+- 개인 화면이라는 이유만으로 모든 데이터를 card로 만들지 않는다.
 
-Evidence: 지원하기 A-01, 최종보고서 진입점.
+Evidence: 지원하기 A-01, 최종보고서 진입점, 마이페이지 통합 지원 현황.
 
 ---
 
@@ -197,10 +199,14 @@ Evidence: AI 심사 대시보드.
 Very High
 
 ### Rules
+- layout shape보다 **work loop continuity**를 우선한다.
+- 기본 work loop는 `대상 선택 → source 확인 → 평가 입력 → 저장 → 다음 대상`이다.
 - 평가 근거와 입력 UI를 불필요하게 다른 페이지로 분리하지 않는다.
 - primary artifact/source가 중심이면 가장 큰 공간을 배정한다.
 - queue/list는 현재 대상과 상태를 빠르게 scan할 정도로 compact하게 유지한다.
 - evaluation/action UI는 작업 중 쉽게 접근 가능하게 한다.
+- right panel / floating panel / bottom sheet 등 표현 방식이 달라도 queue와 source context를 유지한다.
+- local pane failure가 발생해도 가능한 주변 workspace context는 유지한다.
 - exact pane ratio는 closest existing screen의 geometry를 따른다.
 - 해커톤 심사 화면을 token/component QA용 REVIEW-INSPECTOR로 재해석하지 않는다.
 
@@ -220,7 +226,7 @@ Evidence: 1차 심사, 최종 심사, AI 심사 결과 상세.
 2. Warning or incomplete-state summary
 3. Dense comparison/edit table or readiness summary
 4. Save
-5. Final confirm/submit action
+5. Final Action Region
 
 ### Density
 High
@@ -230,6 +236,7 @@ High
 - final action 전에 전체 상태를 한 화면에서 검토 가능하게 한다.
 - editable review라면 inline edit를 우선한다.
 - final action은 draft save와 명확히 구분한다.
+- final action의 정확한 위치나 fixed 여부를 일반 규칙으로 만들지 않는다.
 
 Evidence: 1차 심사 최종 검토, 최종 패키지 제출.
 
@@ -246,7 +253,7 @@ Evidence: 1차 심사 최종 검토, 최종 패키지 제출.
 2. Package readiness summary
 3. Artifact cards/grid
 4. Deadline/warning
-5. Action bar with explicit submit/re-submit
+5. Final Action Region with explicit submit/re-submit/locked state
 
 ### Density
 Medium ~ High
@@ -255,5 +262,7 @@ Medium ~ High
 - 각 artifact의 준비 여부를 개별적으로 보여준다.
 - missing/changed item은 전체 package 상태와 연결해 표시한다.
 - final submit은 모든 artifact 상태 확인 이후의 별도 action으로 둔다.
+- 제출완료와 재제출 필요를 동시에 표현해야 하는 경우 primary state와 secondary action-needed state를 분리한다.
+- artifact grid의 column 수와 final action 위치는 closest existing screen을 따른다.
 
 Evidence: 최종보고서 SECTION 9/9.
