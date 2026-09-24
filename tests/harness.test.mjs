@@ -114,11 +114,15 @@ test('merge rejects missing, duplicate and inconsistent frame batches',t=>{
 });
 test('Figma extractor parses as async body and reads a guarded API mock',async()=>{
  const source=readFileSync(join(repo,'scripts/figma/extract-snapshot.js'),'utf8').replace("fileKey:'__FILE_KEY__',pageName:'__PAGE_NAME__',stage:'__STAGE__',inputDigest:'__INPUT_DIGEST__'","fileKey:'f',pageName:'Screens',stage:'screens',inputDigest:'digest'");
- const root={id:'frame',name:'Home',type:'FRAME',visible:true,width:390,height:844,absoluteBoundingBox:{x:100,y:100,width:390,height:844},children:[],getPluginData:()=>JSON.stringify({role:'screen',screenId:'home',state:'default',viewportId:'mobile'}),boundVariables:{}};
+ const root={id:'frame',name:'Home',type:'FRAME',visible:true,width:390,height:844,absoluteBoundingBox:{x:100,y:100,width:390,height:844},children:[],getPluginData:()=>JSON.stringify({role:'screen',screenId:'home',state:'default',viewportId:'mobile'}),boundVariables:{},opacity:1,blendMode:'PASS_THROUGH',layoutMode:'VERTICAL',layoutSizingHorizontal:'FIXED',layoutSizingVertical:'FIXED',primaryAxisSizingMode:'FIXED',counterAxisSizingMode:'FIXED',primaryAxisAlignItems:'MIN',counterAxisAlignItems:'MIN',layoutWrap:'NO_WRAP',constraints:{horizontal:'MIN',vertical:'MIN'},clipsContent:false,effects:[],fills:[],strokes:[]};
  const guarded=new Proxy(root,{get:(o,k)=>{if(!(k in o))throw new Error('Unsupported getter: '+String(k));return o[k];}});
- const page={id:'page',name:'Screens',children:[guarded]},api={fileKey:'f',root:{children:[page]},variables:{getLocalVariableCollectionsAsync:async()=>[]},getLocalTextStylesAsync:async()=>[],setCurrentPageAsync:async()=>{}};
+ const page={id:'page',name:'Screens',children:[guarded]},api={fileKey:'f',mixed:Symbol('mixed'),root:{children:[page]},variables:{getLocalVariableCollectionsAsync:async()=>[]},getLocalTextStylesAsync:async()=>[],setCurrentPageAsync:async()=>{}};
  const AsyncFunction=Object.getPrototypeOf(async function(){}).constructor;
- const result=await new AsyncFunction('figma',source)(api);assert.equal(result.complete,true);assert.equal(result.frames[0].nodes[0].bounds.x,0);assert.equal(result.frames[0].screenId,'home');
+ const result=await new AsyncFunction('figma',source)(api);
+ const node=result.frames[0].nodes[0];
+ assert.equal(result.complete,true);assert.equal(node.bounds.x,0);assert.equal(result.frames[0].screenId,'home');
+ assert.equal(node.layout.horizontal,'FIXED');assert.equal(node.layout.primaryAxisSizingMode,'FIXED');
+ assert.deepEqual(node.constraints,{horizontal:'MIN',vertical:'MIN'});assert.equal(node.opacity,1);assert.deepEqual(node.effects,[]);
 });
 test('additive component tokens keep the system valid but rebuild affected components',t=>{
  const f=fixture(t);f.put(paths.extensions,{schemaVersion:1,primitives:{red:{type:'COLOR',value:'#FF0000'}},semantic:{'color-error':{ref:'red'}},textStyles:{}});
@@ -151,4 +155,9 @@ test('character slots enforce original file hash, identity, FIT and sky backing'
  n.assetId='unknown';assert.match(validateCharacterAssets(f.root,f.config,manifest,snap).join(),/assetId\/hash/);
  a.file='ref.png';assert.match(validateCharacterAssets(f.root,f.config,manifest,snap).join(),/원본 파일만/);
  a.file='characters/buddy.png';a.sha256='wrong';assert.match(validateCharacterAssets(f.root,f.config,manifest,snap).join(),/sha256/);
+});
+
+test('Figma plugin source remains syntactically valid',()=>{
+ const source=readFileSync(join(repo,'scripts/figma-plugin/code.js'),'utf8');
+ assert.doesNotThrow(()=>new Function(source));
 });
