@@ -1012,9 +1012,28 @@ async function runDuplicate(spec) {
 
     let clone = null;
     try {
-      // Exact Clone. 이후 패치 전까지 구조/레이아웃/바인딩을 재설정하지 않는다.
+      // Source baseline은 clone 전에 잡는다.
+      // path는 node id/name이 아니라 child index 기반이라 clone의 새 ID와 무관하게 비교 가능하다.
+      const sourceBefore = await captureCloneVerificationTree(source);
+
+      // Exact Clone. 이후 patch 전까지 구조/레이아웃/바인딩을 재설정하지 않는다.
       clone = source.clone();
       page.appendChild(clone);
+
+      // 1) PATCH 전 exact-clone 검증.
+      // root position은 parent가 달라질 수 있어 비교하지 않지만,
+      // 트리/타입/크기/layout/constraints/component 연결/style/fill/effect 등은 동일해야 한다.
+      const cloneBefore = await captureCloneVerificationTree(clone);
+      const prePatchDiffs = compareCloneTrees(sourceBefore, cloneBefore, {
+        mode: 'prePatch',
+        allowed: new Map(),
+      });
+      if (prePatchDiffs.length) {
+        throw new Error(
+          'clone 보존 검증 실패(patch 전): ' +
+          summarizeVerificationDiffs(prePatchDiffs)
+        );
+      }
 
       const patchPlans = [];
       const patches = Array.isArray(item.patches) ? item.patches : [];
@@ -1047,6 +1066,23 @@ async function runDuplicate(spec) {
           );
 
         patchPlans.push({ index, patch, targets });
+      }
+
+      // patch 전 clone의 path map. patch 허용 필드를 path 단위로 기록한다.
+      const clonePathById = buildRelativePathMap(clone);
+      const allowedChanges = new Map();
+      if (item.name) allowCloneChange(allowedChanges, '0', 'name');
+
+      for (const plan of patchPlans) {
+        for (const target of plan.targets) {
+          const path = clonePathById.get(target.id);
+          if (!path) throw new Error('patch 대상 path 계산 실패: ' + target.id);
+          if (plan.patch.rename !== undefined) allowCloneChange(allowedChanges, path, 'name');
+          if (plan.patch.visible !== undefined) allowCloneChange(allowedChanges, path, 'visible');
+          if (plan.patch.characters !== undefined) allowCloneChange(allowedChanges, path, 'characters');
+          if (plan.patch.fillBinding !== undefined || plan.patch.fillColor !== undefined)
+            allowCloneChange(allowedChanges, path, 'fills');
+        }
       }
 
       // 이름/위치는 patch target 검증이 끝난 뒤에만 변경한다.
@@ -1113,6 +1149,25 @@ async function runDuplicate(spec) {
         });
       }
 
+      // 2) PATCH 후 invariant 검증.
+      // 명시적으로 허용한 name/visible/characters/fills 외의 구조적 변화가 있으면 실패한다.
+      // width/height는 텍스트 길이 + Auto Layout에 의해 파생 변경될 수 있으므로
+      // strict failure에서는 제외하고 geometryChanges로 별도 보고한다.
+      const cloneAfter = await captureCloneVerificationTree(clone);
+      const postPatchDiffs = compareCloneTrees(sourceBefore, cloneAfter, {
+        mode: 'postPatch',
+        allowed: allowedChanges,
+      });
+      const unexpectedChanges = postPatchDiffs.filter((d) => d.category !== 'geometry');
+      const geometryChanges = postPatchDiffs.filter((d) => d.category === 'geometry');
+
+      if (unexpectedChanges.length) {
+        throw new Error(
+          'clone 보존 검증 실패(patch 후): ' +
+          summarizeVerificationDiffs(unexpectedChanges)
+        );
+      }
+
       const key = item.name || clone.id;
       created[key] = clone.id;
       items.push({
@@ -1122,10 +1177,22 @@ async function runDuplicate(spec) {
         requestedPatchCount: patches.length,
         appliedPatchCount: patchReport.length,
         patches: patchReport,
+        verification: {
+          prePatch: {
+            passed: true,
+            comparedNodes: sourceBefore.nodes.length,
+            differences: [],
+          },
+          postPatch: {
+            passed: true,
+            unexpectedChanges: [],
+            geometryChanges,
+          },
+        },
         success: true,
       });
     } catch (error) {
-      // 한 item의 patch가 실패하면 부분 수정된 clone을 남기지 않는다.
+      // 한 item의 patch/검증이 실패하면 부분 수정된 clone을 남기지 않는다.
       if (clone && !clone.removed) {
         try { clone.remove(); } catch {}
       }
@@ -1147,8 +1214,204 @@ async function runDuplicate(spec) {
       createdItems: items.length,
       requestedPatches: items.reduce((sum, item) => sum + item.requestedPatchCount, 0),
       appliedPatches: items.reduce((sum, item) => sum + item.appliedPatchCount, 0),
+      verifiedItems: items.filter((item) => item.verification?.prePatch?.passed && item.verification?.postPatch?.passed).length,
     },
   };
+}
+
+// ---------------------------------------------------------------------------
+// Duplicate verification helpers
+// ---------------------------------------------------------------------------
+
+function buildRelativePathMap(root) {
+  const map = new Map();
+  const queue = [{ node: root, path: '0' }];
+  while (queue.length) {
+    const { node, path } = queue.shift();
+    map.set(node.id, path);
+    if ('children' in node) {
+      node.children.forEach((child, index) => queue.push({ node: child, path: path + '.' + index }));
+    }
+  }
+  return map;
+}
+
+function allowCloneChange(allowed, path, field) {
+  if (!allowed.has(path)) allowed.set(path, new Set());
+  allowed.get(path).add(field);
+}
+
+function cloneValue(value) {
+  if (value === figma.mixed) return '__MIXED__';
+  if (value == null) return value;
+  if (Array.isArray(value)) return value.map(cloneValue);
+  if (typeof value === 'object') {
+    const out = {};
+    for (const key of Object.keys(value).sort()) {
+      const v = value[key];
+      if (typeof v === 'function' || v === undefined) continue;
+      out[key] = cloneValue(v);
+    }
+    return out;
+  }
+  return value;
+}
+
+function clonePaints(list) {
+  if (!Array.isArray(list)) return '__MIXED__';
+  return list.map((p) => ({
+    type: p.type,
+    visible: p.visible !== false,
+    opacity: typeof p.opacity === 'number' ? p.opacity : 1,
+    blendMode: p.blendMode || null,
+    color: p.type === 'SOLID' ? cloneValue(p.color) : null,
+    imageHash: p.type === 'IMAGE' ? p.imageHash || null : null,
+    scaleMode: p.type === 'IMAGE' ? p.scaleMode || null : null,
+    boundColor: p.boundVariables?.color?.id || null,
+  }));
+}
+
+function cloneEffects(list) {
+  if (!Array.isArray(list)) return '__MIXED__';
+  return list.map((e) => ({
+    type: e.type,
+    visible: e.visible !== false,
+    radius: typeof e.radius === 'number' ? e.radius : null,
+    spread: typeof e.spread === 'number' ? e.spread : null,
+    offset: e.offset ? cloneValue(e.offset) : null,
+    color: e.color ? cloneValue(e.color) : null,
+    blendMode: e.blendMode || null,
+  }));
+}
+
+async function cloneComponentRef(node) {
+  if (node.type !== 'INSTANCE') return null;
+  if (typeof node.getMainComponentAsync === 'function') {
+    const main = await node.getMainComponentAsync();
+    return main?.id || null;
+  }
+  return node.mainComponent?.id || null;
+}
+
+async function captureCloneVerificationTree(root) {
+  const nodes = [];
+  const queue = [{ node: root, path: '0' }];
+
+  while (queue.length) {
+    const { node, path } = queue.shift();
+
+    const record = {
+      path,
+      type: node.type,
+      name: node.name,
+      visible: 'visible' in node ? node.visible : true,
+      width: typeof node.width === 'number' ? round2(node.width) : null,
+      height: typeof node.height === 'number' ? round2(node.height) : null,
+      opacity: typeof node.opacity === 'number' ? node.opacity : null,
+      blendMode: 'blendMode' in node ? node.blendMode : null,
+      layoutMode: 'layoutMode' in node ? node.layoutMode : null,
+      primaryAxisSizingMode: 'primaryAxisSizingMode' in node ? node.primaryAxisSizingMode : null,
+      counterAxisSizingMode: 'counterAxisSizingMode' in node ? node.counterAxisSizingMode : null,
+      primaryAxisAlignItems: 'primaryAxisAlignItems' in node ? node.primaryAxisAlignItems : null,
+      counterAxisAlignItems: 'counterAxisAlignItems' in node ? node.counterAxisAlignItems : null,
+      layoutSizingHorizontal: 'layoutSizingHorizontal' in node ? node.layoutSizingHorizontal : null,
+      layoutSizingVertical: 'layoutSizingVertical' in node ? node.layoutSizingVertical : null,
+      itemSpacing: typeof node.itemSpacing === 'number' ? node.itemSpacing : null,
+      paddingTop: typeof node.paddingTop === 'number' ? node.paddingTop : null,
+      paddingRight: typeof node.paddingRight === 'number' ? node.paddingRight : null,
+      paddingBottom: typeof node.paddingBottom === 'number' ? node.paddingBottom : null,
+      paddingLeft: typeof node.paddingLeft === 'number' ? node.paddingLeft : null,
+      constraints: 'constraints' in node ? cloneValue(node.constraints) : null,
+      clipsContent: 'clipsContent' in node ? node.clipsContent : null,
+      cornerRadius: 'cornerRadius' in node ? cloneValue(node.cornerRadius) : null,
+      strokeWeight: 'strokeWeight' in node ? cloneValue(node.strokeWeight) : null,
+      strokeAlign: 'strokeAlign' in node ? node.strokeAlign : null,
+      fills: 'fills' in node ? clonePaints(node.fills) : null,
+      strokes: 'strokes' in node ? clonePaints(node.strokes) : null,
+      effects: 'effects' in node ? cloneEffects(node.effects) : null,
+      fillStyleId: typeof node.fillStyleId === 'string' ? node.fillStyleId : null,
+      strokeStyleId: typeof node.strokeStyleId === 'string' ? node.strokeStyleId : null,
+      effectStyleId: typeof node.effectStyleId === 'string' ? node.effectStyleId : null,
+      textStyleId: typeof node.textStyleId === 'string' ? node.textStyleId : null,
+      characters: node.type === 'TEXT' ? node.characters : null,
+      fontName: node.type === 'TEXT' ? cloneValue(node.fontName) : null,
+      fontSize: node.type === 'TEXT' ? cloneValue(node.fontSize) : null,
+      fontWeight: node.type === 'TEXT' ? cloneValue(node.fontWeight) : null,
+      lineHeight: node.type === 'TEXT' ? cloneValue(node.lineHeight) : null,
+      letterSpacing: node.type === 'TEXT' ? cloneValue(node.letterSpacing) : null,
+      textAlignHorizontal: node.type === 'TEXT' ? node.textAlignHorizontal : null,
+      textAlignVertical: node.type === 'TEXT' ? node.textAlignVertical : null,
+      textAutoResize: node.type === 'TEXT' ? node.textAutoResize : null,
+      componentRef: await cloneComponentRef(node),
+      componentProperties: node.type === 'INSTANCE' ? cloneValue(node.componentProperties) : null,
+      childCount: 'children' in node ? node.children.length : 0,
+    };
+
+    nodes.push(record);
+    if ('children' in node) {
+      node.children.forEach((child, index) => queue.push({ node: child, path: path + '.' + index }));
+    }
+  }
+
+  return { nodes };
+}
+
+function stableCloneValue(value) {
+  return JSON.stringify(value);
+}
+
+function compareCloneTrees(sourceTree, cloneTree, options) {
+  const diffs = [];
+  const sourceByPath = new Map(sourceTree.nodes.map((n) => [n.path, n]));
+  const cloneByPath = new Map(cloneTree.nodes.map((n) => [n.path, n]));
+
+  const allPaths = new Set([...sourceByPath.keys(), ...cloneByPath.keys()]);
+  const geometryFields = new Set(['width', 'height']);
+
+  for (const path of allPaths) {
+    const a = sourceByPath.get(path);
+    const b = cloneByPath.get(path);
+
+    if (!a || !b) {
+      diffs.push({
+        path,
+        field: 'node',
+        category: 'structure',
+        source: a ? 'present' : 'missing',
+        clone: b ? 'present' : 'missing',
+      });
+      continue;
+    }
+
+    const fields = Object.keys(a).filter((key) => key !== 'path');
+    for (const field of fields) {
+      const allowed = options.allowed?.get(path);
+      if (options.mode === 'postPatch' && allowed?.has(field)) continue;
+
+      // patch 후 geometry는 파생 변화로 별도 보고하고 실패 조건에서는 제외한다.
+      const category = geometryFields.has(field) ? 'geometry' : 'invariant';
+
+      if (stableCloneValue(a[field]) !== stableCloneValue(b[field])) {
+        diffs.push({
+          path,
+          field,
+          category,
+          source: a[field],
+          clone: b[field],
+        });
+      }
+    }
+  }
+
+  return diffs;
+}
+
+function summarizeVerificationDiffs(diffs) {
+  return diffs
+    .slice(0, 5)
+    .map((d) => d.path + '/' + d.field)
+    .join(', ') +
+    (diffs.length > 5 ? ' 외 ' + (diffs.length - 5) + '건' : '');
 }
 
 // 현재 파일의 semantic 변수를 이름으로 찾는다 (컬렉션명 무관, 이름 일치)
