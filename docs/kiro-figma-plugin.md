@@ -116,6 +116,14 @@ patch 필드:
 - `rename` — 노드 이름 변경(패치 후 노드명 정리용).
 - `visible` — 표시/숨김(PRD 상태에 없는 요소 제거용. 예: 제출완료 카드에서 작성중 전용 진행률 바 숨김).
 
+검증:
+- clone 직후, patch 전에 원본과 복제본의 트리/노드 타입/child 순서·수/layout/constraints/component-instance 연결/style/fill/stroke/effect/typography 등을 비교한다.
+- 이 **prePatch 검증이 다르면 patch를 시작하지 않고 실패**하며 clone을 제거한다.
+- patch 후에는 스펙이 명시적으로 허용한 `name / visible / characters / fills` 외의 구조적 속성이 바뀌지 않았는지 다시 비교한다.
+- 텍스트 길이와 Auto Layout 때문에 자연스럽게 파생될 수 있는 `width / height` 변화는 실패시키지 않고 `geometryChanges`에 별도로 기록한다.
+- 결과의 `items[].verification.prePatch`와 `items[].verification.postPatch`를 확인한다. `counts.verifiedItems`는 두 검증을 모두 통과한 item 수다.
+- 검증 실패 시 부분 수정된 clone을 남기지 않는다.
+
 주의:
 - 결과 `created`에 복제본 노드 ID가 담긴다.
 - `items[].patches[]`에는 각 patch의 `matchedCount`, `targetIds`, `applied`가 기록된다. `counts`에는 요청/적용 item·patch 수가 집계된다.
