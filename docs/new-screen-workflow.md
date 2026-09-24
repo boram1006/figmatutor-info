@@ -91,6 +91,63 @@ Candidate Pattern은 현재 화면을 만들기 위한 설계 가설이며 전�
 
 ---
 
+## 1.6. Pattern Retrieval — 그리기 전 필수
+
+새 화면의 archetype/pattern 판단이 끝나면 실제 Figma 자산 후보를 찾는다.
+
+정본:
+- semantic pattern 정의: `design/03-design-rules/generation/patterns.md`
+- machine-readable registry: `design/03-design-rules/patterns/registry.json`
+- 최신 snapshot 기반 resolved registry: `design/03-design-rules/patterns/resolved-registry.json`
+
+### 1) 최신 snapshot으로 clone source 해석
+
+Pattern Registry의 `sourceSelectors`에는 node 이름/타입 같은 **검증 가능한 selector**만 둔다.
+실제 `sourceNodeId`는 최신 Figma extract snapshot에서 exact match가 확인될 때만 얻는다.
+
+```sh
+npm run patterns:resolve -- --snapshot <최신-snapshot.json>
+```
+
+결과:
+- `resolved`: exact unique match → CLONE 후보로 사용 가능
+- `missing`: 현재 snapshot에 없음 → sourceNodeId 추측 금지
+- `ambiguous`: 2개 이상 매칭 → frameName 등 selector를 더 구체화한 뒤 재실행
+
+0개/다수 매칭 상태를 임의의 node ID로 보완하지 않는다.
+
+### 2) PRD/task로 후보 검색
+
+```sh
+npm run patterns:search -- \
+  --intent "현재 제출 상태와 다음 행동 확인" \
+  --archetypes A4 \
+  --tasks "view submission status,resubmit changed work" \
+  --states "submitted,resubmit"
+```
+
+검색 결과는 다음을 보여준다.
+- 어떤 archetype / intent / task / keyword가 매칭됐는지
+- 실제 evidence
+- `cloneReady`
+- snapshot에서 검증된 clone source 후보
+
+`matchCount`는 문자열/분류 근거가 몇 개 겹치는지 나타내는 deterministic retrieval 값일 뿐,
+디자인 품질 점수나 자동 채택 점수가 아니다.
+
+### 3) 선택 규칙
+
+- **실제 component가 적합함** → INSTANCE_REUSE
+- **복합 pattern 후보가 task/intent와 맞고 cloneReady=true** → CLONE_COMPOSE
+- **pattern은 맞지만 cloneReady=false** → 구조 참고만 가능. node ID를 만들거나 추측해서 CLONE하지 않는다.
+- **기존 pattern으로 task를 설명할 수 없음** → NEW_CONSTRUCTION 또는 Candidate Pattern 판단
+
+후보가 여러 개면 단순히 첫 번째 결과를 복제하지 않는다.
+PRD의 task/state와 가장 직접적으로 대응하는 evidence/source를 선택하고,
+선택 근거를 operation spec 또는 작업 메모에 남긴다.
+
+---
+
 ## 2. requirements.json 작성 (inputs 게이트)
 
 PRD의 각 화면을 `design/02-structure/requirements.json`의 `screens[]`로 옮긴다.
