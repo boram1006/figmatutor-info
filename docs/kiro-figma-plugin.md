@@ -59,11 +59,46 @@ Kiro가 result/snapshot 을 읽고 로컬 게이트로 검증
 - **동일 이름의 기존 variable/text style이 이미 있으면 새로 만들지 않는다.** 정의까지 동일하면 기존 자산을 재사용하고 결과의 `reused`에 ID를 기록한다.
 - 동일 이름인데 type/value/alias/font/size/line-height 정의가 다르면 기존 Design System을 덮어쓰거나 중복 생성하지 않고 create를 실패시킨다.
 - 색·padding·spacing·radius는 semantic 변수에 바인딩한다. 타이포는 `Text/*` 스타일을 쓴다.
+- 기존 Figma component가 있으면 primitive로 유사하게 다시 만들지 않고 `type:"INSTANCE"` + `componentNodeId`로 실제 instance를 생성한다.
+- `componentNodeId`가 COMPONENT_SET이면 `variantName` 또는 `variantProperties`로 정확히 하나의 variant를 선택한다. 여러 variant 중 임의 선택하지 않는다.
+- instance의 label/variant/property 변경은 `componentProperties`를 사용한다.
+- INSTANCE에 `children`, `fills`, `strokes`, `metrics`를 넣어 내부 visual을 재구성하는 것은 금지한다.
+- component geometry는 기본 보존한다. width/height 직접 resize가 정말 필요할 때만 `allowResize:true`를 명시한다.
+- 결과의 `created.instances`에 실제 생성 instance ID와 resolved component/variant ID를 기록한다.
 - 가변 콘텐츠 컨테이너는 HUG. 고정 높이는 catalog의 토큰 값과 일치시킨다.
 - 노드 의미는 `node.setSharedPluginData('designHarness','metadata', JSON.stringify(meta))`로 기록한다.
   (`docs/figma-contract.md`의 메타데이터 계약과 동일.)
 - 이미지 슬롯: 플러그인이 붙여넣은 base64/바이트로 `figma.createImage()` → 실제 imageHash를
   반환한다. 슬롯 paint는 FIT, 슬롯 바탕은 `color-character-bg`.
+
+#### 기존 Component Instance 재사용 예시
+
+```json
+{
+  "op": "create",
+  "fileKey": "...",
+  "pageName": "design",
+  "nodes": [
+    {
+      "type": "INSTANCE",
+      "key": "submitButton",
+      "name": "최종 제출",
+      "componentNodeId": "1:637",
+      "variantProperties": {
+        "Type": "Solid",
+        "State": "Default"
+      },
+      "componentProperties": {
+        "Label": "최종 제출하기"
+      },
+      "layoutSizingHorizontal": "HUG",
+      "layoutSizingVertical": "HUG"
+    }
+  ]
+}
+```
+
+`componentNodeId`는 임의 문자열이 아니라 catalog/snapshot에서 확인한 실제 Figma COMPONENT 또는 COMPONENT_SET node ID를 사용한다.
 
 ### `op: "extract"` — 스냅샷 추출
 
