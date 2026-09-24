@@ -47,6 +47,7 @@ Kiro가 result/snapshot 을 읽고 로컬 게이트로 검증
 ## 스펙(op) 종류
 
 플러그인이 받는 스펙 JSON은 `op` 필드로 동작을 고른다.
+(`create` / `extract` / `screenshot` / `rebind` / `duplicate`)
 
 ### `op: "create"` — 캔버스 생성
 
@@ -71,6 +72,53 @@ Kiro가 result/snapshot 을 읽고 로컬 게이트로 검증
 - `inputDigest`는 `npm run fingerprint -- --scope <components|screens>` 출력값을 그대로 쓴다.
 - 응답이 크면 `frameIds`로 나눠 여러 번 추출하고 `scripts/merge-snapshots.mjs`로 병합한다.
 - 이 단계에서는 캔버스를 수정하지 않는다.
+
+### `op: "duplicate"` — 기존 노드 복제 + 최소 패치 (Exact Clone → Minimal Patch)
+
+**기존 화면/카드/컴포넌트의 변형(variant, 상태 카드)을 만들 때는 `op:create`로 재생성하지 않고 `op:duplicate`로 원본을 복제한다.**
+
+원칙: **Exact Clone → Minimal Patch**
+- Figma 네이티브 `node.clone()`으로 원본 트리 전체를 그대로 복제한다(레이아웃·인스턴스 reference·variant·overrides·effects·token binding 유지).
+- 복제 직후에는 어떤 속성도 재설정하지 않는다. width/height 재지정, HUG/FILL 재설정, token 재바인딩, component 재생성 금지 — 복제 정확도를 깨뜨린다.
+- 그 다음 **명시적으로 지정한 노드의 최소 속성만** 패치한다.
+
+`op:create`로 유사 구조를 새로 그리면 레이아웃·auto-layout·sizing이 원본과 어긋나므로, 기존 요소가 있으면 반드시 `duplicate`를 쓴다.
+
+스펙 형식:
+
+```json
+{
+  "op": "duplicate",
+  "fileKey": "...",
+  "pageName": "design",
+  "items": [
+    {
+      "sourceId": "1:23081",            // 복제 원본 노드 ID
+      "name": "Card-SUBMITTED-DONE",    // 복제본 이름
+      "x": 7600, "y": 392,              // 복제본 위치 (optional)
+      "patches": [
+        { "nodeName": "Status Pill", "fillBinding": "background-surface" },
+        { "nodeName": "본선 진행중", "characters": "제출완료", "fillBinding": "status-success-s", "rename": "제출완료" },
+        { "nodeName": "이어 작성하기 →", "characters": "제출 내용 보기 →", "rename": "제출 내용 보기 →" },
+        { "nodeName": "Left Status", "visible": false }
+      ]
+    }
+  ]
+}
+```
+
+patch 필드:
+- `nodeName` — 복제본 트리에서 이름으로 찾을 대상(DFS, 동명 다수 매칭). **원본의 실제 노드 이름을 snapshot에서 확인해 쓴다.** 추측한 이름(`pill-text`, `cta`)은 매칭 실패로 조용히 스킵된다.
+- `characters` — TEXT 노드 문자열 교체(원본 폰트/스타일 유지, `figma.mixed` 폰트 안전 로드).
+- `fillBinding` — fill을 **semantic 토큰에 바인딩**(권장, harness 색 규칙 준수).
+- `fillColor` — raw hex fill(바인딩 제거, `fillBinding` 없을 때만).
+- `rename` — 노드 이름 변경(패치 후 노드명 정리용).
+- `visible` — 표시/숨김(PRD 상태에 없는 요소 제거용. 예: 제출완료 카드에서 작성중 전용 진행률 바 숨김).
+
+주의:
+- 결과 `created`에 복제본 노드 ID가 담긴다.
+- 패치 nodeName이 안 맞으면 에러 없이 스킵되므로, 실행 후 결과에서 실제 반영 여부를 확인한다.
+- 상태 카드를 만들 땐 배지·CTA뿐 아니라 **PRD 상태별 UI 매트릭스의 모든 요소**(부가 표시·시간 표기·진행률 유무)를 patch 목록에 포함했는지 대조한다.
 
 ### `op: "screenshot"` — 캡처 저장 (검증 단계)
 

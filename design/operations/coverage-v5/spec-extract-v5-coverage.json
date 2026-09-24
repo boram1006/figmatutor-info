@@ -1,0 +1,9 @@
+{
+  "op": "extract",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "stage": "screens",
+  "inputDigest": "coverage-v5-2026",
+  "frameIds": ["1:23008"],
+  "_note": "v5 섹션(1:23008) 전체 추출. 결과를 design/operations/coverage-v5/snapshot-coverage.json 으로 저장한 뒤 npm run save-snapshot -- --stage screens --from <경로> 실행"
+}

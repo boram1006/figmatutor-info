@@ -24,7 +24,8 @@ figma.ui.onmessage = async (msg) => {
     else if (spec.op === 'create') result = await runCreate(spec);
     else if (spec.op === 'screenshot') result = await runScreenshot(spec);
     else if (spec.op === 'rebind') result = await runRebind(spec);
-    else throw new Error('알 수 없는 op: ' + spec.op + ' (create/extract/screenshot/rebind 중 하나)');
+    else if (spec.op === 'duplicate') result = await runDuplicate(spec);
+    else throw new Error('알 수 없는 op: ' + spec.op + ' (create/extract/screenshot/rebind/duplicate 중 하나)');
     figma.ui.postMessage({ type: 'result', op: spec.op, result });
   } catch (e) {
     figma.ui.postMessage({ type: 'error', message: e.message });
@@ -953,4 +954,133 @@ async function runRebind(spec) {
 
 function round2(x) {
   return Math.round(x * 100) / 100;
+}
+
+// ===========================================================================
+// op: "duplicate"
+// 기존 노드를 복제(clone)한 뒤 이름·텍스트·fill 등을 패치한다.
+//
+// spec 형식:
+// {
+//   "op": "duplicate",
+//   "fileKey": "...",
+//   "pageName": "design",
+//   "items": [
+//     {
+//       "sourceId": "1:23081",          // 복제 원본 노드 ID
+//       "name": "Card-SUBMITTED-DONE",  // 복제본 이름
+//       "x": 7600, "y": 392,            // 복제본 배치 위치 (optional)
+//       "patches": [
+//         {
+//           "nodeName": "pill-text",    // 패치 대상 노드 이름 (하위 검색)
+//           "characters": "제출완료"    // 텍스트 변경 (TEXT 노드)
+//         },
+//         {
+//           "nodeName": "Status Pill",  // 패치 대상 프레임 이름
+//           "fillColor": "#DCFCE7"      // fill 색상 변경 (hex)
+//         },
+//         {
+//           "nodeName": "pill-text",
+//           "fillColor": "#10B881"      // 텍스트 색상 변경
+//         },
+//         {
+//           "nodeName": "cta",
+//           "characters": "제출 내용 보기 →"
+//         }
+//       ]
+//     }
+//   ]
+// }
+// ===========================================================================
+async function runDuplicate(spec) {
+  if (!spec.pageName) throw new Error('duplicate 스펙에 pageName 필요');
+  if (figma.fileKey && spec.fileKey && figma.fileKey !== spec.fileKey)
+    throw new Error('다른 Figma 파일');
+  const page = figma.root.children.find((p) => p.name === spec.pageName);
+  if (!page) throw new Error('페이지 없음: ' + spec.pageName);
+  await figma.setCurrentPageAsync(page);
+
+  const created = {};
+
+  for (const item of (spec.items || [])) {
+    if (!item.sourceId) throw new Error('sourceId 필요');
+    const source = await figma.getNodeByIdAsync(item.sourceId);
+    if (!source) throw new Error('sourceId 노드 없음: ' + item.sourceId);
+
+    // 복제
+    const clone = source.clone();
+    page.appendChild(clone);
+
+    // 이름 변경
+    if (item.name) clone.name = item.name;
+
+    // 위치 이동
+    if (typeof item.x === 'number') clone.x = item.x;
+    if (typeof item.y === 'number') clone.y = item.y;
+
+    // 패치 적용
+    for (const patch of (item.patches || [])) {
+      const targets = findNodesByName(clone, patch.nodeName);
+      if (!targets.length) {
+        console.warn('patch 대상 노드를 찾지 못함: ' + patch.nodeName);
+        continue;
+      }
+      for (const target of targets) {
+        // 노드 이름 변경 (optional)
+        if (patch.rename !== undefined) target.name = patch.rename;
+        // 노드 표시/숨김 (optional) — PRD 상태에 없는 요소 제거용
+        if (patch.visible !== undefined && 'visible' in target) target.visible = patch.visible;
+        // 텍스트 변경 (원본 폰트/스타일 유지, 문자열만 교체)
+        if (patch.characters !== undefined && target.type === 'TEXT') {
+          if (target.fontName === figma.mixed) {
+            const len = target.characters.length;
+            for (let i = 0; i < len; i++) await figma.loadFontAsync(target.getRangeFontName(i, i + 1));
+          } else {
+            await figma.loadFontAsync(target.fontName);
+          }
+          target.characters = patch.characters;
+        }
+        // fill을 semantic 토큰에 바인딩 (권장 — harness 규칙 준수)
+        if (patch.fillBinding !== undefined && 'fills' in target) {
+          const v = await resolveSemanticVar(patch.fillBinding);
+          if (!v) throw new Error('fillBinding semantic 변수 없음: ' + patch.fillBinding);
+          const base = (Array.isArray(target.fills) && target.fills[0] && target.fills[0].type === 'SOLID')
+            ? { type: 'SOLID', color: target.fills[0].color, opacity: target.fills[0].opacity ?? 1 }
+            : { type: 'SOLID', color: { r: 0, g: 0, b: 0 }, opacity: 1 };
+          target.fills = [figma.variables.setBoundVariableForPaint(base, 'color', v)];
+        }
+        // fill 색상 변경 (raw hex, 바인딩 제거) — fillBinding이 없을 때만
+        else if (patch.fillColor !== undefined && 'fills' in target) {
+          const color = hexToRgb(patch.fillColor);
+          target.fills = [{ type: 'SOLID', color: { r: color.r, g: color.g, b: color.b }, opacity: color.a ?? 1 }];
+        }
+      }
+    }
+
+    created[item.name || clone.id] = clone.id;
+  }
+
+  return {
+    op: 'duplicate',
+    fileKey: figma.fileKey || spec.fileKey || null,
+    created,
+  };
+}
+
+// 현재 파일의 semantic 변수를 이름으로 찾는다 (컬렉션명 무관, 이름 일치)
+async function resolveSemanticVar(name) {
+  const vars = await figma.variables.getLocalVariablesAsync();
+  return vars.find((v) => v.name === name || v.name === 'semantic/' + name) || null;
+}
+
+// 노드 트리에서 이름으로 모든 일치 노드 수집 (DFS)
+function findNodesByName(root, name) {
+  const result = [];
+  const queue = [root];
+  while (queue.length) {
+    const n = queue.shift();
+    if (n.name === name) result.push(n);
+    if ('children' in n) queue.push(...n.children);
+  }
+  return result;
 }

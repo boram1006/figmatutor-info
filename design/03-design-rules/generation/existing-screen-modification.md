@@ -161,7 +161,7 @@ Unchanged:
 
 ---
 
-## 9. New Elements Copy the Nearest Existing Pattern
+## 9. New Elements Copy the Nearest Existing Pattern (Exact Clone → Minimal Patch)
 
 새로운 UI가 필요해도 유사한 기존 요소가 있으면 해당 요소를 복제해 확장한다.
 
@@ -172,6 +172,20 @@ Unchanged:
 - 새로운 warning → 기존 warning/banner treatment 재사용
 
 한 기능 추가 때문에 새로운 visual language를 만들지 않는다.
+
+### 실행 방식: `op:duplicate` (재생성 금지)
+
+복제는 반드시 Figma 네이티브 `node.clone()` 기반 **`op:duplicate`** 로 한다.
+extract JSON을 읽어 `op:create`로 유사 구조를 새로 그리지 않는다 — 레이아웃·auto-layout·sizing·인스턴스 reference가 원본과 어긋난다.
+
+순서:
+1. **Exact Clone**: 원본 노드를 그대로 복제한다. 복제 직후 어떤 속성도 재설정하지 않는다.
+2. **Minimal Patch**: 원본 snapshot에서 확인한 **실제 노드 이름**으로, 변경할 최소 속성만 patch한다.
+   - 추측한 노드 이름(`pill-text`, `cta` 등)은 매칭 실패로 조용히 스킵되므로 반드시 실제 이름을 확인한다.
+   - 상태 카드는 배지·CTA뿐 아니라 PRD 매트릭스의 **모든 요소**(시간 표기, 진행률 유무 등)를 patch에 포함한다.
+   - 원본 상태에만 있어야 할 요소(예: 작성중 카드의 진행률 바)는 새 상태 카드에서 `visible:false`로 제거한다.
+
+상세 스펙 형식은 `docs/kiro-figma-plugin.md`의 `op:duplicate` 참조.
 
 ---
 
