@@ -352,3 +352,130 @@ test('create op refuses ambiguous component sets and direct INSTANCE visual reco
  assert.equal(h2.messages.at(-1).type,'error');
  assert.match(h2.messages.at(-1).message,/INSTANCE visual을 직접 재구성하지 않음/);
 });
+
+
+function createClonePluginHarness(){
+ const sourceCode=readFileSync(join(repo,'scripts/figma-plugin/code.js'),'utf8');
+ const messages=[];
+ let idSeq=0;
+ const makeText=(id,name,characters)=>({
+  id,name,type:'TEXT',visible:true,width:100,height:24,characters,
+  fontName:{family:'Inter',style:'Regular'},fontSize:16,fontWeight:400,
+  lineHeight:{unit:'PIXELS',value:24},letterSpacing:{unit:'PIXELS',value:0},
+  textAlignHorizontal:'LEFT',textAlignVertical:'TOP',textAutoResize:'WIDTH_AND_HEIGHT',
+  fills:[],strokes:[],effects:[],opacity:1,blendMode:'PASS_THROUGH',
+  children:[],parent:null,
+ });
+ const makePattern=()=>{
+  const title=makeText('pattern-title','Pattern Title','Before');
+  const pattern={
+   id:'pattern-source',name:'Status Card Pattern',type:'FRAME',visible:true,width:320,height:120,
+   children:[title],parent:null,fills:[],strokes:[],effects:[],opacity:1,blendMode:'PASS_THROUGH',
+   layoutMode:'VERTICAL',layoutSizingHorizontal:'FIXED',layoutSizingVertical:'HUG',
+   primaryAxisSizingMode:'AUTO',counterAxisSizingMode:'FIXED',
+   primaryAxisAlignItems:'MIN',counterAxisAlignItems:'MIN',layoutWrap:'NO_WRAP',
+   itemSpacing:8,paddingTop:16,paddingRight:16,paddingBottom:16,paddingLeft:16,
+   constraints:{horizontal:'MIN',vertical:'MIN'},clipsContent:false,
+   clone(){
+    const clonedTitle=makeText('clone-title-'+(++idSeq),'Pattern Title','Before');
+    const c={
+     ...this,id:'pattern-clone-'+idSeq,children:[clonedTitle],parent:this.parent,removed:false,
+     remove(){this.removed=true;if(this.parent?.children){this.parent.children=this.parent.children.filter(x=>x!==this);}},
+    };
+    clonedTitle.parent=c;
+    delete c.clone;
+    return c;
+   },
+  };
+  title.parent=pattern;
+  return pattern;
+ };
+ const pattern=makePattern();
+ const page={
+  id:'page',name:'design',children:[],
+  appendChild(n){
+   if(n.parent?.children)n.parent.children=n.parent.children.filter(x=>x!==n);
+   this.children.push(n);n.parent=this;
+  },
+ };
+ const makeFrame=()=>({
+  id:'frame-'+(++idSeq),name:'Frame',type:'FRAME',visible:true,width:100,height:100,
+  children:[],parent:null,fills:[],strokes:[],effects:[],opacity:1,blendMode:'PASS_THROUGH',
+  layoutMode:'NONE',layoutSizingHorizontal:'FIXED',layoutSizingVertical:'FIXED',
+  constraints:{horizontal:'MIN',vertical:'MIN'},clipsContent:false,
+  appendChild(n){
+   if(n.parent?.children)n.parent.children=n.parent.children.filter(x=>x!==n);
+   this.children.push(n);n.parent=this;
+  },
+  resize(w,h){this.width=w;this.height=h;},
+  setSharedPluginData(){},
+ });
+ const figma={
+  fileKey:'f',mixed:Symbol('mixed'),showUI(){},
+  ui:{onmessage:null,postMessage(m){messages.push(m);}},
+  root:{children:[page]},setCurrentPageAsync:async()=>{},
+  getNodeByIdAsync:async(id)=>id==='pattern-source'?pattern:null,
+  createFrame:makeFrame,
+  createText(){throw new Error('unexpected createText');},
+  createRectangle(){throw new Error('unexpected createRectangle');},
+  createEllipse(){throw new Error('unexpected createEllipse');},
+  createLine(){throw new Error('unexpected createLine');},
+  createComponent(){throw new Error('unexpected createComponent');},
+  createPage(){throw new Error('unexpected createPage');},
+  loadFontAsync:async()=>{},
+  variables:{
+   getLocalVariableCollectionsAsync:async()=>[],
+   getLocalVariablesAsync:async()=>[],
+   getVariableByIdAsync:async()=>null,
+   setBoundVariableForPaint(p){return p;},
+  },
+  getLocalTextStylesAsync:async()=>[],
+ };
+ const init=new Function('figma','__html__',sourceCode+'\nreturn figma.ui.onmessage;');
+ const onmessage=init(figma,'');
+ return {figma,page,pattern,onmessage,messages};
+}
+
+test('create CLONE composes a verified existing pattern into a new frame',async()=>{
+ const h=createClonePluginHarness();
+ await h.onmessage({type:'run',spec:{
+  op:'create',fileKey:'f',pageName:'design',
+  nodes:[{
+   type:'FRAME',key:'screen',name:'New Screen',
+   children:[{
+    type:'CLONE',key:'statusCard',sourceNodeId:'pattern-source',name:'Status Card',
+    patches:[{nodeName:'Pattern Title',characters:'After',expectedMatches:1}],
+   }],
+  }],
+ }});
+ const msg=h.messages.at(-1);
+ assert.equal(msg.type,'result');
+ const record=msg.result.created.clones.statusCard;
+ assert.ok(record.id);
+ assert.equal(record.sourceNodeId,'pattern-source');
+ assert.equal(record.patches[0].matchedCount,1);
+ assert.equal(record.verification.prePatch.passed,true);
+ assert.equal(record.verification.postPatch.passed,true);
+ assert.equal(record.verification.composition.passed,true);
+ const screen=h.page.children.find(n=>n.name==='New Screen');
+ assert.equal(screen.children.length,1);
+ assert.equal(screen.children[0].children[0].characters,'After');
+});
+
+test('create CLONE refuses direct visual reconstruction or child creation',async()=>{
+ const h=createClonePluginHarness();
+ await h.onmessage({type:'run',spec:{
+  op:'create',fileKey:'f',pageName:'design',
+  nodes:[{type:'CLONE',sourceNodeId:'pattern-source',fills:[{type:'SOLID',color:'#FFFFFF'}]}],
+ }});
+ assert.equal(h.messages.at(-1).type,'error');
+ assert.match(h.messages.at(-1).message,/CLONE visual을 직접 재구성하지 않음/);
+
+ const h2=createClonePluginHarness();
+ await h2.onmessage({type:'run',spec:{
+  op:'create',fileKey:'f',pageName:'design',
+  nodes:[{type:'CLONE',sourceNodeId:'pattern-source',children:[{type:'TEXT'}]}],
+ }});
+ assert.equal(h2.messages.at(-1).type,'error');
+ assert.match(h2.messages.at(-1).message,/children 직접 생성 금지/);
+});
