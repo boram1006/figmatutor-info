@@ -2,6 +2,9 @@
 
 이 파일은 generation rule이 어떤 실제 화면에서 나온 것인지 추적하기 위한 참고용이다.
 
+기계적인 Pattern Retrieval은 `design/03-design-rules/patterns/registry.json`을 사용한다.
+이 문서의 evidence 이름은 semantic 근거이고, 실제 clone용 node ID는 최신 extract snapshot에서 registry selector가 exact unique match일 때만 resolve한다.
+
 ## v1. 공통 페이지
 관찰 범위:
 - Home / landing
