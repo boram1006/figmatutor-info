@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {resolvePatternRegistry,retrievePatterns} from '../scripts/pattern-registry.mjs';
+import {resolvePatternRegistry,retrievePatterns,discoverPatternCandidates} from '../scripts/pattern-registry.mjs';
 
 const registry={
   schemaVersion:1,
@@ -80,4 +80,44 @@ test('reference-only pattern can match semantically without pretending it is clo
   assert.equal(results[0].patternId,'evaluation');
   assert.equal(results[0].cloneReady,false);
   assert.deepEqual(results[0].cloneSources,[]);
+});
+
+
+test('pattern discovery proposes evidence-backed candidates without auto-promoting them',()=>{
+  const snapshot={
+    fileKey:'f',stage:'screens',capturedAt:'now',pageId:'p',complete:false,
+    frames:[{
+      id:'frame-a',name:'A-30_my-report-status',
+      nodes:[
+        {id:'screen',name:'A-30_my-report-status',type:'FRAME',parentId:null,bounds:{width:1440,height:1024}},
+        {id:'card',name:'Card-RESUBMIT-NEEDED',type:'FRAME',parentId:'screen',bounds:{width:855,height:160}},
+        {id:'t1',name:'재제출 필요',type:'TEXT',parentId:'card',text:{characters:'재제출 필요'},bounds:{width:80,height:20}},
+        {id:'t2',name:'수정사항 제출하기 →',type:'TEXT',parentId:'card',text:{characters:'수정사항 제출하기 →'},bounds:{width:140,height:20}}
+      ]
+    }]
+  };
+  const discovered=discoverPatternCandidates(registry,snapshot,{limitPerPattern:4});
+  const status=discovered.patterns.find(p=>p.patternId==='status-card');
+  assert.equal(discovered.policy.autoPromote,false);
+  assert.ok(status.candidates.length>0);
+  assert.equal(status.candidates[0].nodeId,'card');
+  assert.equal(status.candidates[0].status,'candidate-only');
+  assert.equal(status.candidates[0].selectorSuggestion.nodeName,'Card-RESUBMIT-NEEDED');
+  assert.ok(status.candidates[0].evidence.score>0);
+});
+
+test('pattern discovery excludes PRD notes and does not invent candidates with zero evidence',()=>{
+  const snapshot={
+    frames:[{
+      id:'frame-a',name:'Unrelated',
+      nodes:[
+        {id:'prd',name:'v5 PRD',type:'FRAME',role:'prd-note',parentId:null,bounds:{width:900,height:2000}},
+        {id:'generic',name:'Container',type:'FRAME',parentId:null,bounds:{width:500,height:200}},
+        {id:'text',name:'hello',type:'TEXT',parentId:'generic',text:{characters:'hello'}}
+      ]
+    }]
+  };
+  const discovered=discoverPatternCandidates(registry,snapshot);
+  const evaluation=discovered.patterns.find(p=>p.patternId==='evaluation');
+  assert.equal(evaluation.candidates.length,0);
 });
