@@ -46,6 +46,8 @@ inclusion: always
 | "기존 화면 토큰 바인딩해줘", "색·폰트가 안 붙었어", "raw 값 정리해줘" | `docs/rebind-existing-screen-workflow.md` 절차 (진단→색 rebind→타이포 size 배정→재추출 검증) |
 | "이런 기능 필요해", "PRD 뽑아줘", "기획 정리해줘" | `docs/prd-authoring-workflow.md` 절차 (요청→8블록 PRD 초안→부족분 질문→확정) |
 | "검증해줘", "결함 찾아줘" | `audit-design` |
+| "프레임 이름 어떻게 달지", "화면 번호 매겨줘", "이름 규칙 알려줘" | `docs/frame-naming-and-resync-workflow.md`의 명명 규칙·전체 명명표(H/N/F/TB/A/MY/RV/J 시리즈) |
+| "이름 바꿨어 반영해줘", "rename 재동기화", "프레임명 정리 후 업데이트" | `docs/frame-naming-and-resync-workflow.md` Section 3 절차 (수작업 rename→op:extract 재추출→snapshot/screens.json/coverage 갱신→check/audit) |
 | "Figma 최신 상태 동기화해줘", "최신 화면 반영해줘" | `docs/figma-design-sync-workflow.md` 절차 (extract + screenshot + manifest/snapshot 갱신) |
 | "PRD 대비 빠진 화면 찾아줘", "디자인 누락 확인해줘", "상태 디자인 빠진 거 찾아줘" | `docs/figma-design-sync-workflow.md`의 Design Coverage Audit 절차 — **반드시 PRD Source Discovery(Section 2) → 모드 선택(Section 3) → Pre-check 출력(Section 4) 순서로 시작** |
 | "QA 리스트 만들어줘", "QA 케이스 생성해줘", "테스트 케이스 뽑아줘" | `docs/qa-workflow.md` 절차 (PRD source 읽기→requirement extraction→케이스 생성→state/permission matrix→automation 분류) |
