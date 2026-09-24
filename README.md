@@ -1,6 +1,6 @@
 # Design Flow Harness — Kiro
 
-Kiro에서 데스크탑/모바일 Figma UI를 만드는 프로젝트 전용 하네스입니다.
+Kiro에서 기존 Figma 디자인 시스템과 양산 화면을 추출해 확장·수정·검증하는 프로젝트 전용 하네스입니다. 현재 프로젝트 기본 viewport는 desktop이며, viewport는 설정으로 바꿀 수 있습니다.
 하네스 구조 관련된 내용은 이 영상을 참고해 보세요.
 https://youtu.be/yQcR1Dz5UDA?si=rnqF6nlvn7TSfW2O
 
@@ -51,7 +51,7 @@ PRD.md를 검토하고 기존 피그마 시스템을 추출·정형화해줘.
 ```text
 AGENTS.md                       프로젝트 지침 (Kiro는 .kiro/steering가 진입점)
 .agents/skills/                 단계 스킬 (ui-flow, extract-system, build-structure, create-figma, audit-design, collect/analyze-references, figma-worker)
-scripts/figma-plugin/           Figma 데스크탑에 설치하는 재사용 플러그인 (op: create/extract/screenshot)
+scripts/figma-plugin/           Figma 데스크탑에 설치하는 재사용 플러그인 (op: create/extract/screenshot/rebind/duplicate)
 harness.config.json             화면 크기·extractPages·캐릭터 이미지 정책·Figma 대상
 PRD.md                          요구사항 원문
 design/01-references/           (선택) 기존 화면 근거 캡처·목록·분석
@@ -86,8 +86,8 @@ docs/                          계약, Figma 절차, 도구 어댑터
 
 ## 운영 범위
 
-기본 대상은 Figma 모바일 화면입니다. viewport와 화면 수는 설정/요구사항에서 바꿀 수 있으나,
-React 구현·실제 브라우저 상호작용·WCAG 전 항목 인증은 포함하지 않습니다.
+대상 viewport는 `harness.config.json`에서 결정합니다. 현재 LGE AX Hackathon 프로젝트는 desktop(1920×1080)을 사용합니다.
+React 구현·실제 브라우저 상호작용·WCAG 전 항목 인증은 현재 핵심 범위에 포함하지 않습니다.
 구조 검사는 변수 실제 값, semantic alias, 수치 바인딩, 탭 영역, 넘침, 상태 누락을 검사합니다.
 시각적 위계·가독성·브랜드 적합성은 실제 이미지 관찰을 별도 기록하고 자동 게이트와 합칩니다.
 Figma/API 연결은 실제 디자인 작업 시 확인합니다. 로컬 테스트 통과가 외부 서비스 실행 성공을 의미하지 않습니다.
@@ -97,9 +97,9 @@ Figma/API 연결은 실제 디자인 작업 시 확인합니다. 로컬 테스�
 ## Figma 실행 (플러그인 왕복)
 
 Figma 무료 계정 + 데스크탑 플러그인을 씁니다. Dev Mode MCP를 쓰지 않습니다. Kiro가 스펙 JSON
-(`op`: create/extract/screenshot)을 만들고 사용자가 플러그인에서 실행합니다. 원본·캡처·스냅샷은
+(`op`: create/extract/screenshot/rebind/duplicate)을 만들고 사용자가 플러그인에서 실행합니다. 원본·캡처·스냅샷은
 `design/operations/<task-id>/`에 파일로 보존하고, extract 결과는 `npm run save-snapshot`으로 저장합니다.
-새 화면 생성/수정 후에는 `docs/figma-design-sync-workflow.md`를 따라 extract(JSON)와 screenshot(PNG)을 모두 최신화하고,
+기존 화면 수정은 가능한 경우 `duplicate` 기반 Exact Clone → Minimal Patch를 우선합니다. 새 화면 생성/수정 후에는 `docs/figma-design-sync-workflow.md`를 따라 extract(JSON)와 screenshot(PNG)을 모두 최신화하고,
 PRD 대비 실제 화면/state 누락을 Design Coverage Audit으로 확인합니다.
 자세한 방식은 [플러그인 문서](docs/kiro-figma-plugin.md)와 [실행 계약](docs/figma-delegation.md)을 참고하세요.
 
