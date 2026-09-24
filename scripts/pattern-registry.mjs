@@ -27,10 +27,20 @@ export function resolvePatternRegistry(registry,snapshot){
     const resolvedSources=(pattern.sourceSelectors||[]).map(selector=>{
       const matches=[];
       for(const frame of frames){
+        const children=descendantsByParent(frame);
         for(const node of frame.nodes||[]){
           if(node.name!==selector.nodeName) continue;
           if(selector.nodeType && node.type!==selector.nodeType) continue;
           if(selector.frameName && frame.name!==selector.frameName) continue;
+
+          if((selector.requiredDescendantText||[]).length || (selector.excludedDescendantText||[]).length){
+            const subtree=collectSubtree(frame,node,children);
+            const textCorpus=subtree.map(nodeText).filter(Boolean).join('\n');
+            const hasAll=(selector.requiredDescendantText||[]).every(text=>textCorpus.includes(text));
+            const hasExcluded=(selector.excludedDescendantText||[]).some(text=>textCorpus.includes(text));
+            if(!hasAll || hasExcluded) continue;
+          }
+
           matches.push({
             frameId:frame.id,
             frameName:frame.name,
@@ -45,6 +55,8 @@ export function resolvePatternRegistry(registry,snapshot){
         nodeName:selector.nodeName,
         status:matches.length===1?'resolved':matches.length===0?'missing':'ambiguous',
         preferredFor:selector.preferredFor||[],
+        requiredDescendantText:selector.requiredDescendantText||[],
+        excludedDescendantText:selector.excludedDescendantText||[],
         matches
       };
     });
