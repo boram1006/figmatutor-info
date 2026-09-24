@@ -137,6 +137,8 @@
             "draft",
             "in-progress"
           ],
+          "requiredDescendantText": [],
+          "excludedDescendantText": [],
           "matches": [
             {
               "frameId": "1:23008",
@@ -155,6 +157,8 @@
             "submitted",
             "completed"
           ],
+          "requiredDescendantText": [],
+          "excludedDescendantText": [],
           "matches": [
             {
               "frameId": "1:23008",
@@ -173,6 +177,8 @@
             "changed-after-submit",
             "resubmit"
           ],
+          "requiredDescendantText": [],
+          "excludedDescendantText": [],
           "matches": [
             {
               "frameId": "1:23008",
@@ -254,7 +260,17 @@
         "지원하기 8-step",
         "최종보고서 9-step"
       ],
-      "sourceSelectors": [],
+      "sourceSelectors": [
+        {
+          "id": "v5-step-form-shell",
+          "nodeName": "A-31_report-step-form",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "multi-step-form",
+            "report-step-form"
+          ]
+        }
+      ],
       "discoveryHints": {
         "minScore": 6,
         "requiredAny": [
@@ -268,8 +284,29 @@
         "minWidth": 1000,
         "minHeight": 700
       },
-      "resolvedSources": [],
-      "cloneReady": false
+      "resolvedSources": [
+        {
+          "selectorId": "v5-step-form-shell",
+          "nodeName": "A-31_report-step-form",
+          "status": "resolved",
+          "preferredFor": [
+            "multi-step-form",
+            "report-step-form"
+          ],
+          "requiredDescendantText": [],
+          "excludedDescendantText": [],
+          "matches": [
+            {
+              "frameId": "1:23008",
+              "frameName": "v5. 최종보고서 제출",
+              "nodeId": "1:23119",
+              "nodeName": "A-31_report-step-form",
+              "nodeType": "FRAME"
+            }
+          ]
+        }
+      ],
+      "cloneReady": true
     },
     {
       "id": "evaluation-workspace",
@@ -385,7 +422,32 @@
       "evidence": [
         "최종보고서 SECTION 9"
       ],
-      "sourceSelectors": [],
+      "sourceSelectors": [
+        {
+          "id": "v5-package-complete",
+          "nodeName": "A-32_submission-package",
+          "nodeType": "FRAME",
+          "excludedDescendantText": [
+            "미등록"
+          ],
+          "preferredFor": [
+            "ready",
+            "pre-submit-complete"
+          ]
+        },
+        {
+          "id": "v5-package-incomplete",
+          "nodeName": "A-32_submission-package",
+          "nodeType": "FRAME",
+          "requiredDescendantText": [
+            "미등록"
+          ],
+          "preferredFor": [
+            "incomplete",
+            "missing-artifact"
+          ]
+        }
+      ],
       "discoveryHints": {
         "minScore": 7,
         "requiredAny": [
@@ -399,8 +461,53 @@
         "minWidth": 1000,
         "minHeight": 700
       },
-      "resolvedSources": [],
-      "cloneReady": false
+      "resolvedSources": [
+        {
+          "selectorId": "v5-package-complete",
+          "nodeName": "A-32_submission-package",
+          "status": "resolved",
+          "preferredFor": [
+            "ready",
+            "pre-submit-complete"
+          ],
+          "requiredDescendantText": [],
+          "excludedDescendantText": [
+            "미등록"
+          ],
+          "matches": [
+            {
+              "frameId": "1:23008",
+              "frameName": "v5. 최종보고서 제출",
+              "nodeId": "1:23529",
+              "nodeName": "A-32_submission-package",
+              "nodeType": "FRAME"
+            }
+          ]
+        },
+        {
+          "selectorId": "v5-package-incomplete",
+          "nodeName": "A-32_submission-package",
+          "status": "resolved",
+          "preferredFor": [
+            "incomplete",
+            "missing-artifact"
+          ],
+          "requiredDescendantText": [
+            "미등록"
+          ],
+          "excludedDescendantText": [],
+          "matches": [
+            {
+              "frameId": "1:23008",
+              "frameName": "v5. 최종보고서 제출",
+              "nodeId": "17:996",
+              "nodeName": "A-32_submission-package",
+              "nodeType": "FRAME"
+            }
+          ]
+        }
+      ],
+      "cloneReady": true
     },
     {
       "id": "announcement-hero-follow-up",
