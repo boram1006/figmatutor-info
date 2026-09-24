@@ -121,3 +121,23 @@ test('pattern discovery excludes PRD notes and does not invent candidates with z
   const evaluation=discovered.patterns.find(p=>p.patternId==='evaluation');
   assert.equal(evaluation.candidates.length,0);
 });
+
+
+test('pattern discovery rejects tiny internal containers even when text looks relevant',()=>{
+  const snapshot={
+    frames:[{
+      id:'f',name:'v5. 최종보고서 제출',
+      nodes:[
+        {id:'screen',name:'A-30_my-report-status',type:'FRAME',parentId:null,bounds:{width:1440,height:1024}},
+        {id:'title',name:'Title and Action',type:'FRAME',parentId:'screen',bounds:{width:855,height:36}},
+        {id:'text',name:'내 지원 현황',type:'TEXT',parentId:'title',text:{characters:'내 지원 현황'}},
+        {id:'card',name:'Card-RESUBMIT-NEEDED',type:'FRAME',parentId:'screen',bounds:{width:855,height:156}},
+        {id:'state',name:'재제출 필요',type:'TEXT',parentId:'card',text:{characters:'재제출 필요'}}
+      ]
+    }]
+  };
+  const discovered=discoverPatternCandidates(registry,snapshot,{limitPerPattern:8});
+  const status=discovered.patterns.find(p=>p.patternId==='status-card');
+  assert.equal(status.candidates[0].nodeId,'card');
+  assert.equal(status.candidates.some(c=>c.nodeId==='title'),false);
+});
