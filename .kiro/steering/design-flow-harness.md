@@ -6,7 +6,7 @@ inclusion: always
 
 이 워크스페이스는 Figma 데스크톱 웹 UI를 일관되게 생성하는 디자인 하네스다.
 원본은 Codex용으로 만들어졌으며(`AGENTS.md`), Kiro에서는 이 steering이 진입점 역할을 한다.
-`AGENTS.md`, `.agents/skills/**/SKILL.md`, `docs/**`, `design/**/*.json` 계약을 활성 지침으로 사용한다.
+`AGENTS.md`, `.agents/skills/**/SKILL.md`, `docs/**`, `design/**/*.json` 계약을 활성 지침으로 사용한다. 같은 규칙이 여러 파일에 있으면 `docs/source-of-truth.md`의 정본 우선순위를 따른다.
 
 ## 세션 시작 시
 
@@ -151,7 +151,7 @@ repo에 역방향 복원 PRD 파일이 있다는 이유만으로 그것을 공�
 ## 이 워크스페이스의 커스터마이징 (원본과 다른 점)
 
 - **Figma 무료 계정 (대안 1: Plugin API로 그리기, 확정)**: Figma Dev Mode MCP를 쓰지 않는다. Kiro가
-  플러그인 스펙 JSON(`op`: create/extract/screenshot)을 만들고, 사용자가 재사용 플러그인
+  플러그인 스펙 JSON(`op`: create/extract/screenshot/rebind/duplicate)을 만들고, 사용자가 재사용 플러그인
   `scripts/figma-plugin/`(Figma 데스크탑에 1회 설치)에 붙여넣어 실행한다. 클립보드가 파일 I/O를
   대체한다(로컬 브릿지는 이후 확장). 상세는 `docs/kiro-figma-plugin.md`.
 - **figma-worker 위임**: Kiro는 Codex의 `collaboration.spawn_agent` 위임이 없다. Figma 작업은 위
