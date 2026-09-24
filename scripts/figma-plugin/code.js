@@ -6,6 +6,7 @@
 //   op: "rebind"     -> ensure variables/text styles exist, then walk a page and re-bind
 //                       raw hex fills/strokes and text styles to semantic tokens by a mapping table.
 //                       Alpha is preserved as paint opacity. Returns a per-node change report.
+//   op: "duplicate"  -> exact-clone an existing node, apply strict minimal patches, and verify preservation.
 // The UI (ui.html) handles clipboard in/out. This file never touches the filesystem.
 
 figma.showUI(__html__, { width: 460, height: 560 });
