@@ -16,7 +16,7 @@ function norm(value){
 function tokenSet(values){
   const out=new Set();
   for(const value of values||[]){
-    for(const token of norm(value).split(/[^a-z0-9가-힣_-]+/).filter(Boolean)) out.add(token);
+    for(const token of norm(value).split(/[^a-z0-9가-힣]+/).filter(Boolean)) out.add(token);
   }
   return out;
 }
@@ -222,6 +222,19 @@ export function discoverPatternCandidates(registry,snapshot,{limitPerPattern=8}=
       }
       if(candidate.descendantCount>=3) signals.push('composite-structure');
 
+      const hints=pattern.discoveryHints||{};
+      const allCandidateTokens=new Set([
+        ...candidate._tokens.nodeTokens,
+        ...candidate._tokens.frameTokens,
+        ...candidate._tokens.textTokens
+      ]);
+      const requiredMatches=overlapValues(allCandidateTokens,hints.requiredAny||[]);
+      if((hints.requiredAny||[]).length && !requiredMatches.length) continue;
+      if(typeof hints.minWidth==='number' && candidate.width<hints.minWidth) continue;
+      if(typeof hints.maxWidth==='number' && candidate.width>hints.maxWidth) continue;
+      if(typeof hints.minHeight==='number' && candidate.height<hints.minHeight) continue;
+      if(typeof hints.maxHeight==='number' && candidate.height>hints.maxHeight) continue;
+      if(typeof hints.minScore==='number' && score<hints.minScore) continue;
       if(score<=0) continue;
 
       scored.push({
@@ -239,7 +252,8 @@ export function discoverPatternCandidates(registry,snapshot,{limitPerPattern=8}=
           nodeNameMatches:nameMatches,
           frameMatches,
           descendantTextMatches:textMatches,
-          signals
+          signals,
+          requiredHintMatches: requiredMatches
         },
         selectorSuggestion:{
           nodeName:candidate.nodeName,
