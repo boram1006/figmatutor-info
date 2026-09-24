@@ -170,3 +170,27 @@ test('pattern resolver distinguishes same-name variants using descendant text co
   assert.equal(sources[1].status,'resolved');
   assert.equal(sources[1].matches[0].nodeId,'incomplete-frame');
 });
+
+
+test('legacy pattern refresh merge keeps unique frames and rejects mixed file keys',()=>{
+  const mergeSnapshots=(snapshots)=>{
+    if(!snapshots.length) throw new Error('merge할 snapshot이 없음');
+    const first=snapshots[0];
+    const frames=[],seen=new Set();
+    for(const snap of snapshots){
+      if(first.fileKey && snap.fileKey && first.fileKey!==snap.fileKey)
+        throw new Error('snapshot fileKey 불일치');
+      for(const frame of snap.frames||[]){
+        if(seen.has(frame.id)) continue;
+        seen.add(frame.id);frames.push(frame);
+      }
+    }
+    return {fileKey:first.fileKey||null,frames};
+  };
+  const merged=mergeSnapshots([
+    {fileKey:'f',frames:[{id:'1'},{id:'2'}]},
+    {fileKey:'f',frames:[{id:'2'},{id:'3'}]}
+  ]);
+  assert.deepEqual(merged.frames.map(f=>f.id),['1','2','3']);
+  assert.throws(()=>mergeSnapshots([{fileKey:'f1',frames:[]},{fileKey:'f2',frames:[]}]),/fileKey 불일치/);
+});
