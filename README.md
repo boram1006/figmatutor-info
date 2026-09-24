@@ -36,7 +36,7 @@ PRD.md를 검토하고 기존 피그마 시스템을 추출·정형화해줘.
 추출 스냅샷·정형화·검증 결과는 작업을 진행하면서 생성됩니다.
 
 자연어로 요청해도 `AGENTS.md`의 라우팅을 따릅니다. Kiro에서는 `.kiro/steering/design-flow-harness.md`가 진입점입니다.
-스킬은 `.agents/skills`에서 발견됩니다. Figma 캔버스 작업은 플러그인 왕복으로 합니다(자세한 내용은 `docs/kiro-figma-plugin.md`).
+스킬은 `.agents/skills`에서 발견됩니다. Figma 캔버스 작업은 플러그인 왕복으로 합니다(자세한 내용은 `docs/kiro-figma-plugin.md`). 코드·계약·디자인 규칙·workflow의 정본 위치는 `docs/source-of-truth.md`를 따릅니다.
 
 ## 이미지 정책
 
