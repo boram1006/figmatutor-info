@@ -50,6 +50,17 @@ async function paints(list){
  }
  return result;
 }
+function effects(list){
+ if(!Array.isArray(list))return [];
+ return list.filter(e=>e.visible!==false).map(e=>({type:e.type,radius:typeof e.radius==='number'?e.radius:null,spread:typeof e.spread==='number'?e.spread:null,offset:e.offset?{x:e.offset.x,y:e.offset.y}:null,color:e.color?rgba(e.color):null,blendMode:e.blendMode||null}));
+}
+async function instanceInfo(node){
+ if(node.type!=='INSTANCE')return null;
+ let mainComponentId=null;
+ if(typeof node.getMainComponentAsync==='function'){const main=await node.getMainComponentAsync();mainComponentId=main?.id||null;}
+ else if('mainComponent' in node)mainComponentId=node.mainComponent?.id||null;
+ return {mainComponentId,componentProperties:'componentProperties' in node?node.componentProperties:null,variantProperties:'variantProperties' in node?node.variantProperties:null};
+}
 function metadata(node){
  const shared='getSharedPluginData' in node&&typeof node.getSharedPluginData==='function'?node.getSharedPluginData('designHarness','metadata'):'';
  let local='';
@@ -78,13 +89,19 @@ async function extract(root){
   for(const prop of ['width','height'])if(n.boundVariables?.[prop]?.id){metrics[prop]=n[prop];bindings[prop]=await variable(n.boundVariables[prop].id);}
   let style=null;
   if(n.type==='TEXT'&&typeof n.textStyleId==='string'&&n.textStyleId){const s=await figma.getStyleByIdAsync(n.textStyleId);style=s?.name||null;}
-  nodes.push({id:n.id,name:n.name,type:n.type,parentId,bounds:{x:b.x-origin.x,y:b.y-origin.y,width:n.width,height:n.height},fills:await paints('fills' in n?n.fills:[]),strokes:await paints('strokes' in n?n.strokes:[]),metrics,bindings,textStyle:style,layout:{mode:'layoutMode' in n?n.layoutMode:'NONE',vertical:'layoutSizingVertical' in n?n.layoutSizingVertical:null},clipsContent:'clipsContent' in n&&n.clipsContent===true,scrollable:'overflowDirection' in n&&['HORIZONTAL','VERTICAL','BOTH'].includes(n.overflowDirection),role:meta.role||null,componentId:meta.componentId||null,reusable:meta.reusable===true,tapTarget:meta.tapTarget===true,primaryActionId:meta.primaryActionId||null,slotId:meta.slotId||null,assetId:meta.assetId||null});
+  const instance=await instanceInfo(n);
+  let font=null;
+  if(n.type==='TEXT'){
+   const fs=n.fontSize,fn=n.fontName,lh=n.lineHeight,fw=n.fontWeight;
+   font={size:typeof fs==='number'?fs:null,family:fn&&fn!==figma.mixed?fn.family:null,style:fn&&fn!==figma.mixed?fn.style:null,weight:typeof fw==='number'?fw:null,lineHeight:lh&&lh!==figma.mixed&&lh.unit!=='AUTO'?lh.value:null,mixed:fs===figma.mixed||fn===figma.mixed};
+  }
+  nodes.push({id:n.id,name:n.name,type:n.type,parentId,bounds:{x:b.x-origin.x,y:b.y-origin.y,width:n.width,height:n.height},fills:await paints('fills' in n?n.fills:[]),strokes:await paints('strokes' in n?n.strokes:[]),effects:effects('effects' in n?n.effects:[]),opacity:'opacity' in n&&typeof n.opacity==='number'?n.opacity:null,blendMode:'blendMode' in n?n.blendMode:null,strokeWeight:'strokeWeight' in n&&typeof n.strokeWeight==='number'?n.strokeWeight:null,strokeAlign:'strokeAlign' in n?n.strokeAlign:null,metrics,bindings,textStyle:style,font,text:n.type==='TEXT'?{characters:n.characters,autoResize:'textAutoResize' in n?n.textAutoResize:null,alignHorizontal:'textAlignHorizontal' in n?n.textAlignHorizontal:null,alignVertical:'textAlignVertical' in n?n.textAlignVertical:null,letterSpacing:n.letterSpacing&&n.letterSpacing!==figma.mixed?n.letterSpacing:null}:null,layout:{mode:'layoutMode' in n?n.layoutMode:'NONE',horizontal:'layoutSizingHorizontal' in n?n.layoutSizingHorizontal:null,vertical:'layoutSizingVertical' in n?n.layoutSizingVertical:null,primaryAxisSizingMode:'primaryAxisSizingMode' in n?n.primaryAxisSizingMode:null,counterAxisSizingMode:'counterAxisSizingMode' in n?n.counterAxisSizingMode:null,primaryAxisAlignItems:'primaryAxisAlignItems' in n?n.primaryAxisAlignItems:null,counterAxisAlignItems:'counterAxisAlignItems' in n?n.counterAxisAlignItems:null,layoutWrap:'layoutWrap' in n?n.layoutWrap:null},constraints:'constraints' in n?n.constraints:null,clipsContent:'clipsContent' in n&&n.clipsContent===true,scrollable:'overflowDirection' in n&&['HORIZONTAL','VERTICAL','BOTH'].includes(n.overflowDirection),instance,role:meta.role||null,componentId:meta.componentId||null,reusable:meta.reusable===true,tapTarget:meta.tapTarget===true,primaryActionId:meta.primaryActionId||null,slotId:meta.slotId||null,assetId:meta.assetId||null});
   for(const child of ('children' in n?n.children:[]))queue.push({node:child,parentId:n.id});
  }
  const meta=metadata(root);
  return {id:root.id,name:root.name,width:root.width,height:root.height,screenId:meta.screenId||null,state:meta.state||null,viewportId:meta.viewportId||null,nodes,truncated:false};
 }
-const all=page.children.filter(n=>n.visible!==false && ['FRAME','COMPONENT','COMPONENT_SET','INSTANCE'].includes(n.type));
+const all=page.children.filter(n=>n.visible!==false && ['FRAME','COMPONENT','COMPONENT_SET','INSTANCE','SECTION'].includes(n.type));
 const targets=CONFIG.frameIds.length?all.filter(n=>CONFIG.frameIds.includes(n.id)):all;
 if(CONFIG.frameIds.length && targets.length!==new Set(CONFIG.frameIds).size)throw new Error('Requested frame missing');
 const frames=[];
