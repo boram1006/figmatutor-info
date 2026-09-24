@@ -23,7 +23,11 @@
 6. `layout-rules.md`에서 페이지 구조와 주요 영역 배치를 선택한다.
 7. `component-usage.md`에서 Card / Table / List / Banner / Modal 등의 표현 방식을 결정한다.
 8. `patterns.md`에서 기존 복합 패턴을 우선 재사용한다.
-9. 실제 Figma component가 존재하는 영역은 새 primitive를 만들기 전에 **기존 component INSTANCE 재사용**을 우선한다. catalog/snapshot의 실제 nodeId와 variant/property를 사용하고, 유사 외형을 재구성하지 않는다.
+9. 실제 Figma 자산 재사용 우선순위를 적용한다.
+   - **INSTANCE_REUSE**: Design System component가 있으면 catalog/snapshot의 실제 nodeId로 INSTANCE를 사용한다.
+   - **CLONE_COMPOSE**: 카드/섹션/업무 블록처럼 실제 양산 화면의 복합 패턴이 있으면 source node를 CLONE해 새 화면에 조합하고 최소 patch만 적용한다.
+   - **NEW_CONSTRUCTION**: 앞 두 방식으로 표현되지 않는 구조만 primitive로 새로 만든다.
+   앞 단계로 충분하면 뒤 단계로 내려가지 않는다.
 10. `visual-hierarchy.md`의 강조·상태·시각 언어를 적용한다.
 11. `exceptions.md`의 예외 조건을 확인한다.
 12. 판단 근거가 부족하면 `unresolved.md`를 확인하고 임의의 서비스 규칙을 발명하지 않는다.
