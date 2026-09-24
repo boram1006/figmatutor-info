@@ -1,0 +1,16 @@
+{
+  "op": "extract",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "stage": "explore",
+  "inputDigest": "pattern-source-scan-legacy-batch-1-2026-09",
+  "frameIds": [
+    "1:2348",
+    "1:6566",
+    "1:7638",
+    "1:8865",
+    "1:13679",
+    "1:17912"
+  ],
+  "_note": "Pattern Registry용 legacy 화면/패턴 source 탐색. 결과는 캔버스 수정 없이 구조 snapshot만 반환한다."
+}
