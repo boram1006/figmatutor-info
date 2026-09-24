@@ -71,6 +71,57 @@ Kiro가 result/snapshot 을 읽고 로컬 게이트로 검증
 - 이미지 슬롯: 플러그인이 붙여넣은 base64/바이트로 `figma.createImage()` → 실제 imageHash를
   반환한다. 슬롯 paint는 FIT, 슬롯 바탕은 `color-character-bg`.
 
+#### 기존 복합 패턴 CLONE 재사용 예시
+
+카드/섹션/복합 블록처럼 실제 양산 화면에 이미 존재하는 구조는 `op:create`의 `type:"CLONE"`으로 재사용한다.
+`CLONE`은 새 화면의 FRAME 안에 기존 패턴을 그대로 복제하고, 명시한 최소 patch만 적용한다.
+
+```json
+{
+  "op": "create",
+  "fileKey": "...",
+  "pageName": "design",
+  "nodes": [
+    {
+      "type": "FRAME",
+      "key": "newScreen",
+      "name": "A-NEW 신규 화면",
+      "children": [
+        {
+          "type": "CLONE",
+          "key": "statusCard",
+          "sourceNodeId": "1:23081",
+          "name": "Status Card",
+          "patches": [
+            {
+              "nodeName": "Card Title",
+              "characters": "새 화면의 제목",
+              "expectedMatches": 1
+            }
+          ]
+        },
+        {
+          "type": "INSTANCE",
+          "key": "primaryButton",
+          "componentNodeId": "1:637",
+          "componentProperties": {
+            "Label": "계속하기"
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+CLONE 규칙:
+- `sourceNodeId`는 snapshot에서 확인한 실제 Figma node ID를 사용한다.
+- clone 직후 Exact Clone 검증 → 최소 patch 검증 → 새 parent에 reparent한 뒤 composition 검증까지 수행한다.
+- `children`, `fills`, `strokes`, `metrics`, `layout`, `width/height`, `clip/scroll`로 clone을 다시 설계하지 않는다.
+- 필요한 변화는 `patches`의 `characters / fillBinding / fillColor / rename / visible`만 사용한다.
+- 결과의 `created.clones`에 sourceNodeId, patch 매칭 결과, prePatch/postPatch/composition 검증이 기록된다.
+- 새 parent의 Auto Layout 때문에 생기는 파생 width/height 변화는 `composition.geometryChanges`로 기록하고 구조/style 변화는 실패시킨다.
+
 #### 기존 Component Instance 재사용 예시
 
 ```json
