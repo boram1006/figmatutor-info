@@ -141,3 +141,32 @@ test('pattern discovery rejects tiny internal containers even when text looks re
   assert.equal(status.candidates[0].nodeId,'card');
   assert.equal(status.candidates.some(c=>c.nodeId==='title'),false);
 });
+
+
+test('pattern resolver distinguishes same-name variants using descendant text conditions',()=>{
+  const registryWithVariants={
+    schemaVersion:1,
+    patterns:[{
+      id:'package',
+      ruleRef:'Pattern 7',
+      sourceSelectors:[
+        {id:'complete',nodeName:'A-32_submission-package',nodeType:'FRAME',excludedDescendantText:['미등록']},
+        {id:'incomplete',nodeName:'A-32_submission-package',nodeType:'FRAME',requiredDescendantText:['미등록']}
+      ]
+    }]
+  };
+  const snapshot={frames:[{
+    id:'root',name:'v5',nodes:[
+      {id:'complete-frame',name:'A-32_submission-package',type:'FRAME',parentId:null},
+      {id:'complete-text',name:'완료',type:'TEXT',parentId:'complete-frame',text:{characters:'완료'}},
+      {id:'incomplete-frame',name:'A-32_submission-package',type:'FRAME',parentId:null},
+      {id:'missing-text',name:'미등록',type:'TEXT',parentId:'incomplete-frame',text:{characters:'미등록'}}
+    ]
+  }]};
+  const resolved=resolvePatternRegistry(registryWithVariants,snapshot);
+  const sources=resolved.patterns[0].resolvedSources;
+  assert.equal(sources[0].status,'resolved');
+  assert.equal(sources[0].matches[0].nodeId,'complete-frame');
+  assert.equal(sources[1].status,'resolved');
+  assert.equal(sources[1].matches[0].nodeId,'incomplete-frame');
+});
