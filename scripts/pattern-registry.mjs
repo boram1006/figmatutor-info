@@ -125,6 +125,162 @@ export function retrievePatterns(registry,query={}){
   );
 }
 
+
+function descendantsByParent(frame){
+  const children=new Map();
+  for(const node of frame.nodes||[]){
+    const key=node.parentId||'__ROOT__';
+    if(!children.has(key)) children.set(key,[]);
+    children.get(key).push(node);
+  }
+  return children;
+}
+
+function nodeText(node){
+  if(node?.text?.characters) return String(node.text.characters);
+  if(node?.type==='TEXT' && node?.name) return String(node.name);
+  return '';
+}
+
+function collectSubtree(frame,root,children){
+  const out=[];
+  const queue=[root];
+  const seen=new Set();
+  while(queue.length){
+    const node=queue.shift();
+    if(!node || seen.has(node.id)) continue;
+    seen.add(node.id);
+    out.push(node);
+    for(const child of children.get(node.id)||[]) queue.push(child);
+  }
+  return out;
+}
+
+function overlapValues(tokens,patternValues){
+  const pTokens=tokenSet(patternValues||[]);
+  return [...tokens].filter(token=>pTokens.has(token));
+}
+
+export function discoverPatternCandidates(registry,snapshot,{limitPerPattern=8}={}){
+  const frames=Array.isArray(snapshot?.frames)?snapshot.frames:[];
+  const candidates=[];
+
+  for(const frame of frames){
+    const children=descendantsByParent(frame);
+    for(const node of frame.nodes||[]){
+      if(!['FRAME','SECTION','COMPONENT','COMPONENT_SET'].includes(node.type)) continue;
+      if(node.id===frame.id && node.type==='SECTION') continue;
+      if(node.role==='prd-note') continue;
+
+      const subtree=collectSubtree(frame,node,children);
+      const descendantTexts=subtree
+        .filter(n=>n.id!==node.id)
+        .map(nodeText)
+        .filter(Boolean);
+      const nodeTokens=tokenSet([node.name||'']);
+      const frameTokens=tokenSet([frame.name||'']);
+      const textTokens=tokenSet(descendantTexts);
+      const bounds=node.bounds||{};
+      const width=Number(bounds.width||0);
+      const height=Number(bounds.height||0);
+
+      candidates.push({
+        frameId:frame.id,
+        frameName:frame.name,
+        nodeId:node.id,
+        nodeName:node.name,
+        nodeType:node.type,
+        parentId:node.parentId||null,
+        width,
+        height,
+        descendantCount:Math.max(0,subtree.length-1),
+        textSample:descendantTexts.slice(0,12),
+        _tokens:{nodeTokens,frameTokens,textTokens}
+      });
+    }
+  }
+
+  const patterns=[];
+  for(const pattern of registry.patterns||[]){
+    const scored=[];
+    for(const candidate of candidates){
+      const nameMatches=overlapValues(candidate._tokens.nodeTokens,pattern.keywords);
+      const frameMatches=overlapValues(candidate._tokens.frameTokens,[...(pattern.evidence||[]),...(pattern.keywords||[])]);
+      const textMatches=overlapValues(candidate._tokens.textTokens,[...(pattern.keywords||[]),...(pattern.tasks||[]),...(pattern.intents||[])]);
+
+      let score=nameMatches.length*4 + frameMatches.length*3 + textMatches.length;
+      const signals=[];
+
+      const viewportLike=candidate.width>=1000 && candidate.height>=700;
+      const compactLike=candidate.width>0 && candidate.width<1000 && candidate.height>0 && candidate.height<700;
+
+      if(pattern.id.includes('card') && compactLike){
+        score+=2;signals.push('compact-geometry');
+      }
+      if(['persistent-step-form','evaluation-workspace','final-review-matrix','package-readiness-grid','kpi-summary-data-table'].includes(pattern.id) && viewportLike){
+        score+=2;signals.push('workspace-geometry');
+      }
+      if(candidate.descendantCount>=3) signals.push('composite-structure');
+
+      if(score<=0) continue;
+
+      scored.push({
+        frameId:candidate.frameId,
+        frameName:candidate.frameName,
+        nodeId:candidate.nodeId,
+        nodeName:candidate.nodeName,
+        nodeType:candidate.nodeType,
+        parentId:candidate.parentId,
+        bounds:{width:candidate.width,height:candidate.height},
+        descendantCount:candidate.descendantCount,
+        textSample:candidate.textSample,
+        evidence:{
+          score,
+          nodeNameMatches:nameMatches,
+          frameMatches,
+          descendantTextMatches:textMatches,
+          signals
+        },
+        selectorSuggestion:{
+          nodeName:candidate.nodeName,
+          nodeType:candidate.nodeType,
+          frameName:candidate.frameName
+        },
+        status:'candidate-only'
+      });
+    }
+
+    scored.sort((a,b)=>
+      b.evidence.score-a.evidence.score ||
+      b.descendantCount-a.descendantCount ||
+      String(a.nodeId).localeCompare(String(b.nodeId))
+    );
+
+    patterns.push({
+      patternId:pattern.id,
+      ruleRef:pattern.ruleRef,
+      evidence:pattern.evidence||[],
+      candidates:scored.slice(0,limitPerPattern)
+    });
+  }
+
+  return {
+    schemaVersion:1,
+    source:{
+      fileKey:snapshot?.fileKey||null,
+      stage:snapshot?.stage||null,
+      capturedAt:snapshot?.capturedAt||null,
+      pageId:snapshot?.pageId||null,
+      complete:snapshot?.complete===true
+    },
+    policy:{
+      autoPromote:false,
+      note:'후보는 registry sourceSelector로 자동 승격하지 않는다. 실제 화면 의미와 clone 범위를 검토한 뒤 selector를 수동 승인한다.'
+    },
+    patterns
+  };
+}
+
 function arg(name,args){
   const i=args.indexOf(name);
   return i>=0?args[i+1]:null;
@@ -136,6 +292,7 @@ function usage(){
   return [
     'Usage:',
     '  node scripts/pattern-registry.mjs resolve --snapshot <snapshot.json> [--registry <registry.json>] [--output <resolved.json>]',
+    '  node scripts/pattern-registry.mjs discover --snapshot <snapshot.json> [--registry <registry.json>] [--output <candidates.json>] [--limit 8]',
     '  node scripts/pattern-registry.mjs search --intent <text> [--archetypes A4,A5] [--tasks x,y] [--states submitted,resubmit] [--registry <resolved-or-source.json>]'
   ].join('\n');
 }
@@ -160,6 +317,25 @@ if(process.argv[1]===fileURLToPath(import.meta.url)){
       ambiguous:(p.resolvedSources||[]).filter(s=>s.status==='ambiguous').length
     }));
     console.log(JSON.stringify({output:outputPath,patterns:summary},null,2));
+  } else if(command==='discover'){
+    const snapshotArg=arg('--snapshot',args);
+    if(!snapshotArg) throw new Error('--snapshot 필요\n'+usage());
+    const registryPath=resolve(repoRoot,arg('--registry',args)||DEFAULT_REGISTRY);
+    const snapshotPath=resolve(repoRoot,snapshotArg);
+    const outputPath=resolve(
+      repoRoot,
+      arg('--output',args)||'design/03-design-rules/patterns/discovery-candidates.json'
+    );
+    const limitRaw=arg('--limit',args);
+    const limit=limitRaw?Number(limitRaw):8;
+    if(!Number.isInteger(limit)||limit<1) throw new Error('--limit은 1 이상의 정수');
+    const result=discoverPatternCandidates(readJson(registryPath),readJson(snapshotPath),{limitPerPattern:limit});
+    writeFileSync(outputPath,JSON.stringify(result,null,2)+'\n');
+    console.log(JSON.stringify({
+      output:outputPath,
+      source:result.source,
+      patterns:result.patterns.map(p=>({patternId:p.patternId,candidates:p.candidates.length}))
+    },null,2));
   } else if(command==='search'){
     const requestedRegistry=arg('--registry',args);
     const resolvedPath=resolve(repoRoot,DEFAULT_RESOLVED);
