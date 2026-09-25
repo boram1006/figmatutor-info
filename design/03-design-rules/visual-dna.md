@@ -7,6 +7,10 @@ Visual DNA는 새 화면을 만들 때 기존 화면의 시각적 성질을 근�
 
 - 실제 Figma extract snapshot
 - 같은 snapshot에 대해 exact resolve된 Pattern Registry 결과
+- Pattern Registry의 current baseline / legacy 구분
+
+Visual DNA는 active `sourceSelectors`만 계산 대상으로 사용한다.
+`legacyEvidence`는 과거 구조를 설명하는 참고 근거이며 current invariant 계산에 자동 포함하지 않는다.
 
 명령:
 
@@ -31,6 +35,21 @@ npm run visual-dna:derive -- \
 - source frame / node ID
 
 를 보존한다.
+
+## Current Baseline vs Legacy
+
+같은 기능이 버전업 과정에서 redesign된 경우 과거/현재 화면을 동등하게 평균내지 않는다.
+
+- `currentBaselineSelectorId`: 앞으로의 생성에서 우선하는 source
+- `legacyEvidence`: 과거 구현. historical context와 변화 이유를 이해하는 참고
+- 동일 기능이더라도 현재 baseline이 명확하면 current source의 geometry/style을 우선한다.
+
+예:
+- 사람 심사: 최종 심사 화면 = current visual baseline
+- 1차 심사 화면 = same work loop의 legacy evidence
+
+Campaign처럼 의도적으로 회차별 변형되는 항목은 `contextualVariation`으로 별도 기록한다.
+예: 합격 발표의 background/color/copy는 회차별 campaign skin이며 invariant로 강제하지 않는다.
 
 ## Invariant vs Observation
 
@@ -80,6 +99,8 @@ Visual DNA output은 파생 파일이다.
 - registry selector를 대체하지 않는다.
 - generation rule을 자동 변경하지 않는다.
 - 서로 다른 archetype/task의 화면을 한데 평균내지 않는다.
+- 같은 task라도 superseded visual과 current baseline을 근거 없이 평균내지 않는다.
+- campaign/contextual variation을 structural invariant로 승격하지 않는다.
 - partial snapshot을 서비스 전체 visual rule로 가장하지 않는다.
 
 전역 generation rule로 승격하려면 반복 evidence + 적용 범위 + 예외를 별도로 검토해
