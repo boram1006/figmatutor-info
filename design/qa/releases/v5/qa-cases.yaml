@@ -384,18 +384,19 @@
   release: v5
   screen: "A-32 최종 심사 제출 패키지"
   category: FUNCTIONAL
-  source: "Figma v5 / A-32_submission-package / 최종 보고서 확인"
-  sourceType: SCREEN
+  source: "design/operations/prd-v5/PRD.md / A-32 §5 / confirmed behavior"
+  sourceType: CONFIRMED_PROJECT_RULE
   precondition: |
     최종 보고서 package item이 표시되어 있다.
   action: |
     최종 보고서 확인 액션을 선택한다.
   expected: |
-    최종 보고서 내용을 확인하기 위한 UI가 열린다.
+    A-32 위에 SECTION 1~8 통합 내용을 읽기 전용으로 보여주는 viewer modal이 열린다.
+    편집 control은 없고 닫기 후 A-32 context를 유지한다.
   automationCandidate: true
-  confidence: MEDIUM
+  confidence: HIGH
   notes: |
-    역복원 PRD는 modal이라고 해석했으나 실제 웹 구현의 exact presentation은 확인 필요.
+    current snapshot에는 대응 modal 디자인이 없어 DESIGN_MISSING 상태다.
 
 - id: QA-V5-A32-009
   release: v5
