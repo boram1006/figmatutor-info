@@ -134,6 +134,14 @@ design/operations/pattern-source-scan/result-legacy-1.json,design/operations/pat
 Pattern Registry의 `sourceSelectors`에는 node 이름/타입 같은 **검증 가능한 selector**만 둔다.
 실제 `sourceNodeId`는 최신 Figma extract snapshot에서 exact match가 확인될 때만 얻는다.
 
+Discovery 후보와 resolve 결과를 함께 갱신할 때는:
+
+```sh
+npm run patterns:refresh -- --snapshot <최신-snapshot.json>
+```
+
+resolve만 다시 할 때는:
+
 ```sh
 npm run patterns:resolve -- --snapshot <최신-snapshot.json>
 ```
