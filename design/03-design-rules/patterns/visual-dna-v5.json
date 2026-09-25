@@ -1,0 +1,518 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+    "stage": "screens",
+    "capturedAt": "2026-09-24T11:57:20.941Z",
+    "pageId": "1:987",
+    "complete": false,
+    "snapshotPath": "design/operations/coverage-v5/snapshot-coverage.json",
+    "resolvedRegistryPath": "design/03-design-rules/patterns/resolved-registry-v5.json"
+  },
+  "policy": {
+    "ruleType": "evidence-only",
+    "note": "invariants는 선택된 source에서 동일하게 반복 관찰된 값이다. observations는 범위/차이를 보존하며 평균값을 새 규칙으로 만들지 않는다. OBSERVED_SINGLE은 전역 규칙으로 자동 승격하지 않는다."
+  },
+  "patterns": [
+    {
+      "patternId": "status-driven-entity-card",
+      "ruleRef": "Pattern 2. Status-driven Entity Card",
+      "confidence": "REPEATED_OBSERVATION",
+      "sourceCount": 3,
+      "sourceNodeIds": [
+        "1:23081",
+        "49:1278",
+        "49:1301"
+      ],
+      "invariants": {
+        "bottomLeftRadius": 16,
+        "bottomRightRadius": 16,
+        "clipsContent": false,
+        "fillBindings": [
+          "text-inverse"
+        ],
+        "itemSpacing": 12,
+        "layoutMode": "VERTICAL",
+        "paddingBottom": 24,
+        "paddingLeft": 24,
+        "paddingRight": 24,
+        "paddingTop": 24,
+        "strokeBindings": [
+          "border-disabled"
+        ],
+        "topLeftRadius": 16,
+        "topRightRadius": 16,
+        "width": 855
+      },
+      "observations": {
+        "height": {
+          "values": [
+            163,
+            156
+          ],
+          "observedIn": 3,
+          "totalSources": 3,
+          "min": 156,
+          "max": 163
+        }
+      },
+      "sources": [
+        {
+          "selectorId": "card-pending",
+          "preferredFor": [
+            "draft",
+            "in-progress"
+          ],
+          "frameId": "1:23008",
+          "frameName": "v5. 최종보고서 제출",
+          "nodeId": "1:23081",
+          "nodeName": "Card-PENDING",
+          "nodeType": "FRAME",
+          "rootMetrics": {
+            "width": 855,
+            "height": 163,
+            "layoutMode": "VERTICAL",
+            "paddingTop": 24,
+            "paddingRight": 24,
+            "paddingBottom": 24,
+            "paddingLeft": 24,
+            "itemSpacing": 12,
+            "topLeftRadius": 16,
+            "topRightRadius": 16,
+            "bottomRightRadius": 16,
+            "bottomLeftRadius": 16,
+            "clipsContent": false,
+            "fillBindings": [
+              "text-inverse"
+            ],
+            "strokeBindings": [
+              "border-disabled"
+            ]
+          },
+          "subtree": {
+            "nodeCount": 18,
+            "textStyles": [
+              {
+                "textStyle": "Text/caption",
+                "count": 4
+              },
+              {
+                "textStyle": "Text/micro",
+                "count": 2
+              },
+              {
+                "textStyle": "Text/body-lg-bold",
+                "count": 1
+              },
+              {
+                "textStyle": "Text/caption-medium",
+                "count": 1
+              }
+            ],
+            "componentRefs": []
+          }
+        },
+        {
+          "selectorId": "card-submitted-done",
+          "preferredFor": [
+            "submitted",
+            "completed"
+          ],
+          "frameId": "1:23008",
+          "frameName": "v5. 최종보고서 제출",
+          "nodeId": "49:1278",
+          "nodeName": "Card-SUBMITTED-DONE",
+          "nodeType": "FRAME",
+          "rootMetrics": {
+            "width": 855,
+            "height": 156,
+            "layoutMode": "VERTICAL",
+            "paddingTop": 24,
+            "paddingRight": 24,
+            "paddingBottom": 24,
+            "paddingLeft": 24,
+            "itemSpacing": 12,
+            "topLeftRadius": 16,
+            "topRightRadius": 16,
+            "bottomRightRadius": 16,
+            "bottomLeftRadius": 16,
+            "clipsContent": false,
+            "fillBindings": [
+              "text-inverse"
+            ],
+            "strokeBindings": [
+              "border-disabled"
+            ]
+          },
+          "subtree": {
+            "nodeCount": 12,
+            "textStyles": [
+              {
+                "textStyle": "Text/caption",
+                "count": 3
+              },
+              {
+                "textStyle": "Text/body-lg-bold",
+                "count": 1
+              },
+              {
+                "textStyle": "Text/caption-medium",
+                "count": 1
+              },
+              {
+                "textStyle": "Text/micro",
+                "count": 1
+              }
+            ],
+            "componentRefs": []
+          }
+        },
+        {
+          "selectorId": "card-resubmit-needed",
+          "preferredFor": [
+            "changed-after-submit",
+            "resubmit"
+          ],
+          "frameId": "1:23008",
+          "frameName": "v5. 최종보고서 제출",
+          "nodeId": "49:1301",
+          "nodeName": "Card-RESUBMIT-NEEDED",
+          "nodeType": "FRAME",
+          "rootMetrics": {
+            "width": 855,
+            "height": 156,
+            "layoutMode": "VERTICAL",
+            "paddingTop": 24,
+            "paddingRight": 24,
+            "paddingBottom": 24,
+            "paddingLeft": 24,
+            "itemSpacing": 12,
+            "topLeftRadius": 16,
+            "topRightRadius": 16,
+            "bottomRightRadius": 16,
+            "bottomLeftRadius": 16,
+            "clipsContent": false,
+            "fillBindings": [
+              "text-inverse"
+            ],
+            "strokeBindings": [
+              "border-disabled"
+            ]
+          },
+          "subtree": {
+            "nodeCount": 12,
+            "textStyles": [
+              {
+                "textStyle": "Text/caption",
+                "count": 3
+              },
+              {
+                "textStyle": "Text/body-lg-bold",
+                "count": 1
+              },
+              {
+                "textStyle": "Text/caption-medium",
+                "count": 1
+              },
+              {
+                "textStyle": "Text/micro",
+                "count": 1
+              }
+            ],
+            "componentRefs": []
+          }
+        }
+      ]
+    },
+    {
+      "patternId": "persistent-step-form",
+      "ruleRef": "Pattern 4. Persistent Step Form",
+      "confidence": "OBSERVED_SINGLE",
+      "sourceCount": 1,
+      "sourceNodeIds": [
+        "1:23119"
+      ],
+      "invariants": {
+        "bottomLeftRadius": 0,
+        "bottomRightRadius": 0,
+        "clipsContent": false,
+        "fillBindings": [
+          "background-subtle-2"
+        ],
+        "height": 1024,
+        "itemSpacing": 0,
+        "layoutMode": "VERTICAL",
+        "paddingBottom": 0,
+        "paddingLeft": 0,
+        "paddingRight": 0,
+        "paddingTop": 0,
+        "strokeBindings": [],
+        "topLeftRadius": 0,
+        "topRightRadius": 0,
+        "width": 1440
+      },
+      "observations": {},
+      "sources": [
+        {
+          "selectorId": "v5-step-form-shell",
+          "preferredFor": [
+            "multi-step-form",
+            "report-step-form"
+          ],
+          "frameId": "1:23008",
+          "frameName": "v5. 최종보고서 제출",
+          "nodeId": "1:23119",
+          "nodeName": "A-31_report-step-form",
+          "nodeType": "FRAME",
+          "rootMetrics": {
+            "width": 1440,
+            "height": 1024,
+            "layoutMode": "VERTICAL",
+            "paddingTop": 0,
+            "paddingRight": 0,
+            "paddingBottom": 0,
+            "paddingLeft": 0,
+            "itemSpacing": 0,
+            "topLeftRadius": 0,
+            "topRightRadius": 0,
+            "bottomRightRadius": 0,
+            "bottomLeftRadius": 0,
+            "clipsContent": false,
+            "fillBindings": [
+              "background-subtle-2"
+            ],
+            "strokeBindings": []
+          },
+          "subtree": {
+            "nodeCount": 206,
+            "textStyles": [
+              {
+                "textStyle": "Text/caption-medium",
+                "count": 23
+              },
+              {
+                "textStyle": "Text/body-sm",
+                "count": 16
+              },
+              {
+                "textStyle": "Text/body-sm-semibold",
+                "count": 10
+              },
+              {
+                "textStyle": "Text/micro",
+                "count": 10
+              },
+              {
+                "textStyle": "Text/body-sm-medium",
+                "count": 6
+              },
+              {
+                "textStyle": "Text/caption",
+                "count": 4
+              },
+              {
+                "textStyle": "Text/body-lg-medium",
+                "count": 1
+              },
+              {
+                "textStyle": "Text/h2",
+                "count": 1
+              },
+              {
+                "textStyle": "Text/h4",
+                "count": 1
+              }
+            ],
+            "componentRefs": []
+          }
+        }
+      ]
+    },
+    {
+      "patternId": "package-readiness-grid",
+      "ruleRef": "Pattern 7. Package Readiness Grid",
+      "confidence": "REPEATED_OBSERVATION",
+      "sourceCount": 2,
+      "sourceNodeIds": [
+        "1:23529",
+        "17:996"
+      ],
+      "invariants": {
+        "bottomLeftRadius": 0,
+        "bottomRightRadius": 0,
+        "clipsContent": false,
+        "fillBindings": [
+          "background-subtle-2"
+        ],
+        "height": 1024,
+        "itemSpacing": 0,
+        "layoutMode": "VERTICAL",
+        "paddingBottom": 0,
+        "paddingLeft": 0,
+        "paddingRight": 0,
+        "paddingTop": 0,
+        "strokeBindings": [],
+        "topLeftRadius": 0,
+        "topRightRadius": 0,
+        "width": 1440
+      },
+      "observations": {},
+      "sources": [
+        {
+          "selectorId": "v5-package-complete",
+          "preferredFor": [
+            "ready",
+            "pre-submit-complete"
+          ],
+          "frameId": "1:23008",
+          "frameName": "v5. 최종보고서 제출",
+          "nodeId": "1:23529",
+          "nodeName": "A-32_submission-package",
+          "nodeType": "FRAME",
+          "rootMetrics": {
+            "width": 1440,
+            "height": 1024,
+            "layoutMode": "VERTICAL",
+            "paddingTop": 0,
+            "paddingRight": 0,
+            "paddingBottom": 0,
+            "paddingLeft": 0,
+            "itemSpacing": 0,
+            "topLeftRadius": 0,
+            "topRightRadius": 0,
+            "bottomRightRadius": 0,
+            "bottomLeftRadius": 0,
+            "clipsContent": false,
+            "fillBindings": [
+              "background-subtle-2"
+            ],
+            "strokeBindings": []
+          },
+          "subtree": {
+            "nodeCount": 259,
+            "textStyles": [
+              {
+                "textStyle": "Text/caption-medium",
+                "count": 24
+              },
+              {
+                "textStyle": "Text/body-sm-semibold",
+                "count": 14
+              },
+              {
+                "textStyle": "Text/micro",
+                "count": 13
+              },
+              {
+                "textStyle": "Text/body-sm-medium",
+                "count": 12
+              },
+              {
+                "textStyle": "Text/caption",
+                "count": 6
+              },
+              {
+                "textStyle": "Text/body-lg-medium",
+                "count": 1
+              },
+              {
+                "textStyle": "Text/body-sm",
+                "count": 1
+              },
+              {
+                "textStyle": "Text/h2",
+                "count": 1
+              },
+              {
+                "textStyle": "Text/h4",
+                "count": 1
+              },
+              {
+                "textStyle": "Typography/Body S Medium",
+                "count": 1
+              }
+            ],
+            "componentRefs": []
+          }
+        },
+        {
+          "selectorId": "v5-package-incomplete",
+          "preferredFor": [
+            "incomplete",
+            "missing-artifact"
+          ],
+          "frameId": "1:23008",
+          "frameName": "v5. 최종보고서 제출",
+          "nodeId": "17:996",
+          "nodeName": "A-32_submission-package",
+          "nodeType": "FRAME",
+          "rootMetrics": {
+            "width": 1440,
+            "height": 1024,
+            "layoutMode": "VERTICAL",
+            "paddingTop": 0,
+            "paddingRight": 0,
+            "paddingBottom": 0,
+            "paddingLeft": 0,
+            "itemSpacing": 0,
+            "topLeftRadius": 0,
+            "topRightRadius": 0,
+            "bottomRightRadius": 0,
+            "bottomLeftRadius": 0,
+            "clipsContent": false,
+            "fillBindings": [
+              "background-subtle-2"
+            ],
+            "strokeBindings": []
+          },
+          "subtree": {
+            "nodeCount": 257,
+            "textStyles": [
+              {
+                "textStyle": "Text/caption-medium",
+                "count": 24
+              },
+              {
+                "textStyle": "Text/body-sm-semibold",
+                "count": 14
+              },
+              {
+                "textStyle": "Text/micro",
+                "count": 13
+              },
+              {
+                "textStyle": "Text/body-sm-medium",
+                "count": 12
+              },
+              {
+                "textStyle": "Text/caption",
+                "count": 6
+              },
+              {
+                "textStyle": "Text/body-lg-medium",
+                "count": 1
+              },
+              {
+                "textStyle": "Text/body-sm",
+                "count": 1
+              },
+              {
+                "textStyle": "Text/h2",
+                "count": 1
+              },
+              {
+                "textStyle": "Text/h4",
+                "count": 1
+              },
+              {
+                "textStyle": "Typography/Body S Medium",
+                "count": 1
+              }
+            ],
+            "componentRefs": []
+          }
+        }
+      ]
+    }
+  ]
+}
