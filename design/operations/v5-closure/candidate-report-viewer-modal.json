@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "v5-report-viewer-modal",
+  "status": "BLOCKED_NEW_CONSTRUCTION",
+  "reason": "확정된 액션은 존재하지만 기존 Figma에서 의미적으로 적합한 read-only 8-section report modal source가 없음. 1차 지원서→최종보고서 section mapping(Q1) 확정 후 NEW_CONSTRUCTION.",
+  "trigger": {
+    "screen": "A-32",
+    "action": "최종 보고서 확인"
+  },
+  "requiredBehavior": [
+    "A-32 위 overlay/modal",
+    "SECTION 1~8 내용을 한 번에 읽기 전용으로 확인",
+    "편집 controls 없음",
+    "닫기 후 A-32 context 유지"
+  ],
+  "evidence": [
+    "design/operations/prd-v5/PRD.md A-32 §5",
+    "design/operations/coverage-v5/snapshot-coverage.json"
+  ],
+  "generationStrategy": {
+    "preferred": "NEW_CONSTRUCTION",
+    "rejectedReuse": [
+      "v1 team-building modals: task/content semantics mismatch",
+      "evaluation PDF viewer: document/PDF task mismatch"
+    ],
+    "prerequisites": [
+      "Q1 section mapping",
+      "read-only content ordering/copy"
+    ]
+  }
+}
