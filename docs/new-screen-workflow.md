@@ -183,6 +183,23 @@ npm run patterns:search -- \
 PRD의 task/state와 가장 직접적으로 대응하는 evidence/source를 선택하고,
 선택 근거를 operation spec 또는 작업 메모에 남긴다.
 
+### 4) Visual DNA evidence 확인
+
+resolved source가 정해지면 새 geometry를 만들기 전에 Visual DNA를 확인한다.
+
+```sh
+npm run visual-dna:derive -- \
+  --snapshot <snapshot.json> \
+  --resolved <resolved-registry.json> \
+  --output <visual-dna.json>
+```
+
+- 반복 source에서 같은 값 → invariant evidence
+- source마다 다른 값 → observation으로 그대로 유지
+- source 1개 → `OBSERVED_SINGLE`, 전역 규칙 승격 금지
+- CLONE 내부 geometry/style은 Visual DNA로 다시 설정하지 않는다. native clone 보존이 우선이다.
+- Visual DNA는 NEW_CONSTRUCTION 또는 새 shell/주변 구조에 필요한 근거로만 사용한다.
+
 ---
 
 ## 2. requirements.json 작성 (inputs 게이트)
