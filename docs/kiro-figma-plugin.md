@@ -199,7 +199,8 @@ CLONE 규칙:
 
 patch 필드:
 - `nodeName` — 복제본 트리에서 이름으로 찾을 대상(DFS, 동명 다수 매칭). **원본의 실제 노드 이름을 snapshot에서 확인해 쓴다.** 기본 정책은 strict이며 0건 매칭이면 해당 duplicate item 전체가 실패하고 생성된 clone도 제거된다.
-- `expectedMatches` — optional. 같은 이름의 노드가 여러 개 있을 때 정확히 몇 개가 매칭되어야 하는지 지정한다. 실제 매칭 수가 다르면 해당 item 전체를 실패시킨다.
+- `sourceNodeId` — optional alternative to `nodeName`. source subtree의 실제 node ID를 지정하면 원본과 clone의 동일 relative path에 있는 노드 **1개만 정확히** 패치한다. 동일 이름 노드가 여러 개여서 `nodeName`이 위험할 때 우선 사용한다. `nodeName`과 동시에 지정하지 않는다.
+- `expectedMatches` — optional. 같은 이름의 노드가 여러 개 있을 때 정확히 몇 개가 매칭되어야 하는지 지정한다. `sourceNodeId` 사용 시 실제 매칭은 1개이며, 다른 값이면 실패한다.
 - `characters` — TEXT 노드 문자열 교체(원본 폰트/스타일 유지, `figma.mixed` 폰트 안전 로드).
 - `fillBinding` — fill을 **semantic 토큰에 바인딩**(권장, harness 색 규칙 준수).
 - `fillColor` — raw hex fill(바인딩 제거, `fillBinding` 없을 때만).
