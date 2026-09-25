@@ -60,11 +60,13 @@ Low ~ Medium
 
 ### Rules
 - 일반 functional page보다 큰 typography와 강한 visual treatment 허용.
-- dark/gold 계열 등 이벤트용 visual mode를 사용할 수 있다.
+- **hero/result card/follow-up 구조와 campaign skin을 분리한다.**
+- background, campaign color, decorative asset, hero copy는 회차/시즌 컨셉에 따라 달라질 수 있다.
+- dark/gold는 사용 가능한 한 사례이지 A2의 고정 visual rule이 아니다.
 - 아래에 실제 서비스 행동으로 연결되는 CTA를 명확하게 둔다.
 - 이벤트 표현은 페이지 전체 목적이 celebration일 때만 사용한다.
 
-Evidence: 하반기 해커톤 1차 심사 합격 발표.
+Evidence: H1/H2 1차 심사 합격 발표. 두 버전은 동일 계열 구조를 사용하고 campaign treatment와 콘텐츠가 변형된다.
 
 ---
 
@@ -88,8 +90,10 @@ Medium
 - 카드 높이가 가변 데이터 때문에 지나치게 흔들리지 않도록 bounded sub-list를 사용 가능.
 - 사용자가 이미 참여한/지원한 entity를 정렬 우선순위로 올릴 수 있다.
 - closed/completed entity는 action을 명확히 비활성화한다.
+- **Card 구조에서 product selection policy를 추론하지 않는다.** H1의 선착순과 H2의 팀 리더 검토/선발은 같은 browse archetype 안에서도 다른 정책이다.
+- 현재 해커톤 팀빌딩의 기본 product baseline은 H2의 팀 리더 검토/선발 방식이다.
 
-Evidence: 팀빌딩.
+Evidence: 팀빌딩. Current visual/policy reference는 H2 모집중 화면을 우선한다.
 
 ---
 
@@ -207,10 +211,12 @@ Very High
 - evaluation/action UI는 작업 중 쉽게 접근 가능하게 한다.
 - right panel / floating panel / bottom sheet 등 표현 방식이 달라도 queue와 source context를 유지한다.
 - local pane failure가 발생해도 가능한 주변 workspace context는 유지한다.
-- exact pane ratio는 closest existing screen의 geometry를 따른다.
+- exact pane ratio는 **current baseline에 해당하는 closest existing screen**의 geometry를 따른다.
+- 동일한 work loop가 버전업 과정에서 redesign된 경우 과거/현재 geometry를 평균내지 않는다.
+- 사람 심사의 현재 visual baseline은 최종 심사 `RV-02_final-review-unfolded`; 1차 심사 `RV-01_first-review`는 legacy evidence다.
 - 해커톤 심사 화면을 token/component QA용 REVIEW-INSPECTOR로 재해석하지 않는다.
 
-Evidence: 1차 심사, 최종 심사, AI 심사 결과 상세.
+Evidence: 최종 심사(current), 1차 심사(legacy), AI 심사 결과 상세.
 
 ---
 
