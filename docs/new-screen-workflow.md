@@ -10,6 +10,7 @@
 **이 워크플로우는 "지금부터 새로 만드는 화면"에만 적용한다.**
 
 > PRD가 아직 없고 기능 요청만 있으면, 먼저 **`docs/prd-authoring-workflow.md`** 로 PRD를 생성한 뒤 이 문서로 온다.
+> 기존 기능의 새 버전/변형을 만들기 전에는 **`design/02-structure/SERVICE_EVOLUTION.md`** 에서 current baseline과 legacy evidence를 구분한다.
 > 기존 화면 유형으로 설명되지 않는 완전히 새로운 기획이면 화면을 그리기 전에 **`design/03-design-rules/generation/novel-screen-reasoning.md`** 를 적용한다.
 > 이때 Product Decision은 임의로 만들지 않고, Design Decision만 기존 archetype/pattern 근거를 조합해 판단한다.
 > 새 릴리즈면 그 PRD를 Figma 프레임 맨 앞 **노란색 박스**에도 싣는다(릴리즈 PRD 게시 규칙).
@@ -30,6 +31,7 @@
 ## 1. PRD 기준선 — v1~v3·v5 실제 PRD에서 도출
 
 기존 릴리즈 PRD(v1 공통/팀빌딩, v2 AI 심사, v3 지원하기, v5 최종보고서)를 분석하면,
+버전별 product policy 차이는 `SERVICE_EVOLUTION.md`에서 먼저 해석하고,
 잘 쓰인 화면 PRD는 아래 **8개 블록**을 담는다. 이 순서가 곧 화면을 확정적으로 그릴 수 있는 정보의 최소 집합이다.
 새 PRD를 받으면 이 블록이 있는지 확인하고, 빠지면 만들기 전에 사용자와 채운다(추측으로 그리지 않는다).
 
@@ -65,15 +67,15 @@
 - **공통(v1)**: 랜딩(히어로+카운트다운), 공지사항, FAQ, 팀빌딩(모집/상세/지원 모달/마감/예정), 마이페이지(팀 카드·지원 현황 카드)
 - **AI 심사(v2)**: 심사 대시보드(지표 카드+결과 테이블), 심사 결과 상세(원형 점수 게이지+항목별 채점), 회의록 요약기(로딩→결과), 프롬프트 관리(토글 리스트+편집 모달)
 - **지원하기(v3)**: 지원서 리스트(상태별 카드), 지원 폼(A-02), 마이페이지 내 지원현황(빈/있음)
-- **하반기(v4, PRD 텍스트 없음·디자인만)**: 합격 발표(다크+골드), 팀빌딩(예정/모집중, 포지션 지원), 팀빌딩 설정 모달. 제약: 기존 팀원 5명이면 팀빌딩 불가, 모집 포지션 수는 기존 팀원 합쳐 5 초과 불가.
-- **최종보고서(v5)**: 내 지원현황, 단계별 제출 폼(좌측 스텝 네비), 최종 심사 제출 패키지(보고서/발표자료/데모 URL/소스코드 4구성 + 마감 경고)
+- **하반기(v4/H2)**: 합격 발표, 팀빌딩(예정/모집중, 포지션 지원), 팀빌딩 설정 모달. 팀빌딩은 H1 선착순 중심에서 **팀 리더 검토/선발 방식**으로 변경. 제약: 기존 팀원 5명이면 팀빌딩 불가, 모집 포지션 수는 기존 팀원 합쳐 5 초과 불가.
+- **최종보고서(v5)**: 1차 지원서의 작성 데이터 7섹션을 승계해 prefill하고 본선용 1섹션을 추가한 8개 content section + 최종 심사 제출 패키지. 승계된 7섹션도 수정 가능하며 초기 content completion은 7/8. package는 별도 finalization으로 UI상 SECTION 9/9.
 
 ### 반복 UI 패턴 (새 화면도 이 패턴을 따른다)
 
 - 상단 고정 네비(홈/공지사항/팀빌딩/FAQ/로그인) + 우측 붉은 CTA
 - 상태 뱃지: Gray(작성중/미제출) · Green(제출완료) · Purple(심사중) · Red 계열 강조
 - 카드 리스트(정렬 우선순위 규칙) / 좌측 스텝 네비가 있는 단계별 폼
-- 다크+골드 발표 화면(합격 축하) + 카운트다운 타이머
+- 합격/결과 발표의 hero + 결과 card + 후속 일정 구조. **campaign background/color/copy는 회차별 컨셉에 따라 달라지며 dark+gold를 고정 규칙으로 사용하지 않는다.**
 - 빈 상태 + CTA는 화면마다 필수 정의
 
 ---
@@ -100,34 +102,20 @@ Candidate Pattern은 현재 화면을 만들기 위한 설계 가설이며 전�
 - machine-readable registry: `design/03-design-rules/patterns/registry.json`
 - 최신 snapshot 기반 resolved registry: `design/03-design-rules/patterns/resolved-registry.json`
 
-### v1~v4 source scan
+### 전체 서비스 source 기준
 
-현재 repo에는 v5 partial extract는 있으나 v1~v4의 최신 구조 snapshot은 없다.
-따라서 legacy pattern의 nodeId를 문서/PDF에서 추측하지 않는다.
+v1~v5 전체 design page snapshot을 기준으로 Pattern Registry가 한 차례 resolve되어
+`design/03-design-rules/patterns/resolved-registry.json`과
+`design/03-design-rules/patterns/visual-dna.json`에 파생 evidence가 저장되어 있다.
 
-준비된 Plugin extract spec:
+대용량 raw `snapshot-full.json` 자체는 main에 상시 보관하지 않으며,
+파생 파일의 `snapshotBlobSha`로 사용한 full snapshot을 추적한다.
 
-- `design/operations/pattern-source-scan/spec-extract-legacy-1.json`
-- `design/operations/pattern-source-scan/spec-extract-legacy-2.json`
-- `design/operations/pattern-source-scan/spec-extract-legacy-3.json`
+새 extract로 갱신할 때만 `pattern-source-scan` / `patterns:refresh` workflow를 다시 실행한다.
+현재 source를 선택할 때는 exact resolve 여부뿐 아니라
+`SERVICE_EVOLUTION.md`의 current baseline / legacy 구분을 함께 적용한다.
 
-각 스펙을 Figma Desktop Plugin에서 실행하고 결과를 같은 폴더에
-`result-legacy-1.json`, `result-legacy-2.json`, `result-legacy-3.json`으로 저장한 뒤:
-
-```sh
-npm run patterns:refresh -- --inputs \
-design/operations/pattern-source-scan/result-legacy-1.json,design/operations/pattern-source-scan/result-legacy-2.json,design/operations/pattern-source-scan/result-legacy-3.json
-```
-
-이 명령은:
-1. 세 snapshot을 merge
-2. discovery 후보 생성
-3. exact selector resolve
-4. clone-ready pattern 목록 출력
-
-까지 수행한다.
-
-전체 서비스 snapshot이 없을 때는 partial snapshot 결과를 전역 clone source로 가장하지 않는다.
+즉 **exact nodeId가 있다는 이유만으로 과거 화면을 current generation source로 선택하지 않는다.**
 
 ### 1) 최신 snapshot으로 clone source 해석
 
@@ -319,7 +307,36 @@ Design Coverage Audit 결과에 `MISSING_DESIGN` / `MISSING_STATE`가 있으면
 
 ---
 
-## 7. 원칙 (하네스 계약과 일관)
+## 7. QA 리스트 생성 + 자동화 후보 분류
+
+디자인 동기화/coverage 확인이 끝나면 QA를 별도 후속 작업으로 남기지 않고 **릴리즈 완료 workflow의 정식 단계**로 수행한다.
+
+1. `docs/qa-workflow.md`에 따라 source trace가 있는 QA case를 생성한다.
+2. 상태 머신이 있으면 state coverage matrix를 만든다.
+3. 권한 기능이면 permission matrix를 만든다.
+4. `automationCandidate: true | partial | false`를 분류한다.
+5. `OPEN_QUESTION` / `INFERRED`는 사람이 검토하기 전 자동화하지 않는다.
+6. 브라우저 자동화는 `docs/qa-playwright-workflow.md`에 따라 Playwright backlog로 넘긴다.
+
+QA 리스트는 디자인 화면에서 임의로 요구사항을 발명하지 않는다.
+원본 PRD가 없고 역복원 PRD만 있는 릴리즈는 실제 SCREEN / CONFIRMED_PROJECT_RULE과 INFERRED를 구분한다.
+
+권장 산출물:
+
+```
+design/qa/releases/v<n>/
+  qa-cases.yaml
+  state-matrix.md
+  permission-matrix.md
+  open-questions.md
+```
+
+Pass/Fail/Skip의 사람 실행 기록이 필요하면 `docs/qa-list-workflow.md`의
+`design/operations/qa/<release>.md` 형식을 병행한다.
+
+---
+
+## 8. 원칙 (하네스 계약과 일관)
 
 - JSON 계약이 기계 판정의 원본이다. 필드는 `docs/contracts.md`, 게이트는 `scripts/lib/gates.mjs`·`snapshot.mjs`.
 - 폴더 존재·체크표시·이전 PASS로 완료를 판정하지 않는다. `npm run check`/`npm run audit`로 판정한다.

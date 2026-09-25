@@ -65,9 +65,13 @@ Steering이나 workflow 문서에 디자인 규칙을 다시 상세 복제하지
 ## 5. PRD / 서비스 구조
 
 - 전체 서비스 구조·권한·의존관계: `design/02-structure/SITEMAP.md`
+- 버전별 정책 변화 + 앞으로의 current baseline 설명 정본: `design/02-structure/SERVICE_EVOLUTION.md`
+- current baseline의 machine-readable companion: `design/02-structure/service-baselines.json`
 - PRD 작성 절차: `docs/prd-authoring-workflow.md`
 - Coverage용 PRD source 우선순위: `docs/coverage-audit-rules.md` 및 `docs/figma-design-sync-workflow.md`
 
+새 기획에서는 단순히 과거 PRD/화면이 더 상세하다는 이유로 과거 정책을 복원하지 않는다.
+정책이 변경된 기능은 `SERVICE_EVOLUTION.md`의 current baseline을 먼저 확인한다.
 역복원 PRD는 원본 PRD보다 우선하지 않는다.
 
 ## 6. Figma Sync / Coverage
@@ -82,8 +86,10 @@ Steering이나 workflow 문서에 디자인 규칙을 다시 상세 복제하지
 
 - QA 생성/분류: `docs/qa-workflow.md`
 - QA 결과 기록: `docs/qa-list-workflow.md`
+- 브라우저 QA 자동화: `docs/qa-playwright-workflow.md`
 
 QA 요구사항 근거는 PRD source provenance를 유지한다.
+Playwright spec은 QA requirement의 정본이 아니라 실행 구현이며, QA case ID/source trace를 유지한다.
 
 ## 8. Orchestration
 

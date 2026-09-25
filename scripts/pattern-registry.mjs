@@ -105,15 +105,29 @@ export function retrievePatterns(registry,query={}){
       if(overlap.length) matched.push({field,values:overlap});
     }
 
-    const preferenceTokens=tokenSet(query.states||[]);
+    // Source selection is more specific than pattern selection.
+    // Use the full request context (intent/task/keyword/state), not state alone,
+    // so lineage variants such as application-form vs report-step-form can be
+    // distinguished without hard-coding a global current source.
+    const preferenceTokens=qTokens;
     const resolved=(pattern.resolvedSources||[])
       .filter(source=>source.status==='resolved')
       .map(source=>{
         const preferredTokens=tokenSet(source.preferredFor||[]);
-        const stateMatches=[...preferenceTokens].filter(t=>preferredTokens.has(t));
-        return {...source,stateMatches};
+        const sourceContextMatches=[...preferenceTokens].filter(t=>preferredTokens.has(t));
+        const stateTokens=tokenSet(query.states||[]);
+        const stateMatches=[...stateTokens].filter(t=>preferredTokens.has(t));
+        return {
+          ...source,
+          sourceContextMatches,
+          stateMatches,
+          isCurrentBaseline:source.selectorId===pattern.currentBaselineSelectorId
+        };
       })
-      .sort((a,b)=>b.stateMatches.length-a.stateMatches.length);
+      .sort((a,b)=>
+        b.sourceContextMatches.length-a.sourceContextMatches.length ||
+        Number(b.isCurrentBaseline)-Number(a.isCurrentBaseline)
+      );
 
     const matchCount=matched.reduce((sum,m)=>sum+m.values.length,0);
     if(matchCount===0 && queryArchetypes.size) continue;
@@ -125,6 +139,7 @@ export function retrievePatterns(registry,query={}){
       matchCount,
       matched,
       cloneReady:resolved.length>0,
+      currentBaselineSelectorId:pattern.currentBaselineSelectorId||null,
       cloneSources:resolved,
       evidence:pattern.evidence||[]
     });

@@ -81,6 +81,29 @@ test('pattern retrieval exposes evidence and clone readiness instead of inventin
   assert.ok(results[0].matched.length>0);
 });
 
+test('pattern retrieval prefers current baseline when state evidence does not distinguish sources',()=>{
+  const resolved={
+    patterns:[{
+      id:'announcement',
+      ruleRef:'Pattern 8',
+      archetypes:['A2'],
+      intents:['announce result'],
+      tasks:['read result announcement'],
+      keywords:['announcement'],
+      evidence:['H1/H2'],
+      currentBaselineSelectorId:'h2',
+      resolvedSources:[
+        {selectorId:'h1',status:'resolved',preferredFor:['result-announcement'],matches:[{frameId:'f1',nodeId:'n1'}]},
+        {selectorId:'h2',status:'resolved',preferredFor:['result-announcement'],matches:[{frameId:'f2',nodeId:'n2'}]}
+      ]
+    }]
+  };
+  const results=retrievePatterns(resolved,{archetypes:['A2'],intent:'announce result'});
+  assert.equal(results[0].currentBaselineSelectorId,'h2');
+  assert.equal(results[0].cloneSources[0].selectorId,'h2');
+  assert.equal(results[0].cloneSources[0].isCurrentBaseline,true);
+});
+
 test('reference-only pattern can match semantically without pretending it is clone-ready',()=>{
   const resolved=resolvePatternRegistry(registry,{frames:[]});
   const results=retrievePatterns(resolved,{archetypes:['A7'],keywords:['심사'],tasks:['score']});
@@ -200,4 +223,49 @@ test('legacy pattern refresh merge keeps unique frames and rejects mixed file ke
   ]);
   assert.deepEqual(merged.frames.map(f=>f.id),['1','2','3']);
   assert.throws(()=>mergeSnapshots([{fileKey:'f1',frames:[]},{fileKey:'f2',frames:[]}]),/fileKey 불일치/);
+});
+
+
+test('pattern retrieval uses task context to choose the right form lineage source',()=>{
+  const resolved={
+    patterns:[{
+      id:'persistent-step-form',
+      ruleRef:'Pattern 4',
+      archetypes:['A5'],
+      intents:['complete a long multi-section workflow'],
+      tasks:['edit multi-step form','resume section'],
+      keywords:['step','form','report','application'],
+      evidence:['지원하기','최종보고서'],
+      resolvedSources:[
+        {
+          selectorId:'application-form',
+          status:'resolved',
+          preferredFor:['multi-step-form','application-form'],
+          matches:[{frameId:'f1',nodeId:'application'}]
+        },
+        {
+          selectorId:'report-form',
+          status:'resolved',
+          preferredFor:['multi-step-form','report-step-form'],
+          matches:[{frameId:'f2',nodeId:'report'}]
+        }
+      ]
+    }]
+  };
+
+  const reportResults=retrievePatterns(resolved,{
+    archetypes:['A5'],
+    intent:'edit final report',
+    keywords:['final report']
+  });
+  assert.equal(reportResults[0].cloneSources[0].selectorId,'report-form');
+  assert.ok(reportResults[0].cloneSources[0].sourceContextMatches.includes('report'));
+
+  const applicationResults=retrievePatterns(resolved,{
+    archetypes:['A5'],
+    intent:'edit application form',
+    keywords:['application']
+  });
+  assert.equal(applicationResults[0].cloneSources[0].selectorId,'application-form');
+  assert.ok(applicationResults[0].cloneSources[0].sourceContextMatches.includes('application'));
 });

@@ -18,6 +18,21 @@
 
 ## 절차
 
+### 0. 현재 정책 / 버전 맥락 확인
+PRD를 쓰기 전에 `design/02-structure/SERVICE_EVOLUTION.md`를 확인한다.
+자동화/agent가 current baseline을 선택할 때는 같은 내용의 machine-readable companion인 `design/02-structure/service-baselines.json`도 함께 사용한다.
+
+- 같은 기능의 과거 화면이 여러 개면 **현재 baseline / legacy evidence**를 먼저 구분한다.
+- 과거 PRD가 더 상세하더라도 이미 바뀐 product policy를 새 PRD의 기본값으로 복원하지 않는다.
+- visual 구조는 재사용할 수 있어도 product behavior는 버전별 정책을 따른다.
+- 현재 정책보다 더 새로운 변경 요청이면 해당 변경을 새 PRD에 명시하고 기존 baseline을 그대로 강제하지 않는다.
+
+예:
+- 사람 심사 → 최종 심사 화면을 current visual baseline으로 사용
+- 팀빌딩 → H2의 팀 리더 검토/선발 정책이 current baseline
+- 합격 발표 → 구조는 재사용하되 회차별 background/copy/theme은 variable
+- 본선 최종보고서 → 1차 지원서 데이터를 승계하는 form lineage로 해석
+
 ### 1. 요청 해석 + 화면 분해
 - 요청을 화면 단위로 쪼갠다. 하나의 기능이 여러 화면일 수 있다(리스트/상세/폼/모달/빈상태).
 - 각 화면에 임시 ID를 부여한다(예: `B-01 심사 대시보드`). 기존 ID 체계(A-01 등)와 충돌하지 않게.
@@ -33,7 +48,8 @@
 7. 표기 규칙(상대시간·자릿수·말줄임)
 8. 레이아웃·인터랙션 세부
 
-- 기본값은 **전 서비스 공통 관례가 아니라, 같은 user task / 같은 page archetype / 가장 가까운 기존 화면**에서만 가져온다.
+- 기본값은 **전 서비스 공통 관례가 아니라, 같은 user task / 같은 page archetype / 현재 정책에 맞는 가장 가까운 기존 화면**에서만 가져온다.
+- 같은 task의 화면이 여러 버전에 존재하면 `SERVICE_EVOLUTION.md`의 current baseline을 먼저 적용하고, superseded/legacy 화면은 보조 evidence로만 사용한다.
 - 먼저 `design/03-design-rules/generation/README.md`와 `page-archetypes.md`를 읽고 화면 성격을 정한다.
 - 그 다음 동일 task의 기존 화면이 있을 때만 아래처럼 재사용한다.
   - 상태 뱃지 색/문구: 동일 workflow state가 기존에 정의돼 있을 때 재사용
@@ -87,6 +103,7 @@
 
 ## 원칙
 
-- 기존 토큰/컴포넌트와 **동일 task의 기존 화면**을 기본값의 출처로 삼는다. 단일 사례를 전 서비스 규칙으로 확대하지 않는다. 새 값은 꼭 필요할 때만, 근거와 함께.
+- 기존 토큰/컴포넌트와 **동일 task의 current baseline 화면**을 기본값의 출처로 삼는다. 단일 사례를 전 서비스 규칙으로 확대하지 않는다. 새 값은 꼭 필요할 때만, 근거와 함께.
+- historical 화면의 상세한 정책이 current baseline과 충돌하면 current baseline이 우선한다.
 - PRD는 화면을 **확정적으로** 그릴 수 있어야 한다. 모호하면 그리기 전에 질문으로 좁힌다.
 - 생성한 PRD는 new-screen-workflow의 8블록과 1:1로 맞아야 한다(양방향 호환).

@@ -102,11 +102,13 @@ entity 내부에 variable-length child actions가 존재.
 - completed position later
 - if child list grows, bounded list + internal scroll
 - user-applied entity can rank before others
+- 지원 action의 의미는 현재 product policy를 따른다. H2/current에서는 지원 즉시 합류가 아니라 **팀 리더 검토 대상이 되는 신청**이다.
+- H1 선착순 behavior를 현재 기본값으로 재사용하지 않는다.
 
 ### Anti-pattern
 포지션을 별도 unrelated cards로 흩뜨리지 않는다.
 
-Evidence: 팀빌딩.
+Evidence: H2 팀빌딩(current), H1 팀빌딩(legacy).
 
 ---
 
@@ -142,7 +144,7 @@ Final:
 ### Anti-pattern
 각 section을 전혀 연결되지 않은 standalone page처럼 생성.
 
-Evidence: 지원하기 8-step, 최종보고서 9-step.
+Evidence: 지원하기와 최종보고서는 같은 form lineage다. 1차 지원서는 7개 작성 데이터 섹션 + 검토/제출 finalization, 최종보고서는 기존 7개를 승계·수정 가능하게 유지하고 1개 content section을 추가해 8개 content section으로 확장한 뒤 별도 package finalization(SECTION 9/9)으로 이어진다.
 
 ---
 
@@ -163,7 +165,8 @@ Evidence: 지원하기 8-step, 최종보고서 9-step.
 - scoring / summary / action UI
 
 이 세 영역의 기능적 관계가 핵심이다.
-panel 위치와 비율은 실제 closest screen을 따른다.
+panel 위치와 비율은 실제 **current baseline에 해당하는** closest screen을 따른다.
+사람 심사의 current visual baseline은 최종 심사 화면이며, 1차 심사 화면과 geometry를 평균내지 않는다.
 
 ### Work loop
 화면 구성보다 아래 반복 흐름을 끊지 않는 것이 우선이다.
@@ -278,17 +281,22 @@ Evidence: 최종보고서 SECTION 9.
 합격 발표, 결과 발표 등 campaign moment.
 
 ### Structure
-1. dark/visual hero
+1. campaign hero
 2. result message
 3. selected/highlight entity preview
 4. next-event explanation
-5. countdown
+5. countdown when relevant
 6. clear next CTA
+
+### Variant policy
+- result card / announcement hierarchy는 H1/H2에서 재사용 가능하다.
+- background, campaign color, decorative visual, hero copy는 회차 컨셉에 따라 변경된다.
+- dark/gold는 구조 규칙이 아니라 특정 campaign skin이다.
 
 ### Anti-pattern
 이벤트 styling을 일반 dashboard/form에 재사용.
 
-Evidence: 하반기 해커톤 1차 심사 합격 발표.
+Evidence: H1/H2 1차 심사 합격 발표.
 
 ---
 
