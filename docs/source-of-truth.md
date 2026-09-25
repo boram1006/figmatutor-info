@@ -57,6 +57,7 @@ Figma 무료 계정 + Desktop Plugin 왕복 방식의 정본:
 - 최신 snapshot에서 resolve한 clone source는 `resolved-registry.json` 파생 결과이며, 원본 registry를 대체하지 않는다.
 - v1~v4 legacy pattern source scan의 운영 정본은 `design/operations/pattern-source-scan/` + `scripts/refresh-pattern-sources.mjs`다. 별도 bootstrap 경로를 병행 운영하지 않는다.
 - 단일 최신 snapshot의 discovery + resolve 갱신은 `npm run patterns:refresh-snapshot -- --snapshot <path>`을 사용한다.
+- Visual DNA 계약의 정본은 `design/03-design-rules/visual-dna.md`; `visual-dna*.json`은 snapshot + resolved source에서 생성한 파생 evidence이며 generation rule 자체가 아니다.
 
 Steering이나 workflow 문서에 디자인 규칙을 다시 상세 복제하지 않고,
 필요한 진입점과 적용 순서만 적는다.
