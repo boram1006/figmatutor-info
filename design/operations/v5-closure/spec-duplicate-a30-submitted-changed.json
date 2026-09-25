@@ -1,0 +1,26 @@
+{
+  "op": "duplicate",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "items": [
+    {
+      "sourceId": "49:1278",
+      "name": "Card-SUBMITTED-CHANGED",
+      "x": 2630,
+      "y": 1003,
+      "patches": [
+        {
+          "sourceNodeId": "49:1288",
+          "characters": "최종 제출 · 수정 후 미반영",
+          "expectedMatches": 1
+        },
+        {
+          "sourceNodeId": "49:1300",
+          "characters": "수정사항 제출하기 →",
+          "expectedMatches": 1
+        }
+      ]
+    }
+  ],
+  "_intent": "primary 제출완료 상태를 유지하면서 secondary action-needed 상태를 표현하는 current baseline card"
+}
