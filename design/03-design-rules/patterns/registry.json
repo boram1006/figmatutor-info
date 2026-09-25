@@ -92,7 +92,8 @@
           "preferredFor": [
             "draft",
             "in-progress"
-          ]
+          ],
+          "frameName": "v5. 최종보고서 제출"
         },
         {
           "id": "card-submitted-done",
@@ -101,7 +102,8 @@
           "preferredFor": [
             "submitted",
             "completed"
-          ]
+          ],
+          "frameName": "v5. 최종보고서 제출"
         },
         {
           "id": "card-resubmit-needed",
@@ -110,7 +112,8 @@
           "preferredFor": [
             "changed-after-submit",
             "resubmit"
-          ]
+          ],
+          "frameName": "v5. 최종보고서 제출"
         }
       ],
       "discoveryHints": {
