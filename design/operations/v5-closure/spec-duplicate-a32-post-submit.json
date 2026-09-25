@@ -1,0 +1,64 @@
+{
+  "op": "duplicate",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "items": [
+    {
+      "sourceId": "1:23529",
+      "name": "A-32_submission-package_SUBMITTED",
+      "x": 5650,
+      "y": 392,
+      "patches": [
+        {
+          "sourceNodeId": "1:23773",
+          "characters": "접수 상태: 제출완료",
+          "expectedMatches": 1
+        },
+        {
+          "sourceNodeId": "1:23786",
+          "characters": "최종 제출이 완료되었습니다. 마감 전 수정한 내용은 다시 제출해야 심사에 반영됩니다.",
+          "expectedMatches": 1
+        },
+        {
+          "sourceNodeId": "I17:993;1:655",
+          "characters": "임시 저장",
+          "expectedMatches": 1
+        },
+        {
+          "sourceNodeId": "I17:891;981:281",
+          "characters": "제출 완료됨 ✓",
+          "expectedMatches": 1
+        }
+      ]
+    },
+    {
+      "sourceId": "1:23529",
+      "name": "A-32_submission-package_SUBMITTED_CHANGED",
+      "x": 5650,
+      "y": 1597,
+      "patches": [
+        {
+          "sourceNodeId": "1:23773",
+          "characters": "접수 상태: 제출완료 · 수정사항 미반영",
+          "expectedMatches": 1
+        },
+        {
+          "sourceNodeId": "1:23786",
+          "characters": "제출 후 수정사항이 있습니다. 변경사항을 다시 제출해야 심사에 반영됩니다.",
+          "expectedMatches": 1
+        },
+        {
+          "sourceNodeId": "I17:993;1:655",
+          "characters": "임시 저장",
+          "expectedMatches": 1
+        },
+        {
+          "sourceNodeId": "I17:891;981:281",
+          "characters": "변경사항 다시 제출하기 →",
+          "expectedMatches": 1
+        }
+      ]
+    }
+  ],
+  "_intent": "A-32 post-submit state variants; sourceNodeId patch selector requires plugin commit f7d23f2"
+}
