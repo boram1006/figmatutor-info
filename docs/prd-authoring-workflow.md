@@ -20,6 +20,7 @@
 
 ### 0. 현재 정책 / 버전 맥락 확인
 PRD를 쓰기 전에 `design/02-structure/SERVICE_EVOLUTION.md`를 확인한다.
+자동화/agent가 current baseline을 선택할 때는 같은 내용의 machine-readable companion인 `design/02-structure/service-baselines.json`도 함께 사용한다.
 
 - 같은 기능의 과거 화면이 여러 개면 **현재 baseline / legacy evidence**를 먼저 구분한다.
 - 과거 PRD가 더 상세하더라도 이미 바뀐 product policy를 새 PRD의 기본값으로 복원하지 않는다.
