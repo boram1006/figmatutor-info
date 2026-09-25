@@ -111,9 +111,16 @@ export function retrievePatterns(registry,query={}){
       .map(source=>{
         const preferredTokens=tokenSet(source.preferredFor||[]);
         const stateMatches=[...preferenceTokens].filter(t=>preferredTokens.has(t));
-        return {...source,stateMatches};
+        return {
+          ...source,
+          stateMatches,
+          isCurrentBaseline:source.selectorId===pattern.currentBaselineSelectorId
+        };
       })
-      .sort((a,b)=>b.stateMatches.length-a.stateMatches.length);
+      .sort((a,b)=>
+        b.stateMatches.length-a.stateMatches.length ||
+        Number(b.isCurrentBaseline)-Number(a.isCurrentBaseline)
+      );
 
     const matchCount=matched.reduce((sum,m)=>sum+m.values.length,0);
     if(matchCount===0 && queryArchetypes.size) continue;
@@ -125,6 +132,7 @@ export function retrievePatterns(registry,query={}){
       matchCount,
       matched,
       cloneReady:resolved.length>0,
+      currentBaselineSelectorId:pattern.currentBaselineSelectorId||null,
       cloneSources:resolved,
       evidence:pattern.evidence||[]
     });
