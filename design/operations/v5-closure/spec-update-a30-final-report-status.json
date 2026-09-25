@@ -1,0 +1,29 @@
+{
+  "op": "update",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "rootId": "1:23009",
+  "_source": "design/operations/coverage-v5/snapshot-coverage.json",
+  "_intent": "A-30 현재 디자인 정합화: 최초 completion 7/8 + progress fill 87.5% + 재제출 secondary warning semantic.",
+  "patches": [
+    {
+      "nodeId": "1:23100",
+      "expectedType": "TEXT",
+      "expectedName": "1 / 8",
+      "characters": "7 / 8",
+      "rename": "7 / 8"
+    },
+    {
+      "nodeId": "1:23102",
+      "expectedType": "FRAME",
+      "expectedName": "Progress Fill",
+      "width": 105
+    },
+    {
+      "nodeId": "49:1308",
+      "expectedType": "TEXT",
+      "expectedName": "재제출 필요",
+      "fillBinding": "status-warning"
+    }
+  ]
+}
