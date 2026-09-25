@@ -27,7 +27,7 @@ Source: `design/qa/releases/v5/qa-cases.yaml`
 | QA-V5-A31-004 | 7/8→8/8 | completion rule 필요 |
 | QA-V5-A32-002 | incomplete/complete readiness | artifact fixture 필요 |
 | QA-V5-A32-005 | save/navigation ≠ submit | workflow fixture |
-| QA-V5-A32-008 | report 확인 UI | exact web presentation 확인 |
+| QA-V5-A32-008 | read-only report viewer modal | viewer 디자인 생성 + webapp selector/route 반영 |
 | QA-V5-A32-009 | AI deck generation 시작 | async API contract 필요 |
 | QA-V5-A32-012 | item readiness | artifact fixtures |
 | QA-V5-A32-015 | submitted unchanged | submitted fixture |
