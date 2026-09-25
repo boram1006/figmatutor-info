@@ -7,6 +7,7 @@
 //                       raw hex fills/strokes and text styles to semantic tokens by a mapping table.
 //                       Alpha is preserved as paint opacity. Returns a per-node change report.
 //   op: "duplicate"  -> exact-clone an existing node, apply strict minimal patches, and verify preservation.
+//   op: "update"     -> patch existing nodes in place by exact nodeId, without recreating structure.
 // The UI (ui.html) handles clipboard in/out. This file never touches the filesystem.
 
 figma.showUI(__html__, { width: 460, height: 560 });
@@ -26,7 +27,8 @@ figma.ui.onmessage = async (msg) => {
     else if (spec.op === 'screenshot') result = await runScreenshot(spec);
     else if (spec.op === 'rebind') result = await runRebind(spec);
     else if (spec.op === 'duplicate') result = await runDuplicate(spec);
-    else throw new Error('알 수 없는 op: ' + spec.op + ' (create/extract/screenshot/rebind/duplicate 중 하나)');
+    else if (spec.op === 'update') result = await runUpdate(spec);
+    else throw new Error('알 수 없는 op: ' + spec.op + ' (create/extract/screenshot/rebind/duplicate/update 중 하나)');
     figma.ui.postMessage({ type: 'result', op: spec.op, result });
   } catch (e) {
     figma.ui.postMessage({ type: 'error', message: e.message });
@@ -1833,4 +1835,120 @@ function findNodeByIdInTree(root, id) {
     if ('children' in n) queue.push(...n.children);
   }
   return null;
+}
+
+
+// ===========================================================================
+// op: "update"
+// 기존 노드 구조를 유지한 채 exact nodeId로 최소 patch한다.
+// PRD 노트/고정 화면처럼 clone이 불필요하고 기존 노드 자체가 canonical인 경우 사용.
+// ===========================================================================
+async function runUpdate(spec) {
+  if (!spec.pageName) throw new Error('update 스펙에 pageName 필요');
+  if (figma.fileKey && spec.fileKey && figma.fileKey !== spec.fileKey)
+    throw new Error('다른 Figma 파일');
+
+  const page = figma.root.children.find((p) => p.name === spec.pageName);
+  if (!page) throw new Error('페이지 없음: ' + spec.pageName);
+  await figma.setCurrentPageAsync(page);
+
+  const root = spec.rootId ? await figma.getNodeByIdAsync(spec.rootId) : page;
+  if (!root) throw new Error('update rootId 노드 없음: ' + spec.rootId);
+
+  const isInsideRoot = (node) => {
+    if (!node) return false;
+    if (node.id === root.id) return true;
+    let p = node.parent;
+    while (p) {
+      if (p.id === root.id) return true;
+      p = p.parent;
+    }
+    return false;
+  };
+
+  const changed = [];
+  for (let index = 0; index < (spec.patches || []).length; index++) {
+    const patch = spec.patches[index];
+    if (!patch || typeof patch.nodeId !== 'string' || !patch.nodeId.trim())
+      throw new Error('update patch[' + index + '] nodeId 필요');
+
+    const target = await figma.getNodeByIdAsync(patch.nodeId);
+    if (!target) throw new Error('update 대상 노드 없음: ' + patch.nodeId);
+    if (!isInsideRoot(target))
+      throw new Error('update 대상이 root subtree 밖임: ' + patch.nodeId + ' root=' + root.id);
+
+    if (patch.expectedType && target.type !== patch.expectedType)
+      throw new Error(
+        'update 대상 type 불일치: ' + patch.nodeId +
+        ' expected=' + patch.expectedType + ' actual=' + target.type
+      );
+    if (patch.expectedName && target.name !== patch.expectedName)
+      throw new Error(
+        'update 대상 name 불일치: ' + patch.nodeId +
+        ' expected=' + patch.expectedName + ' actual=' + target.name
+      );
+    if (
+      patch.expectedCharacters !== undefined &&
+      (!('characters' in target) || target.characters !== patch.expectedCharacters)
+    ) throw new Error('update 대상 원문 불일치: ' + patch.nodeId);
+
+    const fields = [];
+
+    if (patch.characters !== undefined) {
+      if (target.type !== 'TEXT')
+        throw new Error('characters update 대상이 TEXT가 아님: ' + patch.nodeId + ' (' + target.type + ')');
+      if (target.fontName === figma.mixed) {
+        const segments = target.getStyledTextSegments(['fontName']);
+        const seen = new Set();
+        for (const seg of segments) {
+          const key = seg.fontName.family + '::' + seg.fontName.style;
+          if (!seen.has(key)) {
+            await figma.loadFontAsync(seg.fontName);
+            seen.add(key);
+          }
+        }
+      } else {
+        await figma.loadFontAsync(target.fontName);
+      }
+      target.characters = patch.characters;
+      fields.push('characters');
+    }
+
+    if (patch.rename !== undefined) {
+      target.name = patch.rename;
+      fields.push('name');
+    }
+
+    if (patch.visible !== undefined) {
+      if (!('visible' in target)) throw new Error('visible update 불가: ' + patch.nodeId);
+      target.visible = patch.visible;
+      fields.push('visible');
+    }
+
+    if (patch.fillBinding !== undefined) {
+      if (!('fills' in target)) throw new Error('fillBinding update 대상에 fills 없음: ' + patch.nodeId);
+      const v = await resolveSemanticVar(patch.fillBinding);
+      if (!v) throw new Error('fillBinding semantic 변수 없음: ' + patch.fillBinding);
+      const base =
+        (Array.isArray(target.fills) && target.fills[0] && target.fills[0].type === 'SOLID')
+          ? { type: 'SOLID', color: target.fills[0].color, opacity: target.fills[0].opacity ?? 1 }
+          : { type: 'SOLID', color: { r: 0, g: 0, b: 0 }, opacity: 1 };
+      target.fills = [figma.variables.setBoundVariableForPaint(base, 'color', v)];
+      fields.push('fills');
+    } else if (patch.fillColor !== undefined) {
+      if (!('fills' in target)) throw new Error('fillColor update 대상에 fills 없음: ' + patch.nodeId);
+      const color = hexToRgb(patch.fillColor);
+      target.fills = [{ type: 'SOLID', color: { r: color.r, g: color.g, b: color.b }, opacity: color.a ?? 1 }];
+      fields.push('fills');
+    }
+
+    changed.push({ nodeId: target.id, name: target.name, type: target.type, fields });
+  }
+
+  return {
+    op: 'update',
+    fileKey: figma.fileKey || spec.fileKey || null,
+    rootId: root.id,
+    changed,
+  };
 }
