@@ -24,6 +24,7 @@
     "patterns:resolve": "node scripts/pattern-registry.mjs resolve",
     "patterns:search": "node scripts/pattern-registry.mjs search",
     "patterns:discover": "node scripts/pattern-registry.mjs discover",
-    "patterns:refresh": "node scripts/pattern-registry.mjs refresh"
+    "patterns:refresh": "node scripts/refresh-pattern-sources.mjs",
+    "patterns:refresh-snapshot": "node scripts/pattern-registry.mjs refresh"
   }
 }
