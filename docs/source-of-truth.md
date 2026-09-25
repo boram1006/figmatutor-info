@@ -65,7 +65,8 @@ Steering이나 workflow 문서에 디자인 규칙을 다시 상세 복제하지
 ## 5. PRD / 서비스 구조
 
 - 전체 서비스 구조·권한·의존관계: `design/02-structure/SITEMAP.md`
-- 버전별 정책 변화 + 앞으로의 current baseline: `design/02-structure/SERVICE_EVOLUTION.md`
+- 버전별 정책 변화 + 앞으로의 current baseline 설명 정본: `design/02-structure/SERVICE_EVOLUTION.md`
+- current baseline의 machine-readable companion: `design/02-structure/service-baselines.json`
 - PRD 작성 절차: `docs/prd-authoring-workflow.md`
 - Coverage용 PRD source 우선순위: `docs/coverage-audit-rules.md` 및 `docs/figma-design-sync-workflow.md`
 
