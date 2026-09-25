@@ -28,7 +28,7 @@ design/qa/
 | 목적 | PRD 기반 케이스 정의 · source traceability | 실제 QA 실행 결과 기록 (Pass/Fail/Skip) |
 | 형식 | YAML + Markdown | Markdown 테이블 |
 | 생성 시점 | PRD 확정 후 | QA 실행 전 |
-| 주체 | Kiro (docs/qa-workflow.md 절차) | 사람 QA 담당 |
+| 주체 | QA agent/ChatGPT (`docs/qa-workflow.md` 절차) | 사람 QA 담당 |
 
 ## 케이스 생성 방법
 
@@ -45,3 +45,17 @@ design/qa/
 4. 역방향 복원 PRD — 보조자료이며 해석이 들어간 부분은 `INFERRED`
 
 source 없는 케이스는 작성하지 않는다.
+
+
+## 현재 v5 산출물
+
+`design/qa/releases/v5/`:
+
+- `qa-cases.yaml` — source trace가 있는 QA case 정본
+- `state-matrix.md` — A-30/A-31/A-32 상태 전이 coverage
+- `open-questions.md` — 제품 정책 확인 전 자동화 금지 항목
+- `manual-checklist.md` — 사람이 Pass/Fail/Skip/Blocked를 기록하는 실행용 view
+- `automation-backlog.md` — Playwright 후보와 fixture/selector 준비사항
+
+v5는 원본 노란 PRD가 아니라 역복원 PRD가 포함되어 있으므로,
+`SCREEN` / `CONFIRMED_PROJECT_RULE` / `INFERRED`를 구분해 사용한다.
