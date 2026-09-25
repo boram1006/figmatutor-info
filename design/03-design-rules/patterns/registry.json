@@ -31,7 +31,17 @@
       "evidence": [
         "AI 심사 대시보드"
       ],
-      "sourceSelectors": [],
+      "sourceSelectors": [
+        {
+          "id": "v2-ai-review-dashboard",
+          "nodeName": "J-01_ai-review-dashboard",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "ai-review-dashboard",
+            "kpi-table-management"
+          ]
+        }
+      ],
       "discoveryHints": {
         "minScore": 6,
         "requiredAny": [
@@ -145,7 +155,26 @@
       "evidence": [
         "팀빌딩"
       ],
-      "sourceSelectors": [],
+      "sourceSelectors": [
+        {
+          "id": "v1-team-card-available",
+          "nodeName": "TB_card_2",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "recruiting",
+            "available-position"
+          ]
+        },
+        {
+          "id": "v1-team-card-waiting",
+          "nodeName": "TB_card_1",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "recruiting",
+            "mixed-position-state"
+          ]
+        }
+      ],
       "discoveryHints": {
         "minScore": 7,
         "requiredAny": [
@@ -187,6 +216,15 @@
         "최종보고서 9-step"
       ],
       "sourceSelectors": [
+        {
+          "id": "v3-application-form-shell",
+          "nodeName": "AP-01_application-form",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "multi-step-form",
+            "application-form"
+          ]
+        },
         {
           "id": "v5-step-form-shell",
           "nodeName": "A-31_report-step-form",
@@ -241,7 +279,29 @@
         "최종 심사",
         "AI 심사 결과 상세"
       ],
-      "sourceSelectors": [],
+      "sourceSelectors": [
+        {
+          "id": "v1-first-review-workspace",
+          "nodeName": "RV-01_first-review",
+          "nodeType": "FRAME",
+          "requiredDescendantText": [
+            "심사표 열기"
+          ],
+          "preferredFor": [
+            "first-review",
+            "document-plus-score"
+          ]
+        },
+        {
+          "id": "v1-final-review-workspace",
+          "nodeName": "RV-02_final-review-unfolded",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "final-review",
+            "document-plus-score"
+          ]
+        }
+      ],
       "discoveryHints": {
         "minScore": 6,
         "requiredAny": [
@@ -280,7 +340,21 @@
       "evidence": [
         "1차 심사 최종 검토"
       ],
-      "sourceSelectors": [],
+      "sourceSelectors": [
+        {
+          "id": "v1-first-review-finalize",
+          "nodeName": "RV-01_first-review-finalize",
+          "nodeType": "FRAME",
+          "requiredDescendantText": [
+            "1차 심사 최종 검토"
+          ],
+          "preferredFor": [
+            "finalize-review",
+            "score-balancing",
+            "pre-submit"
+          ]
+        }
+      ],
       "discoveryHints": {
         "minScore": 6,
         "requiredAny": [
@@ -385,7 +459,17 @@
       "evidence": [
         "하반기 해커톤 1차 심사 합격 발표"
       ],
-      "sourceSelectors": [],
+      "sourceSelectors": [
+        {
+          "id": "v4-first-round-result",
+          "nodeName": "H-02_first-round-result_H2",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "result-announcement",
+            "follow-up-team-building"
+          ]
+        }
+      ],
       "discoveryHints": {
         "minScore": 6,
         "requiredAny": [
@@ -424,7 +508,17 @@
       "evidence": [
         "공지 상세"
       ],
-      "sourceSelectors": [],
+      "sourceSelectors": [
+        {
+          "id": "v1-notice-detail",
+          "nodeName": "N-02_notice-detail",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "notice-detail",
+            "long-form-read"
+          ]
+        }
+      ],
       "discoveryHints": {
         "minScore": 6,
         "requiredAny": [
