@@ -1,0 +1,42 @@
+{
+  "op": "duplicate",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "_source": "design/operations/coverage-v5/snapshot-coverage.json",
+  "_intent": "A-32 DEADLINE_PASSED: complete frame을 exact clone하고 마감 후 전체 read-only 상태를 최소 patch한다.",
+  "items": [
+    {
+      "sourceId": "1:23529",
+      "name": "A-32_submission-package_DEADLINE_PASSED",
+      "x": 7150,
+      "y": 392,
+      "patches": [
+        {
+          "sourceNodeId": "1:23786",
+          "characters": "접수가 마감되었습니다. 마지막으로 제출된 버전이 최종본입니다.",
+          "expectedMatches": 1
+        },
+        {
+          "sourceNodeId": "I17:993;1:655",
+          "characters": "임시 저장",
+          "expectedMatches": 1
+        },
+        {
+          "sourceNodeId": "17:993",
+          "fillBinding": "background-disabled",
+          "expectedMatches": 1
+        },
+        {
+          "sourceNodeId": "I17:891;981:281",
+          "characters": "제출 마감됨",
+          "expectedMatches": 1
+        },
+        {
+          "sourceNodeId": "17:891",
+          "fillBinding": "background-disabled",
+          "expectedMatches": 1
+        }
+      ]
+    }
+  ]
+}
