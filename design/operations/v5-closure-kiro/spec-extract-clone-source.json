@@ -1,9 +1,0 @@
-{
-  "op": "extract",
-  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
-  "pageName": "design",
-  "stage": "screens",
-  "inputDigest": "v5-closure-kiro-clone-source-2026",
-  "frameIds": ["1:23529", "20:823"],
-  "_note": "생성 JSON 3개(a32 상태들)의 patch 대상 실제 nodeName 확인용 = 1:23529(A-32 완료 프레임). 그리고 PRD 노란 박스 교체 준비용 = 20:823(v5 PRD). 결과를 design/operations/v5-closure-kiro/snapshot-clone-source.json 에 저장. 캔버스 수정 없음."
-}
