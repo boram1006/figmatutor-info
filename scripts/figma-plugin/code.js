@@ -1945,10 +1945,26 @@ async function runUpdate(spec) {
     changed.push({ nodeId: target.id, name: target.name, type: target.type, fields });
   }
 
+  let rootResize = null;
+  if (spec.fitRootHeightToContents === true) {
+    if (!('children' in root) || !('resize' in root))
+      throw new Error('fitRootHeightToContents는 children/resize 가능한 root에만 사용 가능');
+    let maxBottom = 0;
+    for (const child of root.children) {
+      maxBottom = Math.max(maxBottom, child.y + child.height);
+    }
+    const paddingBottom = typeof root.paddingBottom === 'number' ? root.paddingBottom : 0;
+    const nextHeight = Math.ceil(maxBottom + paddingBottom);
+    const before = { width: root.width, height: root.height };
+    root.resize(root.width, nextHeight);
+    rootResize = { before, after: { width: root.width, height: root.height } };
+  }
+
   return {
     op: 'update',
     fileKey: figma.fileKey || spec.fileKey || null,
     rootId: root.id,
     changed,
+    rootResize,
   };
 }
