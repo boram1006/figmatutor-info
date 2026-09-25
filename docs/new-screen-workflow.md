@@ -307,7 +307,36 @@ Design Coverage Audit 결과에 `MISSING_DESIGN` / `MISSING_STATE`가 있으면
 
 ---
 
-## 7. 원칙 (하네스 계약과 일관)
+## 7. QA 리스트 생성 + 자동화 후보 분류
+
+디자인 동기화/coverage 확인이 끝나면 QA를 별도 후속 작업으로 남기지 않고 **릴리즈 완료 workflow의 정식 단계**로 수행한다.
+
+1. `docs/qa-workflow.md`에 따라 source trace가 있는 QA case를 생성한다.
+2. 상태 머신이 있으면 state coverage matrix를 만든다.
+3. 권한 기능이면 permission matrix를 만든다.
+4. `automationCandidate: true | partial | false`를 분류한다.
+5. `OPEN_QUESTION` / `INFERRED`는 사람이 검토하기 전 자동화하지 않는다.
+6. 브라우저 자동화는 `docs/qa-playwright-workflow.md`에 따라 Playwright backlog로 넘긴다.
+
+QA 리스트는 디자인 화면에서 임의로 요구사항을 발명하지 않는다.
+원본 PRD가 없고 역복원 PRD만 있는 릴리즈는 실제 SCREEN / CONFIRMED_PROJECT_RULE과 INFERRED를 구분한다.
+
+권장 산출물:
+
+```
+design/qa/releases/v<n>/
+  qa-cases.yaml
+  state-matrix.md
+  permission-matrix.md
+  open-questions.md
+```
+
+Pass/Fail/Skip의 사람 실행 기록이 필요하면 `docs/qa-list-workflow.md`의
+`design/operations/qa/<release>.md` 형식을 병행한다.
+
+---
+
+## 8. 원칙 (하네스 계약과 일관)
 
 - JSON 계약이 기계 판정의 원본이다. 필드는 `docs/contracts.md`, 게이트는 `scripts/lib/gates.mjs`·`snapshot.mjs`.
 - 폴더 존재·체크표시·이전 PASS로 완료를 판정하지 않는다. `npm run check`/`npm run audit`로 판정한다.
