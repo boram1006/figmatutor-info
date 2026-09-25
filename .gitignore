@@ -10,3 +10,4 @@ node_modules/
 # 예외: 대용량 raw extract 원본은 재생성 가능하므로 커밋하지 않는다(coverage 판정 근거만 문서에 요약).
 design/operations/sync-full-2026/snapshot-b*.json
 design/operations/sync-full-2026/snapshot-full.json
+design/operations/pattern-source-scan/snapshot-legacy-merged.json
