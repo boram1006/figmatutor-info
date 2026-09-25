@@ -319,6 +319,7 @@ function usage(){
     'Usage:',
     '  node scripts/pattern-registry.mjs resolve --snapshot <snapshot.json> [--registry <registry.json>] [--output <resolved.json>]',
     '  node scripts/pattern-registry.mjs discover --snapshot <snapshot.json> [--registry <registry.json>] [--output <candidates.json>] [--limit 8]',
+    '  node scripts/pattern-registry.mjs refresh --snapshot <snapshot.json> [--registry <registry.json>] [--limit 8]',
     '  node scripts/pattern-registry.mjs search --intent <text> [--archetypes A4,A5] [--tasks x,y] [--states submitted,resubmit] [--registry <resolved-or-source.json>]'
   ].join('\n');
 }
@@ -361,6 +362,33 @@ if(process.argv[1]===fileURLToPath(import.meta.url)){
       output:outputPath,
       source:result.source,
       patterns:result.patterns.map(p=>({patternId:p.patternId,candidates:p.candidates.length}))
+    },null,2));
+  } else if(command==='refresh'){
+    const snapshotArg=arg('--snapshot',args);
+    if(!snapshotArg) throw new Error('--snapshot 필요\n'+usage());
+    const registryPath=resolve(repoRoot,arg('--registry',args)||DEFAULT_REGISTRY);
+    const snapshotPath=resolve(repoRoot,snapshotArg);
+    const limitRaw=arg('--limit',args);
+    const limit=limitRaw?Number(limitRaw):8;
+    if(!Number.isInteger(limit)||limit<1) throw new Error('--limit은 1 이상의 정수');
+
+    const registry=readJson(registryPath);
+    const snapshot=readJson(snapshotPath);
+    const discovery=discoverPatternCandidates(registry,snapshot,{limitPerPattern:limit});
+    const resolved=resolvePatternRegistry(registry,snapshot);
+
+    const discoveryPath=resolve(repoRoot,'design/03-design-rules/patterns/discovery-candidates.json');
+    const resolvedPath=resolve(repoRoot,DEFAULT_RESOLVED);
+    writeFileSync(discoveryPath,JSON.stringify(discovery,null,2)+'\n');
+    writeFileSync(resolvedPath,JSON.stringify(resolved,null,2)+'\n');
+
+    console.log(JSON.stringify({
+      snapshot:snapshotPath,
+      discovery:discoveryPath,
+      resolved:resolvedPath,
+      cloneReadyPatterns:resolved.patterns
+        .filter(pattern=>pattern.cloneReady)
+        .map(pattern=>pattern.id)
     },null,2));
   } else if(command==='search'){
     const requestedRegistry=arg('--registry',args);
