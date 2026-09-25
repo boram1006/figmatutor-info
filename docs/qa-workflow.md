@@ -32,7 +32,13 @@ PRD / Screen Source
   Human Review                  ← INFERRED·OPEN_QUESTION 확인
         ↓
   QA Execution                  ← 사람이 직접 실행·기록
+        ↓
+  Playwright Implementation     ← automationCandidate=true 중 실행 조건이 갖춰진 케이스
 ```
+
+Playwright 구현 기준은 `docs/qa-playwright-workflow.md`를 따른다.
+`automationCandidate=true`는 "자동화할 가치가 있음"을 뜻하며,
+테스트 서버·로그인·fixture·stable selector가 준비되지 않았으면 즉시 구현 가능하다는 뜻은 아니다.
 
 ---
 
@@ -222,6 +228,7 @@ category=`VISUAL`인 케이스는 모두 `automationCandidate: false`다.
 ## 관련 문서
 
 - `docs/qa-list-workflow.md` — TC 생성 패턴·화면 영역 체크리스트 (Pass/Fail/Skip 기록 형식)
+- `docs/qa-playwright-workflow.md` — automationCandidate를 Playwright 실행으로 연결하는 기준
 - `design/qa/qa-schema.md` — QA case 필드 정의
 - `design/qa/README.md` — QA 산출물 폴더 구조
 - `design/02-structure/SITEMAP.md` — 권한·상태·의존관계
