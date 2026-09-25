@@ -24,6 +24,14 @@
 9. `QA-V5-CROSS-002`
    - 동일 entity를 A-30/A-32에서 조회했을 때 상태 동기화
 
+### 디자인 반영 후 추가
+
+- read-only report viewer modal: QA-V5-A32-008
+  - modal open/close
+  - SECTION 1~8 read-only content container 존재
+  - edit control 없음
+  - close 후 A-32 context 유지
+
 ### 제품 결정 후 추가
 
 - section/field prefill: QA-V5-A31-001/002/009
@@ -60,6 +68,8 @@ a32-submit
 a32-resubmit
 a32-submit-state
 a32-action-needed
+a32-report-viewer
+a32-report-viewer-close
 ```
 
 텍스트/CSS class/DOM depth에 의존하는 selector는 회귀 테스트 정본으로 사용하지 않는다.
