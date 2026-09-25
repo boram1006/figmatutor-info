@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "description": "Machine-readable current product/design baselines derived from SERVICE_EVOLUTION.md. Human explanation remains canonical in SERVICE_EVOLUTION.md.",
+  "baselines": [
+    {
+      "id": "human-review",
+      "domain": "human-evaluation",
+      "currentPolicy": "same evaluation work loop across first/final review unless a new PRD changes scoring/policy",
+      "currentVisualBaseline": {
+        "patternId": "evaluation-workspace",
+        "selectorId": "v1-final-review-workspace",
+        "nodeName": "RV-02_final-review-unfolded"
+      },
+      "legacy": [
+        {
+          "selectorId": "v1-first-review-workspace",
+          "nodeName": "RV-01_first-review",
+          "useFor": [
+            "historical evidence",
+            "feature-specific behavior only when explicitly required"
+          ],
+          "doNotUseFor": [
+            "geometry averaging",
+            "default new review layout"
+          ]
+        }
+      ],
+      "stable": [
+        "target selection",
+        "artifact/source review",
+        "score input",
+        "save",
+        "next target"
+      ],
+      "contextual": [
+        "scoring criteria",
+        "supporting AI summary",
+        "review-stage-specific copy"
+      ]
+    },
+    {
+      "id": "result-announcement",
+      "domain": "campaign-result-announcement",
+      "currentPolicy": "reuse announcement/result structure while adapting campaign skin to the current event concept",
+      "currentVisualBaseline": {
+        "patternId": "announcement-hero-follow-up",
+        "selectorId": "h2-first-round-result",
+        "nodeName": "H-02_first-round-result_H2"
+      },
+      "structuralEvidence": [
+        {
+          "selectorId": "h1-first-round-result",
+          "nodeName": "H-02_first-round-result_H1"
+        },
+        {
+          "selectorId": "h2-first-round-result",
+          "nodeName": "H-02_first-round-result_H2"
+        }
+      ],
+      "stable": [
+        "hero/result hierarchy",
+        "winner cards",
+        "follow-up information structure"
+      ],
+      "contextual": [
+        "background visual",
+        "campaign colors",
+        "decorative treatment",
+        "hero copy",
+        "descriptive text",
+        "result count/page length"
+      ],
+      "doNotAssume": [
+        "dark/gold as fixed visual rule"
+      ]
+    },
+    {
+      "id": "team-building",
+      "domain": "team-building",
+      "currentPolicy": "H2 team-lead review/selection after position application",
+      "currentVisualBaseline": {
+        "patternId": "recruitable-entity-card",
+        "selectorId": "v4-h2-team-card-current",
+        "nodeName": "card_1"
+      },
+      "legacy": [
+        {
+          "policy": "H1 first-come",
+          "nodeNames": [
+            "TB_card_1",
+            "TB_card_2"
+          ],
+          "useFor": [
+            "historical visual evidence"
+          ],
+          "doNotUseFor": [
+            "current selection behavior"
+          ]
+        }
+      ],
+      "stable": [
+        "team browsing",
+        "open positions",
+        "position application",
+        "application status"
+      ],
+      "contextual": [
+        "selection-state details not explicitly specified by PRD"
+      ],
+      "openQuestions": [
+        "simultaneous application limit",
+        "team-lead review UI detail",
+        "rejection/waiting states"
+      ]
+    },
+    {
+      "id": "application-to-final-report",
+      "domain": "application-final-report-lineage",
+      "currentPolicy": "final report inherits the seven application content sections, adds one new editable content section, then proceeds to a separate package finalization step",
+      "lineage": {
+        "application": {
+          "contentSections": 7,
+          "finalizationStep": "review-and-submit",
+          "uiStepCount": 8
+        },
+        "finalReport": {
+          "inheritedEditableSections": 7,
+          "newContentSections": 1,
+          "contentSectionCount": 8,
+          "initialCompletion": "7/8",
+          "packageFinalizationStep": 9
+        }
+      },
+      "sourcePatterns": {
+        "application": {
+          "patternId": "persistent-step-form",
+          "selectorId": "v3-application-form-shell",
+          "nodeName": "AP-01_application-form"
+        },
+        "finalReport": {
+          "patternId": "persistent-step-form",
+          "selectorId": "v5-step-form-shell",
+          "nodeName": "A-31_report-step-form"
+        },
+        "package": {
+          "patternId": "package-readiness-grid",
+          "nodeName": "A-32_submission-package"
+        }
+      },
+      "stable": [
+        "persistent step workflow",
+        "prefilled inherited data",
+        "editable inherited sections",
+        "explicit finalization"
+      ],
+      "doNotAssume": [
+        "final report starts empty",
+        "inherited sections are read-only",
+        "7/8 means UI step 7 of 8"
+      ]
+    }
+  ]
+}
