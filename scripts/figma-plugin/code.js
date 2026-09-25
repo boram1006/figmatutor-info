@@ -1925,6 +1925,15 @@ async function runUpdate(spec) {
       fields.push('visible');
     }
 
+    if (patch.width !== undefined || patch.height !== undefined) {
+      if (!('resize' in target)) throw new Error('resize update 불가: ' + patch.nodeId);
+      const nextWidth = patch.width !== undefined ? patch.width : target.width;
+      const nextHeight = patch.height !== undefined ? patch.height : target.height;
+      target.resize(nextWidth, nextHeight);
+      if (patch.width !== undefined) fields.push('width');
+      if (patch.height !== undefined) fields.push('height');
+    }
+
     if (patch.fillBinding !== undefined) {
       if (!('fills' in target)) throw new Error('fillBinding update 대상에 fills 없음: ' + patch.nodeId);
       const v = await resolveSemanticVar(patch.fillBinding);
