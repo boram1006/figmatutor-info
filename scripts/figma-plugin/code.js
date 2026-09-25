@@ -1331,29 +1331,58 @@ async function cloneAndPatchNode(source, options = {}) {
 
     const patches = Array.isArray(options.patches) ? options.patches : [];
     const patchPlans = [];
+    const sourcePathById = buildRelativePathMap(source);
+    const clonePathByNodeId = buildRelativePathMap(clone);
+    const cloneNodeByPath = new Map();
+    for (const [cloneNodeId, path] of clonePathByNodeId) {
+      const target = findNodeByIdInTree(clone, cloneNodeId);
+      if (target) cloneNodeByPath.set(path, target);
+    }
 
     for (let index = 0; index < patches.length; index++) {
       const patch = patches[index];
-      if (!patch || typeof patch.nodeName !== 'string' || !patch.nodeName.trim())
-        throw new Error('patch[' + index + '] nodeName 필요');
+      const hasNodeName = patch && typeof patch.nodeName === 'string' && patch.nodeName.trim();
+      const hasSourceNodeId = patch && typeof patch.sourceNodeId === 'string' && patch.sourceNodeId.trim();
+      if (!hasNodeName && !hasSourceNodeId)
+        throw new Error('patch[' + index + '] nodeName 또는 sourceNodeId 필요');
+      if (hasNodeName && hasSourceNodeId)
+        throw new Error('patch[' + index + '] nodeName/sourceNodeId 동시 지정 금지');
 
-      const targets = findNodesByName(clone, patch.nodeName);
+      let targets;
+      let selectorLabel;
+      if (hasSourceNodeId) {
+        const sourcePath = sourcePathById.get(patch.sourceNodeId);
+        if (!sourcePath)
+          throw new Error(
+            'patch sourceNodeId가 source subtree에 없음: ' + patch.sourceNodeId +
+            ' (sourceId=' + source.id + ', patchIndex=' + index + ')'
+          );
+        const target = cloneNodeByPath.get(sourcePath);
+        if (!target)
+          throw new Error('patch sourceNodeId 대응 clone path 없음: ' + patch.sourceNodeId);
+        targets = [target];
+        selectorLabel = 'sourceNodeId=' + patch.sourceNodeId;
+      } else {
+        targets = findNodesByName(clone, patch.nodeName);
+        selectorLabel = 'nodeName=' + patch.nodeName;
+      }
+
       const expectedMatches = patch.expectedMatches;
 
       if (!targets.length)
         throw new Error(
-          'patch 대상 노드 없음: ' + patch.nodeName +
+          'patch 대상 노드 없음: ' + selectorLabel +
           ' (sourceId=' + source.id + ', patchIndex=' + index + ')'
         );
 
       if (
         expectedMatches !== undefined &&
         (!Number.isInteger(expectedMatches) || expectedMatches < 1)
-      ) throw new Error('expectedMatches는 1 이상의 정수여야 함: ' + patch.nodeName);
+      ) throw new Error('expectedMatches는 1 이상의 정수여야 함: ' + selectorLabel);
 
       if (expectedMatches !== undefined && targets.length !== expectedMatches)
         throw new Error(
-          'patch 대상 개수 불일치: ' + patch.nodeName +
+          'patch 대상 개수 불일치: ' + selectorLabel +
           ' expected=' + expectedMatches + ' actual=' + targets.length
         );
 
@@ -1434,7 +1463,8 @@ async function cloneAndPatchNode(source, options = {}) {
 
       patchReport.push({
         patchIndex: index,
-        nodeName: patch.nodeName,
+        nodeName: patch.nodeName || null,
+        sourceNodeId: patch.sourceNodeId || null,
         expectedMatches: patch.expectedMatches ?? null,
         matchedCount: targets.length,
         targetIds,
@@ -1793,4 +1823,14 @@ function findNodesByName(root, name) {
     if ('children' in n) queue.push(...n.children);
   }
   return result;
+}
+
+function findNodeByIdInTree(root, id) {
+  const queue = [root];
+  while (queue.length) {
+    const n = queue.shift();
+    if (n.id === id) return n;
+    if ('children' in n) queue.push(...n.children);
+  }
+  return null;
 }
