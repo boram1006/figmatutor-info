@@ -15,7 +15,7 @@
 
 새 화면을 생성하기 전에 다음 순서로 판단한다.
 
-1. 사용자 / task / desired outcome을 먼저 정의한다.
+1. 사용자 / task / desired outcome을 먼저 정의한다. 기존 기능의 새 버전/변형이면 `design/02-structure/SERVICE_EVOLUTION.md` + `service-baselines.json`에서 current policy / current visual baseline / legacy evidence를 먼저 확인한다.
 2. 기존 화면과 동일 유형이 없는 신규 기획이면 `novel-screen-reasoning.md`를 먼저 읽는다.
 3. `page-archetypes.md`에서 화면 목적을 설명할 수 있는 primary archetype이 있는지 확인한다.
 4. 하나의 archetype으로 충분하지 않으면 검증된 pattern을 조합한다. 억지로 하나에 끼워 맞추지 않는다.
