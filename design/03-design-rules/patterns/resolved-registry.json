@@ -1,0 +1,894 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+    "stage": "screens",
+    "capturedAt": "2026-09-24T12:26:53.324Z",
+    "pageId": "1:987",
+    "complete": true,
+    "snapshotPath": "design/operations/sync-full-2026/snapshot-full.json",
+    "snapshotBlobSha": "7677959408fbe9a4a1d85d3101808b2a40c3a1f5"
+  },
+  "patterns": [
+    {
+      "id": "kpi-summary-data-table",
+      "ruleRef": "Pattern 1. KPI Summary + Data Table",
+      "archetypes": [
+        "A6"
+      ],
+      "intents": [
+        "overview then detailed management",
+        "aggregate status with same-schema entities"
+      ],
+      "tasks": [
+        "scan metrics",
+        "filter records",
+        "sort records",
+        "export records"
+      ],
+      "keywords": [
+        "kpi",
+        "dashboard",
+        "table",
+        "filter",
+        "sort",
+        "export",
+        "운영 현황",
+        "목록"
+      ],
+      "evidence": [
+        "AI 심사 대시보드"
+      ],
+      "sourceSelectors": [
+        {
+          "id": "v2-ai-review-dashboard",
+          "nodeName": "J-01_ai-review-dashboard",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "ai-review-dashboard",
+            "kpi-table-management"
+          ]
+        }
+      ],
+      "discoveryHints": {
+        "minScore": 6,
+        "requiredAny": [
+          "kpi",
+          "dashboard",
+          "심사",
+          "점수",
+          "결과",
+          "지원서"
+        ],
+        "minWidth": 700,
+        "minHeight": 180
+      },
+      "resolvedSources": [
+        {
+          "selectorId": "v2-ai-review-dashboard",
+          "nodeName": "J-01_ai-review-dashboard",
+          "status": "resolved",
+          "preferredFor": [
+            "ai-review-dashboard",
+            "kpi-table-management"
+          ],
+          "requiredDescendantText": [],
+          "excludedDescendantText": [],
+          "matches": [
+            {
+              "frameId": "1:13679",
+              "frameName": "v2. AI 심사 페이지",
+              "nodeId": "1:14166",
+              "nodeName": "J-01_ai-review-dashboard",
+              "nodeType": "FRAME"
+            }
+          ]
+        }
+      ],
+      "cloneReady": true
+    },
+    {
+      "id": "status-driven-entity-card",
+      "ruleRef": "Pattern 2. Status-driven Entity Card",
+      "archetypes": [
+        "A4"
+      ],
+      "intents": [
+        "show current workflow state and next action",
+        "resume personal work",
+        "show action-needed state without losing primary state"
+      ],
+      "tasks": [
+        "resume work",
+        "view submission status",
+        "resubmit changed work"
+      ],
+      "keywords": [
+        "status card",
+        "지원 현황",
+        "제출완료",
+        "재제출",
+        "작성중",
+        "next action"
+      ],
+      "evidence": [
+        "지원하기 A-01",
+        "최종보고서 진입점"
+      ],
+      "sourceSelectors": [
+        {
+          "id": "card-pending",
+          "nodeName": "Card-PENDING",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "draft",
+            "in-progress"
+          ]
+        },
+        {
+          "id": "card-submitted-done",
+          "nodeName": "Card-SUBMITTED-DONE",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "submitted",
+            "completed"
+          ]
+        },
+        {
+          "id": "card-resubmit-needed",
+          "nodeName": "Card-RESUBMIT-NEEDED",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "changed-after-submit",
+            "resubmit"
+          ]
+        }
+      ],
+      "discoveryHints": {
+        "minScore": 7,
+        "requiredAny": [
+          "card",
+          "pending",
+          "submitted",
+          "resubmit",
+          "작성중",
+          "제출완료",
+          "재제출",
+          "본선 진행중"
+        ],
+        "minWidth": 300,
+        "minHeight": 80,
+        "maxHeight": 400
+      },
+      "resolvedSources": [
+        {
+          "selectorId": "card-pending",
+          "nodeName": "Card-PENDING",
+          "status": "ambiguous",
+          "preferredFor": [
+            "draft",
+            "in-progress"
+          ],
+          "requiredDescendantText": [],
+          "excludedDescendantText": [],
+          "matches": [
+            {
+              "frameId": "1:19180",
+              "frameName": "v3. 지원하기_NEW",
+              "nodeId": "1:19206",
+              "nodeName": "Card-PENDING",
+              "nodeType": "FRAME"
+            },
+            {
+              "frameId": "1:19180",
+              "frameName": "v3. 지원하기_NEW",
+              "nodeId": "1:19972",
+              "nodeName": "Card-PENDING",
+              "nodeType": "FRAME"
+            },
+            {
+              "frameId": "1:23008",
+              "frameName": "v5. 최종보고서 제출",
+              "nodeId": "1:23081",
+              "nodeName": "Card-PENDING",
+              "nodeType": "FRAME"
+            }
+          ]
+        },
+        {
+          "selectorId": "card-submitted-done",
+          "nodeName": "Card-SUBMITTED-DONE",
+          "status": "resolved",
+          "preferredFor": [
+            "submitted",
+            "completed"
+          ],
+          "requiredDescendantText": [],
+          "excludedDescendantText": [],
+          "matches": [
+            {
+              "frameId": "1:23008",
+              "frameName": "v5. 최종보고서 제출",
+              "nodeId": "49:1278",
+              "nodeName": "Card-SUBMITTED-DONE",
+              "nodeType": "FRAME"
+            }
+          ]
+        },
+        {
+          "selectorId": "card-resubmit-needed",
+          "nodeName": "Card-RESUBMIT-NEEDED",
+          "status": "resolved",
+          "preferredFor": [
+            "changed-after-submit",
+            "resubmit"
+          ],
+          "requiredDescendantText": [],
+          "excludedDescendantText": [],
+          "matches": [
+            {
+              "frameId": "1:23008",
+              "frameName": "v5. 최종보고서 제출",
+              "nodeId": "49:1301",
+              "nodeName": "Card-RESUBMIT-NEEDED",
+              "nodeType": "FRAME"
+            }
+          ]
+        }
+      ],
+      "cloneReady": true
+    },
+    {
+      "id": "recruitable-entity-card",
+      "ruleRef": "Pattern 3. Recruitable Entity Card",
+      "archetypes": [
+        "A3"
+      ],
+      "intents": [
+        "browse entities with variable child actions",
+        "apply to an available child position"
+      ],
+      "tasks": [
+        "browse teams",
+        "compare recruitment availability",
+        "apply or cancel"
+      ],
+      "keywords": [
+        "팀빌딩",
+        "모집",
+        "지원",
+        "position",
+        "card grid"
+      ],
+      "evidence": [
+        "팀빌딩"
+      ],
+      "sourceSelectors": [
+        {
+          "id": "v1-team-card-available",
+          "nodeName": "TB_card_2",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "recruiting",
+            "available-position"
+          ]
+        },
+        {
+          "id": "v1-team-card-waiting",
+          "nodeName": "TB_card_1",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "recruiting",
+            "mixed-position-state"
+          ]
+        }
+      ],
+      "discoveryHints": {
+        "minScore": 7,
+        "requiredAny": [
+          "card",
+          "팀",
+          "모집",
+          "지원",
+          "position"
+        ],
+        "minWidth": 250,
+        "minHeight": 120,
+        "maxHeight": 700
+      },
+      "resolvedSources": [
+        {
+          "selectorId": "v1-team-card-available",
+          "nodeName": "TB_card_2",
+          "status": "resolved",
+          "preferredFor": [
+            "recruiting",
+            "available-position"
+          ],
+          "requiredDescendantText": [],
+          "excludedDescendantText": [],
+          "matches": [
+            {
+              "frameId": "1:8865",
+              "frameName": "v1. 공통 페이지",
+              "nodeId": "1:11033",
+              "nodeName": "TB_card_2",
+              "nodeType": "FRAME"
+            }
+          ]
+        },
+        {
+          "selectorId": "v1-team-card-waiting",
+          "nodeName": "TB_card_1",
+          "status": "resolved",
+          "preferredFor": [
+            "recruiting",
+            "mixed-position-state"
+          ],
+          "requiredDescendantText": [],
+          "excludedDescendantText": [],
+          "matches": [
+            {
+              "frameId": "1:8865",
+              "frameName": "v1. 공통 페이지",
+              "nodeId": "1:11093",
+              "nodeName": "TB_card_1",
+              "nodeType": "FRAME"
+            }
+          ]
+        }
+      ],
+      "cloneReady": true
+    },
+    {
+      "id": "persistent-step-form",
+      "ruleRef": "Pattern 4. Persistent Step Form",
+      "archetypes": [
+        "A5"
+      ],
+      "intents": [
+        "complete a long multi-section workflow without losing position"
+      ],
+      "tasks": [
+        "edit multi-step form",
+        "resume section",
+        "review before submit"
+      ],
+      "keywords": [
+        "step",
+        "section",
+        "form",
+        "좌측 스텝",
+        "작성",
+        "resume"
+      ],
+      "evidence": [
+        "지원하기 8-step",
+        "최종보고서 9-step"
+      ],
+      "sourceSelectors": [
+        {
+          "id": "v3-application-form-shell",
+          "nodeName": "AP-01_application-form",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "multi-step-form",
+            "application-form"
+          ]
+        },
+        {
+          "id": "v5-step-form-shell",
+          "nodeName": "A-31_report-step-form",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "multi-step-form",
+            "report-step-form"
+          ]
+        }
+      ],
+      "discoveryHints": {
+        "minScore": 6,
+        "requiredAny": [
+          "step",
+          "section",
+          "지원서 항목",
+          "다음",
+          "이전",
+          "작성"
+        ],
+        "minWidth": 1000,
+        "minHeight": 700
+      },
+      "resolvedSources": [
+        {
+          "selectorId": "v3-application-form-shell",
+          "nodeName": "AP-01_application-form",
+          "status": "resolved",
+          "preferredFor": [
+            "multi-step-form",
+            "application-form"
+          ],
+          "requiredDescendantText": [],
+          "excludedDescendantText": [],
+          "matches": [
+            {
+              "frameId": "1:19180",
+              "frameName": "v3. 지원하기_NEW",
+              "nodeId": "1:19271",
+              "nodeName": "AP-01_application-form",
+              "nodeType": "FRAME"
+            }
+          ]
+        },
+        {
+          "selectorId": "v5-step-form-shell",
+          "nodeName": "A-31_report-step-form",
+          "status": "resolved",
+          "preferredFor": [
+            "multi-step-form",
+            "report-step-form"
+          ],
+          "requiredDescendantText": [],
+          "excludedDescendantText": [],
+          "matches": [
+            {
+              "frameId": "1:23008",
+              "frameName": "v5. 최종보고서 제출",
+              "nodeId": "1:23119",
+              "nodeName": "A-31_report-step-form",
+              "nodeType": "FRAME"
+            }
+          ]
+        }
+      ],
+      "cloneReady": true
+    },
+    {
+      "id": "evaluation-workspace",
+      "ruleRef": "Pattern 5. Evaluation Workspace",
+      "archetypes": [
+        "A7"
+      ],
+      "intents": [
+        "review an artifact while entering evaluation",
+        "process multiple entities continuously"
+      ],
+      "tasks": [
+        "select review target",
+        "inspect source",
+        "score",
+        "save",
+        "move next"
+      ],
+      "keywords": [
+        "심사",
+        "evaluation",
+        "queue",
+        "viewer",
+        "score",
+        "review"
+      ],
+      "evidence": [
+        "심사 페이지",
+        "최종 심사",
+        "AI 심사 결과 상세"
+      ],
+      "sourceSelectors": [
+        {
+          "id": "v1-first-review-workspace",
+          "nodeName": "RV-01_first-review",
+          "nodeType": "FRAME",
+          "requiredDescendantText": [
+            "심사표 열기"
+          ],
+          "preferredFor": [
+            "first-review",
+            "document-plus-score"
+          ]
+        },
+        {
+          "id": "v1-final-review-workspace",
+          "nodeName": "RV-02_final-review-unfolded",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "final-review",
+            "document-plus-score"
+          ]
+        }
+      ],
+      "discoveryHints": {
+        "minScore": 6,
+        "requiredAny": [
+          "심사",
+          "score",
+          "평가",
+          "review",
+          "viewer",
+          "queue"
+        ],
+        "minWidth": 1000,
+        "minHeight": 700
+      },
+      "resolvedSources": [
+        {
+          "selectorId": "v1-first-review-workspace",
+          "nodeName": "RV-01_first-review",
+          "status": "resolved",
+          "preferredFor": [
+            "first-review",
+            "document-plus-score"
+          ],
+          "requiredDescendantText": [
+            "심사표 열기"
+          ],
+          "excludedDescendantText": [],
+          "matches": [
+            {
+              "frameId": "1:2348",
+              "frameName": "v1. 심사 페이지",
+              "nodeId": "1:2349",
+              "nodeName": "RV-01_first-review",
+              "nodeType": "FRAME"
+            }
+          ]
+        },
+        {
+          "selectorId": "v1-final-review-workspace",
+          "nodeName": "RV-02_final-review-unfolded",
+          "status": "resolved",
+          "preferredFor": [
+            "final-review",
+            "document-plus-score"
+          ],
+          "requiredDescendantText": [],
+          "excludedDescendantText": [],
+          "matches": [
+            {
+              "frameId": "1:6566",
+              "frameName": "v1. 최종 심사 페이지",
+              "nodeId": "1:6567",
+              "nodeName": "RV-02_final-review-unfolded",
+              "nodeType": "FRAME"
+            }
+          ]
+        }
+      ],
+      "cloneReady": true
+    },
+    {
+      "id": "final-review-matrix",
+      "ruleRef": "Pattern 6. Final Review Matrix",
+      "archetypes": [
+        "A8"
+      ],
+      "intents": [
+        "review completeness before final confirmation"
+      ],
+      "tasks": [
+        "find missing evaluations",
+        "edit final values",
+        "confirm final submission"
+      ],
+      "keywords": [
+        "최종 검토",
+        "matrix",
+        "누락",
+        "confirm",
+        "submit"
+      ],
+      "evidence": [
+        "1차 심사 최종 검토"
+      ],
+      "sourceSelectors": [
+        {
+          "id": "v1-first-review-finalize",
+          "nodeName": "RV-01_first-review-finalize",
+          "nodeType": "FRAME",
+          "requiredDescendantText": [
+            "1차 심사 최종 검토"
+          ],
+          "preferredFor": [
+            "finalize-review",
+            "score-balancing",
+            "pre-submit"
+          ]
+        }
+      ],
+      "discoveryHints": {
+        "minScore": 6,
+        "requiredAny": [
+          "최종 검토",
+          "누락",
+          "matrix",
+          "confirm",
+          "평가"
+        ],
+        "minWidth": 900,
+        "minHeight": 600
+      },
+      "resolvedSources": [
+        {
+          "selectorId": "v1-first-review-finalize",
+          "nodeName": "RV-01_first-review-finalize",
+          "status": "resolved",
+          "preferredFor": [
+            "finalize-review",
+            "score-balancing",
+            "pre-submit"
+          ],
+          "requiredDescendantText": [
+            "1차 심사 최종 검토"
+          ],
+          "excludedDescendantText": [],
+          "matches": [
+            {
+              "frameId": "1:2348",
+              "frameName": "v1. 심사 페이지",
+              "nodeId": "1:3666",
+              "nodeName": "RV-01_first-review-finalize",
+              "nodeType": "FRAME"
+            }
+          ]
+        }
+      ],
+      "cloneReady": true
+    },
+    {
+      "id": "package-readiness-grid",
+      "ruleRef": "Pattern 7. Package Readiness Grid",
+      "archetypes": [
+        "A9",
+        "A8"
+      ],
+      "intents": [
+        "verify heterogeneous artifacts before one final submit"
+      ],
+      "tasks": [
+        "check artifact readiness",
+        "submit package",
+        "resubmit changed package"
+      ],
+      "keywords": [
+        "package",
+        "readiness",
+        "최종 제출",
+        "발표자료",
+        "데모 URL",
+        "소스코드",
+        "재제출"
+      ],
+      "evidence": [
+        "최종보고서 SECTION 9"
+      ],
+      "sourceSelectors": [
+        {
+          "id": "v5-package-complete",
+          "nodeName": "A-32_submission-package",
+          "nodeType": "FRAME",
+          "excludedDescendantText": [
+            "미등록"
+          ],
+          "preferredFor": [
+            "ready",
+            "pre-submit-complete"
+          ]
+        },
+        {
+          "id": "v5-package-incomplete",
+          "nodeName": "A-32_submission-package",
+          "nodeType": "FRAME",
+          "requiredDescendantText": [
+            "미등록"
+          ],
+          "preferredFor": [
+            "incomplete",
+            "missing-artifact"
+          ]
+        }
+      ],
+      "discoveryHints": {
+        "minScore": 7,
+        "requiredAny": [
+          "package",
+          "제출 패키지",
+          "서비스 데모",
+          "소스코드",
+          "발표자료",
+          "최종 제출"
+        ],
+        "minWidth": 1000,
+        "minHeight": 700
+      },
+      "resolvedSources": [
+        {
+          "selectorId": "v5-package-complete",
+          "nodeName": "A-32_submission-package",
+          "status": "resolved",
+          "preferredFor": [
+            "ready",
+            "pre-submit-complete"
+          ],
+          "requiredDescendantText": [],
+          "excludedDescendantText": [
+            "미등록"
+          ],
+          "matches": [
+            {
+              "frameId": "1:23008",
+              "frameName": "v5. 최종보고서 제출",
+              "nodeId": "1:23529",
+              "nodeName": "A-32_submission-package",
+              "nodeType": "FRAME"
+            }
+          ]
+        },
+        {
+          "selectorId": "v5-package-incomplete",
+          "nodeName": "A-32_submission-package",
+          "status": "resolved",
+          "preferredFor": [
+            "incomplete",
+            "missing-artifact"
+          ],
+          "requiredDescendantText": [
+            "미등록"
+          ],
+          "excludedDescendantText": [],
+          "matches": [
+            {
+              "frameId": "1:23008",
+              "frameName": "v5. 최종보고서 제출",
+              "nodeId": "17:996",
+              "nodeName": "A-32_submission-package",
+              "nodeType": "FRAME"
+            }
+          ]
+        }
+      ],
+      "cloneReady": true
+    },
+    {
+      "id": "announcement-hero-follow-up",
+      "ruleRef": "Pattern 8. Announcement Hero + Follow-up Action",
+      "archetypes": [
+        "A2"
+      ],
+      "intents": [
+        "announce an important result and lead to a next action"
+      ],
+      "tasks": [
+        "read result announcement",
+        "understand next event",
+        "continue to follow-up"
+      ],
+      "keywords": [
+        "합격 발표",
+        "result",
+        "announcement",
+        "countdown",
+        "hero"
+      ],
+      "evidence": [
+        "하반기 해커톤 1차 심사 합격 발표"
+      ],
+      "sourceSelectors": [
+        {
+          "id": "v4-first-round-result",
+          "nodeName": "H-02_first-round-result_H2",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "result-announcement",
+            "follow-up-team-building"
+          ]
+        }
+      ],
+      "discoveryHints": {
+        "minScore": 6,
+        "requiredAny": [
+          "합격",
+          "발표",
+          "announcement",
+          "countdown",
+          "축하",
+          "결과"
+        ],
+        "minWidth": 1000,
+        "minHeight": 600
+      },
+      "resolvedSources": [
+        {
+          "selectorId": "v4-first-round-result",
+          "nodeName": "H-02_first-round-result_H2",
+          "status": "resolved",
+          "preferredFor": [
+            "result-announcement",
+            "follow-up-team-building"
+          ],
+          "requiredDescendantText": [],
+          "excludedDescendantText": [],
+          "matches": [
+            {
+              "frameId": "1:21542",
+              "frameName": "v4. 하반기 해커톤용",
+              "nodeId": "1:22713",
+              "nodeName": "H-02_first-round-result_H2",
+              "nodeType": "FRAME"
+            }
+          ]
+        }
+      ],
+      "cloneReady": true
+    },
+    {
+      "id": "read-only-article-detail",
+      "ruleRef": "Pattern 9. Read-only Article Detail",
+      "archetypes": [
+        "A1"
+      ],
+      "intents": [
+        "read a long-form operational notice or guide"
+      ],
+      "tasks": [
+        "read announcement",
+        "read guide",
+        "return to list"
+      ],
+      "keywords": [
+        "공지",
+        "article",
+        "detail",
+        "breadcrumb",
+        "long-form"
+      ],
+      "evidence": [
+        "공지 상세"
+      ],
+      "sourceSelectors": [
+        {
+          "id": "v1-notice-detail",
+          "nodeName": "N-02_notice-detail",
+          "nodeType": "FRAME",
+          "preferredFor": [
+            "notice-detail",
+            "long-form-read"
+          ]
+        }
+      ],
+      "discoveryHints": {
+        "minScore": 6,
+        "requiredAny": [
+          "공지",
+          "article",
+          "breadcrumb",
+          "조회",
+          "작성일"
+        ],
+        "minWidth": 700,
+        "minHeight": 500
+      },
+      "resolvedSources": [
+        {
+          "selectorId": "v1-notice-detail",
+          "nodeName": "N-02_notice-detail",
+          "status": "resolved",
+          "preferredFor": [
+            "notice-detail",
+            "long-form-read"
+          ],
+          "requiredDescendantText": [],
+          "excludedDescendantText": [],
+          "matches": [
+            {
+              "frameId": "1:8865",
+              "frameName": "v1. 공통 페이지",
+              "nodeId": "1:12503",
+              "nodeName": "N-02_notice-detail",
+              "nodeType": "FRAME"
+            }
+          ]
+        }
+      ],
+      "cloneReady": true
+    }
+  ]
+}
