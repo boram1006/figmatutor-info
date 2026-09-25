@@ -155,11 +155,14 @@ export function deriveVisualDna(snapshot,resolvedRegistry){
     patterns.push({
       patternId:pattern.id,
       ruleRef:pattern.ruleRef,
+      currentBaselineSelectorId:pattern.currentBaselineSelectorId||null,
       confidence:sources.length>=2?'REPEATED_OBSERVATION':'OBSERVED_SINGLE',
       sourceCount:sources.length,
       sourceNodeIds:sources.map(source=>source.nodeId),
       invariants:summary.invariants,
       observations:summary.observations,
+      contextualVariation:pattern.variantPolicy||pattern.productPolicy||null,
+      lineage:pattern.lineage||null,
       sources
     });
   }
@@ -175,7 +178,7 @@ export function deriveVisualDna(snapshot,resolvedRegistry){
     },
     policy:{
       ruleType:'evidence-only',
-      note:'invariants는 선택된 source에서 동일하게 반복 관찰된 값이다. observations는 범위/차이를 보존하며 평균값을 새 규칙으로 만들지 않는다. OBSERVED_SINGLE은 전역 규칙으로 자동 승격하지 않는다.'
+      note:'active/current resolved source만 invariant derivation에 사용한다. legacyEvidence는 명시적으로 active source에 포함되지 않는 한 제외한다. observations는 범위/차이를 보존하며 평균값을 새 규칙으로 만들지 않는다. OBSERVED_SINGLE은 전역 규칙으로 자동 승격하지 않는다.'
     },
     patterns
   };
