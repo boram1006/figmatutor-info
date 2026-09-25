@@ -236,6 +236,28 @@ test('duplicate op fails closed and removes clone when patch target is missing',
  assert.equal(h.getLastClone().removed,true);
 });
 
+test('duplicate op can target the exact corresponding clone node by sourceNodeId',async()=>{
+ const h=duplicatePluginHarness();
+ await h.onmessage({
+  type:'run',
+  spec:{
+   op:'duplicate',
+   fileKey:'f',
+   pageName:'design',
+   items:[{
+    sourceId:'source',
+    name:'Card-Exact',
+    patches:[{sourceNodeId:'text-source',characters:'Exact target',expectedMatches:1}]
+   }]
+  }
+ });
+ const msg=h.messages.at(-1);
+ assert.equal(msg.type,'result');
+ assert.equal(msg.result.items[0].patches[0].sourceNodeId,'text-source');
+ assert.equal(msg.result.items[0].patches[0].matchedCount,1);
+ assert.equal(h.getLastClone().children[0].characters,'Exact target');
+});
+
 
 function createInstancePluginHarness(sourceNode){
  const sourceCode=readFileSync(join(repo,'scripts/figma-plugin/code.js'),'utf8');
