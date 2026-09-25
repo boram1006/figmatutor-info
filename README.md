@@ -83,6 +83,7 @@ docs/                          계약, Figma 절차, 도구 어댑터
 | `npm run patterns:resolve -- --snapshot <path>` | 최신 extract에서 Pattern Registry의 clone source를 exact-match로 해석 |
 | `npm run patterns:search -- --intent <text> ...` | PRD/task와 맞는 pattern 후보·근거·clone-ready source 검색 |
 | `npm run patterns:refresh -- --inputs <a,b,c>` | 여러 legacy extract를 merge해 discovery + resolve를 한 번에 갱신 |
+| `npm run patterns:refresh-snapshot -- --snapshot <path>` | 하나의 최신 snapshot으로 discovery + resolve 파생 결과 갱신 |
 | `npm test` | 외부 서비스 호출 없는 회귀 테스트 |
 
 `npm run check -- --json`으로 기계 판정 JSON을 받을 수 있습니다.
