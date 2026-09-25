@@ -69,6 +69,9 @@ test('visual DNA does not promote a single source to repeated evidence',()=>{
   const resolved={
     patterns:[{
       id:'single',
+      currentBaselineSelectorId:'one',
+      variantPolicy:{contextual:['background visual']},
+      lineage:{relationship:'current-from-legacy'},
       resolvedSources:[
         {selectorId:'one',status:'resolved',matches:[{frameId:'f',nodeId:'only'}]}
       ]
@@ -76,6 +79,9 @@ test('visual DNA does not promote a single source to repeated evidence',()=>{
   };
   const result=deriveVisualDna(snapshot,resolved);
   assert.equal(result.patterns[0].confidence,'OBSERVED_SINGLE');
+  assert.equal(result.patterns[0].currentBaselineSelectorId,'one');
+  assert.deepEqual(result.patterns[0].contextualVariation,{contextual:['background visual']});
+  assert.deepEqual(result.patterns[0].lineage,{relationship:'current-from-legacy'});
   assert.equal(result.policy.ruleType,'evidence-only');
 });
 
