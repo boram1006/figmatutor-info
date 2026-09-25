@@ -254,21 +254,19 @@
       ],
       "sourceSelectors": [
         {
-          "id": "v1-team-card-available",
-          "nodeName": "TB_card_2",
+          "id": "v4-h2-team-card-current",
+          "nodeName": "card_1",
           "nodeType": "FRAME",
+          "frameName": "v4. 하반기 해커톤용",
+          "requiredDescendantText": [
+            "모집 중 포지션",
+            "지원하기",
+            "지원취소"
+          ],
           "preferredFor": [
             "recruiting",
-            "available-position"
-          ]
-        },
-        {
-          "id": "v1-team-card-waiting",
-          "nodeName": "TB_card_1",
-          "nodeType": "FRAME",
-          "preferredFor": [
-            "recruiting",
-            "mixed-position-state"
+            "position-application",
+            "team-lead-selection"
           ]
         }
       ],
@@ -285,43 +283,51 @@
         "minHeight": 120,
         "maxHeight": 700
       },
-      "resolvedSources": [
+      "legacyEvidence": [
         {
-          "selectorId": "v1-team-card-available",
+          "id": "v1-team-card-available",
           "nodeName": "TB_card_2",
-          "status": "resolved",
-          "preferredFor": [
-            "recruiting",
-            "available-position"
-          ],
-          "requiredDescendantText": [],
-          "excludedDescendantText": [],
-          "matches": [
-            {
-              "frameId": "1:8865",
-              "frameName": "v1. 공통 페이지",
-              "nodeId": "1:11033",
-              "nodeName": "TB_card_2",
-              "nodeType": "FRAME"
-            }
-          ]
+          "nodeType": "FRAME",
+          "frameName": "v1. 공통 페이지",
+          "policy": "H1-first-come",
+          "note": "Legacy visual/policy evidence only. Do not use as current team-selection behavior."
         },
         {
-          "selectorId": "v1-team-card-waiting",
+          "id": "v1-team-card-waiting",
           "nodeName": "TB_card_1",
+          "nodeType": "FRAME",
+          "frameName": "v1. 공통 페이지",
+          "policy": "H1-first-come",
+          "note": "Legacy visual/policy evidence only. Do not use as current team-selection behavior."
+        }
+      ],
+      "currentBaselineSelectorId": "v4-h2-team-card-current",
+      "productPolicy": {
+        "current": "H2-team-lead-selection",
+        "note": "Position application does not imply immediate team membership. Selection is decided after team-lead review."
+      },
+      "resolvedSources": [
+        {
+          "selectorId": "v4-h2-team-card-current",
+          "nodeName": "card_1",
           "status": "resolved",
           "preferredFor": [
             "recruiting",
-            "mixed-position-state"
+            "position-application",
+            "team-lead-selection"
           ],
-          "requiredDescendantText": [],
+          "requiredDescendantText": [
+            "모집 중 포지션",
+            "지원하기",
+            "지원취소"
+          ],
           "excludedDescendantText": [],
           "matches": [
             {
-              "frameId": "1:8865",
-              "frameName": "v1. 공통 페이지",
-              "nodeId": "1:11093",
-              "nodeName": "TB_card_1",
+              "frameId": "1:21542",
+              "frameName": "v4. 하반기 해커톤용",
+              "nodeId": "1:21622",
+              "nodeName": "card_1",
               "nodeType": "FRAME"
             }
           ]
@@ -387,6 +393,13 @@
         ],
         "minWidth": 1000,
         "minHeight": 700
+      },
+      "lineage": {
+        "relationship": "application-to-final-report",
+        "application": "7 content sections + review/submit finalization step",
+        "finalReport": "inherit 7 editable sections + 1 new content section",
+        "initialFinalReportCompletion": "7/8",
+        "packageFinalization": "separate UI stage, shown as SECTION 9/9"
       },
       "resolvedSources": [
         {
@@ -464,24 +477,15 @@
       ],
       "sourceSelectors": [
         {
-          "id": "v1-first-review-workspace",
-          "nodeName": "RV-01_first-review",
-          "nodeType": "FRAME",
-          "requiredDescendantText": [
-            "심사표 열기"
-          ],
-          "preferredFor": [
-            "first-review",
-            "document-plus-score"
-          ]
-        },
-        {
           "id": "v1-final-review-workspace",
           "nodeName": "RV-02_final-review-unfolded",
           "nodeType": "FRAME",
+          "frameName": "v1. 최종 심사 페이지",
           "preferredFor": [
+            "human-evaluation",
             "final-review",
-            "document-plus-score"
+            "document-plus-score",
+            "current-visual-baseline"
           ]
         }
       ],
@@ -498,36 +502,27 @@
         "minWidth": 1000,
         "minHeight": 700
       },
-      "resolvedSources": [
+      "legacyEvidence": [
         {
-          "selectorId": "v1-first-review-workspace",
+          "id": "v1-first-review-workspace",
           "nodeName": "RV-01_first-review",
-          "status": "resolved",
-          "preferredFor": [
-            "first-review",
-            "document-plus-score"
-          ],
-          "requiredDescendantText": [
-            "심사표 열기"
-          ],
-          "excludedDescendantText": [],
-          "matches": [
-            {
-              "frameId": "1:2348",
-              "frameName": "v1. 심사 페이지",
-              "nodeId": "1:2349",
-              "nodeName": "RV-01_first-review",
-              "nodeType": "FRAME"
-            }
-          ]
-        },
+          "nodeType": "FRAME",
+          "frameName": "v1. 심사 페이지",
+          "note": "Same evaluation work loop, older visual implementation."
+        }
+      ],
+      "currentBaselineSelectorId": "v1-final-review-workspace",
+      "evolutionNote": "First-review and final-review share the work loop, but final-review is the current visual baseline. Do not average their geometry.",
+      "resolvedSources": [
         {
           "selectorId": "v1-final-review-workspace",
           "nodeName": "RV-02_final-review-unfolded",
           "status": "resolved",
           "preferredFor": [
+            "human-evaluation",
             "final-review",
-            "document-plus-score"
+            "document-plus-score",
+            "current-visual-baseline"
           ],
           "requiredDescendantText": [],
           "excludedDescendantText": [],
@@ -758,16 +753,30 @@
         "hero"
       ],
       "evidence": [
-        "하반기 해커톤 1차 심사 합격 발표"
+        "H1/H2 1차 심사 합격 발표"
       ],
       "sourceSelectors": [
         {
-          "id": "v4-first-round-result",
-          "nodeName": "H-02_first-round-result_H2",
+          "id": "h1-first-round-result",
+          "nodeName": "H-02_first-round-result_H1",
           "nodeType": "FRAME",
+          "frameName": "v1. 공통 페이지",
           "preferredFor": [
             "result-announcement",
-            "follow-up-team-building"
+            "structural-evidence",
+            "H1"
+          ]
+        },
+        {
+          "id": "h2-first-round-result",
+          "nodeName": "H-02_first-round-result_H2",
+          "nodeType": "FRAME",
+          "frameName": "v4. 하반기 해커톤용",
+          "preferredFor": [
+            "result-announcement",
+            "follow-up-team-building",
+            "current-visual-baseline",
+            "H2"
           ]
         }
       ],
@@ -784,14 +793,54 @@
         "minWidth": 1000,
         "minHeight": 600
       },
+      "currentBaselineSelectorId": "h2-first-round-result",
+      "variantPolicy": {
+        "stable": [
+          "hero/result hierarchy",
+          "winner cards",
+          "follow-up information structure"
+        ],
+        "contextual": [
+          "background visual",
+          "campaign colors",
+          "decorative treatment",
+          "hero copy",
+          "descriptive text",
+          "result count/page length"
+        ],
+        "note": "Dark/gold is a campaign skin, not a fixed pattern rule."
+      },
       "resolvedSources": [
         {
-          "selectorId": "v4-first-round-result",
+          "selectorId": "h1-first-round-result",
+          "nodeName": "H-02_first-round-result_H1",
+          "status": "resolved",
+          "preferredFor": [
+            "result-announcement",
+            "structural-evidence",
+            "H1"
+          ],
+          "requiredDescendantText": [],
+          "excludedDescendantText": [],
+          "matches": [
+            {
+              "frameId": "1:8865",
+              "frameName": "v1. 공통 페이지",
+              "nodeId": "1:10426",
+              "nodeName": "H-02_first-round-result_H1",
+              "nodeType": "FRAME"
+            }
+          ]
+        },
+        {
+          "selectorId": "h2-first-round-result",
           "nodeName": "H-02_first-round-result_H2",
           "status": "resolved",
           "preferredFor": [
             "result-announcement",
-            "follow-up-team-building"
+            "follow-up-team-building",
+            "current-visual-baseline",
+            "H2"
           ],
           "requiredDescendantText": [],
           "excludedDescendantText": [],
