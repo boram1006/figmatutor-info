@@ -47,7 +47,7 @@ Kiro가 result/snapshot 을 읽고 로컬 게이트로 검증
 ## 스펙(op) 종류
 
 플러그인이 받는 스펙 JSON은 `op` 필드로 동작을 고른다.
-(`create` / `extract` / `screenshot` / `rebind` / `duplicate`)
+(`create` / `extract` / `screenshot` / `rebind` / `duplicate` / `update`)
 
 ### `op: "create"` — 캔버스 생성
 
@@ -262,3 +262,33 @@ MCP도 `spawn_agent` 위임도 없다. 따라서:
 - 원문 응답·대용량 데이터(노드 트리·스냅샷·캡처)는 메인 대화에 붙이지 않고
   `design/operations/<task-id>/`에 파일로 보존한다.
 - `figma-worker` 스킬과 `docs/figma-delegation.md`는 이 플러그인 왕복 규약으로 읽는다.
+
+
+### `op: "update"` — 기존 노드 직접 수정
+
+기존 프레임/노트를 유지하면서 **확인된 exact nodeId만 최소 수정**할 때 사용한다.
+기존 canonical 노드를 clone하거나 재생성할 필요가 없는 PRD 노트, 카피 수정 등에 적합하다.
+
+```json
+{
+  "op": "update",
+  "fileKey": "...",
+  "pageName": "design",
+  "rootId": "20:823",
+  "patches": [
+    {
+      "nodeId": "20:830",
+      "expectedType": "TEXT",
+      "expectedName": "b:상태 머신",
+      "expectedCharacters": "기존 원문 전체",
+      "characters": "새 원문 전체"
+    }
+  ]
+}
+```
+
+안전 규칙:
+- `rootId`를 지정하면 patch 대상은 반드시 그 subtree 안에 있어야 한다.
+- `nodeId`는 snapshot/Figma에서 확인한 실제 ID만 사용한다.
+- `expectedType`, `expectedName`, `expectedCharacters`를 넣어 stale snapshot에서 잘못 덮어쓰는 것을 막는다.
+- 구조/위치/Auto Layout/토큰을 유지할 때는 삭제+재생성보다 `update`를 우선한다.
