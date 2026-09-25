@@ -16,7 +16,14 @@ const registry={
       sourceSelectors:[
         {id:'pending',nodeName:'Card-PENDING',nodeType:'FRAME',preferredFor:['draft']},
         {id:'resubmit',nodeName:'Card-RESUBMIT-NEEDED',nodeType:'FRAME',preferredFor:['resubmit']}
-      ]
+      ],
+      discoveryHints:{
+        minScore:7,
+        requiredAny:['card','pending','submitted','resubmit','작성중','제출완료','재제출','본선 진행중'],
+        minWidth:300,
+        minHeight:80,
+        maxHeight:400
+      }
     },
     {
       id:'evaluation',
