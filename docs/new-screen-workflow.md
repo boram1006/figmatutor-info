@@ -137,7 +137,7 @@ Pattern Registry의 `sourceSelectors`에는 node 이름/타입 같은 **검증 �
 Discovery 후보와 resolve 결과를 함께 갱신할 때는:
 
 ```sh
-npm run patterns:refresh -- --snapshot <최신-snapshot.json>
+npm run patterns:refresh-snapshot -- --snapshot <최신-snapshot.json>
 ```
 
 resolve만 다시 할 때는:
