@@ -86,8 +86,10 @@ Steering이나 workflow 문서에 디자인 규칙을 다시 상세 복제하지
 
 - QA 생성/분류: `docs/qa-workflow.md`
 - QA 결과 기록: `docs/qa-list-workflow.md`
+- 브라우저 QA 자동화: `docs/qa-playwright-workflow.md`
 
 QA 요구사항 근거는 PRD source provenance를 유지한다.
+Playwright spec은 QA requirement의 정본이 아니라 실행 구현이며, QA case ID/source trace를 유지한다.
 
 ## 8. Orchestration
 
