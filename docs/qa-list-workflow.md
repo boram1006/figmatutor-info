@@ -1,6 +1,6 @@
 # QA 리스트 생성 워크플로우
 
-새 릴리즈가 나올 때마다 QA 체크리스트를 Kiro가 생성하고, 사람이 직접 실행·기록하는 흐름.
+새 릴리즈가 나올 때마다 QA agent가 source-backed QA 체크리스트를 생성하고, 사람이 직접 실행·기록하는 흐름.
 
 ---
 
@@ -8,16 +8,16 @@
 
 | 단계 | 담당 | 설명 |
 |---|---|---|
-| QA 리스트 생성 | Kiro | PRD + SITEMAP + 이전 릴리즈 패턴 기반으로 TC 초안 생성 |
+| QA 리스트 생성 | QA agent | PRD + SCREEN + 확정 프로젝트 규칙을 source로 TC 초안 생성. 이전 릴리즈는 granularity/regression 참고만 사용 |
 | 리스트 검토·보완 | 사람 | 누락 케이스 추가, 우선순위 조정, Skip 사유 결정 |
 | 실제 QA 실행 | 사람 | 브라우저에서 직접 확인하며 Pass/Fail/Skip 기록 |
-| Fail 이슈 정리 | 사람 + Kiro | Fail 항목 설명 보완, 재현 조건 정리 요청 가능 |
+| Fail 이슈 정리 | 사람 + QA agent | Fail 항목 설명 보완, 재현 조건 정리 요청 가능 |
 
 ---
 
 ## 입력
 
-Kiro가 QA 리스트를 생성하려면 다음을 제공한다.
+QA 리스트를 생성하려면 다음 입력을 사용한다.
 
 ### 필수
 - **릴리즈 PRD** — 대상 화면, 상태 머신, UI 매트릭스, 기능 범위
@@ -167,6 +167,20 @@ design/operations/qa/<릴리즈식별자>.md
 ### 발표/결과 화면 패턴 (ver.2)
 데이터(합격팀 정보, 탈락팀, 정렬) → 시간(카운트다운 기준/종료/버튼 변경) → 액션(버튼 동작, 중복 클릭) → UI/UX(로딩, 텍스트 오탈자) → API 에러 → 네비게이션 → 부하 테스트
 
+### 실제 Fail에서 얻은 regression-risk 패턴
+
+ver.1~3의 과거 QA는 현재 requirement source가 아니지만, **어디에서 결함이 잘 발생했는지**를 보여주는 regression evidence로 사용할 수 있다.
+
+반복해서 우선 확인할 위험:
+- **boundary input**: min/max에서 값이 실제로 바뀌지 않았는데 저장 상태가 변경되는 문제
+- **invalid numeric state**: 0점처럼 허용되지 않아야 할 값의 입력/저장
+- **cross-screen synchronization**: 한 화면에서 수정한 값/상태가 다른 화면에 즉시 반영되지 않는 문제
+- **save/submit distinction**: 저장과 확정 제출의 상태가 섞이는 문제
+- **transition edge**: 마지막 항목, 마감 직전/직후, 제출 후 수정처럼 state boundary에서 발생하는 문제
+
+현재 릴리즈 source가 해당 상태를 실제로 정의할 때만 TC로 생성하되,
+같은 수준의 boundary/cross-screen case가 빠지지 않았는지 self-check한다.
+
 ---
 
 ## 사용 예시
@@ -174,7 +188,7 @@ design/operations/qa/<릴리즈식별자>.md
 ```
 "v6 PRD 기반으로 QA 리스트 만들어줘"
 → PRD 파일 경로 또는 내용을 제공
-→ Kiro가 위 절차대로 design/operations/qa/v6-<날짜>.md 생성
+→ QA agent가 위 절차대로 source trace가 있는 케이스와 실행용 체크리스트 생성
 ```
 
 ```
