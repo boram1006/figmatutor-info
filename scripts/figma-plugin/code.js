@@ -598,6 +598,95 @@ async function runCreate(spec) {
     );
   }
 
+  async function applyInstancePatches(instance, sourceComponent, patches) {
+    if (!Array.isArray(patches) || !patches.length) return [];
+
+    const sourcePathById = buildRelativePathMap(sourceComponent);
+    const instancePathById = buildRelativePathMap(instance);
+    const instanceNodeByPath = new Map();
+    for (const [instanceNodeId, path] of instancePathById) {
+      const target = findNodeByIdInTree(instance, instanceNodeId);
+      if (target) instanceNodeByPath.set(path, target);
+    }
+
+    const report = [];
+    for (let index = 0; index < patches.length; index++) {
+      const patch = patches[index];
+      const hasNodeName = patch && typeof patch.nodeName === 'string' && patch.nodeName.trim();
+      const hasSourceNodeId = patch && typeof patch.sourceNodeId === 'string' && patch.sourceNodeId.trim();
+      if (!hasNodeName && !hasSourceNodeId)
+        throw new Error('INSTANCE patch[' + index + '] nodeName 또는 sourceNodeId 필요');
+      if (hasNodeName && hasSourceNodeId)
+        throw new Error('INSTANCE patch[' + index + '] nodeName/sourceNodeId 동시 지정 금지');
+      if (patch.fillBinding !== undefined || patch.fillColor !== undefined ||
+          patch.variantProperties !== undefined || patch.componentProperties !== undefined)
+        throw new Error('INSTANCE child patch에서 visual/state 직접 변경 금지. variantProperties/componentProperties는 INSTANCE 상위 필드로 사용');
+
+      let targets;
+      let selectorLabel;
+      if (hasSourceNodeId) {
+        const sourcePath = sourcePathById.get(patch.sourceNodeId);
+        if (!sourcePath)
+          throw new Error('INSTANCE patch sourceNodeId가 resolved component subtree에 없음: ' + patch.sourceNodeId);
+        const target = instanceNodeByPath.get(sourcePath);
+        if (!target)
+          throw new Error('INSTANCE patch sourceNodeId 대응 instance path 없음: ' + patch.sourceNodeId);
+        targets = [target];
+        selectorLabel = 'sourceNodeId=' + patch.sourceNodeId;
+      } else {
+        targets = findNodesByName(instance, patch.nodeName);
+        selectorLabel = 'nodeName=' + patch.nodeName;
+      }
+
+      if (!targets.length)
+        throw new Error('INSTANCE patch 대상 노드 없음: ' + selectorLabel);
+
+      if (patch.expectedMatches !== undefined &&
+          (!Number.isInteger(patch.expectedMatches) || patch.expectedMatches < 1))
+        throw new Error('INSTANCE patch expectedMatches는 1 이상의 정수: ' + selectorLabel);
+
+      if (patch.expectedMatches !== undefined && targets.length !== patch.expectedMatches)
+        throw new Error(
+          'INSTANCE patch 대상 개수 불일치: ' + selectorLabel +
+          ' expected=' + patch.expectedMatches + ' actual=' + targets.length
+        );
+
+      const targetIds = [];
+      for (const target of targets) {
+        targetIds.push(target.id);
+        if (patch.characters !== undefined) {
+          if (target.type !== 'TEXT')
+            throw new Error('INSTANCE characters patch 대상이 TEXT가 아님: ' + selectorLabel);
+          if (target.fontName === figma.mixed) {
+            const segments = target.getStyledTextSegments(['fontName']);
+            const seen = new Set();
+            for (const seg of segments) {
+              const key = seg.fontName.family + '::' + seg.fontName.style;
+              if (!seen.has(key)) {
+                await figma.loadFontAsync(seg.fontName);
+                seen.add(key);
+              }
+            }
+          } else {
+            await figma.loadFontAsync(target.fontName);
+          }
+          target.characters = patch.characters;
+        }
+        if (patch.rename !== undefined) target.name = patch.rename;
+        if (patch.visible !== undefined && 'visible' in target) target.visible = patch.visible;
+      }
+
+      report.push({
+        index,
+        selector: selectorLabel,
+        matchedCount: targets.length,
+        targetIds,
+        applied: true,
+      });
+    }
+    return report;
+  }
+
   async function build(node, parent) {
     let n;
     let instanceSource = null;
@@ -686,6 +775,7 @@ async function runCreate(spec) {
           throw new Error('INSTANCE setProperties 미지원: ' + n.id);
         n.setProperties(node.componentProperties);
       }
+      const instancePatchReport = await applyInstancePatches(n, instanceSource, node.patches || []);
       const instanceKey = node.key || node.name || n.id;
       created.instances[instanceKey] = {
         id: n.id,
@@ -696,6 +786,7 @@ async function runCreate(spec) {
         requestedVariantName: node.variantName || null,
         requestedVariantProperties: node.variantProperties || null,
         appliedComponentProperties: node.componentProperties || null,
+        patches: instancePatchReport,
       };
     }
 
