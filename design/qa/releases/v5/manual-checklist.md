@@ -20,7 +20,7 @@
 | QA-V5-A30-004 | 제출완료 + 변경 미반영 dual-state 표현 | P1 |  |  |
 | QA-V5-A30-005 | 변경분 존재 시 재제출 액션 | P1 |  |  |
 | QA-V5-A30-006 | 상태/metadata/CTA 정보 위계 | P2 |  | Human visual |
-| QA-V5-A30-007 | 상대시간 표기 | P3 | Blocked | source 확인 필요 |
+| QA-V5-A30-007 | 상대시간 표기 | P3 |  | 기존 공통 시간 표기 규칙 기준 |
 
 ## A-31 최종보고서
 
@@ -29,12 +29,12 @@
 | QA-V5-A31-001 | 기존 7개 section prefill | P1 |  |  |
 | QA-V5-A31-002 | inherited section 수정 가능 | P1 |  |  |
 | QA-V5-A31-003 | 최초 progress 7/8 | P1 |  |  |
-| QA-V5-A31-004 | 신규 section 완료 후 8/8 | P1 |  | completion rule 미확정 |
+| QA-V5-A31-004 | 신규 section 완료 후 8/8 | P1 |  | 서버 completion 상태 렌더링 검증 |
 | QA-V5-A31-005 | persistent step nav + workspace | P2 |  | partial automation |
 | QA-V5-A31-006 | 8 content + package step 9 구분 | P1 |  |  |
 | QA-V5-A31-007 | 다음 단계 이동 | P2 |  |  |
-| QA-V5-A31-008 | section 완료 판정 | P1 | Blocked | required field rule 필요 |
-| QA-V5-A31-009 | section/field mapping | P1 | Blocked | mapping table 필요 |
+| QA-V5-A31-008 | 서버 section 완료 상태 반영 | P1 |  | UI 자체 판정식 없음 |
+| QA-V5-A31-009 | 7개 승계 + 5번 신규 메뉴 mapping | P1 |  | 정책 확정 |
 
 ## A-32 제출 패키지
 
@@ -47,13 +47,13 @@
 | QA-V5-A32-005 | Save/navigation으로 submit 발생 금지 | P1 |  |  |
 | QA-V5-A32-006 | 제출 후 수정 → submitted+changed | P1 |  |  |
 | QA-V5-A32-007 | 재제출 성공 → changed 해소 | P1 |  |  |
-| QA-V5-A32-008 | 최종 보고서 확인 UI | P2 |  | exact presentation 확인 |
+| QA-V5-A32-008 | 최종 보고서 read-only viewer | P2 | Blocked | DESIGN_MISSING |
 | QA-V5-A32-009 | 발표자료 초안 생성 workflow 시작 | P2 |  | 비동기 후속 정책 확인 |
-| QA-V5-A32-010 | 발표자료 허용 형식 | P1 | Blocked | file policy 필요 |
-| QA-V5-A32-011 | 저장소 provider validation | P2 | Blocked | provider policy 필요 |
+| QA-V5-A32-010 | 발표자료 PDF only 등록 | P1 |  | 정책 확정 |
+| QA-V5-A32-011 | 저장소 링크 입력 / provider 제한 없음 | P2 |  | 정책 확정 |
 | QA-V5-A32-012 | artifact readiness 개별 표시 | P1 |  |  |
 | QA-V5-A32-013 | artifact action vs final action 위계 | P2 |  | Human visual |
-| QA-V5-A32-014 | deadline boundary | P1 | Blocked | canonical timestamp 필요 |
+| QA-V5-A32-014 | deadline 후 전체 read-only | P1 | Blocked | DESIGN_MISSING; E2E는 time control 필요 |
 | QA-V5-A32-015 | 제출완료/변경없음 상태 | P1 |  |  |
 | QA-V5-A32-016 | 재제출 후 A-30/A-32 상태 동기화 | P1 |  |  |
 
