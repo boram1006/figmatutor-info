@@ -1,0 +1,6 @@
+{
+  "_status": "PENDING_PLUGIN_RESULT",
+  "_operation": "V5 latest mismatch corrections update",
+  "_spec": "design/operations/v5-closure/spec-update-v5-latest-gaps.json",
+  "_instruction": "Design Flow Harness plugin 실행 결과 JSON 전체로 이 파일 내용을 교체하세요. 오류가 발생한 경우에는 성공 결과를 임의로 작성하지 말고 error 메시지를 별도로 전달하세요."
+}
