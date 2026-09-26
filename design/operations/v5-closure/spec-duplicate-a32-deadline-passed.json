@@ -25,9 +25,10 @@
           "sourceNodeId": "17:993",
           "expectedMatches": 1,
           "componentProperties": {
+            "tone": "primary",
             "state": "disabled"
           },
-          "_target": "Button INSTANCE의 state=disabled로 전환. 색은 Design System variant가 결정."
+          "_target": "DS에 solid/Medium/Rounded/neutral/disabled 조합이 없으므로, 같은 Button component set의 primary+disabled variant로 전환. 색 직접 지정 금지."
         },
         {
           "sourceNodeId": "I17:891;981:281",
