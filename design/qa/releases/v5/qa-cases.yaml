@@ -395,7 +395,7 @@
   automationCandidate: true
   confidence: HIGH
   notes: |
-    current snapshot에는 대응 modal 디자인이 없어 DESIGN_MISSING 상태다.
+    최신 canonical screen snapshot 확인 결과 대응 modal 디자인이 없어 DESIGN_MISSING 상태다.
 
 - id: QA-V5-A32-009
   release: v5
@@ -494,6 +494,7 @@
   automationCandidate: partial
   confidence: HIGH
   notes: |
+    최신 canonical screen snapshot에는 DEADLINE_PASSED 화면이 없어 DESIGN_MISSING 상태다.
     실제 경계시각 E2E는 backend time control이 있을 때 자동화한다.
 
 - id: QA-V5-A32-015
