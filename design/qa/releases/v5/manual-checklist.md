@@ -14,7 +14,7 @@
 
 | QA ID | Summary | Priority | Result | 비고 |
 |---|---|---:|---|---|
-| QA-V5-A30-001 | 본선 진입 초기 content completion 7/8 | P1 |  |  |
+| QA-V5-A30-001 | 본선 진입 초기 content completion 7/8 | P1 |  | Figma baseline: text 7/8, bar는 30/120px로 DESIGN_MISMATCH |
 | QA-V5-A30-002 | 작성중 카드 + 이어 작성 액션 노출 | P1 |  |  |
 | QA-V5-A30-003 | 이어 작성으로 최종보고서 workflow 진입 | P1 |  |  |
 | QA-V5-A30-004 | 제출완료 + 변경 미반영 dual-state 표현 | P1 |  |  |
