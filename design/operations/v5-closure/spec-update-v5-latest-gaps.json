@@ -1,0 +1,100 @@
+{
+  "op": "update",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "rootId": "1:23008",
+  "_source": "design/operations/v5-latest-snapshot/snapshot-v5-latest.json",
+  "_intent": "최신 V5 snapshot에서 확인된 A-30 progress/PDF/provider-neutral mismatch를 최소 patch한다.",
+  "patches": [
+    {
+      "nodeId": "1:23102",
+      "expectedType": "FRAME",
+      "expectedName": "Progress Fill",
+      "width": 105
+    },
+    {
+      "nodeId": "1:23674",
+      "expectedType": "TEXT",
+      "expectedCharacters": "최종 심사용 발표 자료 파일 등록",
+      "characters": "PDF 파일만 · 최대 50MB",
+      "rename": "PDF 파일만 · 최대 50MB"
+    },
+    {
+      "nodeId": "17:1141",
+      "expectedType": "TEXT",
+      "expectedCharacters": "최종 심사용 발표 자료 파일 등록",
+      "characters": "PDF 파일만 · 최대 50MB",
+      "rename": "PDF 파일만 · 최대 50MB"
+    },
+    {
+      "nodeId": "76:2035",
+      "expectedType": "TEXT",
+      "expectedCharacters": "최종 심사용 발표 자료 파일 등록",
+      "characters": "PDF 파일만 · 최대 50MB",
+      "rename": "PDF 파일만 · 최대 50MB"
+    },
+    {
+      "nodeId": "76:2300",
+      "expectedType": "TEXT",
+      "expectedCharacters": "최종 심사용 발표 자료 파일 등록",
+      "characters": "PDF 파일만 · 최대 50MB",
+      "rename": "PDF 파일만 · 최대 50MB"
+    },
+    {
+      "nodeId": "1:23687",
+      "expectedType": "TEXT",
+      "expectedCharacters": "최종_아뜰리에_발표자료_v1.2.pptx",
+      "characters": "최종_아뜰리에_발표자료_v1.2.pdf",
+      "rename": "최종_아뜰리에_발표자료_v1.2.pdf"
+    },
+    {
+      "nodeId": "17:1154",
+      "expectedType": "TEXT",
+      "expectedCharacters": "최종_아뜰리에_발표자료_v1.2.pptx",
+      "characters": "최종_아뜰리에_발표자료_v1.2.pdf",
+      "rename": "최종_아뜰리에_발표자료_v1.2.pdf"
+    },
+    {
+      "nodeId": "76:2048",
+      "expectedType": "TEXT",
+      "expectedCharacters": "최종_아뜰리에_발표자료_v1.2.pptx",
+      "characters": "최종_아뜰리에_발표자료_v1.2.pdf",
+      "rename": "최종_아뜰리에_발표자료_v1.2.pdf"
+    },
+    {
+      "nodeId": "76:2313",
+      "expectedType": "TEXT",
+      "expectedCharacters": "최종_아뜰리에_발표자료_v1.2.pptx",
+      "characters": "최종_아뜰리에_발표자료_v1.2.pdf",
+      "rename": "최종_아뜰리에_발표자료_v1.2.pdf"
+    },
+    {
+      "nodeId": "1:23738",
+      "expectedType": "TEXT",
+      "expectedCharacters": "사내 GitLab",
+      "characters": "Repository URL",
+      "rename": "Repository URL"
+    },
+    {
+      "nodeId": "17:1205",
+      "expectedType": "TEXT",
+      "expectedCharacters": "사내 GitLab",
+      "characters": "Repository URL",
+      "rename": "Repository URL"
+    },
+    {
+      "nodeId": "76:2099",
+      "expectedType": "TEXT",
+      "expectedCharacters": "사내 GitLab",
+      "characters": "Repository URL",
+      "rename": "Repository URL"
+    },
+    {
+      "nodeId": "76:2364",
+      "expectedType": "TEXT",
+      "expectedCharacters": "사내 GitLab",
+      "characters": "Repository URL",
+      "rename": "Repository URL"
+    }
+  ]
+}
