@@ -1,0 +1,9 @@
+{
+  "op": "extract",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "Design System",
+  "stage": "components",
+  "inputDigest": "cca39edf97b71ab7d28ae1b9b20247080161d04be715ba20897c974393fa9281",
+  "frameIds": ["1:877"],
+  "_note": "Design System refresh 6/6. Tag. 결과 전체 원문을 snapshot-ds-6.json으로 저장."
+}
