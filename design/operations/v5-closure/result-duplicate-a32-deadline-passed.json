@@ -1,6 +1,138 @@
 {
-  "_status": "PENDING_PLUGIN_RESULT",
-  "_operation": "A-32 DEADLINE_PASSED duplicate",
-  "_spec": "design/operations/v5-closure/spec-duplicate-a32-deadline-passed.json",
-  "_instruction": "Design Flow Harness plugin 실행 결과 JSON 전체로 이 파일 내용을 교체하세요. 오류가 발생한 경우에는 성공 결과를 임의로 작성하지 말고 error 메시지를 별도로 전달하세요."
+  "op": "duplicate",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "created": {
+    "A-32_submission-package_DEADLINE_PASSED": "97:2337"
+  },
+  "items": [
+    {
+      "sourceId": "1:23529",
+      "cloneId": "97:2337",
+      "name": "A-32_submission-package_DEADLINE_PASSED",
+      "requestedPatchCount": 6,
+      "appliedPatchCount": 6,
+      "patches": [
+        {
+          "patchIndex": 0,
+          "nodeName": null,
+          "sourceNodeId": "1:23786",
+          "expectedMatches": 1,
+          "matchedCount": 1,
+          "targetIds": [
+            "97:2594"
+          ],
+          "applied": true
+        },
+        {
+          "patchIndex": 1,
+          "nodeName": null,
+          "sourceNodeId": "I17:993;1:655",
+          "expectedMatches": 1,
+          "matchedCount": 1,
+          "targetIds": [
+            "I97:2596;1:655"
+          ],
+          "applied": true
+        },
+        {
+          "patchIndex": 2,
+          "nodeName": null,
+          "sourceNodeId": "17:993",
+          "expectedMatches": 1,
+          "matchedCount": 1,
+          "targetIds": [
+            "97:2596"
+          ],
+          "applied": true
+        },
+        {
+          "patchIndex": 3,
+          "nodeName": null,
+          "sourceNodeId": "I17:891;981:281",
+          "expectedMatches": 1,
+          "matchedCount": 1,
+          "targetIds": [
+            "I97:2597;981:281"
+          ],
+          "applied": true
+        },
+        {
+          "patchIndex": 4,
+          "nodeName": null,
+          "sourceNodeId": "17:891",
+          "expectedMatches": 1,
+          "matchedCount": 1,
+          "targetIds": [
+            "97:2597"
+          ],
+          "applied": true
+        },
+        {
+          "patchIndex": 5,
+          "nodeName": null,
+          "sourceNodeId": "1:23658",
+          "expectedMatches": 1,
+          "matchedCount": 1,
+          "targetIds": [
+            "97:2466"
+          ],
+          "applied": true
+        }
+      ],
+      "verification": {
+        "prePatch": {
+          "passed": true,
+          "comparedNodes": 265,
+          "differences": []
+        },
+        "postPatch": {
+          "passed": true,
+          "unexpectedChanges": [],
+          "geometryChanges": [
+            {
+              "path": "0.1.1.1.0.1.0",
+              "field": "width",
+              "category": "geometry",
+              "source": 483,
+              "clone": 397
+            },
+            {
+              "path": "0.1.1.1.0.1.1",
+              "field": "width",
+              "category": "geometry",
+              "source": 275,
+              "clone": 198
+            },
+            {
+              "path": "0.1.1.1.0.1.0.1",
+              "field": "width",
+              "category": "geometry",
+              "source": 469,
+              "clone": 383
+            },
+            {
+              "path": "0.1.1.1.0.1.0.1.0",
+              "field": "width",
+              "category": "geometry",
+              "source": 461,
+              "clone": 375
+            }
+          ]
+        },
+        "composition": {
+          "passed": true,
+          "unexpectedChanges": [],
+          "geometryChanges": []
+        }
+      },
+      "success": true
+    }
+  ],
+  "counts": {
+    "requestedItems": 1,
+    "createdItems": 1,
+    "requestedPatches": 6,
+    "appliedPatches": 6,
+    "verifiedItems": 1
+  }
 }
