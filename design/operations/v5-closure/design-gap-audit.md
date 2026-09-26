@@ -1,100 +1,98 @@
 # V5 Current Design Gap Audit
 
-기준: 최신 `design/04-screens/snapshot.json` 직접 확인.
+기준:
+- `design/operations/v5-latest-snapshot/snapshot-v5-latest.json`
+- capturedAt: `2026-09-26T11:11:36.951Z`
+- V5 section: `1:23008`
 
-## 확인 완료
+## 완료 확인
 
-### A-30 `1:23009`
-- progress text: `7 / 8` 실제 반영
-- progress track `1:23101` = 120px, fill `1:23102` = 30px로 남아 있음
-- 7/8 시각 진행률이라면 fill은 105px(87.5%)가 되어야 하므로 text와 bar가 불일치
-- submitted card 존재
-- resubmit card 존재
-- `재제출 필요` text가 `status-warning` (#F59E0B) semantic에 바인딩됨
-
-**판정: MISMATCH — progress text는 수정됐지만 bar geometry가 1/4 상태로 남아 있음**
-
-### A-31 `1:23119`
-- 기존 최종보고서 step form 유지
-- 7 inherited + 1 new 정책은 PRD/QA 정본에서 확정
-- completion 판정은 server-side
-
-**판정: COVERED (server-state rendering QA 필요)**
-
-### A-32 complete/incomplete
-- complete `1:23529`
-- incomplete `17:996`
-
-**판정: COVERED**
-
-### A-32 SUBMITTED
-- `A-32_submission-package_SUBMITTED` 실제 frame 존재
-- `제출 완료됨 ✓` 실제 화면 text 확인
-
-**판정: COVERED**
-
-### A-32 SUBMITTED_CHANGED
-- `A-32_submission-package_SUBMITTED_CHANGED` 실제 frame 존재
-- `변경사항 다시 제출하기 →` 실제 화면 text 확인
-
-**판정: COVERED**
+- A-30 `7 / 8` text 반영
+- A-30 submitted / resubmit-needed 상태 존재
+- A-31 9-step 구조 확인
+- 1차 지원서 기존 7개 승계 + 5번 `신규 메뉴` 추가 정책 확인
+- A-32 complete: `1:23529`
+- A-32 incomplete: `17:996`
+- A-32 SUBMITTED: `76:1890`
+- A-32 SUBMITTED_CHANGED: `76:2155`
+- `제출 완료됨 ✓`
+- `변경사항 다시 제출하기 →`
+- AI 발표자료 초안 `.pptx` 생성 CTA
 
 ## Remaining gaps
 
-### G0 A-30 progress bar mismatch
-확정 요구:
-- content completion 7/8
-- 숫자 표기와 progress bar 시각 상태가 동일한 completion을 표현
+### G0 — A-30 progress visual mismatch
 
-최신 snapshot:
-- `1:23100` = `7 / 8`
-- track `1:23101` = 120px
-- fill `1:23102` = 30px
+- text `1:23100` = `7 / 8`
+- track `1:23101` width = 120px
+- fill `1:23102` width = 30px
 
-**판정: MISMATCH**
+7/8과 시각 상태가 불일치한다. 120px 기준 7/8 fill은 105px이어야 한다.
 
-수정:
-- `1:23102` width를 105px로 수정
-- 기존 `spec-update-a30-final-report-status.json`의 width patch가 실제 캔버스에 반영됐는지 재실행/확인
+**Result: DESIGN_MISMATCH**
 
-### G1 A-32 DEADLINE_PASSED
-확정 요구:
-- edit/save/submit/re-submit 전체 잠금
+### G1 — A-32 DEADLINE_PASSED missing
+
+확정 정책:
+- edit/save/submit/re-submit 모두 disabled
 - 전체 read-only
-- `제출 마감됨`
+- primary action `제출 마감됨`
 - 마지막 제출본이 최종본
 
-최신 snapshot에서:
-- `A-32_submission-package_DEADLINE_PASSED` 없음
-- 실제 화면 text `제출 마감됨` 없음
-- 마감 안내 문구 없음
+최신 snapshot에는 `A-32_submission-package_DEADLINE_PASSED` frame과 실제 `제출 마감됨` CTA가 없다.
 
-**판정: MISSING_DESIGN**
+**Result: MISSING_DESIGN**
 
-실행 spec:
-- `design/operations/v5-closure/spec-duplicate-a32-deadline-passed.json`
+### G2 — Final report viewer modal missing
 
-### G2 Final report viewer modal
-확정 요구:
-- A-32 위 overlay/modal
-- SECTION 1~8 통합 read-only
+확정 정책:
+- A-32 위 SECTION 1~8 통합 read-only modal
 - edit control 없음
 - close 후 A-32 context 유지
 
-최신 snapshot에 대응 modal 없음.
+최신 snapshot에는 대응 viewer/modal frame이 없다.
 
-**판정: MISSING_DESIGN**
+**Result: MISSING_DESIGN**
 
-방식:
-- `NEW_CONSTRUCTION`
-- Design System canonical refresh가 완료된 뒤 기존 component INSTANCE를 사용해 생성
+### G3 — PDF final upload mismatch
 
-## 현재 결론
+확정 정책:
+- AI 생성물 = editable PPTX
+- 최종 등록 = PDF only
+- max 50MB
 
-V5 핵심 상태 화면은 대부분 반영 완료.
-남은 디자인 이슈는 3건:
-1. A-30 progress bar 7/8 geometry mismatch
-2. A-32 DEADLINE_PASSED
-3. Final report read-only viewer modal
+최신 화면에는 `발표 자료(PDF)`와 `발표 자료 초안 생성 (.pptx)`가 존재하지만,
+등록 완료 예시 파일명이 `최종_아뜰리에_발표자료_v1.2.pptx`로 남아 있다.
+또 실제 화면에서 `최대 50MB · PDF 파일만 업로드 가능` 안내를 확인할 수 없다.
 
-이 2건 외의 제품 정책 blocking open question은 없다.
+**Result: DESIGN_MISMATCH / MISSING_GUIDANCE**
+
+### G4 — repository provider-neutral mismatch
+
+확정 정책:
+- generic repository link
+- GitHub/GitLab provider 제한 없음
+
+최신 화면에는 generic `소스코드 저장소` label도 있지만 보조 label이 `사내 GitLab`로 고정되어 있다.
+
+**Result: DESIGN_MISMATCH**
+
+## 결론
+
+| Item | Result |
+|---|---|
+| A-30 7/8 text | COMPLETE |
+| A-30 progress visual | MISMATCH |
+| A-30 submitted/resubmit | COMPLETE |
+| A-31 9-step/new menu | COMPLETE |
+| A-32 complete/incomplete | COMPLETE |
+| A-32 SUBMITTED | COMPLETE |
+| A-32 SUBMITTED_CHANGED | COMPLETE |
+| A-32 DEADLINE_PASSED | MISSING |
+| Report viewer modal | MISSING |
+| PDF-only/max 50MB | MISMATCH |
+| Provider-neutral repository UI | MISMATCH |
+
+**V5 디자인은 아직 QA baseline으로 확정하지 않는다.**
+
+위 gap을 수정한 뒤 V5 전용 snapshot을 다시 extract한다. 그 결과가 모두 해소되면 `design/qa/releases/v5/` QA 파일을 최신 PRD + 최신 화면 기준으로 정리한다.
