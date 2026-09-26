@@ -733,6 +733,11 @@ async function runCreate(spec) {
     if (parent) parent.appendChild(n);
     else page.appendChild(n);
 
+    // Explicit placement for NEW_CONSTRUCTION overlays/modals and other composed nodes.
+    // Position is optional; when omitted, existing auto-layout/page behavior is preserved.
+    if (typeof node.x === 'number') n.x = node.x;
+    if (typeof node.y === 'number') n.y = node.y;
+
     if (node.type === 'CLONE') {
       // 새 parent로 reparent한 뒤에도 구조/style invariant가 보존되는지 확인한다.
       const cloneAfterAttach = await captureCloneVerificationTree(n);
@@ -1653,9 +1658,28 @@ async function runDuplicate(spec) {
       });
       clone = cloned.clone;
 
-      // destination page로 이동하기 전 baseline.
+      // destination parent로 이동하기 전 baseline.
       const beforeAttach = await captureCloneVerificationTree(clone);
-      page.appendChild(clone);
+
+      let destination = page;
+      if (item.parentId) {
+        destination = await figma.getNodeByIdAsync(item.parentId);
+        if (!destination) throw new Error('duplicate parentId 노드 없음: ' + item.parentId);
+        if (!('appendChild' in destination))
+          throw new Error('duplicate parentId 노드가 자식을 가질 수 없음: ' + item.parentId);
+
+        let ownerPage = destination;
+        while (ownerPage && ownerPage.type !== 'PAGE') ownerPage = ownerPage.parent;
+        if (!ownerPage || ownerPage.id !== page.id)
+          throw new Error('duplicate parentId가 지정 page 밖에 있음: ' + item.parentId);
+      }
+      destination.appendChild(clone);
+
+      if (item.parentId && clone.parent?.id !== item.parentId)
+        throw new Error(
+          'duplicate parent 검증 실패: expected=' + item.parentId +
+          ' actual=' + (clone.parent?.id || 'null')
+        );
 
       // reparent 후에도 구조/style invariant는 동일해야 한다.
       const afterAttach = await captureCloneVerificationTree(clone);
@@ -1682,6 +1706,7 @@ async function runDuplicate(spec) {
         sourceId: item.sourceId,
         cloneId: clone.id,
         name: clone.name,
+        parentId: clone.parent?.id || null,
         requestedPatchCount: Array.isArray(item.patches) ? item.patches.length : 0,
         appliedPatchCount: cloned.patchReport.length,
         patches: cloned.patchReport,
