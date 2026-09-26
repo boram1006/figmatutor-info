@@ -19,6 +19,7 @@ import { fileURLToPath } from 'node:url';
 const repoRoot = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const TOKENS = 'design/03-design-rules/tokens/tokens.json';
 const EXT = 'design/03-design-rules/components/token-extensions.json';
+const CATALOG = 'design/03-design-rules/components/catalog.json';
 
 function readJson(p) {
   return JSON.parse(readFileSync(p, 'utf8').replace(/^\uFEFF/, ''));
@@ -40,19 +41,34 @@ function loadTokenSets() {
 }
 
 // 스펙 객체를 재귀적으로 훑으며 토큰 참조 필드를 수집한다.
-function collectRefs(node, path, out) {
+function collectRefs(node, path, out, componentRefs) {
   if (Array.isArray(node)) {
-    node.forEach((v, i) => collectRefs(v, `${path}[${i}]`, out));
+    node.forEach((v, i) => collectRefs(v, `${path}[${i}]`, out, componentRefs));
     return;
   }
   if (node && typeof node === 'object') {
+    if (node.type === 'INSTANCE') {
+      componentRefs.push({
+        componentNodeId: node.componentNodeId,
+        at: path,
+        name: node.name || node.key || null,
+      });
+    }
     for (const [k, v] of Object.entries(node)) {
       if (k === 'fillBinding' && typeof v === 'string') {
         out.push({ kind: 'semantic', field: 'fillBinding', value: v, at: `${path}.${k}` });
+      } else if (k === 'binding' && typeof v === 'string') {
+        out.push({ kind: 'semantic', field: 'binding', value: v, at: `${path}.${k}` });
+      } else if (k === 'bindings' && v && typeof v === 'object' && !Array.isArray(v)) {
+        for (const [prop, token] of Object.entries(v)) {
+          if (typeof token === 'string')
+            out.push({ kind: 'semantic', field: 'bindings.' + prop, value: token, at: `${path}.${k}.${prop}` });
+        }
+        collectRefs(v, `${path}.${k}`, out, componentRefs);
       } else if (k === 'textStyle' && typeof v === 'string') {
         out.push({ kind: 'textStyle', field: 'textStyle', value: v, at: `${path}.${k}` });
       } else {
-        collectRefs(v, `${path}.${k}`, out);
+        collectRefs(v, `${path}.${k}`, out, componentRefs);
       }
     }
   }
@@ -87,6 +103,8 @@ if (args.includes('--all')) {
 }
 
 const { semantic, textStyles } = loadTokenSets();
+const catalog = readJson(resolve(repoRoot, CATALOG));
+const catalogNodeIds = new Set((catalog.components || []).map((c) => c.nodeId));
 let hadError = false;
 let checked = 0;
 
@@ -106,7 +124,48 @@ for (const sp of specPaths) {
     continue;
   }
   const refs = [];
-  collectRefs(spec, '$', refs);
+  const componentRefs = [];
+  collectRefs(spec, '
+  for (const r of refs) {
+    if (r.kind === 'semantic' && !semantic.has(r.value)) {
+      bad.push(r);
+    } else if (r.kind === 'textStyle' && !textStyles.has(r.value)) {
+      bad.push(r);
+    }
+  }
+  for (const c of componentRefs) {
+    if (typeof c.componentNodeId !== 'string' || !c.componentNodeId) {
+      bad.push({ field: 'componentNodeId', value: String(c.componentNodeId), at: c.at, kind: 'component' });
+    } else if (!catalogNodeIds.has(c.componentNodeId)) {
+      bad.push({ field: 'componentNodeId', value: c.componentNodeId, at: c.at, kind: 'component' });
+    }
+  }
+  checked++;
+  if (bad.length) {
+    hadError = true;
+    console.error(`\nFAIL ${sp}`);
+    for (const b of bad) {
+      if (b.kind === 'component') {
+        console.error(`  - ${b.field}="${b.value}" 는 catalog.json에 등록된 component nodeId가 아님 (${b.at})`);
+        console.error('    먼저 Design System을 수동 extract하고 catalog.json을 갱신하라.');
+      } else {
+        const pool = b.kind === 'semantic' ? semantic : textStyles;
+        const near = [...pool].filter((k) => k.includes(b.value.split('-')[0])).slice(0, 6);
+        console.error(`  - ${b.field}="${b.value}" 는 실제 ${b.kind} 토큰에 없음 (${b.at})`);
+        if (near.length) console.error(`    비슷한 후보: ${near.join(', ')}`);
+      }
+    }
+  } else {
+    console.log(`OK   ${sp} (${refs.length}개 토큰 참조 모두 유효)`);
+  }
+}
+
+if (hadError) {
+  console.error(`\n검증 실패. 존재하지 않는 토큰 이름을 스펙에서 제거/교체하라. 토큰 정본: ${TOKENS} (+ ${EXT}).`);
+  process.exit(1);
+}
+console.log(`\n검증 통과: ${checked}개 스펙, 모든 토큰/컴포넌트 참조 유효.`);
+, refs, componentRefs);
   const bad = [];
   for (const r of refs) {
     if (r.kind === 'semantic' && !semantic.has(r.value)) {
