@@ -8,7 +8,7 @@
 
 요구사항 → 기존 시스템 추출·정형화 → 컴포넌트(기존 재사용 + 신규) → 전체 화면·상태 확장(기존 + 신규) → 구조·시각 검증.
 
-5단계 게이트: inputs → extract-system → components → screens → verification.
+구조/시각 5단계 게이트: inputs → extract-system → components → screens → verification. 릴리즈별 PRD↔디자인 의미 정합성은 별도 semantic coverage gate(`npm run check:coverage`)로 검사하며, `npm run audit`은 구조/시각 게이트 뒤 이 coverage gate까지 통과해야 성공한다.
 컨셉 탐색·방향 선택 단계는 없다. 이 하네스는 기존 피그마 시스템을 추출해 정형화한 뒤 재사용해 확장한다.
 
 - JSON 계약은 기계 판정의 원본이다. 필드는 `docs/contracts.md`, 게이트는 `scripts/lib/gates.mjs` 참조.
@@ -23,6 +23,9 @@
 - 브랜드 로고가 표시되는 헤더에는 `design/characters/Logo.svg` 원본을 사용한다. 텍스트나 다른 글꼴로 재현하지 않고 원본 비율·색상을 유지한다. 일반 화면 제목·뒤로가기 헤더에 로고를 일률적으로 추가하지 않는다. SVG 로고에는 캐릭터용 하늘색 배경을 강제하지 않는다. 파일이 없으면 임의 대체하지 않고 누락을 알린다. 제작·검증은 `docs/figma-contract.md`의 헤더 로고 절차를 따른다.
 - 규칙 위반은 캔버스/원본 JSON을 수정해서 해결한다. snapshot, 검사 결과, 시각 관찰을 만들어서 통과시키지 않는다.
 - 임의의 폴더 존재, 체크 표시, 이전 PASS만으로 완료 판단하지 않는다.
+- Figma mutation(create/update/duplicate/rebind)은 플러그인 성공 응답만으로 완료 처리하지 않는다. 반드시 대상 범위를 다시 `op:extract`하고 최신 scoped snapshot을 저장한 뒤 `npm run check:coverage`를 통과해야 완료다.
+- 부분 extract는 `npm run save-snapshot -- --stage screens --from <file> --scope <name> --root <frameId>`로 canonical scoped snapshot으로 저장할 수 있다. 전체 canonical snapshot에는 계속 `complete:true`가 필요하다.
+- `op:duplicate`로 특정 SECTION/FRAME 내부에 상태 화면을 만들 때는 `parentId`를 반드시 명시한다. plugin 결과의 `parentId`가 요청값과 다르면 실패다.
 - Figma 작업은 플러그인 왕복으로 한다. Kiro가 `op` 스펙을 만들어 `design/operations/<task-id>/`에 저장하고, 사용자가 데스크탑 플러그인에서 실행한다. 원본 응답·이미지·스냅샷은 대화에 붙이지 않고 파일로 보존한다.
 - Kiro는 요구사항·승인·작업 범위·로컬 게이트를 관리한다. extract 결과는 `npm run save-snapshot`으로 저장한 뒤 `npm run check`로 판정한다. 같은 파일의 Figma 작업은 순차로 진행한다. 상세 절차는 `docs/figma-delegation.md`.
 
