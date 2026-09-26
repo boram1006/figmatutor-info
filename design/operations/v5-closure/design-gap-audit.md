@@ -6,12 +6,13 @@
 
 ### A-30 `1:23009`
 - progress text: `7 / 8` 실제 반영
-- progress fill 수정 반영
+- progress track `1:23101` = 120px, fill `1:23102` = 30px로 남아 있음
+- 7/8 시각 진행률이라면 fill은 105px(87.5%)가 되어야 하므로 text와 bar가 불일치
 - submitted card 존재
 - resubmit card 존재
 - `재제출 필요` text가 `status-warning` (#F59E0B) semantic에 바인딩됨
 
-**판정: COVERED**
+**판정: MISMATCH — progress text는 수정됐지만 bar geometry가 1/4 상태로 남아 있음**
 
 ### A-31 `1:23119`
 - 기존 최종보고서 step form 유지
@@ -39,6 +40,22 @@
 **판정: COVERED**
 
 ## Remaining gaps
+
+### G0 A-30 progress bar mismatch
+확정 요구:
+- content completion 7/8
+- 숫자 표기와 progress bar 시각 상태가 동일한 completion을 표현
+
+최신 snapshot:
+- `1:23100` = `7 / 8`
+- track `1:23101` = 120px
+- fill `1:23102` = 30px
+
+**판정: MISMATCH**
+
+수정:
+- `1:23102` width를 105px로 수정
+- 기존 `spec-update-a30-final-report-status.json`의 width patch가 실제 캔버스에 반영됐는지 재실행/확인
 
 ### G1 A-32 DEADLINE_PASSED
 확정 요구:
@@ -75,8 +92,9 @@
 ## 현재 결론
 
 V5 핵심 상태 화면은 대부분 반영 완료.
-남은 디자인은 정확히 2건:
-1. A-32 DEADLINE_PASSED
-2. Final report read-only viewer modal
+남은 디자인 이슈는 3건:
+1. A-30 progress bar 7/8 geometry mismatch
+2. A-32 DEADLINE_PASSED
+3. Final report read-only viewer modal
 
 이 2건 외의 제품 정책 blocking open question은 없다.
