@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "release": "v5",
+  "snapshotPath": "design/operations/v5-latest-snapshot/snapshot-v5-latest.json",
+  "excludeAncestorIds": ["20:823"],
+  "assertions": [
+    {
+      "id": "A30_INITIAL_PROGRESS_TEXT",
+      "type": "node-text",
+      "nodeId": "1:23100",
+      "equals": "7 / 8"
+    },
+    {
+      "id": "A30_INITIAL_PROGRESS_VISUAL",
+      "type": "node-width",
+      "nodeId": "1:23102",
+      "equals": 105
+    },
+    {
+      "id": "A32_DEADLINE_FRAME",
+      "type": "frame-name",
+      "equals": "A-32_submission-package_DEADLINE_PASSED"
+    },
+    {
+      "id": "A32_DEADLINE_CTA",
+      "type": "text-present",
+      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED",
+      "equals": "제출 마감됨"
+    },
+    {
+      "id": "A32_DEADLINE_DISABLED_CONTROLS",
+      "type": "instance-property",
+      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED",
+      "property": "state",
+      "equals": "disabled",
+      "minCount": 3
+    },
+    {
+      "id": "A32_REPORT_VIEWER",
+      "type": "frame-name",
+      "equals": "A-32_report-viewer-modal"
+    },
+    {
+      "id": "A32_PDF_GUIDANCE",
+      "type": "text-present",
+      "equals": "PDF 파일만 · 최대 50MB",
+      "minCount": 4
+    },
+    {
+      "id": "A32_NO_PPTX_AS_REGISTERED_FILE",
+      "type": "text-absent",
+      "equals": "최종_아뜰리에_발표자료_v1.2.pptx"
+    },
+    {
+      "id": "A32_PDF_AS_REGISTERED_FILE",
+      "type": "text-present",
+      "equals": "최종_아뜰리에_발표자료_v1.2.pdf",
+      "minCount": 4
+    },
+    {
+      "id": "A32_PROVIDER_NEUTRAL",
+      "type": "text-absent",
+      "equals": "사내 GitLab"
+    }
+  ]
+}
