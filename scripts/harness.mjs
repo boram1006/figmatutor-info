@@ -54,9 +54,23 @@ try {
     try{snap=JSON.parse(readFileSync(src,'utf8'));}catch(e){throw new Error(`스냅샷 JSON 파싱 실패: ${e.message}`);}
     if(snap.schemaVersion!==1) throw new Error('스냅샷 schemaVersion은 1이어야 함');
     if(snap.stage!==stage) throw new Error(`스냅샷 stage 불일치: 파일=${snap.stage}, 요청=${stage}`);
-    if(snap.complete!==true) throw new Error('불완전한 스냅샷(complete!==true). frameIds로 나눴다면 merge-snapshots.mjs로 병합 후 저장');
-    write(root,targets[stage],snap);
-    console.log(`스냅샷 저장: ${targets[stage]}. 이제 npm run check -- --phase ${stage} 로 판정하세요. (저장은 검증이 아닙니다.)`);
+
+    const scope=arg('--scope',null);
+    if(scope) {
+      if(stage!=='screens') throw new Error('--scope은 stage=screens에서만 지원');
+      const rootId=arg('--root');
+      const scopedFrame=Array.isArray(snap.frames) ? snap.frames.find(f=>f.id===rootId) : null;
+      if(!scopedFrame) throw new Error(`scoped snapshot root frame 없음: ${rootId}`);
+      if(!Array.isArray(scopedFrame.nodes) || !scopedFrame.nodes.length)
+        throw new Error(`scoped snapshot root가 비어 있음: ${rootId}`);
+      const to=arg('--to',`design/04-screens/scoped/${scope}.json`);
+      write(root,to,{...snap,scope:{name:scope,rootId},complete:false,frames:[scopedFrame]});
+      console.log(`scoped snapshot 저장: ${to} (root=${rootId}). 저장 후 semantic coverage gate로 검증하세요.`);
+    } else {
+      if(snap.complete!==true) throw new Error('불완전한 스냅샷(complete!==true). 전체 canonical snapshot은 merge 후 저장하거나 --scope/--root로 scoped snapshot을 저장');
+      write(root,targets[stage],snap);
+      console.log(`스냅샷 저장: ${targets[stage]}. 이제 npm run check -- --phase ${stage} 로 판정하세요. (저장은 검증이 아닙니다.)`);
+    }
   } else if(command==='assets-list') {
     console.log(JSON.stringify({source:'local-character',files:characterFiles(root,read(root,paths.config))},null,2));
   } else if(command==='doctor') {
