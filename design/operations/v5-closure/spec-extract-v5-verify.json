@@ -1,0 +1,9 @@
+{
+  "op": "extract",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "stage": "screens",
+  "inputDigest": "v5-post-mutation-verify-20260926",
+  "frameIds": ["1:23008"],
+  "_note": "V5 mutation 후 반드시 실행. 결과를 design/operations/v5-latest-snapshot/snapshot-v5-latest.json 으로 갱신한 뒤 npm run check:coverage를 실행한다."
+}
