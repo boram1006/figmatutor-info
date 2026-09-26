@@ -3,7 +3,7 @@
   "fileKey": "t00UvcVe1M6llSJFyXcDkG",
   "pageName": "design",
   "_source": "design/04-screens/snapshot.json — Button instance variantProperties state 확인 + manual Design System extract disabled variant evidence.",
-  "_intent": "A-32 DEADLINE_PASSED: complete frame을 exact clone하고 마감 후 전체 read-only 상태를 최소 patch한다.",
+  "_intent": "A-32 DEADLINE_PASSED: complete frame을 exact clone해 V5 section(1:23008) 내부에 생성하고, 마감 후 edit/save/submit 관련 control을 DS disabled variant로 잠근다.",
   "items": [
     {
       "sourceId": "1:23529",
@@ -42,8 +42,17 @@
             "state": "disabled"
           },
           "_target": "Button INSTANCE의 state=disabled로 전환. 색은 Design System variant가 결정."
+        },
+        {
+          "sourceNodeId": "1:23658",
+          "expectedMatches": 1,
+          "componentProperties": {
+            "state": "disabled"
+          },
+          "_target": "발표자료 초안 생성 버튼도 마감 후 disabled. 기존 Button INSTANCE variant 사용."
         }
-      ]
+      ],
+      "parentId": "1:23008"
     }
   ]
 }
