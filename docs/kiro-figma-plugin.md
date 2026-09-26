@@ -149,7 +149,14 @@ CLONE 규칙:
 }
 ```
 
-`componentNodeId`는 임의 문자열이 아니라 catalog/snapshot에서 확인한 실제 Figma COMPONENT 또는 COMPONENT_SET node ID를 사용한다.
+`componentNodeId`는 임의 문자열이 아니라 **최신 canonical `catalog.json`/component snapshot**에서 확인한 실제 Figma COMPONENT 또는 COMPONENT_SET node ID를 사용한다.
+
+INSTANCE 규칙:
+- COMPONENT_SET이면 `variantName` 또는 `variantProperties`로 정확히 하나의 variant를 선택한다.
+- 상태색은 `variantProperties/componentProperties`로 상태를 바꿔 Design System 정의를 따른다.
+- 현재 Button처럼 라벨이 component text property로 노출되지 않은 컴포넌트는 `patches`로 텍스트만 최소 override할 수 있다.
+- INSTANCE `patches`는 `sourceNodeId` 또는 strict `nodeName + expectedMatches`를 사용하고 `characters / rename / visible`만 허용한다. `fillBinding/fillColor` 같은 visual patch는 금지한다.
+- `componentProperties`는 실제 snapshot에 존재하는 property key만 사용한다. 문서 예시를 근거로 property 이름을 발명하지 않는다.
 
 ### `op: "extract"` — 스냅샷 추출
 
