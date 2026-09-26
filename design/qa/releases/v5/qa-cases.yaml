@@ -16,7 +16,9 @@
     최종보고서 content completion은 7/8로 시작한다.
   automationCandidate: true
   confidence: HIGH
-  notes: ""
+  notes: |
+    최신 Figma snapshot에서 text는 7/8이지만 progress bar fill은 30/120px로 남아 있어 DESIGN_MISMATCH.
+    UI 구현 QA 전에 디자인 baseline을 105/120px로 수정해야 한다.
 
 - id: QA-V5-A30-002
   release: v5
