@@ -21,7 +21,8 @@
         "accent-indigo-s",
         "radius-8",
         "radius-12",
-        "radius-999"
+        "radius-999",
+        "dark-text-slate"
       ]
     },
     {
@@ -40,5 +41,6 @@
         "radius-999"
       ]
     }
-  ]
+  ],
+  "_sourceNote": "2026-09-26 manual Design System extract: Button solid-disabled background resolves via dark-text-slate. Full canonical components snapshot refresh still required because current components/snapshot.json is from the previous fileKey."
 }
