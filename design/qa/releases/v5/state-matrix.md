@@ -16,8 +16,9 @@ Source:
 | SUBMITTED + CHANGED_AFTER_SUBMIT | 재제출 성공 | SUBMITTED | CONFIRMED_PROJECT_RULE | QA-V5-A30-005, QA-V5-A32-007 |
 
 최신 snapshot 확인:
-- A-30 progress `7 / 8` 반영됨.
+- A-30 progress text `7 / 8` 반영됨.
 - `재제출 필요`는 `status-warning` 바인딩으로 반영됨.
+- 단, progress track 120px 대비 fill이 30px로 남아 있어 7/8과 시각적으로 불일치 → **DESIGN_MISMATCH**.
 
 ## A-31 최종보고서 스텝 폼
 
@@ -49,13 +50,17 @@ Section completion 판정식은 UI 책임이 아니다. 서버가 완료/미완�
 
 ## Remaining design gaps
 
-제품 정책 open question은 없다. 남은 것은 디자인 산출물 2건이다.
+제품 정책 open question은 없다. 남은 디자인 이슈는 3건이다.
 
-1. A-32 `DEADLINE_PASSED`
+1. A-30 progress bar geometry
+   - text = 7/8
+   - track = 120px
+   - fill = 30px → 105px로 수정 필요
+2. A-32 `DEADLINE_PASSED`
    - edit/save/submit/re-submit 전체 잠금
    - 전체 read-only
    - `제출 마감됨`
-2. 최종 보고서 viewer modal
+3. 최종 보고서 viewer modal
    - SECTION 1~8 통합 read-only
    - edit control 없음
    - close 후 A-32 context 유지
