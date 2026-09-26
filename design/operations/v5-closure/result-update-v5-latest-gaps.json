@@ -1,6 +1,124 @@
 {
-  "_status": "PENDING_PLUGIN_RESULT",
-  "_operation": "V5 latest mismatch corrections update",
-  "_spec": "design/operations/v5-closure/spec-update-v5-latest-gaps.json",
-  "_instruction": "Design Flow Harness plugin 실행 결과 JSON 전체로 이 파일 내용을 교체하세요. 오류가 발생한 경우에는 성공 결과를 임의로 작성하지 말고 error 메시지를 별도로 전달하세요."
+  "op": "update",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "rootId": "1:23008",
+  "changed": [
+    {
+      "nodeId": "1:23102",
+      "name": "Progress Fill",
+      "type": "FRAME",
+      "fields": [
+        "width"
+      ]
+    },
+    {
+      "nodeId": "1:23674",
+      "name": "PDF 파일만 · 최대 50MB",
+      "type": "TEXT",
+      "fields": [
+        "characters",
+        "name"
+      ]
+    },
+    {
+      "nodeId": "17:1141",
+      "name": "PDF 파일만 · 최대 50MB",
+      "type": "TEXT",
+      "fields": [
+        "characters",
+        "name"
+      ]
+    },
+    {
+      "nodeId": "76:2035",
+      "name": "PDF 파일만 · 최대 50MB",
+      "type": "TEXT",
+      "fields": [
+        "characters",
+        "name"
+      ]
+    },
+    {
+      "nodeId": "76:2300",
+      "name": "PDF 파일만 · 최대 50MB",
+      "type": "TEXT",
+      "fields": [
+        "characters",
+        "name"
+      ]
+    },
+    {
+      "nodeId": "1:23687",
+      "name": "최종_아뜰리에_발표자료_v1.2.pdf",
+      "type": "TEXT",
+      "fields": [
+        "characters",
+        "name"
+      ]
+    },
+    {
+      "nodeId": "17:1154",
+      "name": "최종_아뜰리에_발표자료_v1.2.pdf",
+      "type": "TEXT",
+      "fields": [
+        "characters",
+        "name"
+      ]
+    },
+    {
+      "nodeId": "76:2048",
+      "name": "최종_아뜰리에_발표자료_v1.2.pdf",
+      "type": "TEXT",
+      "fields": [
+        "characters",
+        "name"
+      ]
+    },
+    {
+      "nodeId": "76:2313",
+      "name": "최종_아뜰리에_발표자료_v1.2.pdf",
+      "type": "TEXT",
+      "fields": [
+        "characters",
+        "name"
+      ]
+    },
+    {
+      "nodeId": "1:23738",
+      "name": "Repository URL",
+      "type": "TEXT",
+      "fields": [
+        "characters",
+        "name"
+      ]
+    },
+    {
+      "nodeId": "17:1205",
+      "name": "Repository URL",
+      "type": "TEXT",
+      "fields": [
+        "characters",
+        "name"
+      ]
+    },
+    {
+      "nodeId": "76:2099",
+      "name": "Repository URL",
+      "type": "TEXT",
+      "fields": [
+        "characters",
+        "name"
+      ]
+    },
+    {
+      "nodeId": "76:2364",
+      "name": "Repository URL",
+      "type": "TEXT",
+      "fields": [
+        "characters",
+        "name"
+      ]
+    }
+  ],
+  "rootResize": null
 }

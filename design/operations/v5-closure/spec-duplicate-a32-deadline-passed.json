@@ -40,17 +40,19 @@
           "sourceNodeId": "17:891",
           "expectedMatches": 1,
           "componentProperties": {
+            "tone": "primary",
             "state": "disabled"
           },
-          "_target": "Button INSTANCE의 state=disabled로 전환. 색은 Design System variant가 결정."
+          "_target": "제출 버튼(현재 solid/Medium/Rounded/primary/default). primary+disabled variant 존재. tone 명시로 조합 보장. 색 직접 지정 금지."
         },
         {
           "sourceNodeId": "1:23658",
           "expectedMatches": 1,
           "componentProperties": {
+            "tone": "primary",
             "state": "disabled"
           },
-          "_target": "발표자료 초안 생성 버튼도 마감 후 disabled. 기존 Button INSTANCE variant 사용."
+          "_target": "발표자료 초안 생성 버튼(현재 solid/Small/Rounded/primary/default). solid/Small/Rounded/primary/disabled variant 존재. tone 명시로 조합 보장. 색 직접 지정 금지."
         }
       ],
       "parentId": "1:23008"
