@@ -21,11 +21,14 @@ Source: `design/qa/releases/v5/qa-cases.yaml`
 - QA-V5-A32-014 — 마감 후 edit/save/submit 잠금
 - QA-V5-A32-015/016 — submitted unchanged / re-submit sync
 
-## 디자인 반영 후
+## 디자인 반영 완료
 - QA-V5-A30-004/005 — Warning 재제출 상태
-- QA-V5-A32-008 — read-only report viewer modal
 - QA-V5-A32-015 — submitted unchanged
 - QA-V5-CROSS-002 — changed-after-submit sync
+
+## 디자인 반영 대기
+- QA-V5-A32-008 — read-only report viewer modal
+- QA-V5-A32-014 — DEADLINE_PASSED 전체 read-only 상태
 
 ## UI 자동화 대상 제외
 - QA-V5-A31-008 — section 완료 판정식은 서버 책임
