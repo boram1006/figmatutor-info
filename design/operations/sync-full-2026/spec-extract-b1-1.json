@@ -1,0 +1,9 @@
+{
+  "op": "extract",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "stage": "screens",
+  "inputDigest": "sync-full-2026-09-26-b1-1",
+  "frameIds": ["1:2348"],
+  "_note": "배치1을 프레임 1개씩 분할. 1/5. 실행 후 결과를 snapshot-b1-1.json 으로 저장. 프레임이 지워졌으면 '프레임 없음' 오류가 날 수 있음 → 그 경우 건너뛰고 알려주세요."
+}

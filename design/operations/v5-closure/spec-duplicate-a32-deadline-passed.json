@@ -23,17 +23,18 @@
         },
         {
           "sourceNodeId": "17:993",
-          "fillBinding": "background-disabled",
+          "fillBinding": "background-surface",
           "expectedMatches": 1
         },
         {
           "sourceNodeId": "I17:891;981:281",
           "characters": "제출 마감됨",
+          "rename": "제출 마감됨",
           "expectedMatches": 1
         },
         {
           "sourceNodeId": "17:891",
-          "fillBinding": "background-disabled",
+          "fillBinding": "background-surface",
           "expectedMatches": 1
         }
       ]

@@ -1,0 +1,21 @@
+{
+  "_note": "Design System 페이지 재추출 결과(2026-09-26). 사용자가 붙여넣은 op:extract 원본. 크기가 커서 요약만 아래 _summary에 기록. 필요 시 Figma에서 재추출.",
+  "_summary": {
+    "capturedAt": "2026-09-26T00:17:40.303Z",
+    "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+    "page": "Design System (pageId 0:1)",
+    "frames": ["1:285 Design System", "1:637 Button", "1:710 Dropdown Menu", "1:730 Switch", "1:739 Radio Button", "1:750 checkbox", "1:761 Text Field", "1:800 Text Area", "1:848 Toast", "1:877 Tag"],
+    "buttonDisabledFinding": {
+      "component": "Button (1:637)",
+      "state": "solid-disabled (variants 1:662/1:664/1:666/1:668/1:670/1:672)",
+      "fillBinding": "dark-text-slate",
+      "resolvedColor": "#C8D0D8 (slate-100)",
+      "textBinding": "text-disabled (#9CA3AF)",
+      "note": "사용자가 solid-disabled 배경색을 dark-text-slate(#C8D0D8)로 변경함. 기존 catalog는 background-surface였음. 이 값이 A-32 SUBMITTED/DEADLINE 버튼 disabled 처리의 기준."
+    },
+    "buttonOutlinedDisabled": {
+      "border": "border-disabled (#E5E7EB)",
+      "background": "background-primary (white)"
+    }
+  }
+}

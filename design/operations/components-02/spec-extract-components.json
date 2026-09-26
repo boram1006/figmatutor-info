@@ -1,0 +1,15 @@
+{
+  "op": "extract",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "Design System",
+  "stage": "components",
+  "inputDigest": "components-resync-2026-09-25",
+  "frameIds": [],
+  "_intent": "디자인시스템에서 Button의 solid-disabled 색을 사용자가 변경 → repo 컴포넌트 스냅샷 재동기화. Design System 페이지 전체를 stage=components로 재추출해 Button의 실제 fill 바인딩/색을 다시 읽는다. nodeId·토큰은 추측하지 않고 이 추출 결과로 catalog/snapshot을 갱신한다.",
+  "_next": [
+    "1) 결과 JSON을 design/operations/components-02/snapshot-components.json 에 저장",
+    "2) npm run save-snapshot -- --stage components --from design/operations/components-02/snapshot-components.json",
+    "3) npm run check -- --phase components 로 판정",
+    "4) Button solid-disabled 가 참조하는 실제 semantic 토큰명을 확인해 catalog.json / 관련 스펙(fillBinding)에 반영"
+  ]
+}

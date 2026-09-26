@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Validate spec token names on save",
+      "trigger": "PostFileSave",
+      "description": "스펙 JSON 저장 시 fillBinding/textStyle 토큰 이름이 실제 tokens에 존재하는지 검증. 존재하지 않는 토큰(추측)을 쓰면 실패로 알린다.",
+      "matcher": "spec-.*\\.json$",
+      "action": {
+        "type": "command",
+        "command": "node scripts/validate-spec-tokens.mjs --all"
+      }
+    }
+  ]
+}

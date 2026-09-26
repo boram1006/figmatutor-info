@@ -1,0 +1,9 @@
+{
+  "op": "extract",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "stage": "screens",
+  "inputDigest": "sync-full-2026-09-26-b1-4",
+  "frameIds": ["1:8865"],
+  "_note": "배치1을 프레임 1개씩 분할. 4/5. 실행 후 결과를 snapshot-b1-4.json 으로 저장."
+}

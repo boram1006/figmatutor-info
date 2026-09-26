@@ -1393,6 +1393,7 @@ async function cloneAndPatchNode(source, options = {}) {
 
     const clonePathById = buildRelativePathMap(clone);
     const allowedChanges = new Map();
+    const allowedSubtrees = [];
     if (options.name) allowCloneChange(allowedChanges, '0', 'name');
 
     for (const plan of patchPlans) {
@@ -1404,6 +1405,13 @@ async function cloneAndPatchNode(source, options = {}) {
         if (plan.patch.characters !== undefined) allowCloneChange(allowedChanges, path, 'characters');
         if (plan.patch.fillBinding !== undefined || plan.patch.fillColor !== undefined)
           allowCloneChange(allowedChanges, path, 'fills');
+        // variant/componentProperties 전환은 인스턴스 자신과 그 하위 노드의
+        // 스타일/구조/텍스트를 통째로 바꾼다(디자인시스템 정의를 따름). 따라서 해당
+        // 인스턴스 subtree 전체 변경을 보존 검증에서 허용한다. 색을 수동 지정하지 않고
+        // 컴포넌트 정의를 따르게 하는 것이 목적이므로 이는 의도된 변경이다.
+        if (plan.patch.variantProperties !== undefined || plan.patch.componentProperties !== undefined) {
+          allowedSubtrees.push(path);
+        }
       }
     }
 
@@ -1461,6 +1469,19 @@ async function cloneAndPatchNode(source, options = {}) {
             opacity: color.a ?? 1,
           }];
         }
+
+        // variant/componentProperties 전환: 상태색(disabled/hover 등)은 수동으로 칠하지
+        // 않고 컴포넌트 정의를 따르도록 한다. INSTANCE에만 적용 가능.
+        const props = patch.variantProperties !== undefined ? patch.variantProperties : patch.componentProperties;
+        if (props !== undefined) {
+          if (target.type !== 'INSTANCE')
+            throw new Error('variantProperties/componentProperties patch 대상이 INSTANCE가 아님: ' + (patch.sourceNodeId || patch.nodeName) + ' (' + target.type + ')');
+          if (!props || typeof props !== 'object' || Array.isArray(props))
+            throw new Error('variantProperties/componentProperties는 객체여야 함: ' + (patch.sourceNodeId || patch.nodeName));
+          if (typeof target.setProperties !== 'function')
+            throw new Error('INSTANCE setProperties 미지원: ' + target.id);
+          target.setProperties(props);
+        }
       }
 
       patchReport.push({
@@ -1478,6 +1499,7 @@ async function cloneAndPatchNode(source, options = {}) {
     const postPatchDiffs = compareCloneTrees(sourceBefore, cloneAfter, {
       mode: 'postPatch',
       allowed: allowedChanges,
+      allowedSubtrees,
     });
     const unexpectedChanges = postPatchDiffs.filter((d) => d.category !== 'geometry');
     const geometryChanges = postPatchDiffs.filter((d) => d.category === 'geometry');
@@ -1762,8 +1784,16 @@ function compareCloneTrees(sourceTree, cloneTree, options) {
 
   const allPaths = new Set([...sourceByPath.keys(), ...cloneByPath.keys()]);
   const geometryFields = new Set(['width', 'height']);
+  const allowedSubtrees = Array.isArray(options.allowedSubtrees) ? options.allowedSubtrees : [];
+  // path가 허용된 subtree 루트 자신이거나 그 하위인지 검사한다.
+  const inAllowedSubtree = (path) =>
+    allowedSubtrees.some((root) => path === root || path.startsWith(root + '.'));
 
   for (const path of allPaths) {
+    // variant/componentProperties 전환이 적용된 인스턴스 subtree는 컴포넌트 정의를
+    // 따르는 의도된 변경이므로 postPatch 검증에서 통째로 제외한다.
+    if (options.mode === 'postPatch' && inAllowedSubtree(path)) continue;
+
     const a = sourceByPath.get(path);
     const b = cloneByPath.get(path);
 
