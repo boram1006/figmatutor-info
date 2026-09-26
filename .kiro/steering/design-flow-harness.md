@@ -39,6 +39,7 @@ inclusion: always
 | --- | --- |
 | "디자인 시작", "이어서 진행", "UI 만들어줘" | `ui-flow` 스킬 절차 시작 (status 확인 후 다음 단계) |
 | "기존 시스템 추출/정형화", "토큰·컴포넌트 뽑아줘" | `extract-system` |
+| "디자인시스템 바꿨어", "컴포넌트 수정했어", "DS 다시 읽어줘" | `docs/design-system-refresh-workflow.md` — Plugin 수동 extract → canonical snapshot/catalog/tokens 갱신 |
 | "기존 화면 근거 수집/분석" (선택) | `collect-references` → `analyze-references` |
 | "화면 구조 잡아줘" | `build-structure` |
 | "컴포넌트/화면 만들어줘/추가해줘" | `create-figma` |
@@ -135,6 +136,7 @@ repo에 역방향 복원 PRD 파일이 있다는 이유만으로 그것을 공�
 - 새 토큰은 `token-extensions.json`에 추가만 한다. 추출한 시스템 토큰을 덮어쓰려면 피그마 원본을 고쳐 재추출한다.
 - **토큰 이름을 절대 추측해서 쓰지 않는다.** `fillBinding`/`textStyle` 등 스펙에 넣는 모든 토큰 이름은 반드시 정본(`design/03-design-rules/tokens/tokens.json` + `token-extensions.json`)에 실재하는 키여야 한다. 그럴듯한 이름(예: `background-disabled`)을 지어내지 않는다. 실제 존재하는 disabled 계열은 `background-surface`(비활성 배경)·`text-disabled`·`border-disabled` 등이며, 필요한 토큰이 없으면 지어내지 말고 정본에서 가장 가까운 실재 토큰을 쓰거나 사용자에게 알린다.
 - **스펙(op:create/duplicate/update) 확정·실행 전 반드시 `npm run validate-tokens -- <스펙파일>`(또는 `--all`)로 토큰 이름을 검증한다.** 검증(`scripts/validate-spec-tokens.mjs`)이 실패하면 그 스펙을 사용자에게 주거나 실행하도록 넘기지 않는다. 스펙 파일 저장 시 훅(`.kiro/hooks/validate-spec-tokens-on-save.json`)이 자동으로 이 검증을 돌린다.
+- **신규 화면 생성 전에 component snapshot freshness를 확인한다.** `design/03-design-rules/components/snapshot.json.fileKey`가 `harness.config.json.fig​ma.fileKey`와 다르거나 사용자가 DS 변경을 알렸으면 화면 생성을 시작하지 말고 `docs/design-system-refresh-workflow.md`로 재추출한다. summary-only 파일은 canonical evidence가 아니다.
 - **상태색·재사용 UI는 프리미티브로 칠하지 않고 컴포넌트로 처리한다.** 버튼·태그·카드 등 컴포넌트가 있는 UI는 신규 생성 시에도 새로 그리지 말고 인스턴스를 배치한다. disabled/hover/error 등 **상태에 따라 바뀌는 색은 `fillBinding`으로 직접 칠하지 말고 컴포넌트 variant(`variantProperties`/`componentProperties`)로 전환**한다. 이래야 디자인시스템에서 색을 바꿔도 자동 반영된다(매번 재추출 불필요). `fillBinding`으로 직접 지정하는 것은 잘 안 바뀌는 구조색(background-primary/text-primary 등)으로 국한한다. 디자인시스템이 실제로 바뀐 경우에만 필요 시 재추출로 catalog/tokens를 갱신한다.
 - 새 화면 레이아웃 초안이 필요하면 `op:create`로 그려줄 수 있으나 게이트 통과 조건이 아니다(컨셉 방향 선택 아님).
 - 일률적 승인 대기를 넣지 않는다. 정보 누락이 실제로 작업을 막을 때만 질문한다.
