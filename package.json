@@ -27,6 +27,7 @@
     "patterns:discover": "node scripts/pattern-registry.mjs discover",
     "patterns:refresh": "node scripts/refresh-pattern-sources.mjs",
     "patterns:refresh-snapshot": "node scripts/pattern-registry.mjs refresh",
-    "visual-dna:derive": "node scripts/visual-dna.mjs derive"
+    "visual-dna:derive": "node scripts/visual-dna.mjs derive",
+    "merge:components-snapshot": "node scripts/merge-component-snapshots.mjs"
   }
 }
