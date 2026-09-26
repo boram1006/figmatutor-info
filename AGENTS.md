@@ -23,6 +23,10 @@
 - 브랜드 로고가 표시되는 헤더에는 `design/characters/Logo.svg` 원본을 사용한다. 텍스트나 다른 글꼴로 재현하지 않고 원본 비율·색상을 유지한다. 일반 화면 제목·뒤로가기 헤더에 로고를 일률적으로 추가하지 않는다. SVG 로고에는 캐릭터용 하늘색 배경을 강제하지 않는다. 파일이 없으면 임의 대체하지 않고 누락을 알린다. 제작·검증은 `docs/figma-contract.md`의 헤더 로고 절차를 따른다.
 - 규칙 위반은 캔버스/원본 JSON을 수정해서 해결한다. snapshot, 검사 결과, 시각 관찰을 만들어서 통과시키지 않는다.
 - 임의의 폴더 존재, 체크 표시, 이전 PASS만으로 완료 판단하지 않는다.
+- Figma mutation(create/update/duplicate/rebind) 작업은 **spec 생성 또는 plugin 실행 성공만으로 완료 처리하지 않는다.** 반드시 대상 범위를 다시 `op:extract`한 최신 snapshot으로 검증한다.
+- 릴리즈별 semantic coverage assertion이 있으면 mutation 후 `npm run check:coverage`를 실행하고 PASS해야 완료다. `MISSING_DESIGN`, `MISSING_STATE`, `MISMATCH`에 해당하는 assertion 실패가 남아 있으면 QA baseline 확정 및 다음 단계 진행을 금지한다.
+- 부분 extract는 전체 snapshot으로 위장하지 않는다. `npm run save-snapshot -- --stage screens --from <file> --scope <name> --root <frameId>`로 scoped snapshot을 저장할 수 있다.
+- duplicate로 릴리즈 section 내부에 state/frame을 추가할 때는 spec item에 `parentId`를 명시한다. plugin 결과의 실제 `parentId`가 기대값과 다르면 실패로 본다.
 - Figma mutation(create/update/duplicate/rebind)은 플러그인 성공 응답만으로 완료 처리하지 않는다. 반드시 대상 범위를 다시 `op:extract`하고 최신 scoped snapshot을 저장한 뒤 `npm run check:coverage`를 통과해야 완료다.
 - 부분 extract는 `npm run save-snapshot -- --stage screens --from <file> --scope <name> --root <frameId>`로 canonical scoped snapshot으로 저장할 수 있다. 전체 canonical snapshot에는 계속 `complete:true`가 필요하다.
 - `op:duplicate`로 특정 SECTION/FRAME 내부에 상태 화면을 만들 때는 `parentId`를 반드시 명시한다. plugin 결과의 `parentId`가 요청값과 다르면 실패다.
