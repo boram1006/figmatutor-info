@@ -1498,7 +1498,13 @@ async function cloneAndPatchNode(source, options = {}) {
         if (!path) throw new Error('patch 대상 path 계산 실패: ' + target.id);
         if (plan.patch.rename !== undefined) allowCloneChange(allowedChanges, path, 'name');
         if (plan.patch.visible !== undefined) allowCloneChange(allowedChanges, path, 'visible');
-        if (plan.patch.characters !== undefined) allowCloneChange(allowedChanges, path, 'characters');
+        if (plan.patch.characters !== undefined) {
+          // Figma may keep a TEXT layer name synchronized with its characters.
+          // Allow that automatic name change only on the exact TEXT node whose
+          // characters are explicitly patched; unrelated node names stay invariant.
+          allowCloneChange(allowedChanges, path, 'characters');
+          allowCloneChange(allowedChanges, path, 'name');
+        }
         if (plan.patch.fillBinding !== undefined || plan.patch.fillColor !== undefined)
           allowCloneChange(allowedChanges, path, 'fills');
         // variant/componentProperties 전환은 인스턴스 자신과 그 하위 노드의
