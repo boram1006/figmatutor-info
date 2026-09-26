@@ -14,7 +14,7 @@
     "check:extract-system": "node scripts/harness.mjs check --phase extract-system",
     "check:components": "node scripts/harness.mjs check --phase components",
     "check:screens": "node scripts/harness.mjs check --phase screens",
-    "audit": "node scripts/harness.mjs audit",
+    "audit": "node scripts/harness.mjs audit && node scripts/coverage-gate.mjs",
     "doctor": "node scripts/harness.mjs doctor",
     "fingerprint": "node scripts/harness.mjs fingerprint",
     "save-snapshot": "node scripts/harness.mjs save-snapshot",
@@ -28,6 +28,8 @@
     "patterns:refresh": "node scripts/refresh-pattern-sources.mjs",
     "patterns:refresh-snapshot": "node scripts/pattern-registry.mjs refresh",
     "visual-dna:derive": "node scripts/visual-dna.mjs derive",
-    "merge:components-snapshot": "node scripts/merge-component-snapshots.mjs"
+    "merge:components-snapshot": "node scripts/merge-component-snapshots.mjs",
+    "check:coverage": "node scripts/coverage-gate.mjs",
+    "audit:structural": "node scripts/harness.mjs audit"
   }
 }
