@@ -7,7 +7,7 @@ Figma 무료 계정에서 MCP 없이 Design System 변경을 repository 정본�
 다음 중 하나면 **새 화면 생성 전에** 실행한다.
 
 - 사용자가 Figma Design System의 component/variant/token/text style을 수정했다고 알림
-- `harness.config.json.fig​ma.fileKey`와 `design/03-design-rules/components/snapshot.json.fileKey`가 다름
+- `harness.config.json.figma.fileKey`와 `design/03-design-rules/components/snapshot.json.fileKey`가 다름
 - catalog의 componentNodeId/state/property가 현재 Figma와 다를 가능성이 있음
 
 요약 메모나 과거 screenshot만으로 최신이라고 판단하지 않는다.
@@ -49,7 +49,7 @@ npm run save-snapshot -- --stage components --from design/operations/components-
 ```
 
 저장 후 반드시 확인:
-- canonical snapshot `fileKey` == `harness.config.json.fig​ma.fileKey`
+- canonical snapshot `fileKey` == `harness.config.json.figma.fileKey`
 - `complete:true` 또는 의도한 분할 extract가 모두 merge됨
 - Button/Tag 등 필요한 COMPONENT/COMPONENT_SET과 variant child가 포함됨
 
