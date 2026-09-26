@@ -2,7 +2,7 @@
   "op": "duplicate",
   "fileKey": "t00UvcVe1M6llSJFyXcDkG",
   "pageName": "design",
-  "_source": "design/operations/coverage-v5/snapshot-coverage.json",
+  "_source": "design/04-screens/snapshot.json — Button instance variantProperties state 확인 + manual Design System extract disabled variant evidence.",
   "_intent": "A-32 DEADLINE_PASSED: complete frame을 exact clone하고 마감 후 전체 read-only 상태를 최소 patch한다.",
   "items": [
     {
@@ -23,8 +23,11 @@
         },
         {
           "sourceNodeId": "17:993",
-          "fillBinding": "background-surface",
-          "expectedMatches": 1
+          "expectedMatches": 1,
+          "componentProperties": {
+            "state": "disabled"
+          },
+          "_target": "Button INSTANCE의 state=disabled로 전환. 색은 Design System variant가 결정."
         },
         {
           "sourceNodeId": "I17:891;981:281",
@@ -34,8 +37,11 @@
         },
         {
           "sourceNodeId": "17:891",
-          "fillBinding": "background-surface",
-          "expectedMatches": 1
+          "expectedMatches": 1,
+          "componentProperties": {
+            "state": "disabled"
+          },
+          "_target": "Button INSTANCE의 state=disabled로 전환. 색은 Design System variant가 결정."
         }
       ]
     }
