@@ -1,0 +1,65 @@
+{
+  "op": "update",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "rootId": "20:823",
+  "changed": [
+    {
+      "nodeId": "20:828",
+      "name": "b:진입/개요",
+      "type": "TEXT",
+      "fields": [
+        "characters"
+      ]
+    },
+    {
+      "nodeId": "20:830",
+      "name": "b:상태 머신",
+      "type": "TEXT",
+      "fields": [
+        "characters"
+      ]
+    },
+    {
+      "nodeId": "20:850",
+      "name": "b:제출 후 수정 정책 (확정·재제출 모델)",
+      "type": "TEXT",
+      "fields": [
+        "characters"
+      ]
+    },
+    {
+      "nodeId": "20:852",
+      "name": "b:하단 제출 버튼 상태값",
+      "type": "TEXT",
+      "fields": [
+        "characters"
+      ]
+    },
+    {
+      "nodeId": "20:854",
+      "name": "b:표기/레이아웃",
+      "type": "TEXT",
+      "fields": [
+        "characters"
+      ]
+    },
+    {
+      "nodeId": "20:857",
+      "name": "b:공통 규칙",
+      "type": "TEXT",
+      "fields": [
+        "characters"
+      ]
+    }
+  ],
+  "rootResize": {
+    "before": {
+      "width": 900,
+      "height": 2728
+    },
+    "after": {
+      "width": 900,
+      "height": 2848
+    }
+  }
+}
