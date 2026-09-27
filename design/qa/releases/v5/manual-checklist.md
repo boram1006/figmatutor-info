@@ -1,52 +1,70 @@
 # v5 Manual QA Checklist
 
-실제 Pass / Fail / Skip을 기록하기 위한 실행용 체크리스트다.
-정본은 `qa-cases.yaml`이며 디자인 pixel/visual 검수는 포함하지 않는다.
+실제 사람이 최소 동선으로 V5를 검수하기 위한 실행용 체크리스트다.
+정본 requirement는 `qa-cases.yaml`이며, 디자인 pixel/visual 검수는 포함하지 않는다.
+
+21개 TC를 개별 실행하지 않고 아래 사용자 journey를 따라가며 여러 TC를 함께 확인한다.
 
 ## Result 기준
 
 - **Pass**: expected와 일치
 - **Fail**: expected와 불일치
-- **Skip**: fixture/환경 때문에 재현 불가
-- **Blocked**: 실행에 필요한 시스템 contract 또는 환경이 준비되지 않음
+- **Skip**: 현재 데이터/환경에서 재현 불가
+- **Blocked**: 실행 자체에 별도 시스템 상태 또는 contract가 필요
 
-## A-30 내 지원 현황
+## Journey 1 — 최초 진입 → 최종보고서 작성 완료
 
-| QA ID | Summary | Priority | Result | 비고 |
-|---|---|---:|---|---|
-| QA-V5-A30-001 | 본선 진입 초기 completion 7/8 | P1 |  |  |
-| QA-V5-A30-002 | 작성중 카드 + 이어 작성 → workflow 진입 | P1 |  |  |
-| QA-V5-A30-003 | 제출 후 수정 → 재제출 필요 상태/액션 | P1 |  |  |
+시작 조건: 본선 진출 직후, 기존 1차 지원서 7개 section 완료 / 신규 최종보고서 section 미완료 상태.
 
-## A-31 최종보고서
+| 순서 | 확인 내용 | QA ID | Result | 비고 |
+|---:|---|---|---|---|
+| 1 | A-30 최초 completion이 7/8인지 확인 | QA-V5-A30-001 |  |  |
+| 2 | 작성중 카드와 이어 작성 액션 확인 후 진입 | QA-V5-A30-002 |  |  |
+| 3 | A-31에 기존 7개 section 값이 승계되고 수정 가능한지 확인 | QA-V5-A31-001 |  |  |
+| 4 | 신규 section 미완료 상태에서 7/8인지 확인 | QA-V5-A31-002 |  |  |
+| 5 | 신규 section 작성 완료 후 서버 상태가 8/8로 반영되는지 확인 | QA-V5-A31-002, QA-V5-A31-004 |  |  |
+| 6 | 8개 content section 이후 9번째 package 단계로 이동되는지 확인 | QA-V5-A31-003 |  |  |
+| 7 | A-30 → A-31 → A-32 전체 흐름에서 승계 데이터와 상태가 유지되는지 확인 | QA-V5-CROSS-001 |  |  |
 
-| QA ID | Summary | Priority | Result | 비고 |
-|---|---|---:|---|---|
-| QA-V5-A31-001 | 기존 7개 section prefill + 수정 가능 | P1 |  | fixture 필요 |
-| QA-V5-A31-002 | 7/8 → 신규 section 완료 후 8/8 | P1 |  | 서버 completion 상태 반영 |
-| QA-V5-A31-003 | 8 content → 9번째 package 단계 이동 | P1 |  |  |
-| QA-V5-A31-004 | 서버 section completion 상태 반영 | P1 |  | UI 자체 판정 없음 |
+## Journey 2 — 미완료 package → 저장 → 최종 제출
 
-## A-32 제출 패키지
+시작 조건: A-32에 진입했으며 일부 package item이 아직 미등록인 상태.
 
-| QA ID | Summary | Priority | Result | 비고 |
-|---|---|---:|---|---|
-| QA-V5-A32-001 | package 4종 표시 | P1 |  |  |
-| QA-V5-A32-002 | 미등록 항목 식별 + 제출 불가 | P1 |  | fixture 필요 |
-| QA-V5-A32-003 | 저장으로 최종 제출 발생 금지 | P1 |  |  |
-| QA-V5-A32-004 | 최종 제출 성공 → 제출완료 | P1 |  |  |
-| QA-V5-A32-005 | 제출 후 수정 → 변경사항 미반영/재제출 필요 | P1 |  |  |
-| QA-V5-A32-006 | 재제출 → 최신 제출본 반영 | P1 |  |  |
-| QA-V5-A32-007 | 기존 viewer modal로 최종 보고서 read-only 확인 | P1 |  | 신규 modal 생성 요구 없음 |
-| QA-V5-A32-008 | 발표자료 .pptx 생성 workflow | P2 |  | async contract 필요 |
-| QA-V5-A32-009 | 발표자료 최종 등록 PDF only | P1 |  | upload fixture 필요 |
-| QA-V5-A32-010 | 저장소 링크 provider 제한 없음 | P2 |  |  |
-| QA-V5-A32-011 | 제출 마감 후 단일 read-only 상태 | P1 |  | E2E 자동화 시 time control 필요 |
-| QA-V5-A32-012 | 제출완료·변경없음 상태 | P1 |  |  |
+| 순서 | 확인 내용 | QA ID | Result | 비고 |
+|---:|---|---|---|---|
+| 1 | 최종보고서 / 발표자료 / 데모 URL / 저장소 4종이 표시되는지 확인 | QA-V5-A32-001 |  |  |
+| 2 | 미등록 항목이 식별되고 최종 제출할 수 없는지 확인 | QA-V5-A32-002 |  |  |
+| 3 | 항목을 등록하고 `저장` 실행 시 최종 제출 상태가 되지 않는지 확인 | QA-V5-A32-003 |  |  |
+| 4 | 모든 필수 항목 준비 후 최종 제출 | QA-V5-A32-004 |  |  |
+| 5 | 다시 진입했을 때 제출완료·변경없음 상태인지 확인 | QA-V5-A32-012 |  |  |
 
-## Cross-screen
+## Journey 3 — 제출 후 수정 → 재제출
 
-| QA ID | Summary | Priority | Result | 비고 |
-|---|---|---:|---|---|
-| QA-V5-CROSS-001 | 7 inherited + 1 new + package 연속 workflow | P1 |  | fixture 필요 |
-| QA-V5-CROSS-002 | 제출 후 수정/재제출 A-30 ↔ A-32 동기화 | P1 |  | regression 핵심 |
+시작 조건: Journey 2에서 최종 제출이 완료된 상태.
+
+| 순서 | 확인 내용 | QA ID | Result | 비고 |
+|---:|---|---|---|---|
+| 1 | 마감 전 제출 내용을 수정 | QA-V5-A32-005 |  |  |
+| 2 | 변경사항 미반영/재제출 필요 상태가 되는지 확인 | QA-V5-A32-005 |  | 안내 정책 포함 |
+| 3 | A-30에서도 동일하게 재제출 필요 상태가 반영되는지 확인 | QA-V5-A30-003, QA-V5-CROSS-002 |  |  |
+| 4 | A-32에서 재제출 | QA-V5-A32-006 |  |  |
+| 5 | A-30/A-32 모두 최신 제출본 기준 정상 상태로 동기화되는지 확인 | QA-V5-CROSS-002 |  | regression 핵심 |
+
+## Journey 4 — 부가 기능 / validation / 특수 상태
+
+기본 제출 흐름과 독립적으로 확인 가능한 항목이다.
+
+| 확인 내용 | QA ID | Result | 비고 |
+|---|---|---|---|
+| 최종보고서 확인 시 기존 viewer modal이 열리고 read-only이며 닫은 뒤 A-32 context가 유지되는지 | QA-V5-A32-007 |  | 신규 modal 생성 요구 없음 |
+| 발표자료 초안 생성 시 수정용 .pptx 생성 workflow가 시작되는지 | QA-V5-A32-008 |  | 실행 환경에서 가능할 때 확인 |
+| 발표자료 최종 등록은 PDF만 허용되는지 | QA-V5-A32-009 |  | 비-PDF도 함께 시도 |
+| repository URL이 특정 provider에 제한되지 않는지 | QA-V5-A32-010 |  |  |
+| 제출 마감 후 단일 read-only 상태이며 저장/제출/재제출 액션이 없고 `제출이 마감되었습니다.`가 표시되는지 | QA-V5-A32-011 |  | 마감 상태 데이터가 없으면 Skip |
+
+## 실행 종료 기준
+
+- Journey 1~3은 가능한 한 하나의 테스트 데이터 흐름으로 연속 실행한다.
+- Journey 4는 현재 환경에서 재현 가능한 항목만 실행한다.
+- Fail 발생 시 QA ID와 실제 결과만 기록하고, 디자인 생성 coverage 이슈와 혼합하지 않는다.
+- 마감 상태처럼 별도 상태 생성이 필요한 항목은 억지로 재현하지 않고 Skip 사유를 남긴다.
