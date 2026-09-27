@@ -1,0 +1,244 @@
+{
+  "manifestVersion": 1,
+  "release": "v5",
+  "scope": "screen-manifest prototype for semantic retrieval; not a pattern catalog",
+  "sources": {
+    "prd": "design/operations/prd-v5/PRD.md",
+    "figmaSnapshot": "design/operations/v5-latest-snapshot/snapshot-v5-latest.json",
+    "figmaSectionId": "1:23008"
+  },
+  "generationPolicy": {
+    "semanticFields": "derive from PRD; do not infer from visual appearance when PRD is explicit",
+    "implementationFields": "derive only from extracted Figma evidence; never guess node/component/variant/token",
+    "patternStatus": "none of these entries is promoted to a reusable pattern yet",
+    "promotionRule": "promote to pattern only after repeated structure/purpose is observed across multiple screens/features"
+  },
+  "screens": [
+    {
+      "screenId": "A-30",
+      "name": "내 지원 현황",
+      "purpose": "본선 진출 지원서의 최종보고서 진행·제출 상태를 보여주고 작성/조회/재제출 workflow로 진입시킨다.",
+      "role": [
+        "status_overview",
+        "workflow_entry"
+      ],
+      "structure": [
+        "application/report card",
+        "primary workflow state",
+        "content completion",
+        "secondary action-needed state when applicable",
+        "next action CTA"
+      ],
+      "states": [
+        "in_progress_draft",
+        "submitted",
+        "submitted_changed_after_submit",
+        "not_selected"
+      ],
+      "actions": [
+        "resume_editing",
+        "view_submission",
+        "resubmit_changes",
+        "view_original_application"
+      ],
+      "relationships": {
+        "next": [
+          "A-31",
+          "A-32"
+        ],
+        "reflectsStateFrom": [
+          "A-31",
+          "A-32"
+        ]
+      },
+      "invariants": [
+        "initial content completion is 7/8",
+        "after new section completion content completion is 8/8",
+        "editing after submit keeps primary SUBMITTED state",
+        "changed-after-submit is a secondary action-needed state",
+        "post-submit edits require resubmission to affect judging"
+      ],
+      "figmaEvidence": {
+        "frameId": "1:23009",
+        "frameName": "A-30_my-report-status",
+        "parentSectionId": "1:23008",
+        "size": {
+          "width": 1440,
+          "height": 1024
+        },
+        "layoutMode": "VERTICAL"
+      },
+      "implementationEvidenceStatus": "partial",
+      "implementationUnknowns": [
+        "exact DS component instances used inside the frame",
+        "exact internal sibling groups and reuse boundaries",
+        "which internal structures are intentional reusable patterns versus screen-specific composition"
+      ]
+    },
+    {
+      "screenId": "A-31",
+      "name": "최종보고서 스텝 폼",
+      "purpose": "1차 지원서에서 승계한 7개 section과 신규 section 1개를 수정·완료하고 최종 제출 패키지 단계로 이동한다.",
+      "role": [
+        "multi_step_editing",
+        "content_completion"
+      ],
+      "structure": [
+        "persistent 9-step navigation",
+        "current content section workspace",
+        "section completion state",
+        "package finalization as step 9"
+      ],
+      "states": [
+        "content_7_of_8",
+        "content_8_of_8",
+        "per_section_complete_or_incomplete"
+      ],
+      "actions": [
+        "edit_inherited_sections",
+        "complete_new_section",
+        "navigate_steps",
+        "enter_package_finalization"
+      ],
+      "relationships": {
+        "previous": [
+          "A-30"
+        ],
+        "next": [
+          "A-32"
+        ]
+      },
+      "invariants": [
+        "7 existing application sections are inherited",
+        "only section 5 신규 메뉴 is newly added for final report",
+        "inherited sections remain editable",
+        "section completion truth comes from server",
+        "UI does not implement required/optional completion logic",
+        "there are 8 content sections and a separate 9th package step"
+      ],
+      "figmaEvidence": {
+        "frameId": "1:23119",
+        "frameName": "A-31_report-step-form",
+        "parentSectionId": "1:23008",
+        "size": {
+          "width": 1440,
+          "height": 1024
+        },
+        "layoutMode": "VERTICAL"
+      },
+      "implementationEvidenceStatus": "partial",
+      "implementationUnknowns": [
+        "exact step navigation component/instances",
+        "exact internal sibling structure",
+        "reusable layout boundaries across other form screens"
+      ]
+    },
+    {
+      "screenId": "A-32",
+      "name": "최종 심사 제출 패키지",
+      "purpose": "최종 심사에 필요한 4종 산출물을 준비·확인하고 저장, 최종 제출, 수정 후 재제출을 수행한다.",
+      "role": [
+        "package_finalization",
+        "submission"
+      ],
+      "structure": [
+        "final report item",
+        "presentation item",
+        "service demo URL item",
+        "source repository item",
+        "artifact readiness/status",
+        "submission status",
+        "save/submit actions before deadline"
+      ],
+      "states": [
+        "incomplete",
+        "ready",
+        "submitted",
+        "submitted_changed_after_submit",
+        "deadline_passed"
+      ],
+      "actions": [
+        "save",
+        "final_submit",
+        "resubmit",
+        "view_final_report",
+        "generate_presentation_draft",
+        "upload_presentation_pdf",
+        "test_demo_url",
+        "enter_repository_url"
+      ],
+      "relationships": {
+        "previous": [
+          "A-31"
+        ],
+        "statusReflectedIn": [
+          "A-30"
+        ],
+        "externalReuse": [
+          "existing read-only report viewer modal"
+        ]
+      },
+      "invariants": [
+        "save and final submit are distinct events",
+        "save alone never changes workflow to submitted",
+        "final package contains 4 artifact types",
+        "presentation final upload is PDF only",
+        "AI-generated PPTX is an editable intermediate output",
+        "repository input has no provider restriction",
+        "editing after submit requires explicit resubmission",
+        "submitted unchanged state does not require resubmission",
+        "deadline-passed is a single UI state regardless of prior submitted/not-submitted distinction",
+        "deadline-passed is read-only",
+        "deadline-passed has no save/submit/resubmit controls",
+        "deadline message is '제출이 마감되었습니다.'",
+        "final report viewer reuses an existing read-only modal; no new dedicated viewer frame"
+      ],
+      "figmaEvidence": {
+        "baseFrame": {
+          "frameId": "1:23529",
+          "frameName": "A-32_submission-package",
+          "parentSectionId": "1:23008",
+          "size": {
+            "width": 1440,
+            "height": 1024
+          },
+          "layoutMode": "VERTICAL"
+        },
+        "knownStateFrame": {
+          "frameId": "17:996",
+          "frameName": "A-32_submission-package_SUBMITTED",
+          "parentSectionId": "1:23008",
+          "size": {
+            "width": 1440,
+            "height": 1024
+          },
+          "layoutMode": "VERTICAL"
+        }
+      },
+      "implementationEvidenceStatus": "partial",
+      "implementationUnknowns": [
+        "complete list of current A-32 state frame IDs from the scoped snapshot",
+        "exact internal DS component instances and variants",
+        "which artifact rows/cards are reusable structures versus A-32-specific composition",
+        "actual node ID of the reused report viewer because it is outside this V5 section"
+      ]
+    }
+  ],
+  "retrievalUse": {
+    "queryAgainst": [
+      "purpose",
+      "role",
+      "structure",
+      "states",
+      "actions",
+      "relationships",
+      "invariants"
+    ],
+    "resultPolicy": [
+      "return reference candidates, not an automatic reuse decision",
+      "allow no-suitable-reference as a valid outcome",
+      "after candidate selection, inspect candidate Figma snapshot before reuse or composition",
+      "do not treat semantic similarity alone as evidence that two screen structures can be composed safely"
+    ]
+  }
+}
