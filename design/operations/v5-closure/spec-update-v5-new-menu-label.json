@@ -1,0 +1,17 @@
+{
+  "op": "update",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "rootId": "1:23008",
+  "_source": "design/operations/v5-latest-snapshot/snapshot-v5-latest.json",
+  "_intent": "PRD 정본의 5번 section 명칭을 '신규 메뉴'로 통일한다. 화면/상태를 새로 만들지 않고 현재 V5 section 안의 확인된 TEXT node 7개만 최소 수정한다.",
+  "patches": [
+    {"nodeId":"1:23167","expectedType":"TEXT","expectedName":"신규 메뉴!!","expectedCharacters":"신규 메뉴!!","characters":"신규 메뉴","rename":"신규 메뉴"},
+    {"nodeId":"1:23577","expectedType":"TEXT","expectedName":"신규 메뉴!!","expectedCharacters":"신규 메뉴!!","characters":"신규 메뉴","rename":"신규 메뉴"},
+    {"nodeId":"17:1044","expectedType":"TEXT","expectedName":"신규 메뉴!!","expectedCharacters":"신규 메뉴!!","characters":"신규 메뉴","rename":"신규 메뉴"},
+    {"nodeId":"76:1938","expectedType":"TEXT","expectedName":"신규 메뉴!!","expectedCharacters":"신규 메뉴!!","characters":"신규 메뉴","rename":"신규 메뉴"},
+    {"nodeId":"76:2203","expectedType":"TEXT","expectedName":"신규 메뉴!!","expectedCharacters":"신규 메뉴!!","characters":"신규 메뉴","rename":"신규 메뉴"},
+    {"nodeId":"98:2653","expectedType":"TEXT","expectedName":"신규 메뉴!!","expectedCharacters":"신규 메뉴!!","characters":"신규 메뉴","rename":"신규 메뉴"},
+    {"nodeId":"98:2919","expectedType":"TEXT","expectedName":"신규 메뉴!!","expectedCharacters":"신규 메뉴!!","characters":"신규 메뉴","rename":"신규 메뉴"}
+  ]
+}
