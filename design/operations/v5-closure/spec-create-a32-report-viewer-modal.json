@@ -1,0 +1,863 @@
+{
+  "op": "create",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "nodes": [
+    {
+      "type": "FRAME",
+      "name": "A-32_report-viewer-modal",
+      "parentId": "1:23008",
+      "x": 8671,
+      "y": 1597,
+      "width": 1440,
+      "height": 1024,
+      "metadata": {
+        "role": "modal-state",
+        "release": "v5",
+        "screenId": "A-32",
+        "state": "report-viewer-readonly",
+        "sourceContext": "76:1890"
+      },
+      "children": [
+        {
+          "type": "CLONE",
+          "name": "A-32_submission-package_CONTEXT",
+          "sourceNodeId": "76:1890",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "RECTANGLE",
+          "name": "Modal Overlay",
+          "x": 0,
+          "y": 0,
+          "width": 1440,
+          "height": 1024,
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#00000073",
+              "binding": "background-inverse"
+            }
+          ]
+        },
+        {
+          "type": "FRAME",
+          "name": "Report Viewer",
+          "x": 240,
+          "y": 64,
+          "width": 960,
+          "height": 896,
+          "layout": {
+            "mode": "VERTICAL",
+            "primaryAxisSizingMode": "FIXED",
+            "counterAxisSizingMode": "FIXED",
+            "primaryAxisAlignItems": "MIN",
+            "counterAxisAlignItems": "MIN"
+          },
+          "metrics": {
+            "paddingTop": 32,
+            "paddingRight": 32,
+            "paddingBottom": 32,
+            "paddingLeft": 32,
+            "itemSpacing": 16,
+            "topLeftRadius": 16,
+            "topRightRadius": 16,
+            "bottomLeftRadius": 16,
+            "bottomRightRadius": 16
+          },
+          "bindings": {
+            "paddingTop": "space-32",
+            "paddingRight": "space-32",
+            "paddingBottom": "space-32",
+            "paddingLeft": "space-32",
+            "itemSpacing": "space-16",
+            "topLeftRadius": "radius-16",
+            "topRightRadius": "radius-16",
+            "bottomLeftRadius": "radius-16",
+            "bottomRightRadius": "radius-16"
+          },
+          "fills": [
+            {
+              "type": "SOLID",
+              "binding": "background-primary"
+            }
+          ],
+          "strokes": [
+            {
+              "type": "SOLID",
+              "binding": "border-default"
+            }
+          ],
+          "children": [
+            {
+              "type": "FRAME",
+              "name": "Viewer Header",
+              "layout": {
+                "mode": "HORIZONTAL",
+                "primaryAxisSizingMode": "FIXED",
+                "counterAxisSizingMode": "AUTO",
+                "primaryAxisAlignItems": "SPACE_BETWEEN",
+                "counterAxisAlignItems": "CENTER"
+              },
+              "layoutSizingHorizontal": "FILL",
+              "children": [
+                {
+                  "type": "FRAME",
+                  "name": "Header Copy",
+                  "layout": {
+                    "mode": "VERTICAL",
+                    "primaryAxisSizingMode": "AUTO",
+                    "counterAxisSizingMode": "AUTO"
+                  },
+                  "metrics": {
+                    "itemSpacing": 4
+                  },
+                  "layoutSizingHorizontal": "FILL",
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "name": "Viewer Title",
+                      "textStyle": "Text/h2",
+                      "characters": "최종 보고서 확인",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-primary"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "Viewer Description",
+                      "textStyle": "Text/body-sm",
+                      "characters": "SECTION 1~8 작성 내용을 한 번에 확인합니다. 이 화면에서는 내용을 수정할 수 없습니다.",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-tertiary"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "TEXT",
+                  "name": "Close",
+                  "textStyle": "Text/caption-medium",
+                  "characters": "닫기 ✕",
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "binding": "text-secondary"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "RECTANGLE",
+              "name": "Header Divider",
+              "height": 1,
+              "layoutSizingHorizontal": "FILL",
+              "fills": [
+                {
+                  "type": "SOLID",
+                  "binding": "border-disabled"
+                }
+              ]
+            },
+            {
+              "type": "FRAME",
+              "name": "Read-only Sections",
+              "layout": {
+                "mode": "VERTICAL",
+                "primaryAxisSizingMode": "AUTO",
+                "counterAxisSizingMode": "FIXED",
+                "primaryAxisAlignItems": "MIN",
+                "counterAxisAlignItems": "MIN"
+              },
+              "layoutSizingHorizontal": "FILL",
+              "metrics": {
+                "itemSpacing": 8
+              },
+              "children": [
+                {
+                  "type": "FRAME",
+                  "name": "SECTION 1 · 기본 정보",
+                  "layout": {
+                    "mode": "HORIZONTAL",
+                    "primaryAxisSizingMode": "FIXED",
+                    "counterAxisSizingMode": "AUTO",
+                    "primaryAxisAlignItems": "MIN",
+                    "counterAxisAlignItems": "CENTER"
+                  },
+                  "layoutSizingHorizontal": "FILL",
+                  "metrics": {
+                    "paddingTop": 12,
+                    "paddingRight": 16,
+                    "paddingBottom": 12,
+                    "paddingLeft": 16,
+                    "itemSpacing": 16,
+                    "topLeftRadius": 8,
+                    "topRightRadius": 8,
+                    "bottomLeftRadius": 8,
+                    "bottomRightRadius": 8
+                  },
+                  "bindings": {
+                    "paddingTop": "space-12",
+                    "paddingRight": "space-16",
+                    "paddingBottom": "space-12",
+                    "paddingLeft": "space-16",
+                    "itemSpacing": "space-16",
+                    "topLeftRadius": "radius-8",
+                    "topRightRadius": "radius-8",
+                    "bottomLeftRadius": "radius-8",
+                    "bottomRightRadius": "radius-8"
+                  },
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "binding": "background-subtle"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "name": "SECTION 1",
+                      "textStyle": "Text/caption-medium",
+                      "characters": "SECTION 1",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-accent"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "기본 정보",
+                      "textStyle": "Text/body-sm-medium",
+                      "characters": "기본 정보",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-primary"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "FILL"
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "Read-only",
+                      "textStyle": "Text/micro",
+                      "characters": "읽기 전용",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-disabled"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "FRAME",
+                  "name": "SECTION 2 · 서비스 정의",
+                  "layout": {
+                    "mode": "HORIZONTAL",
+                    "primaryAxisSizingMode": "FIXED",
+                    "counterAxisSizingMode": "AUTO",
+                    "primaryAxisAlignItems": "MIN",
+                    "counterAxisAlignItems": "CENTER"
+                  },
+                  "layoutSizingHorizontal": "FILL",
+                  "metrics": {
+                    "paddingTop": 12,
+                    "paddingRight": 16,
+                    "paddingBottom": 12,
+                    "paddingLeft": 16,
+                    "itemSpacing": 16,
+                    "topLeftRadius": 8,
+                    "topRightRadius": 8,
+                    "bottomLeftRadius": 8,
+                    "bottomRightRadius": 8
+                  },
+                  "bindings": {
+                    "paddingTop": "space-12",
+                    "paddingRight": "space-16",
+                    "paddingBottom": "space-12",
+                    "paddingLeft": "space-16",
+                    "itemSpacing": "space-16",
+                    "topLeftRadius": "radius-8",
+                    "topRightRadius": "radius-8",
+                    "bottomLeftRadius": "radius-8",
+                    "bottomRightRadius": "radius-8"
+                  },
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "binding": "background-subtle"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "name": "SECTION 2",
+                      "textStyle": "Text/caption-medium",
+                      "characters": "SECTION 2",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-accent"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "서비스 정의",
+                      "textStyle": "Text/body-sm-medium",
+                      "characters": "서비스 정의",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-primary"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "FILL"
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "Read-only",
+                      "textStyle": "Text/micro",
+                      "characters": "읽기 전용",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-disabled"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "FRAME",
+                  "name": "SECTION 3 · 문제정의",
+                  "layout": {
+                    "mode": "HORIZONTAL",
+                    "primaryAxisSizingMode": "FIXED",
+                    "counterAxisSizingMode": "AUTO",
+                    "primaryAxisAlignItems": "MIN",
+                    "counterAxisAlignItems": "CENTER"
+                  },
+                  "layoutSizingHorizontal": "FILL",
+                  "metrics": {
+                    "paddingTop": 12,
+                    "paddingRight": 16,
+                    "paddingBottom": 12,
+                    "paddingLeft": 16,
+                    "itemSpacing": 16,
+                    "topLeftRadius": 8,
+                    "topRightRadius": 8,
+                    "bottomLeftRadius": 8,
+                    "bottomRightRadius": 8
+                  },
+                  "bindings": {
+                    "paddingTop": "space-12",
+                    "paddingRight": "space-16",
+                    "paddingBottom": "space-12",
+                    "paddingLeft": "space-16",
+                    "itemSpacing": "space-16",
+                    "topLeftRadius": "radius-8",
+                    "topRightRadius": "radius-8",
+                    "bottomLeftRadius": "radius-8",
+                    "bottomRightRadius": "radius-8"
+                  },
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "binding": "background-subtle"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "name": "SECTION 3",
+                      "textStyle": "Text/caption-medium",
+                      "characters": "SECTION 3",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-accent"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "문제정의",
+                      "textStyle": "Text/body-sm-medium",
+                      "characters": "문제정의",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-primary"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "FILL"
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "Read-only",
+                      "textStyle": "Text/micro",
+                      "characters": "읽기 전용",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-disabled"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "FRAME",
+                  "name": "SECTION 4 · AI서비스 구성계획",
+                  "layout": {
+                    "mode": "HORIZONTAL",
+                    "primaryAxisSizingMode": "FIXED",
+                    "counterAxisSizingMode": "AUTO",
+                    "primaryAxisAlignItems": "MIN",
+                    "counterAxisAlignItems": "CENTER"
+                  },
+                  "layoutSizingHorizontal": "FILL",
+                  "metrics": {
+                    "paddingTop": 12,
+                    "paddingRight": 16,
+                    "paddingBottom": 12,
+                    "paddingLeft": 16,
+                    "itemSpacing": 16,
+                    "topLeftRadius": 8,
+                    "topRightRadius": 8,
+                    "bottomLeftRadius": 8,
+                    "bottomRightRadius": 8
+                  },
+                  "bindings": {
+                    "paddingTop": "space-12",
+                    "paddingRight": "space-16",
+                    "paddingBottom": "space-12",
+                    "paddingLeft": "space-16",
+                    "itemSpacing": "space-16",
+                    "topLeftRadius": "radius-8",
+                    "topRightRadius": "radius-8",
+                    "bottomLeftRadius": "radius-8",
+                    "bottomRightRadius": "radius-8"
+                  },
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "binding": "background-subtle"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "name": "SECTION 4",
+                      "textStyle": "Text/caption-medium",
+                      "characters": "SECTION 4",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-accent"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "AI서비스 구성계획",
+                      "textStyle": "Text/body-sm-medium",
+                      "characters": "AI서비스 구성계획",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-primary"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "FILL"
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "Read-only",
+                      "textStyle": "Text/micro",
+                      "characters": "읽기 전용",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-disabled"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "FRAME",
+                  "name": "SECTION 5 · 신규 메뉴",
+                  "layout": {
+                    "mode": "HORIZONTAL",
+                    "primaryAxisSizingMode": "FIXED",
+                    "counterAxisSizingMode": "AUTO",
+                    "primaryAxisAlignItems": "MIN",
+                    "counterAxisAlignItems": "CENTER"
+                  },
+                  "layoutSizingHorizontal": "FILL",
+                  "metrics": {
+                    "paddingTop": 12,
+                    "paddingRight": 16,
+                    "paddingBottom": 12,
+                    "paddingLeft": 16,
+                    "itemSpacing": 16,
+                    "topLeftRadius": 8,
+                    "topRightRadius": 8,
+                    "bottomLeftRadius": 8,
+                    "bottomRightRadius": 8
+                  },
+                  "bindings": {
+                    "paddingTop": "space-12",
+                    "paddingRight": "space-16",
+                    "paddingBottom": "space-12",
+                    "paddingLeft": "space-16",
+                    "itemSpacing": "space-16",
+                    "topLeftRadius": "radius-8",
+                    "topRightRadius": "radius-8",
+                    "bottomLeftRadius": "radius-8",
+                    "bottomRightRadius": "radius-8"
+                  },
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "binding": "background-subtle"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "name": "SECTION 5",
+                      "textStyle": "Text/caption-medium",
+                      "characters": "SECTION 5",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-accent"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "신규 메뉴",
+                      "textStyle": "Text/body-sm-medium",
+                      "characters": "신규 메뉴",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-primary"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "FILL"
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "Read-only",
+                      "textStyle": "Text/micro",
+                      "characters": "읽기 전용",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-disabled"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "FRAME",
+                  "name": "SECTION 6 · 활용 Data 및 연동시스템",
+                  "layout": {
+                    "mode": "HORIZONTAL",
+                    "primaryAxisSizingMode": "FIXED",
+                    "counterAxisSizingMode": "AUTO",
+                    "primaryAxisAlignItems": "MIN",
+                    "counterAxisAlignItems": "CENTER"
+                  },
+                  "layoutSizingHorizontal": "FILL",
+                  "metrics": {
+                    "paddingTop": 12,
+                    "paddingRight": 16,
+                    "paddingBottom": 12,
+                    "paddingLeft": 16,
+                    "itemSpacing": 16,
+                    "topLeftRadius": 8,
+                    "topRightRadius": 8,
+                    "bottomLeftRadius": 8,
+                    "bottomRightRadius": 8
+                  },
+                  "bindings": {
+                    "paddingTop": "space-12",
+                    "paddingRight": "space-16",
+                    "paddingBottom": "space-12",
+                    "paddingLeft": "space-16",
+                    "itemSpacing": "space-16",
+                    "topLeftRadius": "radius-8",
+                    "topRightRadius": "radius-8",
+                    "bottomLeftRadius": "radius-8",
+                    "bottomRightRadius": "radius-8"
+                  },
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "binding": "background-subtle"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "name": "SECTION 6",
+                      "textStyle": "Text/caption-medium",
+                      "characters": "SECTION 6",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-accent"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "활용 Data 및 연동시스템",
+                      "textStyle": "Text/body-sm-medium",
+                      "characters": "활용 Data 및 연동시스템",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-primary"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "FILL"
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "Read-only",
+                      "textStyle": "Text/micro",
+                      "characters": "읽기 전용",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-disabled"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "FRAME",
+                  "name": "SECTION 7 · 확대전개 가능성",
+                  "layout": {
+                    "mode": "HORIZONTAL",
+                    "primaryAxisSizingMode": "FIXED",
+                    "counterAxisSizingMode": "AUTO",
+                    "primaryAxisAlignItems": "MIN",
+                    "counterAxisAlignItems": "CENTER"
+                  },
+                  "layoutSizingHorizontal": "FILL",
+                  "metrics": {
+                    "paddingTop": 12,
+                    "paddingRight": 16,
+                    "paddingBottom": 12,
+                    "paddingLeft": 16,
+                    "itemSpacing": 16,
+                    "topLeftRadius": 8,
+                    "topRightRadius": 8,
+                    "bottomLeftRadius": 8,
+                    "bottomRightRadius": 8
+                  },
+                  "bindings": {
+                    "paddingTop": "space-12",
+                    "paddingRight": "space-16",
+                    "paddingBottom": "space-12",
+                    "paddingLeft": "space-16",
+                    "itemSpacing": "space-16",
+                    "topLeftRadius": "radius-8",
+                    "topRightRadius": "radius-8",
+                    "bottomLeftRadius": "radius-8",
+                    "bottomRightRadius": "radius-8"
+                  },
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "binding": "background-subtle"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "name": "SECTION 7",
+                      "textStyle": "Text/caption-medium",
+                      "characters": "SECTION 7",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-accent"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "확대전개 가능성",
+                      "textStyle": "Text/body-sm-medium",
+                      "characters": "확대전개 가능성",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-primary"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "FILL"
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "Read-only",
+                      "textStyle": "Text/micro",
+                      "characters": "읽기 전용",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-disabled"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "FRAME",
+                  "name": "SECTION 8 · 기대효과",
+                  "layout": {
+                    "mode": "HORIZONTAL",
+                    "primaryAxisSizingMode": "FIXED",
+                    "counterAxisSizingMode": "AUTO",
+                    "primaryAxisAlignItems": "MIN",
+                    "counterAxisAlignItems": "CENTER"
+                  },
+                  "layoutSizingHorizontal": "FILL",
+                  "metrics": {
+                    "paddingTop": 12,
+                    "paddingRight": 16,
+                    "paddingBottom": 12,
+                    "paddingLeft": 16,
+                    "itemSpacing": 16,
+                    "topLeftRadius": 8,
+                    "topRightRadius": 8,
+                    "bottomLeftRadius": 8,
+                    "bottomRightRadius": 8
+                  },
+                  "bindings": {
+                    "paddingTop": "space-12",
+                    "paddingRight": "space-16",
+                    "paddingBottom": "space-12",
+                    "paddingLeft": "space-16",
+                    "itemSpacing": "space-16",
+                    "topLeftRadius": "radius-8",
+                    "topRightRadius": "radius-8",
+                    "bottomLeftRadius": "radius-8",
+                    "bottomRightRadius": "radius-8"
+                  },
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "binding": "background-subtle"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "name": "SECTION 8",
+                      "textStyle": "Text/caption-medium",
+                      "characters": "SECTION 8",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-accent"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "기대효과",
+                      "textStyle": "Text/body-sm-medium",
+                      "characters": "기대효과",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-primary"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "FILL"
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "Read-only",
+                      "textStyle": "Text/micro",
+                      "characters": "읽기 전용",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-disabled"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "FRAME",
+              "name": "Viewer Footer",
+              "layout": {
+                "mode": "HORIZONTAL",
+                "primaryAxisSizingMode": "FIXED",
+                "counterAxisSizingMode": "AUTO",
+                "primaryAxisAlignItems": "SPACE_BETWEEN",
+                "counterAxisAlignItems": "CENTER"
+              },
+              "layoutSizingHorizontal": "FILL",
+              "children": [
+                {
+                  "type": "TEXT",
+                  "name": "Readonly Note",
+                  "textStyle": "Text/caption",
+                  "characters": "수정이 필요하면 이 창을 닫고 각 SECTION에서 변경해 주세요.",
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "binding": "text-tertiary"
+                    }
+                  ],
+                  "layoutSizingHorizontal": "FILL"
+                },
+                {
+                  "type": "TEXT",
+                  "name": "Close Action",
+                  "textStyle": "Text/caption-medium",
+                  "characters": "닫기",
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "binding": "text-accent"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
