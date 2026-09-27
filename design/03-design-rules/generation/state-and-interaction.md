@@ -158,3 +158,52 @@ Final action은 반드시 화면 하단의 고정 bar일 필요는 없다.
 **Confidence: HIGH**
 
 status color는 label/text/behavior와 함께 사용한다.
+
+---
+
+## S10. 사용자에게 의미 있는 차이가 있을 때만 UI state를 분리한다
+**Confidence: HIGH**
+
+backend/domain state가 다르다는 이유만으로 별도 화면·frame·variant를 만들지 않는다.
+
+별도 UI state가 필요한지는 다음 차이를 기준으로 판단한다.
+
+- 사용자가 볼 핵심 정보가 달라지는가
+- 가능한 action/CTA가 달라지는가
+- editable / read-only 범위가 달라지는가
+- 다음 workflow가 달라지는가
+- 사용자가 현재 상황을 이해하거나 의사결정하기 위해 구분이 필요한가
+
+위 차이가 없고 결과 UI와 사용자의 다음 행동이 동일하면 **하나의 UI state로 통합**한다.
+
+예:
+- 마감 후 어떤 경우든 동일한 최종 제출본을 read-only로 조회하고 action이 없다면, 과거의 제출 경로/중간 상태를 근거로 `DEADLINE_PASSED_SUBMITTED`와 `DEADLINE_PASSED_NOT_SUBMITTED` 같은 별도 화면을 만들지 않는다.
+
+### 생성 전 state equivalence check
+새 state/frame을 생성하기 전에 기존 state와 다음을 비교한다.
+
+`visible information + available actions + editability + next workflow`
+
+이 네 항목이 실질적으로 같으면 신규 state를 생성하지 않고 기존 state를 재사용하거나 통합한다.
+
+---
+
+## S11. 현재 UI가 이미 전달하는 사실을 설명 문구로 중복하지 않는다
+**Confidence: HIGH**
+
+안내 문구는 사용자의 현재 판단이나 다음 행동에 필요한 정보가 있을 때만 추가한다.
+
+다음 이유만으로 supporting copy/banner/helper text를 새로 만들지 않는다.
+
+- UI에서 이미 제거되어 존재하지 않는 action을 설명하기 위해
+- disabled/read-only 구조만으로 충분히 명확한 사실을 다시 풀어쓰기 위해
+- 이전 상태에서 무엇을 할 수 있었는지 설명하기 위해
+- 친절해 보이기 위해 상태명을 문장으로 반복하기 위해
+- 과거 workflow를 유추하게 하는 잔여 설명을 남기기 위해
+
+특히 read-only/closed 화면에서는 **현재 상태를 이해하는 데 필요한 최소 정보**만 남긴다.
+
+예:
+- `제출이 마감되었습니다.`가 현재 상태를 충분히 설명하고 edit/save/submit UI가 제거되어 있다면, `현재 제출된 내용을 수정할 수 없습니다.`를 추가해 사라진 편집 action을 다시 설명하지 않는다.
+
+단, action이 보이지 않는 이유가 사용자에게 모호하거나 오해/손실 위험이 있는 경우에는 필요한 설명을 제공한다.
