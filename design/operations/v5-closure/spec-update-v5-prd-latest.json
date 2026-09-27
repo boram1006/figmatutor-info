@@ -1,0 +1,47 @@
+{
+  "op": "update",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "rootId": "20:823",
+  "fitRootHeightToContents": true,
+  "_source": "design/operations/v5-closure/spec-update-v5-prd.json",
+  "_intent": "기존 v5 PRD 노란 박스(20:823)의 구조/스타일은 유지하고, 2026-09-28 확정된 A-32 저장/제출/마감 정책만 최소 patch한다. 신규 PRD frame을 만들지 않는다.",
+  "patches": [
+    {
+      "nodeId": "20:828",
+      "expectedType": "TEXT",
+      "expectedName": "b:진입/개요",
+      "characters": "마이페이지 좌측 네비의 ‘내 지원 현황’ 탭에서 진입한다. 본선 진출 지원서가 있으면 최종보고서 작성 카드가 노출되고 [이어 작성하기 →]로 A-31에 진입한다. A-31/A-32에서는 기존 화면과 동일하게 ‘지원하기’ 컨텍스트 표시가 정상이다. 상단 안내 배너: “10월 16일까지 제출을 완료해주세요. 제출완료 이후에도 제출 마감 전까지는 수정 가능합니다.” 로딩·에러는 기존 공통 양식을 사용하고, empty state는 실제 필요가 확인될 때만 추가한다."
+    },
+    {
+      "nodeId": "20:830",
+      "expectedType": "TEXT",
+      "expectedName": "b:상태 머신",
+      "characters": "최종보고서 제출은 명시적 완결 이벤트다. 상태는 ① 본선 진행중·작성중: Red ‘본선 진행중’, 최초 content completion 7/8 ② 제출완료: Green ‘제출완료’ ③ 제출완료+수정사항 미반영: primary ‘제출완료’를 유지하면서 secondary Warning ‘재제출 필요’ 표시 ④ 본선 미진출: Gray ‘본선 미진출’. A-32 [최종 패키지 일괄 제출하기] 성공 시 제출완료, 제출 후 항목 수정 시 SUBMITTED + CHANGED_AFTER_SUBMIT, [변경사항 다시 제출하기] 성공 시 다시 변경 없음 상태가 된다. 수정분은 자동 반영되지 않고 재제출해야 심사에 반영된다. 제출 마감 후에는 별도의 제출/미제출 UI 상태로 나누지 않고 단일 DEADLINE_PASSED 상태에서 마감 시점의 최종 제출본을 read-only로 조회한다."
+    },
+    {
+      "nodeId": "20:850",
+      "expectedType": "TEXT",
+      "expectedName": "b:제출 후 수정 정책 (확정·재제출 모델)",
+      "characters": "최종 제출은 [최종 패키지 일괄 제출하기]라는 명시적 액션으로만 workflow state를 변경한다. [저장]이나 일반 navigation은 제출을 발생시키지 않는다. 제출 후 마감 전까지 각 항목을 수정할 수 있지만 기존 제출본은 유지되며, 수정 후에는 primary state=SUBMITTED를 유지한 채 secondary Warning ‘수정사항 미반영/재제출 필요’를 표시한다. 수정분은 [변경사항 다시 제출하기]로 재제출해야 심사에 반영된다. 재제출 성공 시 changed state가 해소되고 최신 제출본이 반영된다. SUBMITTED 화면의 하단 안내는 “마감 전까지 모든 항목을 수정할 수 있습니다. 수정 후에는 다시 제출해야 합니다.”로 표시한다."
+    },
+    {
+      "nodeId": "20:852",
+      "expectedType": "TEXT",
+      "expectedName": "b:하단 제출 버튼 상태값",
+      "characters": "① 최초 제출 전·4종 미충족: [저장] 사용 가능 + ‘최종 패키지 일괄 제출하기 →’ 비활성 ② 최초 제출 전·4종 충족: [저장] 사용 가능 + 동일 제출 라벨 활성 ③ 제출완료·변경 없음: [저장] 사용 가능 + ‘제출 완료됨 ✓’ muted 비활성 ④ 제출 후 수정: [저장] 사용 가능 + ‘변경사항 다시 제출하기 →’ Red primary 재활성 + Warning ‘수정사항 미반영’ 안내 ⑤ 제출 마감 이후: 저장/제출/재제출 버튼을 모두 제거한다. 화면 용어는 ‘임시 저장’이 아니라 ‘저장’으로 통일하며, 저장만으로 submitted state가 되지 않는다."
+    },
+    {
+      "nodeId": "20:854",
+      "expectedType": "TEXT",
+      "expectedName": "b:표기/레이아웃",
+      "characters": "4종 카드는 2×2로 배치하고 완료=Green ‘✔ 완료’, 미등록=Gray ‘미등록’으로 표시한다. 발표 자료는 PDF 파일명/용량 및 미리보기 또는 업로드 상태를 표시하고, 데모/저장소 링크는 [↗] 아이콘을 동반한다. 마감 관련 UI는 기존 서비스에서 정의한 마감 시각을 따르며 v5가 별도 timestamp를 새로 표시하지 않는다. 제출 마감 후 A-32는 단일 DEADLINE_PASSED read-only 상태로 전환하고, 저장/제출 관련 action은 노출하지 않는다. 상태 안내는 “제출이 마감되었습니다.”만 표시하며, 이미 제거된 편집 action을 설명하는 추가 문구는 두지 않는다."
+    },
+    {
+      "nodeId": "20:857",
+      "expectedType": "TEXT",
+      "expectedName": "b:공통 규칙",
+      "characters": "상태 semantic: 완료/제출완료=Green, 진행중=Red, 미제출·미등록=Gray, 재제출 필요=Warning. Save와 Final Submit은 서로 다른 이벤트이며 Final Submit만 제출 workflow state를 변경한다. 제출 후 수정은 기존 제출본을 삭제하거나 자동 반영하지 않고 SUBMITTED + CHANGED_AFTER_SUBMIT으로 표현한다. backend/domain state가 달라도 사용자에게 보이는 정보·가능 action·편집 가능성·다음 workflow가 동일하면 별도 UI state로 분리하지 않는다. 현재 UI가 이미 명확히 전달하는 사실이나 제거된 action을 설명하기 위한 불필요한 안내 문구는 추가하지 않는다. 로딩·에러는 기존 공통 양식을 사용하고 화면별로 다시 정의하지 않는다. empty state는 실제 필요가 확인될 때만 추가한다."
+    }
+  ]
+}
