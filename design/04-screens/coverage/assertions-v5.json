@@ -2,118 +2,36 @@
   "schemaVersion": 1,
   "release": "v5",
   "snapshotPath": "design/operations/v5-latest-snapshot/snapshot-v5-latest.json",
-  "excludeAncestorIds": [
-    "20:823"
-  ],
+  "excludeAncestorIds": ["20:823"],
   "assertions": [
-    {
-      "id": "A30_INITIAL_PROGRESS_TEXT",
-      "type": "node-text",
-      "nodeId": "1:23100",
-      "equals": "7 / 8"
-    },
-    {
-      "id": "A30_INITIAL_PROGRESS_VISUAL",
-      "type": "node-width",
-      "nodeId": "1:23102",
-      "equals": 105
-    },
-    {
-      "id": "A32_DEADLINE_SUBMITTED_FRAME",
-      "type": "frame-name",
-      "equals": "A-32_submission-package_DEADLINE_PASSED_SUBMITTED"
-    },
-    {
-      "id": "A32_DEADLINE_SUBMITTED_ALL_SECTIONS_COMPLETE",
-      "type": "text-present",
-      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED_SUBMITTED",
-      "equals": "완료",
-      "minCount": 8
-    },
-    {
-      "id": "A32_DEADLINE_SUBMITTED_STATUS",
-      "type": "text-present",
-      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED_SUBMITTED",
-      "equals": "접수 상태: 제출완료 · 마감"
-    },
-    {
-      "id": "A32_DEADLINE_SUBMITTED_FINAL_COPY",
-      "type": "text-present",
-      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED_SUBMITTED",
-      "equals": "접수가 마감되었습니다. 마지막으로 제출된 버전이 최종본입니다."
-    },
-    {
-      "id": "A32_DEADLINE_SUBMITTED_NO_UNREGISTERED",
-      "type": "text-absent",
-      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED_SUBMITTED",
-      "equals": "미등록"
-    },
-    {
-      "id": "A32_DEADLINE_SUBMITTED_CTA",
-      "type": "text-present",
-      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED_SUBMITTED",
-      "equals": "제출 마감됨"
-    },
-    {
-      "id": "A32_DEADLINE_SUBMITTED_DISABLED_CONTROLS",
-      "type": "instance-property",
-      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED_SUBMITTED",
-      "property": "state",
-      "equals": "disabled",
-      "minCount": 2
-    },
-    {
-      "id": "A32_DEADLINE_NOT_SUBMITTED_FRAME",
-      "type": "frame-name",
-      "equals": "A-32_submission-package_DEADLINE_PASSED_NOT_SUBMITTED"
-    },
-    {
-      "id": "A32_DEADLINE_NOT_SUBMITTED_STATUS",
-      "type": "text-present",
-      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED_NOT_SUBMITTED",
-      "equals": "접수 상태: 미제출 · 마감"
-    },
-    {
-      "id": "A32_DEADLINE_NOT_SUBMITTED_HAS_UNREGISTERED",
-      "type": "text-present",
-      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED_NOT_SUBMITTED",
-      "equals": "미등록"
-    },
-    {
-      "id": "A32_DEADLINE_NOT_SUBMITTED_CTA",
-      "type": "text-present",
-      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED_NOT_SUBMITTED",
-      "equals": "제출 마감됨"
-    },
-    {
-      "id": "A32_DEADLINE_NOT_SUBMITTED_DISABLED_CONTROLS",
-      "type": "instance-property",
-      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED_NOT_SUBMITTED",
-      "property": "state",
-      "equals": "disabled",
-      "minCount": 2
-    },
-    {
-      "id": "A32_PDF_GUIDANCE",
-      "type": "text-present",
-      "equals": "PDF 파일만 · 최대 50MB",
-      "minCount": 4
-    },
-    {
-      "id": "A32_NO_PPTX_AS_REGISTERED_FILE",
-      "type": "text-absent",
-      "equals": "최종_아뜰리에_발표자료_v1.2.pptx"
-    },
-    {
-      "id": "A32_PDF_AS_REGISTERED_FILE",
-      "type": "text-present",
-      "equals": "최종_아뜰리에_발표자료_v1.2.pdf",
-      "minCount": 4
-    },
-    {
-      "id": "A32_PROVIDER_NEUTRAL",
-      "type": "text-absent",
-      "equals": "사내 GitLab"
-    }
+    {"id":"A30_INITIAL_PROGRESS_TEXT","type":"node-text","nodeId":"1:23100","equals":"7 / 8"},
+    {"id":"A30_INITIAL_PROGRESS_VISUAL","type":"node-width","nodeId":"1:23102","equals":105},
+    {"id":"A30_RESUBMIT_WARNING_BINDING","type":"node-fill-binding","nodeId":"49:1308","equals":"status-warning"},
+    {"id":"A32_INCOMPLETE_SUBMIT_DISABLED","type":"node-instance-property","nodeId":"17:1256","property":"state","equals":"disabled"},
+    {"id":"A32_SUBMITTED_STATUS","type":"text-present","scopeFrameName":"A-32_submission-package_SUBMITTED","equals":"접수 상태: 제출완료"},
+    {"id":"A32_SUBMITTED_SUBMIT_DISABLED","type":"node-instance-property","nodeId":"76:2150","property":"state","equals":"disabled"},
+    {"id":"A32_CHANGED_STATUS","type":"text-present","scopeFrameName":"A-32_submission-package_SUBMITTED_CHANGED","equals":"접수 상태: 제출완료 · 수정사항 미반영"},
+    {"id":"A32_CHANGED_RESUBMIT_ENABLED","type":"node-instance-property","nodeId":"76:2415","property":"state","equals":"default"},
+    {"id":"A32_DEADLINE_SUBMITTED_FRAME","type":"frame-name","equals":"A-32_submission-package_DEADLINE_PASSED_SUBMITTED"},
+    {"id":"A32_DEADLINE_SUBMITTED_ALL_SECTIONS_COMPLETE","type":"text-present","scopeFrameName":"A-32_submission-package_DEADLINE_PASSED_SUBMITTED","equals":"완료","minCount":8},
+    {"id":"A32_DEADLINE_SUBMITTED_STATUS","type":"text-present","scopeFrameName":"A-32_submission-package_DEADLINE_PASSED_SUBMITTED","equals":"접수 상태: 제출완료 · 마감"},
+    {"id":"A32_DEADLINE_SUBMITTED_FINAL_COPY","type":"text-present","scopeFrameName":"A-32_submission-package_DEADLINE_PASSED_SUBMITTED","equals":"접수가 마감되었습니다. 마지막으로 제출된 버전이 최종본입니다."},
+    {"id":"A32_DEADLINE_SUBMITTED_NO_UNREGISTERED","type":"text-absent","scopeFrameName":"A-32_submission-package_DEADLINE_PASSED_SUBMITTED","equals":"미등록"},
+    {"id":"A32_DEADLINE_SUBMITTED_CTA","type":"text-present","scopeFrameName":"A-32_submission-package_DEADLINE_PASSED_SUBMITTED","equals":"제출 마감됨"},
+    {"id":"A32_DEADLINE_SUBMITTED_DISABLED_CONTROLS","type":"instance-property","scopeFrameName":"A-32_submission-package_DEADLINE_PASSED_SUBMITTED","property":"state","equals":"disabled","minCount":2},
+    {"id":"A32_DEADLINE_SUBMITTED_SAVE_DISABLED_EXACT","type":"node-instance-property","nodeId":"98:2864","property":"state","equals":"disabled"},
+    {"id":"A32_DEADLINE_SUBMITTED_SUBMIT_DISABLED_EXACT","type":"node-instance-property","nodeId":"98:2865","property":"state","equals":"disabled"},
+    {"id":"A32_DEADLINE_NOT_SUBMITTED_FRAME","type":"frame-name","equals":"A-32_submission-package_DEADLINE_PASSED_NOT_SUBMITTED"},
+    {"id":"A32_DEADLINE_NOT_SUBMITTED_STATUS","type":"text-present","scopeFrameName":"A-32_submission-package_DEADLINE_PASSED_NOT_SUBMITTED","equals":"접수 상태: 미제출 · 마감"},
+    {"id":"A32_DEADLINE_NOT_SUBMITTED_HAS_UNREGISTERED","type":"text-present","scopeFrameName":"A-32_submission-package_DEADLINE_PASSED_NOT_SUBMITTED","equals":"미등록"},
+    {"id":"A32_DEADLINE_NOT_SUBMITTED_CTA","type":"text-present","scopeFrameName":"A-32_submission-package_DEADLINE_PASSED_NOT_SUBMITTED","equals":"제출 마감됨"},
+    {"id":"A32_DEADLINE_NOT_SUBMITTED_DISABLED_CONTROLS","type":"instance-property","scopeFrameName":"A-32_submission-package_DEADLINE_PASSED_NOT_SUBMITTED","property":"state","equals":"disabled","minCount":2},
+    {"id":"A32_DEADLINE_NOT_SUBMITTED_SAVE_DISABLED_EXACT","type":"node-instance-property","nodeId":"98:3128","property":"state","equals":"disabled"},
+    {"id":"A32_DEADLINE_NOT_SUBMITTED_SUBMIT_DISABLED_EXACT","type":"node-instance-property","nodeId":"98:3129","property":"state","equals":"disabled"},
+    {"id":"A32_PDF_GUIDANCE","type":"text-present","equals":"PDF 파일만 · 최대 50MB","minCount":4},
+    {"id":"A32_NO_PPTX_AS_REGISTERED_FILE","type":"text-absent","equals":"최종_아뜰리에_발표자료_v1.2.pptx"},
+    {"id":"A32_PDF_AS_REGISTERED_FILE","type":"text-present","equals":"최종_아뜰리에_발표자료_v1.2.pdf","minCount":4},
+    {"id":"A32_PROVIDER_NEUTRAL","type":"text-absent","equals":"사내 GitLab"},
+    {"id":"V5_NEW_MENU_LABEL_NO_BANG","type":"text-absent","equals":"신규 메뉴!!"}
   ]
 }
