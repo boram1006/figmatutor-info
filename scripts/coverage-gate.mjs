@@ -62,6 +62,17 @@ function minCount(a) {
   return Number.isInteger(a.minCount) ? a.minCount : 1;
 }
 
+function instancePropertyOf(n, property) {
+  if (n?.type !== 'INSTANCE') return undefined;
+  const cp = n.instance?.componentProperties?.[property];
+  const vp = n.instance?.variantProperties?.[property];
+  return cp && typeof cp === 'object' && 'value' in cp ? cp.value : vp;
+}
+
+function fillBindingNames(n) {
+  return (n?.fills || []).map(fill => fill?.binding?.name).filter(Boolean);
+}
+
 function evaluate(a) {
   const pool = visibleNodes(a);
   if (a.type === 'node-text') {
@@ -94,14 +105,20 @@ function evaluate(a) {
     return count === 0 ? null : `${a.id}: 금지 regex text 존재 /${a.pattern}/ count=${count}`;
   }
   if (a.type === 'instance-property') {
-    const count = pool.filter(n => {
-      if (n.type !== 'INSTANCE') return false;
-      const cp = n.instance?.componentProperties?.[a.property];
-      const vp = n.instance?.variantProperties?.[a.property];
-      const actual = cp && typeof cp === 'object' && 'value' in cp ? cp.value : vp;
-      return String(actual) === String(a.equals);
-    }).length;
+    const count = pool.filter(n => String(instancePropertyOf(n, a.property)) === String(a.equals)).length;
     return count >= minCount(a) ? null : `${a.id}: INSTANCE property 부족 ${a.property}=${a.equals} count=${count}`;
+  }
+  if (a.type === 'node-instance-property') {
+    const n = byId.get(a.nodeId);
+    const actual = instancePropertyOf(n, a.property);
+    return n && !hasExcludedAncestor(n) && String(actual) === String(a.equals)
+      ? null : `${a.id}: node INSTANCE property 불일치 (${a.nodeId}) ${a.property} expected=${JSON.stringify(a.equals)} actual=${JSON.stringify(actual)}`;
+  }
+  if (a.type === 'node-fill-binding') {
+    const n = byId.get(a.nodeId);
+    const actual = fillBindingNames(n);
+    return n && !hasExcludedAncestor(n) && actual.includes(a.equals)
+      ? null : `${a.id}: node fill binding 불일치 (${a.nodeId}) expected=${JSON.stringify(a.equals)} actual=${JSON.stringify(actual)}`;
   }
   return `${a.id}: 알 수 없는 assertion type ${a.type}`;
 }
