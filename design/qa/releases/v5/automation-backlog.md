@@ -1,72 +1,47 @@
-# v5 Playwright Automation Backlog
+# v5 QA Automation Backlog — Deferred
 
 Source: `design/qa/releases/v5/qa-cases.yaml`
 
-서비스 기능/데이터/상태/validation QA의 자동화 후보만 관리한다. 디자인 pixel/visual 검수는 대상이 아니다.
+## Current decision
 
-## Tier 0 — smoke / core state
+V5에서는 브라우저 QA 자동화를 구현하지 않는다.
 
-- QA-V5-A30-001 — 최초 completion 7/8
-- QA-V5-A30-002 — 작성중 → 이어 작성 workflow
-- QA-V5-A32-001 — package 4종 표시
-- QA-V5-A32-003 — 저장 ≠ 최종 제출
-- QA-V5-A32-004 — 최종 제출 성공
-- QA-V5-A32-005 — 제출 후 수정 → 재제출 필요
-- QA-V5-A32-006 — 재제출 → 최신 제출본
-- QA-V5-CROSS-002 — A-30/A-32 상태 sync
+현재 QA는 21개 수준이며 여러 TC를 하나의 사용자 journey에서 함께 검수할 수 있다. 실제 화면의 의미와 상태를 사람이 최종 확인해야 하는 항목도 많다. 현재 회사 작업 환경에서는 자동화를 위한 실행 환경, 테스트 fixture, 상태 제어를 별도로 구축하는 비용이 수동 QA 절감 효과보다 클 가능성이 높다.
 
-## Fixture 준비 후
+따라서 이번 V5는 `manual-checklist.md`의 journey 기반 수동 QA를 사용한다.
 
-- QA-V5-A31-001 — 7개 승계 + 수정 가능
-- QA-V5-A31-002 — completion 7/8 → 8/8
-- QA-V5-A31-004 — 서버 completion 상태 반영
-- QA-V5-A32-002 — 미등록 item + 제출 불가
-- QA-V5-A32-009 — PDF only 업로드
-- QA-V5-A32-012 — submitted unchanged
-- QA-V5-CROSS-001 — 전체 workflow continuity
+## 계속 자동화하는 영역
 
-## 환경/contract 준비 후
+Design Flow Harness의 구조/semantic coverage 자동화는 유지한다.
 
-- QA-V5-A32-007 — 기존 report viewer modal open/close/read-only
-- QA-V5-A32-008 — AI .pptx 생성 workflow (async contract 필요)
-- QA-V5-A32-011 — 제출 마감 후 read-only (backend time control 필요)
+- mutation 후 scoped extract
+- 최신 snapshot 갱신
+- coverage assertion
+- semantic state / 필수 상태 누락 검증
+- 반복되는 생성 실수의 harness/coverage 회귀 방지
 
-## stable selector contract
+이는 실제 서비스 QA와 별도 영역이다.
 
-```text
-a30-report-card-{applicationId}
-a30-report-progress
-a30-report-primary-state
-a30-report-action-needed
-a30-report-resubmit
+## 다시 검토할 시점
 
-a31-content-progress
-a31-step-{n}
-a31-section-{n}
-a31-next
-a31-back
+아래 상황이 생기면 브라우저 QA 자동화를 다시 검토한다.
 
-a32-package-grid
-a32-artifact-report
-a32-artifact-deck
-a32-artifact-demo
-a32-artifact-repository
-a32-save
-a32-submit
-a32-resubmit
-a32-submit-state
-a32-action-needed
-a32-report-viewer
-a32-report-viewer-close
-```
+- V6/V7 등에서 동일 회귀 QA를 반복 실행하게 됨
+- QA 수가 크게 증가함
+- 동일 제출/수정/재제출 흐름을 여러 환경에서 반복해야 함
+- 테스트용 fixture/seed 또는 상태 제어 환경이 자연스럽게 제공됨
+- 브라우저 agent 또는 Playwright 실행 환경을 별도 구축 없이 사용할 수 있게 됨
 
-## 실제 Playwright spec 생성 전 필요한 webapp contract
+## 향후 자동화 후보
 
-1. baseURL / actual route
-2. auth/storageState
-3. fixture/seed 방식
-4. stable `data-testid`
-5. deadline E2E용 backend time control
-6. 발표자료 생성 비동기 완료/실패 contract
+자동화를 재개한다면 우선순위는 다음과 같다.
 
-제품 정책 또는 Figma 디자인 누락은 현재 blocker가 아니다.
+1. 저장 ≠ 최종 제출
+2. 최종 제출 성공
+3. 제출 후 수정 → 재제출 필요
+4. 재제출 → 최신 제출본 반영
+5. A-30/A-32 상태 동기화
+6. package 4종 및 미등록 상태
+7. 7/8 → 8/8 completion
+
+마감 상태처럼 backend time control이 필요한 케이스와 AI 발표자료 생성처럼 비동기 contract가 필요한 케이스는 후순위로 둔다.
