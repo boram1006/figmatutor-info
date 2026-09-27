@@ -104,9 +104,20 @@ Examples:
 ### Do
 - content 영역 상단 또는 관련 workflow 단계 바로 위
 - warning severity에 따라 semantic color
+- 현재 상태를 이해하거나 다음 행동을 결정하는 데 필요한 정보만 제공
+- UI만으로는 알기 어려운 consequence, deadline, required follow-up을 설명
 
 ### Do not
-단일 field 설명을 page-wide banner로 승격하지 않는다.
+- 단일 field 설명을 page-wide banner로 승격하지 않는다.
+- 화면에 이미 명확히 표현된 상태를 문장으로 반복하지 않는다.
+- 제거된/존재하지 않는 CTA나 편집 기능을 굳이 언급해 이전 상태를 설명하지 않는다.
+- 사용자가 취할 수 있는 action이 없는데 action-oriented 안내를 억지로 추가하지 않는다.
+- `친절한 안내가 있으면 좋을 것 같다`는 이유만으로 copy를 발명하지 않는다.
+
+### Minimal copy rule
+안내를 제거해도 사용자가 **현재 상태 + 가능한 행동 + 중요한 consequence**를 동일하게 이해할 수 있다면 그 안내는 기본적으로 생략한다.
+
+Closed/read-only 상태에서는 현재 상태를 설명하는 최소 문구를 우선하고, 이미 사라진 action을 역으로 설명하는 문구는 추가하지 않는다.
 
 ---
 
