@@ -1,6 +1,71 @@
 {
-  "_status": "PENDING_PLUGIN_RESULT",
-  "_operation": "Normalize V5 '신규 메뉴' labels",
-  "_spec": "design/operations/v5-closure/spec-update-v5-new-menu-label.json",
-  "_instruction": "Design Flow Harness plugin 실행 결과 JSON 전체로 이 파일 내용을 교체하세요. 오류가 발생하면 성공 결과를 임의 작성하지 말고 error 메시지를 그대로 전달하세요."
+  "op": "update",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "rootId": "1:23008",
+  "changed": [
+    {
+      "nodeId": "1:23167",
+      "name": "신규 메뉴",
+      "type": "TEXT",
+      "fields": [
+        "characters",
+        "name"
+      ]
+    },
+    {
+      "nodeId": "1:23577",
+      "name": "신규 메뉴",
+      "type": "TEXT",
+      "fields": [
+        "characters",
+        "name"
+      ]
+    },
+    {
+      "nodeId": "17:1044",
+      "name": "신규 메뉴",
+      "type": "TEXT",
+      "fields": [
+        "characters",
+        "name"
+      ]
+    },
+    {
+      "nodeId": "76:1938",
+      "name": "신규 메뉴",
+      "type": "TEXT",
+      "fields": [
+        "characters",
+        "name"
+      ]
+    },
+    {
+      "nodeId": "76:2203",
+      "name": "신규 메뉴",
+      "type": "TEXT",
+      "fields": [
+        "characters",
+        "name"
+      ]
+    },
+    {
+      "nodeId": "98:2653",
+      "name": "신규 메뉴",
+      "type": "TEXT",
+      "fields": [
+        "characters",
+        "name"
+      ]
+    },
+    {
+      "nodeId": "98:2919",
+      "name": "신규 메뉴",
+      "type": "TEXT",
+      "fields": [
+        "characters",
+        "name"
+      ]
+    }
+  ],
+  "rootResize": null
 }
