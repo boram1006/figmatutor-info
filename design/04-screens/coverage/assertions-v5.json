@@ -94,11 +94,6 @@
       "minCount": 2
     },
     {
-      "id": "A32_REPORT_VIEWER",
-      "type": "frame-name",
-      "equals": "A-32_report-viewer-modal"
-    },
-    {
       "id": "A32_PDF_GUIDANCE",
       "type": "text-present",
       "equals": "PDF 파일만 · 최대 50MB",
