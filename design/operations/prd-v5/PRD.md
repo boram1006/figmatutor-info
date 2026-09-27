@@ -1,6 +1,6 @@
 # v5 릴리즈 PRD — 최종보고서 제출 (Final Report Submission)
 
-> 기준일: 2026-09-25
+> 기준일: 2026-09-28
 > 성격: 기존 v5 화면 역복원본에 사용자 확정 결정을 반영한 **현재 정본 PRD**.
 > 화면 ID `A-30/A-31/A-32`는 유지하되 slug 최종 승인만 남아 있다.
 
@@ -54,7 +54,7 @@
 - `재제출 필요`은 필수 확인 액션이므로 **Warning semantic**을 사용한다.
 
 상단 안내:
-> 10월 16일까지 제출을 완료해주세요. 제출완료 이후에도 접수 마감 전까지는 수정 가능합니다.
+> 10월 16일까지 제출을 완료해주세요. 제출완료 이후에도 제출 마감 전까지는 수정 가능합니다.
 
 로딩/에러는 기존 공통 양식을 사용하고 v5 화면별 별도 정책으로 정의하지 않는다. Empty state는 실제 필요가 확인될 때 추가한다.
 
@@ -99,8 +99,8 @@ UI는 서버가 내려준 완료/미완료 상태만 표시하며 required/optio
 ### 4종 구성
 
 | # | 구성요소 | 확정 동작 |
-|---|---|---|
-| 1 | 기획/개발 최종 보고서 | `최종 보고서 확인` → SECTION 1~8 통합 **read-only modal**. `발표 자료 초안 생성 (.pptx)` → AI가 수정용 PPTX 생성 |
+|---|---|
+| 1 | 기획/개발 최종 보고서 | `최종 보고서 확인` → SECTION 1~8 통합 **기존 read-only modal 재사용**. `발표 자료 초안 생성 (.pptx)` → AI가 수정용 PPTX 생성 |
 | 2 | 발표 자료 | **등록은 PDF only**. AI 생성 PPTX는 수정용이며 사용자가 PDF로 변환해 등록 |
 | 3 | 서비스 데모 URL | URL + `테스트 ↗` |
 | 4 | 소스코드 저장소 | **링크 입력칸만 제공**. provider 제한/검증 없음 |
@@ -108,6 +108,7 @@ UI는 서버가 내려준 완료/미완료 상태만 표시하며 required/optio
 완료=Green ✔, 미등록=Gray.
 
 ### 최종 보고서 확인
+- 신규 전용 modal frame을 생성하지 않는다. **기존 read-only modal을 재사용**한다.
 - 현재 A-32 위에 modal/overlay로 연다.
 - SECTION 1~8 내용을 통합해서 읽기 전용으로 보여준다.
 - edit control 없음.
@@ -118,34 +119,37 @@ UI는 서버가 내려준 완료/미완료 상태만 표시하며 required/optio
 - 최종 등록: **PDF only**
 - 업로드 안내: `최대 50MB · PDF 파일만 업로드 가능`
 
-### 제출 버튼 상태
+### 저장 / 제출 버튼 상태
 
-| 시점 | 버튼 | 상태 |
+| 시점 | 저장 | 제출 |
 |---|---|---|
-| 4종 미충족 | `최종 패키지 일괄 제출하기 →` | 비활성 |
-| 4종 충족 | 동일 라벨 | 활성 |
-| 제출완료·변경없음 | `제출 완료됨 ✓` | muted 비활성 |
-| 제출 후 수정 | `변경사항 다시 제출하기 →` | Red primary 재활성 + Warning 안내 |
-| 마감 후 | `제출 마감됨` | 비활성 + 잠금 |
+| 4종 미충족 | `저장` 사용 가능 | `최종 패키지 일괄 제출하기 →` 비활성 |
+| 4종 충족 | `저장` 사용 가능 | `최종 패키지 일괄 제출하기 →` 활성 |
+| 제출완료·변경없음 | `저장` 사용 가능 | `제출 완료됨 ✓` muted 비활성 |
+| 제출 후 수정 | `저장` 사용 가능 | `변경사항 다시 제출하기 →` Red primary 재활성 |
+| 제출 마감 후 | **버튼 없음** | **버튼 없음** |
 
-- `임시 저장`은 제출과 별개이며 마감 전 사용 가능하다.
-- 임시 저장만으로 submitted state가 되지 않는다.
+- 화면 용어는 `임시 저장`이 아니라 **`저장`**으로 통일한다.
+- `저장`은 Final Submit과 별개이며 제출 마감 전 사용 가능하다.
+- 저장만으로 submitted state가 되지 않는다.
+- `A-32_submission-package_SUBMITTED` 하단 안내 문구는 **`마감 전까지 모든 항목을 수정할 수 있습니다. 수정 후에는 다시 제출해야 합니다.`** 로 한다.
 
-### 마감 후 정책
+### 제출 마감 후 정책
 기존 서비스에서 정의하는 마감 시각을 따른다. v5 UI에 별도 canonical timestamp를 새로 노출하지 않는다.
 
-마감 도달 시:
-- **edit 잠금**
-- **save 잠금**
-- **submit/re-submit 잠금**
-- 전체 read-only
-- 마지막 제출본이 최종본
+제출 마감 도달 시:
+- DEADLINE_PASSED를 제출/미제출 상태로 분리하지 않는다. **단일 `A-32_submission-package_DEADLINE_PASSED`** 상태를 사용한다.
+- 이 화면은 **마감 시점의 최종 제출본을 조회하는 화면**이다.
+- 전체 read-only이며 edit control을 제공하지 않는다.
+- `저장`, submit, re-submit 버튼을 모두 제거한다.
+- disabled `제출 마감됨` 버튼도 두지 않는다.
+- 상태 안내 문구는 **`제출이 마감되었습니다.`** 만 표시한다.
 
 ---
 
 ## 6. 공통 상태 원칙
 
-- 완료/접수완료 = Green
+- 완료/제출완료 = Green
 - 진행중 = Red
 - 미제출/미등록 = Gray
 - 재제출 필요 = Warning
@@ -153,17 +157,33 @@ UI는 서버가 내려준 완료/미완료 상태만 표시하며 required/optio
 - Final Submit만 workflow의 제출 상태를 변경한다.
 - 제출 후 수정은 기존 제출본을 삭제하지 않고 `SUBMITTED + CHANGED_AFTER_SUBMIT`으로 표현한다.
 
+### 버튼 최소 폭
+- 버튼의 최소 가로 폭은 **84px**이다.
+- 라벨이 짧아 content 기반 너비가 84px 미만이 되는 경우에도 버튼 너비는 84px 이상을 유지한다.
+- 라벨/패딩으로 필요한 너비가 84px을 넘으면 내용에 맞게 확장한다.
+- 디자인 생성 시 짧은 라벨을 이유로 84px 미만의 버튼을 만들지 않는다.
+
 ---
 
-## 7. 디자인 반영 필요
+## 7. 현재 디자인 반영 상태 / 다음 동기화
 
-현재 Figma 기준:
-- A-30 작성중 progress `1/8` → **7/8** 수정 필요
-- A-30 재제출 표현 → primary `제출완료` + Warning `재제출 필요`로 수정 필요
-- A-32 `SUBMITTED / 변경 없음` variant 필요
-- A-32 `SUBMITTED + CHANGED_AFTER_SUBMIT` variant 필요
-- A-32 `DEADLINE_PASSED` 전체 read-only variant 필요
-- `최종 보고서 확인` read-only modal 필요
+최근 검증 snapshot 기준으로 다음 항목은 이미 구현·검증되었다.
+- A-30 작성중 progress **7/8**
+- A-30 primary `제출완료` + Warning `재제출 필요`
+- A-32 `SUBMITTED / 변경 없음`
+- A-32 `SUBMITTED + CHANGED_AFTER_SUBMIT`
+- A-31/A-32 5번 section 명칭 `신규 메뉴`
+- `최종 보고서 확인`은 기존 modal 재사용 정책으로 확정되어 신규 viewer modal을 생성하지 않는다.
+
+이번 PRD 변경으로 **다음 Figma 동기화에서 확인할 delta**:
+- A-32 전 상태의 `임시 저장` → `저장`
+- `A-32_submission-package_SUBMITTED` 하단 안내 문구 수정
+- 기존 `DEADLINE_PASSED_SUBMITTED` / `DEADLINE_PASSED_NOT_SUBMITTED`를 단일 DEADLINE_PASSED 표현으로 정리
+- DEADLINE_PASSED에서 저장/제출 관련 버튼 제거
+- DEADLINE_PASSED 안내 `제출이 마감되었습니다.`
+- 해당 화면의 짧은 버튼이 최소 폭 84px을 지키는지 확인
+
+사용자가 현재 Figma를 직접 수정 중이므로 **기존 최신 snapshot은 이 PRD delta가 반영되기 전 상태**로 취급한다. 다음 scoped extract가 올라오기 전에는 위 delta를 coverage PASS로 간주하지 않는다.
 
 Figma 생성은 `INSTANCE_REUSE → CLONE_COMPOSE → NEW_CONSTRUCTION` 원칙을 따른다.
 snapshot에서 확인하지 않은 nodeId/nodeName은 추측하지 않는다.
