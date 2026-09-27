@@ -2,7 +2,9 @@
   "schemaVersion": 1,
   "release": "v5",
   "snapshotPath": "design/operations/v5-latest-snapshot/snapshot-v5-latest.json",
-  "excludeAncestorIds": ["20:823"],
+  "excludeAncestorIds": [
+    "20:823"
+  ],
   "assertions": [
     {
       "id": "A30_INITIAL_PROGRESS_TEXT",
@@ -17,23 +19,79 @@
       "equals": 105
     },
     {
-      "id": "A32_DEADLINE_FRAME",
+      "id": "A32_DEADLINE_SUBMITTED_FRAME",
       "type": "frame-name",
-      "equals": "A-32_submission-package_DEADLINE_PASSED"
+      "equals": "A-32_submission-package_DEADLINE_PASSED_SUBMITTED"
     },
     {
-      "id": "A32_DEADLINE_CTA",
+      "id": "A32_DEADLINE_SUBMITTED_ALL_SECTIONS_COMPLETE",
       "type": "text-present",
-      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED",
+      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED_SUBMITTED",
+      "equals": "완료",
+      "minCount": 8
+    },
+    {
+      "id": "A32_DEADLINE_SUBMITTED_STATUS",
+      "type": "text-present",
+      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED_SUBMITTED",
+      "equals": "접수 상태: 제출완료 · 마감"
+    },
+    {
+      "id": "A32_DEADLINE_SUBMITTED_FINAL_COPY",
+      "type": "text-present",
+      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED_SUBMITTED",
+      "equals": "접수가 마감되었습니다. 마지막으로 제출된 버전이 최종본입니다."
+    },
+    {
+      "id": "A32_DEADLINE_SUBMITTED_NO_UNREGISTERED",
+      "type": "text-absent",
+      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED_SUBMITTED",
+      "equals": "미등록"
+    },
+    {
+      "id": "A32_DEADLINE_SUBMITTED_CTA",
+      "type": "text-present",
+      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED_SUBMITTED",
       "equals": "제출 마감됨"
     },
     {
-      "id": "A32_DEADLINE_DISABLED_CONTROLS",
+      "id": "A32_DEADLINE_SUBMITTED_DISABLED_CONTROLS",
       "type": "instance-property",
-      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED",
+      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED_SUBMITTED",
       "property": "state",
       "equals": "disabled",
-      "minCount": 3
+      "minCount": 2
+    },
+    {
+      "id": "A32_DEADLINE_NOT_SUBMITTED_FRAME",
+      "type": "frame-name",
+      "equals": "A-32_submission-package_DEADLINE_PASSED_NOT_SUBMITTED"
+    },
+    {
+      "id": "A32_DEADLINE_NOT_SUBMITTED_STATUS",
+      "type": "text-present",
+      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED_NOT_SUBMITTED",
+      "equals": "접수 상태: 미제출 · 마감"
+    },
+    {
+      "id": "A32_DEADLINE_NOT_SUBMITTED_HAS_UNREGISTERED",
+      "type": "text-present",
+      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED_NOT_SUBMITTED",
+      "equals": "미등록"
+    },
+    {
+      "id": "A32_DEADLINE_NOT_SUBMITTED_CTA",
+      "type": "text-present",
+      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED_NOT_SUBMITTED",
+      "equals": "제출 마감됨"
+    },
+    {
+      "id": "A32_DEADLINE_NOT_SUBMITTED_DISABLED_CONTROLS",
+      "type": "instance-property",
+      "scopeFrameName": "A-32_submission-package_DEADLINE_PASSED_NOT_SUBMITTED",
+      "property": "state",
+      "equals": "disabled",
+      "minCount": 2
     },
     {
       "id": "A32_REPORT_VIEWER",
