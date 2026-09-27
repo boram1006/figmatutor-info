@@ -52,6 +52,14 @@
 일반적인 "깔끔한 SaaS UI" 관습을 적용해 기존 화면의 정보량을 임의로 줄이거나,
 모든 정보를 Card로 쪼개거나, 작업 컨텍스트를 여러 페이지로 분리하지 않는다.
 
+## 버튼 최소 가로 폭
+
+- 버튼은 **최소 84px의 가로 폭**을 유지한다.
+- 라벨이 짧아 intrinsic/content 기반 너비가 84px 미만이 되더라도 84px보다 좁게 생성하지 않는다.
+- 라벨과 내부 padding 때문에 필요한 너비가 84px을 넘는 경우에는 내용에 맞게 확장한다.
+- 기존 Design System의 실제 Button instance/component를 재사용할 때는 임의 primitive 버튼을 새로 만들지 않는다. 재사용한 버튼이 짧은 라벨 때문에 84px 미만으로 축소되는 경우에만 해당 instance의 허용된 크기 조정 방식으로 최소 폭을 보장한다.
+- 이 규칙은 신규 화면 생성뿐 아니라 기존 화면 수정 시 새로 추가하거나 라벨을 변경하는 버튼에도 적용한다.
+
 ## 신규 기획과 기존 화면 수정
 
 - **완전히 새로운 기획**: `novel-screen-reasoning.md`를 따라 Product Decision과 Design Decision을 분리하고, 기존 archetype 재사용 → pattern 조합 → Candidate Pattern 순으로 판단한다.
