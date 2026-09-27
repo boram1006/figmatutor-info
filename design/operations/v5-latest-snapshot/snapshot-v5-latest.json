@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "fileKey": "t00UvcVe1M6llSJFyXcDkG",
   "stage": "screens",
-  "inputDigest": "v5-post-deadline-states-verify-20260927",
-  "capturedAt": "2026-09-27T00:58:20.936Z",
+  "inputDigest": "v5-post-mutation-verify-20260926",
+  "capturedAt": "2026-09-27T17:12:04.596Z",
   "pageId": "1:987",
   "expectedFrameIds": [
     "1:2348",
@@ -27378,7 +27378,7 @@
           "bounds": {
             "x": 2809,
             "y": 839,
-            "width": 64,
+            "width": 55,
             "height": 20
           },
           "fills": [],
@@ -29419,7 +29419,7 @@
           "bounds": {
             "x": 4310,
             "y": 839,
-            "width": 64,
+            "width": 55,
             "height": 20
           },
           "fills": [],
@@ -31562,7 +31562,7 @@
           "bounds": {
             "x": 4310,
             "y": 2044,
-            "width": 64,
+            "width": 55,
             "height": 20
           },
           "fills": [],
@@ -33705,7 +33705,7 @@
           "bounds": {
             "x": 5817,
             "y": 839,
-            "width": 64,
+            "width": 55,
             "height": 20
           },
           "fills": [],
@@ -35848,7 +35848,7 @@
           "bounds": {
             "x": 5817,
             "y": 2044,
-            "width": 64,
+            "width": 55,
             "height": 20
           },
           "fills": [],
@@ -37991,7 +37991,7 @@
           "bounds": {
             "x": 7324,
             "y": 829,
-            "width": 64,
+            "width": 55,
             "height": 20
           },
           "fills": [],
@@ -40134,7 +40134,7 @@
           "bounds": {
             "x": 7324,
             "y": 2044,
-            "width": 64,
+            "width": 55,
             "height": 20
           },
           "fills": [],
@@ -43766,13 +43766,13 @@
         },
         {
           "id": "1:23167",
-          "name": "신규 메뉴!!",
+          "name": "신규 메뉴",
           "type": "TEXT",
           "parentId": "1:23166",
           "bounds": {
             "x": 2809,
             "y": 839,
-            "width": 64,
+            "width": 55,
             "height": 20
           },
           "fills": [
@@ -43803,7 +43803,7 @@
             "mixed": false
           },
           "text": {
-            "characters": "신규 메뉴!!",
+            "characters": "신규 메뉴",
             "autoResize": "WIDTH_AND_HEIGHT",
             "alignHorizontal": "LEFT",
             "alignVertical": "CENTER",
@@ -45859,13 +45859,13 @@
         },
         {
           "id": "1:23577",
-          "name": "신규 메뉴!!",
+          "name": "신규 메뉴",
           "type": "TEXT",
           "parentId": "1:23576",
           "bounds": {
             "x": 4310,
             "y": 839,
-            "width": 64,
+            "width": 55,
             "height": 20
           },
           "fills": [
@@ -45896,7 +45896,7 @@
             "mixed": false
           },
           "text": {
-            "characters": "신규 메뉴!!",
+            "characters": "신규 메뉴",
             "autoResize": "WIDTH_AND_HEIGHT",
             "alignHorizontal": "LEFT",
             "alignVertical": "CENTER",
@@ -48100,13 +48100,13 @@
         },
         {
           "id": "17:1044",
-          "name": "신규 메뉴!!",
+          "name": "신규 메뉴",
           "type": "TEXT",
           "parentId": "17:1043",
           "bounds": {
             "x": 4310,
             "y": 2044,
-            "width": 64,
+            "width": 55,
             "height": 20
           },
           "fills": [
@@ -48137,7 +48137,7 @@
             "mixed": false
           },
           "text": {
-            "characters": "신규 메뉴!!",
+            "characters": "신규 메뉴",
             "autoResize": "WIDTH_AND_HEIGHT",
             "alignHorizontal": "LEFT",
             "alignVertical": "CENTER",
@@ -50341,13 +50341,13 @@
         },
         {
           "id": "76:1938",
-          "name": "신규 메뉴!!",
+          "name": "신규 메뉴",
           "type": "TEXT",
           "parentId": "76:1937",
           "bounds": {
             "x": 5817,
             "y": 839,
-            "width": 64,
+            "width": 55,
             "height": 20
           },
           "fills": [
@@ -50378,7 +50378,7 @@
             "mixed": false
           },
           "text": {
-            "characters": "신규 메뉴!!",
+            "characters": "신규 메뉴",
             "autoResize": "WIDTH_AND_HEIGHT",
             "alignHorizontal": "LEFT",
             "alignVertical": "CENTER",
@@ -52582,13 +52582,13 @@
         },
         {
           "id": "76:2203",
-          "name": "신규 메뉴!!",
+          "name": "신규 메뉴",
           "type": "TEXT",
           "parentId": "76:2202",
           "bounds": {
             "x": 5817,
             "y": 2044,
-            "width": 64,
+            "width": 55,
             "height": 20
           },
           "fills": [
@@ -52619,7 +52619,7 @@
             "mixed": false
           },
           "text": {
-            "characters": "신규 메뉴!!",
+            "characters": "신규 메뉴",
             "autoResize": "WIDTH_AND_HEIGHT",
             "alignHorizontal": "LEFT",
             "alignVertical": "CENTER",
@@ -54823,13 +54823,13 @@
         },
         {
           "id": "98:2653",
-          "name": "신규 메뉴!!",
+          "name": "신규 메뉴",
           "type": "TEXT",
           "parentId": "98:2652",
           "bounds": {
             "x": 7324,
             "y": 829,
-            "width": 64,
+            "width": 55,
             "height": 20
           },
           "fills": [
@@ -54860,7 +54860,7 @@
             "mixed": false
           },
           "text": {
-            "characters": "신규 메뉴!!",
+            "characters": "신규 메뉴",
             "autoResize": "WIDTH_AND_HEIGHT",
             "alignHorizontal": "LEFT",
             "alignVertical": "CENTER",
@@ -57064,13 +57064,13 @@
         },
         {
           "id": "98:2919",
-          "name": "신규 메뉴!!",
+          "name": "신규 메뉴",
           "type": "TEXT",
           "parentId": "98:2918",
           "bounds": {
             "x": 7324,
             "y": 2044,
-            "width": 64,
+            "width": 55,
             "height": 20
           },
           "fills": [
@@ -57101,7 +57101,7 @@
             "mixed": false
           },
           "text": {
-            "characters": "신규 메뉴!!",
+            "characters": "신규 메뉴",
             "autoResize": "WIDTH_AND_HEIGHT",
             "alignHorizontal": "LEFT",
             "alignVertical": "CENTER",
