@@ -1,0 +1,97 @@
+{
+  "op": "duplicate",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "_source": "design/operations/v5-latest-snapshot/snapshot-v5-latest.json + design/operations/components-refresh-20260926/snapshot-ds-2.json",
+  "_intent": "A-32 deadline 이후 상태를 제출 여부에 따라 2개로 분리한다. SUBMITTED는 기존 제출완료 canonical frame을 기준으로 8개 section 완료 및 마지막 제출본을 보존하고, NOT_SUBMITTED는 미완료 canonical frame을 기준으로 미제출 상태를 보존한다. 두 상태 모두 마감 이후 save/submit은 잠그되 최종 보고서 확인 등 read-only 조회 action은 유지한다.",
+  "items": [
+    {
+      "sourceId": "76:1890",
+      "name": "A-32_submission-package_DEADLINE_PASSED_SUBMITTED",
+      "x": 8650,
+      "y": 392,
+      "parentId": "1:23008",
+      "patches": [
+        {
+          "sourceNodeId": "76:2147",
+          "characters": "접수가 마감되었습니다. 마지막으로 제출된 버전이 최종본입니다.",
+          "rename": "접수가 마감되었습니다. 마지막으로 제출된 버전이 최종본입니다.",
+          "expectedMatches": 1
+        },
+        {
+          "sourceNodeId": "76:2134",
+          "characters": "접수 상태: 제출완료 · 마감",
+          "rename": "접수 상태: 제출완료 · 마감",
+          "expectedMatches": 1
+        },
+        {
+          "sourceNodeId": "I76:2149;1:655",
+          "characters": "임시 저장",
+          "rename": "임시 저장",
+          "expectedMatches": 1
+        },
+        {
+          "sourceNodeId": "76:2149",
+          "expectedMatches": 1,
+          "componentProperties": {
+            "variant": "solid",
+            "size": "Medium",
+            "shape": "Rounded",
+            "state": "disabled",
+            "tone": "primary"
+          }
+        },
+        {
+          "sourceNodeId": "I76:2150;992:213",
+          "characters": "제출 마감됨",
+          "rename": "제출 마감됨",
+          "expectedMatches": 1
+        }
+      ]
+    },
+    {
+      "sourceId": "17:996",
+      "name": "A-32_submission-package_DEADLINE_PASSED_NOT_SUBMITTED",
+      "x": 10150,
+      "y": 392,
+      "parentId": "1:23008",
+      "patches": [
+        {
+          "sourceNodeId": "17:1253",
+          "characters": "접수가 마감되어 더 이상 수정하거나 제출할 수 없습니다.",
+          "rename": "접수가 마감되어 더 이상 수정하거나 제출할 수 없습니다.",
+          "expectedMatches": 1
+        },
+        {
+          "sourceNodeId": "17:1240",
+          "characters": "접수 상태: 미제출 · 마감",
+          "rename": "접수 상태: 미제출 · 마감",
+          "expectedMatches": 1
+        },
+        {
+          "sourceNodeId": "I17:1255;1:655",
+          "characters": "임시 저장",
+          "rename": "임시 저장",
+          "expectedMatches": 1
+        },
+        {
+          "sourceNodeId": "17:1255",
+          "expectedMatches": 1,
+          "componentProperties": {
+            "variant": "solid",
+            "size": "Medium",
+            "shape": "Rounded",
+            "state": "disabled",
+            "tone": "primary"
+          }
+        },
+        {
+          "sourceNodeId": "I17:1256;992:213",
+          "characters": "제출 마감됨",
+          "rename": "제출 마감됨",
+          "expectedMatches": 1
+        }
+      ]
+    }
+  ]
+}

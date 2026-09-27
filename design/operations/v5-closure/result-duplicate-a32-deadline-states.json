@@ -1,0 +1,295 @@
+{
+  "op": "duplicate",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "created": {
+    "A-32_submission-package_DEADLINE_PASSED_SUBMITTED": "98:2605",
+    "A-32_submission-package_DEADLINE_PASSED_NOT_SUBMITTED": "98:2871"
+  },
+  "items": [
+    {
+      "sourceId": "76:1890",
+      "cloneId": "98:2605",
+      "name": "A-32_submission-package_DEADLINE_PASSED_SUBMITTED",
+      "requestedPatchCount": 5,
+      "appliedPatchCount": 5,
+      "patches": [
+        {
+          "patchIndex": 0,
+          "nodeName": null,
+          "sourceNodeId": "76:2147",
+          "expectedMatches": 1,
+          "matchedCount": 1,
+          "targetIds": [
+            "98:2862"
+          ],
+          "applied": true
+        },
+        {
+          "patchIndex": 1,
+          "nodeName": null,
+          "sourceNodeId": "76:2134",
+          "expectedMatches": 1,
+          "matchedCount": 1,
+          "targetIds": [
+            "98:2849"
+          ],
+          "applied": true
+        },
+        {
+          "patchIndex": 2,
+          "nodeName": null,
+          "sourceNodeId": "I76:2149;1:655",
+          "expectedMatches": 1,
+          "matchedCount": 1,
+          "targetIds": [
+            "I98:2864;1:655"
+          ],
+          "applied": true
+        },
+        {
+          "patchIndex": 3,
+          "nodeName": null,
+          "sourceNodeId": "76:2149",
+          "expectedMatches": 1,
+          "matchedCount": 1,
+          "targetIds": [
+            "98:2864"
+          ],
+          "applied": true
+        },
+        {
+          "patchIndex": 4,
+          "nodeName": null,
+          "sourceNodeId": "I76:2150;992:213",
+          "expectedMatches": 1,
+          "matchedCount": 1,
+          "targetIds": [
+            "I98:2865;992:213"
+          ],
+          "applied": true
+        }
+      ],
+      "verification": {
+        "prePatch": {
+          "passed": true,
+          "comparedNodes": 265,
+          "differences": []
+        },
+        "postPatch": {
+          "passed": true,
+          "unexpectedChanges": [],
+          "geometryChanges": [
+            {
+              "path": "0.1.1.1.0.1.0",
+              "field": "width",
+              "category": "geometry",
+              "source": 518,
+              "clone": 397
+            },
+            {
+              "path": "0.1.1.1.0.1.1",
+              "field": "width",
+              "category": "geometry",
+              "source": 213,
+              "clone": 198
+            },
+            {
+              "path": "0.1.1.1.0.1.0.1",
+              "field": "width",
+              "category": "geometry",
+              "source": 504,
+              "clone": 383
+            },
+            {
+              "path": "0.1.1.1.0.1.1.1",
+              "field": "width",
+              "category": "geometry",
+              "source": 113,
+              "clone": 98
+            },
+            {
+              "path": "0.1.1.0.1.1.1.0.0",
+              "field": "width",
+              "category": "geometry",
+              "source": 82,
+              "clone": 109
+            },
+            {
+              "path": "0.1.1.1.0.1.0.1.0",
+              "field": "width",
+              "category": "geometry",
+              "source": 496,
+              "clone": 375
+            },
+            {
+              "path": "0.1.1.1.0.1.1.1.0",
+              "field": "width",
+              "category": "geometry",
+              "source": 81,
+              "clone": 66
+            },
+            {
+              "path": "0.1.1.0.1.1.1.0.0.0",
+              "field": "width",
+              "category": "geometry",
+              "source": 82,
+              "clone": 109
+            }
+          ]
+        },
+        "composition": {
+          "passed": true,
+          "unexpectedChanges": [],
+          "geometryChanges": []
+        }
+      },
+      "success": true
+    },
+    {
+      "sourceId": "17:996",
+      "cloneId": "98:2871",
+      "name": "A-32_submission-package_DEADLINE_PASSED_NOT_SUBMITTED",
+      "requestedPatchCount": 5,
+      "appliedPatchCount": 5,
+      "patches": [
+        {
+          "patchIndex": 0,
+          "nodeName": null,
+          "sourceNodeId": "17:1253",
+          "expectedMatches": 1,
+          "matchedCount": 1,
+          "targetIds": [
+            "98:3126"
+          ],
+          "applied": true
+        },
+        {
+          "patchIndex": 1,
+          "nodeName": null,
+          "sourceNodeId": "17:1240",
+          "expectedMatches": 1,
+          "matchedCount": 1,
+          "targetIds": [
+            "98:3113"
+          ],
+          "applied": true
+        },
+        {
+          "patchIndex": 2,
+          "nodeName": null,
+          "sourceNodeId": "I17:1255;1:655",
+          "expectedMatches": 1,
+          "matchedCount": 1,
+          "targetIds": [
+            "I98:3128;1:655"
+          ],
+          "applied": true
+        },
+        {
+          "patchIndex": 3,
+          "nodeName": null,
+          "sourceNodeId": "17:1255",
+          "expectedMatches": 1,
+          "matchedCount": 1,
+          "targetIds": [
+            "98:3128"
+          ],
+          "applied": true
+        },
+        {
+          "patchIndex": 4,
+          "nodeName": null,
+          "sourceNodeId": "I17:1256;992:213",
+          "expectedMatches": 1,
+          "matchedCount": 1,
+          "targetIds": [
+            "I98:3129;992:213"
+          ],
+          "applied": true
+        }
+      ],
+      "verification": {
+        "prePatch": {
+          "passed": true,
+          "comparedNodes": 263,
+          "differences": []
+        },
+        "postPatch": {
+          "passed": true,
+          "unexpectedChanges": [],
+          "geometryChanges": [
+            {
+              "path": "0.1.1.1.0.1.0",
+              "field": "width",
+              "category": "geometry",
+              "source": 483,
+              "clone": 349
+            },
+            {
+              "path": "0.1.1.1.0.1.1",
+              "field": "width",
+              "category": "geometry",
+              "source": 275,
+              "clone": 198
+            },
+            {
+              "path": "0.1.1.1.0.1.0.1",
+              "field": "width",
+              "category": "geometry",
+              "source": 469,
+              "clone": 335
+            },
+            {
+              "path": "0.1.1.1.0.1.1.1",
+              "field": "width",
+              "category": "geometry",
+              "source": 179,
+              "clone": 98
+            },
+            {
+              "path": "0.1.1.0.1.1.1.0.0",
+              "field": "width",
+              "category": "geometry",
+              "source": 106,
+              "clone": 100
+            },
+            {
+              "path": "0.1.1.1.0.1.0.1.0",
+              "field": "width",
+              "category": "geometry",
+              "source": 461,
+              "clone": 327
+            },
+            {
+              "path": "0.1.1.1.0.1.1.1.0",
+              "field": "width",
+              "category": "geometry",
+              "source": 147,
+              "clone": 66
+            },
+            {
+              "path": "0.1.1.0.1.1.1.0.0.0",
+              "field": "width",
+              "category": "geometry",
+              "source": 106,
+              "clone": 100
+            }
+          ]
+        },
+        "composition": {
+          "passed": true,
+          "unexpectedChanges": [],
+          "geometryChanges": []
+        }
+      },
+      "success": true
+    }
+  ],
+  "counts": {
+    "requestedItems": 2,
+    "createdItems": 2,
+    "requestedPatches": 10,
+    "appliedPatches": 10,
+    "verifiedItems": 2
+  }
+}
