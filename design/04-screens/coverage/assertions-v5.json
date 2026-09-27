@@ -8,11 +8,7 @@
     {"id":"A30_INITIAL_PROGRESS_VISUAL","type":"node-width","nodeId":"1:23102","equals":105},
     {"id":"A30_RESUBMIT_WARNING_BINDING","type":"node-fill-binding","nodeId":"49:1308","equals":"status-warning"},
 
-    {"id":"A32_INCOMPLETE_SUBMIT_DISABLED","type":"node-instance-property","nodeId":"17:1256","property":"state","equals":"disabled"},
-    {"id":"A32_SUBMITTED_STATUS","type":"text-present","scopeFrameName":"A-32_submission-package_SUBMITTED","equals":"접수 상태: 제출완료"},
     {"id":"A32_SUBMITTED_GUIDANCE","type":"text-present","scopeFrameName":"A-32_submission-package_SUBMITTED","equals":"마감 전까지 모든 항목을 수정할 수 있습니다. 수정 후에는 다시 제출해야 합니다."},
-    {"id":"A32_SUBMITTED_SUBMIT_DISABLED","type":"node-instance-property","nodeId":"76:2150","property":"state","equals":"disabled"},
-    {"id":"A32_CHANGED_STATUS","type":"text-present","scopeFrameName":"A-32_submission-package_SUBMITTED_CHANGED","equals":"접수 상태: 제출완료 · 수정사항 미반영"},
     {"id":"A32_CHANGED_RESUBMIT_ENABLED","type":"node-instance-property","nodeId":"76:2415","property":"state","equals":"default"},
 
     {"id":"A32_DEADLINE_FRAME","type":"frame-name","equals":"A-32_submission-package_DEADLINE_PASSED"},
