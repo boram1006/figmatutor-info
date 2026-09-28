@@ -26,7 +26,7 @@
           "metrics":{"itemSpacing":6},
           "children":[
             {"type":"TEXT","name":"Context Label","textStyle":"Text/body-sm-semibold","characters":"마이페이지 · 내 지원 현황","fills":[{"type":"SOLID","binding":"text-accent"}]},
-            {"type":"TEXT","name":"Page Title","textStyle":"Text/h2-bold","characters":"심사 결과","fills":[{"type":"SOLID","binding":"text-primary"}]},
+            {"type":"TEXT","name":"Page Title","textStyle":"Text/h2","characters":"심사 결과","fills":[{"type":"SOLID","binding":"text-primary"}]},
             {"type":"TEXT","name":"Page Description","textStyle":"Text/body-sm","characters":"최종 심사가 완료되었습니다. 우리 팀의 결과와 심사 요약을 확인해 보세요.","fills":[{"type":"SOLID","binding":"text-secondary"}]}
           ]
         },
@@ -36,7 +36,7 @@
           "layoutSizingHorizontal":"FILL",
           "height":300,
           "metrics":{"paddingTop":40,"paddingRight":40,"paddingBottom":40,"paddingLeft":40,"itemSpacing":32,"topLeftRadius":24,"topRightRadius":24,"bottomLeftRadius":24,"bottomRightRadius":24},
-          "bindings":{"paddingTop":"space-40","paddingRight":"space-40","paddingBottom":"space-40","paddingLeft":"space-40","itemSpacing":"space-32","topLeftRadius":"radius-24","topRightRadius":"radius-24","bottomLeftRadius":"radius-24","bottomRightRadius":"radius-24"},
+          "bindings":{"paddingTop":"space-32","paddingRight":"space-32","paddingBottom":"space-32","paddingLeft":"space-32","itemSpacing":"space-32","topLeftRadius":"radius-24","topRightRadius":"radius-24","bottomLeftRadius":"radius-24","bottomRightRadius":"radius-24"},
           "fills":[{"type":"SOLID","binding":"award-first"}],
           "children":[
             {
