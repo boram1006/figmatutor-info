@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "task": "v6-judging-result/A-40",
+  "status": "DRAFT_BEFORE_PRODUCT_LOCK",
+  "rule": "Only LOCKED_CORE or APPROVED product scope may enter generation spec.",
+  "references": [
+    {
+      "key": "mypage-context",
+      "source": "screen-manifests.json / final-report-status",
+      "figmaEvidence": {
+        "frameId": "1:23009",
+        "frameName": "A-30_my-report-status"
+      },
+      "use": "Preserve participant My Page/service context and transition lineage.",
+      "mode": "STRUCTURAL_REFERENCE",
+      "inspectBeforeBuild": true
+    },
+    {
+      "key": "result-announcement",
+      "source": "pattern: announcement-hero-follow-up",
+      "currentBaseline": {
+        "frameId": "1:21542",
+        "nodeId": "1:22713",
+        "nodeName": "H-02_first-round-result_H2"
+      },
+      "use": "Result hero hierarchy and follow-up information structure only; campaign skin/copy remain contextual.",
+      "mode": "CLONE_CANDIDATE",
+      "inspectBeforeBuild": true
+    },
+    {
+      "key": "evaluation-information",
+      "source": "screen-manifests.json / J-02 + human-final-review",
+      "fallbackPattern": "evaluation-workspace",
+      "use": "Information grouping for score/comment evidence, not admin/reviewer work controls.",
+      "mode": "STRUCTURAL_REFERENCE",
+      "inspectBeforeBuild": true,
+      "note": "Do not clone reviewer queue/input workspace wholesale."
+    }
+  ],
+  "regions": [
+    {
+      "region": "service-shell-and-context",
+      "purpose": "사용자가 현재 마이페이지/자기 지원건 결과를 보고 있음을 유지",
+      "productScope": [
+        "LOCKED_CORE: A-30 → A-40 participant flow"
+      ],
+      "reference": "mypage-context",
+      "reuseMode": "CLONE_COMPOSE",
+      "inspectBeforeBuild": true
+    },
+    {
+      "region": "result-hero",
+      "purpose": "수상/미입상 결과를 첫 시선에서 이해",
+      "productScope": [
+        "LOCKED_CORE: AWARDED_RANK/AWARDED_SPECIAL/NOT_AWARDED"
+      ],
+      "reference": "result-announcement",
+      "reuseMode": "CLONE_COMPOSE",
+      "inspectBeforeBuild": true
+    },
+    {
+      "region": "result-summary",
+      "purpose": "총점과 핵심 결과를 빠르게 파악",
+      "productScope": [
+        "LOCKED_CORE: total score/result summary"
+      ],
+      "reference": "no_suitable_reference",
+      "reuseMode": "NEW_CONSTRUCTION",
+      "inspectBeforeBuild": false,
+      "constraints": [
+        "Do not invent score weights, percentile, tier, judge count."
+      ]
+    },
+    {
+      "region": "ai-review-summary",
+      "purpose": "AI 심사에서 무엇을 잘/못했는지 이해",
+      "productScope": [
+        "LOCKED_CORE: AI review summary"
+      ],
+      "reference": "evaluation-information",
+      "reuseMode": "CLONE_COMPOSE_OR_NEW_AFTER_INSPECTION",
+      "inspectBeforeBuild": true
+    },
+    {
+      "region": "human-review-summary",
+      "purpose": "휴먼 심사 코멘트와 평가를 이해",
+      "productScope": [
+        "LOCKED_CORE: human review summary"
+      ],
+      "reference": "evaluation-information",
+      "reuseMode": "CLONE_COMPOSE_OR_NEW_AFTER_INSPECTION",
+      "inspectBeforeBuild": true
+    },
+    {
+      "region": "primary-actions",
+      "purpose": "상세 결과와 최종 제출 원본으로 이동",
+      "productScope": [
+        "LOCKED_CORE: 심사 상세 보기",
+        "LOCKED_CORE: 최종 제출 내용 보기"
+      ],
+      "reference": "Design System Button",
+      "reuseMode": "INSTANCE_REUSE",
+      "inspectBeforeBuild": true
+    },
+    {
+      "region": "follow-up-information",
+      "purpose": "결과 확인 뒤 다음 일정/문의 등 후속 행동 제공",
+      "productScope": [
+        "CANDIDATE_PRODUCT only"
+      ],
+      "reference": "result-announcement follow-up structure",
+      "reuseMode": "DO_NOT_GENERATE_BEFORE_LOCK",
+      "inspectBeforeBuild": false
+    }
+  ],
+  "generationGate": {
+    "passWhen": [
+      "CANDIDATE_PRODUCT decisions are APPROVED/DEFERRED/REJECTED",
+      "all CLONE candidates have actual subtree evidence inspected",
+      "each region has reuseMode and source",
+      "unsupported Stitch facts are absent"
+    ],
+    "failWhen": [
+      "unapproved candidate appears in spec",
+      "reference exists but primitives are used without justification",
+      "composition plan is bypassed"
+    ]
+  }
+}
