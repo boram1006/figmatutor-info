@@ -7,11 +7,11 @@ Spec gaps: `qa-gap-audit.md`
 
 | From | Event | To / visible state | QA |
 |---|---|---|---|
-| 본선 진출 직후 | A-30 진입 | 본선 진행중 + 7/8 | A30-001 |
+| 본선 진출 직후 | A-30 진입 | Red 본선 진행중 + 7/8 + 수정일시 표시 | A30-001, A30-009, A30-010 |
 | 7/8 | 신규 section 완료 | 8/8 | A30-007, CROSS-002 |
 | 작성중 | 이어 작성 | A-31 | A30-002 |
-| SUBMITTED | A-30 진입 | Green 제출완료 | A30-003 |
-| SUBMITTED | 제출 후 수정 | Warning 재제출 필요, Green 제출완료 비노출 | A30-004, A30-005, CROSS-004 |
+| SUBMITTED | A-30 진입 | Green 제출완료 + 수정일시 표시 | A30-003, A30-010 |
+| SUBMITTED | 제출 후 수정 | Warning 재제출 필요, Green 제출완료 비노출, 수정일시 표시 | A30-004, A30-005, A30-010, CROSS-004 |
 | 변경 미반영 | 재제출 성공 | Green 제출완료 | CROSS-005 |
 | 본선 미진출 | A-30 진입 | Gray 본선 미진출 | A30-006 |
 
