@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "task": "v6-judging-result/A-40",
+  "variant": "blind-v2",
+  "status": "LOCKED_FOR_GENERATION",
+  "blindRule": "Generation reasoning uses only V6 PRD + current Figma/manifest/pattern/design-system evidence. Stitch artifacts are excluded until post-generation comparison.",
+  "preserve": ["design/operations/v6-judging-result/spec-create-a40-judging-result.json", "design/operations/v6-judging-result/composition-plan.json"],
+  "references": [
+    {
+      "key": "mypage-context",
+      "source": "design/02-structure/screen-manifests.json#final-report-status",
+      "figmaEvidence": {"frameId":"1:23009","frameName":"A-30_my-report-status"},
+      "use": "Keep A-40 visibly in the participant My Page/results lineage rather than treating it as a public campaign landing page.",
+      "mode": "STRUCTURAL_REFERENCE"
+    },
+    {
+      "key": "result-announcement",
+      "source": "design/02-structure/screen-manifests.json#result-announcement",
+      "figmaEvidence": {"frameId":"1:22713","frameName":"H-02_first-round-result_H2"},
+      "use": "Reuse announcement hierarchy only: result first, supporting explanation second, next action last. Do not copy campaign skin literally.",
+      "mode": "STRUCTURAL_REFERENCE"
+    },
+    {
+      "key": "evaluation-information",
+      "source": "design/02-structure/screen-manifests.json#ai-review-results + human-final-review",
+      "figmaEvidence": [{"frameId":"1:6567","frameName":"RV-02_final-review-unfolded"},{"frameId":"1:13679","frameName":"J-series review evidence"}],
+      "use": "Translate evaluation evidence into participant-readable summaries; exclude admin/reviewer controls.",
+      "mode": "INFORMATION_ARCHITECTURE_REFERENCE"
+    },
+    {
+      "key": "design-system",
+      "source": "design/03-design-rules/components/catalog.json + snapshot.json",
+      "use": "Buttons and tags are instances; use validated variants and variant-scoped patch node names.",
+      "mode": "INSTANCE_REUSE"
+    }
+  ],
+  "compositionReasoning": {
+    "userQuestionOrder": [
+      "내 결과가 무엇인가?",
+      "점수는 어느 정도인가?",
+      "AI/휴먼 심사에서 어떤 평가를 받았나?",
+      "더 자세히 보거나 제출 원본을 어디서 확인하나?"
+    ],
+    "visualHierarchy": [
+      "participant context",
+      "result hero + total score",
+      "two-source review evidence",
+      "primary actions"
+    ],
+    "densityStrategy": "Keep the hero emotionally clear but compact; spend vertical space on readable evaluation evidence rather than decorative campaign content.",
+    "stateStrategy": "AWARDED_RANK is the blind-v2 generation sample. AWARDED_SPECIAL and NOT_AWARDED should later be derived by state-specific hero/tag treatment without changing information architecture."
+  },
+  "regions": [
+    {
+      "region": "participant-context",
+      "purpose": "Anchor the screen in My Page / my application result flow.",
+      "reference": "mypage-context",
+      "reuseMode": "STRUCTURAL_COMPOSE",
+      "contents": ["small context label", "page title", "one-line explanation"]
+    },
+    {
+      "region": "result-hero",
+      "purpose": "Answer result and score in one glance.",
+      "reference": "result-announcement",
+      "reuseMode": "STRUCTURAL_COMPOSE",
+      "layout": "horizontal split: award/result message left, score panel right",
+      "contents": ["validated rank tag instance", "result title", "team/project identity", "total score"],
+      "constraints": ["no percentile", "no judge count", "no weighting formula", "no unapproved schedule"]
+    },
+    {
+      "region": "review-evidence",
+      "purpose": "Show why the result happened, separated by AI and human evaluation source.",
+      "reference": "evaluation-information",
+      "reuseMode": "NEW_COMPOSITION_FROM_INTERNAL_EVIDENCE",
+      "layout": "two equal-width cards",
+      "contents": [
+        "AI review: source scope + summary comment + score",
+        "Human review: concise judge comment + score"
+      ],
+      "constraints": ["do not expose admin/reviewer controls", "do not invent item names or detailed rubric"]
+    },
+    {
+      "region": "actions",
+      "purpose": "Continue to detailed review or final submission viewer.",
+      "reference": "design-system",
+      "reuseMode": "INSTANCE_REUSE",
+      "contents": ["심사 상세 보기 →", "최종 제출 내용 보기 →"]
+    }
+  ],
+  "generationGate": {
+    "mustPass": [
+      "Stitch content has not been consulted",
+      "v1 files remain untouched",
+      "all componentNodeId values exist in current catalog",
+      "all patch nodeName values are validated against the selected variant scope",
+      "all token bindings already exist in the current design system",
+      "no PRD-unknown business facts are introduced"
+    ]
+  }
+}
