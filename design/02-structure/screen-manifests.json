@@ -566,7 +566,8 @@
       "relationships": {
         "to": [
           "final-report-form",
-          "final-report-package"
+          "final-report-package",
+          "judging-result"
         ],
         "reflectsStateFrom": [
           "final-report-form",
@@ -990,6 +991,59 @@
       ],
       "evidence": {
         "policy": "SITEMAP J series"
+      }
+    },
+    {
+      "key": "judging-result",
+      "screenId": "A-40",
+      "name": "심사 결과",
+      "audience": [
+        "general"
+      ],
+      "purpose": "TOP30 참가자가 A-30의 자기 지원건에서 진입해 최종 수상 여부·순위/상·총점·AI/휴먼 심사 요약을 조회한다.",
+      "archetype": "A4-with-result-content",
+      "roles": [
+        "personal_status_detail",
+        "read_only_result"
+      ],
+      "structure": [
+        "inherited_mypage_shell",
+        "selected_application_context",
+        "result_hero",
+        "total_score",
+        "ai_review_summary",
+        "human_review_summary",
+        "result_actions"
+      ],
+      "states": [
+        "awarded_rank",
+        "awarded_special",
+        "not_awarded"
+      ],
+      "actions": [
+        "open_judging_detail",
+        "open_final_submission_viewer"
+      ],
+      "relationships": {
+        "from": [
+          "final-report-status"
+        ],
+        "to": [
+          "judging-result-detail",
+          "final-report-package"
+        ]
+      },
+      "invariants": [
+        "A-30 current Figma shell is inherited before task content composition",
+        "generic announcement/result patterns cannot replace the inherited shell",
+        "AI/human scoring weights are not invented",
+        "result screen is participant read-only, not reviewer/admin workspace"
+      ],
+      "figmaEvidence": {
+        "shellSourceFrameId": "1:23009",
+        "shellSourceFrameName": "A-30_my-report-status",
+        "parentSectionId": "1:23008",
+        "contentFrame": "pending-v4-shell-extract"
       }
     }
   ],
