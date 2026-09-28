@@ -1,0 +1,1025 @@
+{
+  "manifestVersion": 2,
+  "status": "prototype-expanded",
+  "scope": "service-wide semantic screen manifest for retrieval; not a fixed pattern catalog",
+  "sources": [
+    "design/02-structure/SITEMAP.md",
+    "design/02-structure/SERVICE_EVOLUTION.md",
+    "design/02-structure/service-baselines.json",
+    "design/02-structure/requirements.json",
+    "design/operations/prd-v5/PRD.md",
+    "design/operations/v5-latest-snapshot/snapshot-v5-latest.json",
+    "design/03-design-rules/generation/page-archetypes.md"
+  ],
+  "principles": {
+    "semanticSourcePriority": [
+      "current service baseline",
+      "latest confirmed PRD",
+      "current Figma evidence",
+      "legacy PRD/Figma",
+      "general UX inference"
+    ],
+    "retrievalIsNotReuseDecision": true,
+    "allowNoSuitableReference": true,
+    "patternPromotion": "Only promote repeated structures to a reusable pattern after repeated evidence across multiple screens/features.",
+    "legacyPolicy": "Legacy screens may provide visual/behavior evidence but must not restore superseded product policy."
+  },
+  "screens": [
+    {
+      "key": "home",
+      "name": "홈/랜딩",
+      "audience": [
+        "general"
+      ],
+      "purpose": "해커톤의 핵심 메시지, 일정, 보상과 현재 회차 컨텍스트를 전달하고 주요 기능으로 진입시킨다.",
+      "archetype": "A2",
+      "roles": [
+        "campaign_entry",
+        "information"
+      ],
+      "structure": [
+        "hero",
+        "countdown_or_schedule",
+        "key_event_information",
+        "primary_navigation_or_cta"
+      ],
+      "states": [
+        "campaign_default"
+      ],
+      "relationships": {
+        "to": [
+          "notice-list",
+          "faq",
+          "team-building-list",
+          "application-list",
+          "result-announcement"
+        ]
+      },
+      "invariants": [
+        "campaign skin may vary by round",
+        "campaign visual treatment is contextual, not a fixed global rule"
+      ],
+      "evidence": {
+        "policy": "SITEMAP",
+        "figma": "v1/v4 landing evidence; exact node not bound in manifest"
+      }
+    },
+    {
+      "key": "notice-list",
+      "name": "공지사항 목록",
+      "audience": [
+        "general"
+      ],
+      "purpose": "참가자가 공지 제목과 중요도를 훑고 상세 공지로 이동한다.",
+      "archetype": "A1",
+      "roles": [
+        "information_list"
+      ],
+      "structure": [
+        "page_title",
+        "notice_list_or_table",
+        "importance_badge",
+        "pagination"
+      ],
+      "states": [
+        "default",
+        "empty",
+        "loading",
+        "error"
+      ],
+      "actions": [
+        "open_notice_detail"
+      ],
+      "relationships": {
+        "to": [
+          "notice-detail"
+        ]
+      },
+      "invariants": [
+        "information hierarchy relies on typography/list structure rather than dashboard cards"
+      ],
+      "evidence": {
+        "requirementsId": "notice",
+        "sourceFrame": "1_Notice (Updated)@design"
+      }
+    },
+    {
+      "key": "notice-detail",
+      "name": "공지사항 상세",
+      "audience": [
+        "general"
+      ],
+      "purpose": "공지의 일정·장소·준비물 등 상세 안내를 읽는다.",
+      "archetype": "A1",
+      "roles": [
+        "information_detail"
+      ],
+      "structure": [
+        "title_metadata",
+        "body_content",
+        "supporting_information"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "error"
+      ],
+      "actions": [
+        "return_to_notice_list"
+      ],
+      "relationships": {
+        "from": [
+          "notice-list"
+        ]
+      },
+      "invariants": [
+        "author is administrator in current product context"
+      ],
+      "evidence": {
+        "policy": "SITEMAP"
+      }
+    },
+    {
+      "key": "faq",
+      "name": "FAQ",
+      "audience": [
+        "general"
+      ],
+      "purpose": "참가자가 자주 묻는 질문을 빠르게 탐색하고 답변을 확인한다.",
+      "archetype": "A1",
+      "roles": [
+        "information",
+        "self_service_help"
+      ],
+      "structure": [
+        "page_title",
+        "accordion_question_list"
+      ],
+      "states": [
+        "default",
+        "expanded_item",
+        "loading",
+        "error"
+      ],
+      "actions": [
+        "expand_question",
+        "collapse_question"
+      ],
+      "invariants": [
+        "do not turn static help content into an operational dashboard"
+      ],
+      "evidence": {
+        "policy": "SITEMAP"
+      }
+    },
+    {
+      "key": "team-building-list",
+      "name": "팀빌딩 목록",
+      "audience": [
+        "general"
+      ],
+      "purpose": "여러 팀과 모집 포지션을 탐색하고 원하는 포지션에 지원한다.",
+      "archetype": "A3",
+      "roles": [
+        "entity_browse",
+        "selection"
+      ],
+      "structure": [
+        "period_or_rule_notice",
+        "summary_strip",
+        "team_card_grid",
+        "position_level_actions"
+      ],
+      "states": [
+        "upcoming",
+        "recruiting",
+        "closed",
+        "application_status"
+      ],
+      "actions": [
+        "apply_to_position",
+        "view_application_status"
+      ],
+      "relationships": {
+        "currentPolicy": "H2 team-lead review/selection"
+      },
+      "invariants": [
+        "applying does not mean immediate team membership",
+        "H1 first-come behavior is legacy and must not be restored automatically",
+        "team card visual structure must not be used to infer selection policy"
+      ],
+      "evidence": {
+        "currentFrame": "TB-01_team-list__recruiting_H2",
+        "currentCard": "card_1",
+        "legacyCards": [
+          "TB_card_1",
+          "TB_card_2"
+        ]
+      }
+    },
+    {
+      "key": "team-building-settings",
+      "name": "팀빌딩 설정 모달",
+      "audience": [
+        "general"
+      ],
+      "purpose": "기존 팀이 팀빌딩 참여 여부와 모집 포지션/인원을 설정한다.",
+      "archetype": "supporting_modal",
+      "roles": [
+        "configuration"
+      ],
+      "structure": [
+        "participation_toggle",
+        "position_and_headcount_fields",
+        "validation",
+        "save_action"
+      ],
+      "states": [
+        "enabled",
+        "disabled_by_team_size",
+        "validation_error"
+      ],
+      "actions": [
+        "toggle_team_building",
+        "edit_positions",
+        "save"
+      ],
+      "invariants": [
+        "existing team of 5 cannot enable team-building",
+        "existing members plus recruiting headcount cannot exceed 5"
+      ],
+      "evidence": {
+        "policy": "v4/H2 SITEMAP"
+      }
+    },
+    {
+      "key": "application-list",
+      "screenId": "A-01",
+      "name": "내 지원서 리스트",
+      "audience": [
+        "general"
+      ],
+      "purpose": "내 지원서의 상태와 다음 행동을 확인하고 작성·조회·삭제 흐름으로 진입한다.",
+      "archetype": "A4",
+      "roles": [
+        "personal_status",
+        "workflow_entry"
+      ],
+      "structure": [
+        "phase_or_deadline_context",
+        "application_status_cards",
+        "status_specific_cta"
+      ],
+      "states": [
+        "draft",
+        "submitted",
+        "reviewing",
+        "reviewed"
+      ],
+      "actions": [
+        "resume_editing",
+        "view_application",
+        "delete_when_open"
+      ],
+      "relationships": {
+        "to": [
+          "application-form",
+          "mypage-application-status"
+        ],
+        "phaseDependency": "OPEN"
+      },
+      "invariants": [
+        "when phase is not OPEN, application flow closes and My Page becomes the entry point"
+      ],
+      "evidence": {
+        "policy": "SITEMAP current application lifecycle"
+      }
+    },
+    {
+      "key": "application-form",
+      "screenId": "A-02",
+      "name": "지원서 입력 폼",
+      "audience": [
+        "general"
+      ],
+      "purpose": "7개 지원서 데이터 섹션을 작성하고 마지막 단계에서 검토·제출한다.",
+      "archetype": "A5",
+      "roles": [
+        "multi_step_editing",
+        "submission"
+      ],
+      "structure": [
+        "persistent_step_navigation",
+        "current_section_workspace",
+        "section_state",
+        "review_and_submit_finalization"
+      ],
+      "states": [
+        "editing",
+        "section_complete_or_incomplete",
+        "review_and_submit"
+      ],
+      "actions": [
+        "edit_section",
+        "navigate_steps",
+        "save",
+        "review",
+        "submit"
+      ],
+      "relationships": {
+        "lineageTo": [
+          "final-report-form"
+        ]
+      },
+      "invariants": [
+        "UI has 8 steps but only 7 content sections",
+        "last step is finalization rather than a new data section"
+      ],
+      "evidence": {
+        "currentNode": "AP-01_application-form",
+        "baselinePatternId": "persistent-step-form"
+      }
+    },
+    {
+      "key": "result-announcement",
+      "name": "1차 심사 결과 발표",
+      "audience": [
+        "general"
+      ],
+      "purpose": "1차 심사 결과를 명확히 전달하고 후속 일정·행동으로 연결한다.",
+      "archetype": "A2",
+      "roles": [
+        "campaign_result_announcement"
+      ],
+      "structure": [
+        "hero_result",
+        "result_or_winner_cards",
+        "follow_up_information"
+      ],
+      "states": [
+        "campaign_default"
+      ],
+      "actions": [
+        "follow_next_step"
+      ],
+      "invariants": [
+        "reuse hero/result/follow-up structure",
+        "campaign colors/background/copy are contextual"
+      ],
+      "evidence": {
+        "currentNode": "H-02_first-round-result_H2",
+        "legacyNode": "H-02_first-round-result_H1"
+      }
+    },
+    {
+      "key": "final-winners",
+      "name": "최종 합격팀 발표",
+      "audience": [
+        "general"
+      ],
+      "purpose": "최종 수상팀을 순위·상금과 함께 공개한다.",
+      "archetype": "A2",
+      "roles": [
+        "campaign_result_announcement"
+      ],
+      "structure": [
+        "hero",
+        "ranked_winners",
+        "prize_information",
+        "follow_up"
+      ],
+      "states": [
+        "default"
+      ],
+      "actions": [
+        "open_winner_detail"
+      ],
+      "invariants": [
+        "campaign skin may differ while announcement hierarchy remains recognizable"
+      ],
+      "evidence": {
+        "requirementsId": "winners",
+        "sourceFrame": "LGE AX Hackathon - 최종 합격팀 발표 v2@design"
+      }
+    },
+    {
+      "key": "awards-landing",
+      "name": "수상작 발표 랜딩",
+      "audience": [
+        "general"
+      ],
+      "purpose": "수상작을 소개하고 개별 서비스 탐색·사용으로 연결한다.",
+      "archetype": "A2",
+      "roles": [
+        "showcase",
+        "campaign"
+      ],
+      "structure": [
+        "showcase_hero",
+        "award_entries",
+        "service_cta"
+      ],
+      "states": [
+        "default"
+      ],
+      "actions": [
+        "open_award_service"
+      ],
+      "relationships": {
+        "contains": [
+          "award-card"
+        ]
+      },
+      "evidence": {
+        "requirementsId": "awards-landing",
+        "sourceFrame": "Frame(1920x5482)@design"
+      }
+    },
+    {
+      "key": "award-card",
+      "name": "수상작 카드",
+      "audience": [
+        "general"
+      ],
+      "purpose": "개별 수상작의 제목·설명·서비스를 요약하고 실제 서비스로 연결한다.",
+      "archetype": "supporting_entity_card",
+      "roles": [
+        "showcase_entity"
+      ],
+      "structure": [
+        "title",
+        "description",
+        "service_identity_or_tags",
+        "service_cta"
+      ],
+      "states": [
+        "default"
+      ],
+      "actions": [
+        "open_service"
+      ],
+      "evidence": {
+        "requirementsId": "award-card",
+        "sourceFrame": "AX Hackathon — Card Redesign@design"
+      }
+    },
+    {
+      "key": "mypage-profile",
+      "name": "마이페이지 기본정보",
+      "audience": [
+        "general"
+      ],
+      "purpose": "개인 기본 정보를 조회·수정한다.",
+      "archetype": "A5",
+      "roles": [
+        "profile_editing"
+      ],
+      "structure": [
+        "mypage_navigation",
+        "profile_fields",
+        "save_action"
+      ],
+      "states": [
+        "default",
+        "editing",
+        "validation_error"
+      ],
+      "actions": [
+        "edit_profile",
+        "save"
+      ],
+      "invariants": [
+        "employee number, phone, organization, team, grade follow current field constraints"
+      ],
+      "evidence": {
+        "policy": "SITEMAP"
+      }
+    },
+    {
+      "key": "mypage-application-status",
+      "name": "마이페이지 지원 현황",
+      "audience": [
+        "general"
+      ],
+      "purpose": "모든 회차의 지원 이력을 동일 schema로 비교·조회하고 관리 기능으로 진입한다.",
+      "archetype": "A4",
+      "roles": [
+        "history_status",
+        "work_hub"
+      ],
+      "structure": [
+        "mypage_navigation",
+        "cross_round_history_table",
+        "status",
+        "management_actions"
+      ],
+      "states": [
+        "accepted",
+        "in_progress",
+        "final_winner",
+        "rejected"
+      ],
+      "actions": [
+        "view_application",
+        "open_team_management",
+        "open_team_building_when_available"
+      ],
+      "invariants": [
+        "history comparison favors table over status cards",
+        "team-building management action is period dependent"
+      ],
+      "evidence": {
+        "policy": "SITEMAP"
+      }
+    },
+    {
+      "key": "final-report-status",
+      "screenId": "A-30",
+      "name": "내 지원 현황 / 최종보고서 진입",
+      "audience": [
+        "general"
+      ],
+      "purpose": "본선 진출 지원서의 최종보고서 진행·제출 상태를 보여주고 작성/조회/재제출 workflow로 진입시킨다.",
+      "archetype": "A4",
+      "roles": [
+        "personal_status",
+        "workflow_entry"
+      ],
+      "structure": [
+        "report_status_card",
+        "primary_state",
+        "content_completion",
+        "secondary_action_needed_state",
+        "next_action_cta"
+      ],
+      "states": [
+        "in_progress_draft",
+        "submitted",
+        "submitted_changed_after_submit",
+        "not_selected"
+      ],
+      "actions": [
+        "resume_editing",
+        "view_submission",
+        "resubmit_changes",
+        "view_original_application"
+      ],
+      "relationships": {
+        "to": [
+          "final-report-form",
+          "final-report-package"
+        ],
+        "reflectsStateFrom": [
+          "final-report-form",
+          "final-report-package"
+        ]
+      },
+      "invariants": [
+        "initial completion 7/8",
+        "completed content 8/8",
+        "post-submit edit keeps SUBMITTED primary state and adds action-needed state"
+      ],
+      "figmaEvidence": {
+        "frameId": "1:23009",
+        "frameName": "A-30_my-report-status",
+        "parentSectionId": "1:23008"
+      }
+    },
+    {
+      "key": "final-report-form",
+      "screenId": "A-31",
+      "name": "최종보고서 스텝 폼",
+      "audience": [
+        "general"
+      ],
+      "purpose": "승계한 7개 section과 신규 section 1개를 수정·완료하고 최종 패키지 단계로 이동한다.",
+      "archetype": "A5",
+      "roles": [
+        "multi_step_editing",
+        "content_completion"
+      ],
+      "structure": [
+        "persistent_9_step_navigation",
+        "current_section_workspace",
+        "section_completion",
+        "package_as_step_9"
+      ],
+      "states": [
+        "content_7_of_8",
+        "content_8_of_8",
+        "per_section_complete_or_incomplete"
+      ],
+      "actions": [
+        "edit_inherited_sections",
+        "complete_new_section",
+        "navigate_steps",
+        "enter_package_finalization"
+      ],
+      "relationships": {
+        "from": [
+          "final-report-status"
+        ],
+        "to": [
+          "final-report-package"
+        ],
+        "lineageFrom": [
+          "application-form"
+        ]
+      },
+      "invariants": [
+        "7 sections inherited and editable",
+        "1 new section",
+        "completion truth comes from server",
+        "8 content sections plus separate package step"
+      ],
+      "figmaEvidence": {
+        "frameId": "1:23119",
+        "frameName": "A-31_report-step-form",
+        "parentSectionId": "1:23008"
+      }
+    },
+    {
+      "key": "final-report-package",
+      "screenId": "A-32",
+      "name": "최종 심사 제출 패키지",
+      "audience": [
+        "general"
+      ],
+      "purpose": "최종 심사에 필요한 4종 산출물을 준비·확인하고 저장, 최종 제출, 수정 후 재제출한다.",
+      "archetype": "A9",
+      "roles": [
+        "package_finalization",
+        "submission"
+      ],
+      "structure": [
+        "final_report",
+        "presentation",
+        "demo_url",
+        "source_repository",
+        "readiness_state",
+        "submission_actions"
+      ],
+      "states": [
+        "incomplete",
+        "ready",
+        "submitted",
+        "submitted_changed_after_submit",
+        "deadline_passed"
+      ],
+      "actions": [
+        "save",
+        "final_submit",
+        "resubmit",
+        "view_final_report",
+        "generate_pptx_draft",
+        "upload_pdf",
+        "test_demo_url",
+        "enter_repository_url"
+      ],
+      "relationships": {
+        "from": [
+          "final-report-form"
+        ],
+        "statusReflectedIn": [
+          "final-report-status"
+        ],
+        "externalReuse": [
+          "existing_readonly_report_viewer"
+        ]
+      },
+      "invariants": [
+        "save != submit",
+        "PDF is final presentation upload",
+        "PPTX is editable intermediate",
+        "repository provider neutral",
+        "deadline-passed is single read-only state",
+        "deadline-passed has no save/submit/resubmit"
+      ],
+      "figmaEvidence": {
+        "baseFrameId": "1:23529",
+        "baseFrameName": "A-32_submission-package",
+        "submittedFrameId": "17:996",
+        "submittedFrameName": "A-32_submission-package_SUBMITTED",
+        "parentSectionId": "1:23008"
+      }
+    },
+    {
+      "key": "human-first-review",
+      "name": "사람 1차 심사",
+      "audience": [
+        "general_with_reviewer_permission"
+      ],
+      "purpose": "배정된 지원서 원본을 보면서 점수를 입력·저장하고 다음 지원서를 순차 처리한다.",
+      "archetype": "A7",
+      "roles": [
+        "evaluation_workspace"
+      ],
+      "structure": [
+        "assigned_queue",
+        "application_source_viewer",
+        "evaluation_control",
+        "progress",
+        "next_target"
+      ],
+      "states": [
+        "not_reviewed",
+        "in_review",
+        "review_complete",
+        "finalized_readonly"
+      ],
+      "actions": [
+        "select_target",
+        "score",
+        "save",
+        "next_target",
+        "open_final_review"
+      ],
+      "relationships": {
+        "to": [
+          "human-review-finalization"
+        ]
+      },
+      "invariants": [
+        "reviewer is a general account with temporary reviewer permission",
+        "AI-review admin role is separate",
+        "use as legacy visual evidence, not current geometry baseline"
+      ],
+      "evidence": {
+        "legacyNode": "RV-01_first-review"
+      }
+    },
+    {
+      "key": "human-final-review",
+      "name": "사람 최종 심사",
+      "audience": [
+        "general_with_reviewer_permission"
+      ],
+      "purpose": "지원서와 최종 산출물을 보면서 최종 심사 점수를 입력·저장하고 다음 대상을 처리한다.",
+      "archetype": "A7",
+      "roles": [
+        "evaluation_workspace"
+      ],
+      "structure": [
+        "target_queue",
+        "artifact_source_workspace",
+        "evaluation_input",
+        "persistent_progress",
+        "next_target"
+      ],
+      "states": [
+        "not_reviewed",
+        "in_review",
+        "review_complete"
+      ],
+      "actions": [
+        "select_target",
+        "inspect_artifacts",
+        "score",
+        "save",
+        "next_target"
+      ],
+      "invariants": [
+        "current visual baseline for future human review",
+        "work-loop continuity has priority over fixed pane geometry"
+      ],
+      "evidence": {
+        "currentNode": "RV-02_final-review-unfolded"
+      }
+    },
+    {
+      "key": "human-review-finalization",
+      "name": "사람 심사 최종 검토/제출",
+      "audience": [
+        "general_with_reviewer_permission"
+      ],
+      "purpose": "전체 심사 결과의 누락과 입력값을 최종 검토하고 확정 제출한다.",
+      "archetype": "A8",
+      "roles": [
+        "final_review",
+        "finalization"
+      ],
+      "structure": [
+        "final_review_header",
+        "incomplete_summary",
+        "dense_review_surface",
+        "save",
+        "final_action"
+      ],
+      "states": [
+        "incomplete",
+        "ready_to_finalize",
+        "finalized_readonly"
+      ],
+      "actions": [
+        "review_all",
+        "edit_before_finalize",
+        "save",
+        "finalize"
+      ],
+      "invariants": [
+        "all assigned reviews must be complete before finalization",
+        "after final submit scores are read-only"
+      ],
+      "evidence": {
+        "policy": "SITEMAP + A8 archetype"
+      }
+    },
+    {
+      "key": "ai-review-dashboard",
+      "screenId": "J-01",
+      "name": "AI 심사 대시보드",
+      "audience": [
+        "admin"
+      ],
+      "purpose": "회차별 AI 심사 운영 현황을 요약하고 심사 실행·결과·템플릿 관리로 진입한다.",
+      "archetype": "A6",
+      "roles": [
+        "operational_dashboard"
+      ],
+      "structure": [
+        "round_selector",
+        "summary_kpis",
+        "criteria_weights",
+        "application_table",
+        "operational_actions"
+      ],
+      "states": [
+        "default",
+        "running",
+        "partial_failure"
+      ],
+      "actions": [
+        "change_round",
+        "run_ai_review",
+        "open_results",
+        "open_templates",
+        "export_csv"
+      ],
+      "relationships": {
+        "to": [
+          "ai-review-results",
+          "ai-review-templates"
+        ]
+      },
+      "invariants": [
+        "admin-only",
+        "human reviewer permission does not grant access"
+      ],
+      "evidence": {
+        "policy": "SITEMAP J series"
+      }
+    },
+    {
+      "key": "ai-review-results",
+      "screenId": "J-02",
+      "name": "AI 심사 결과 목록/상세",
+      "audience": [
+        "admin"
+      ],
+      "purpose": "지원서별 AI 심사 처리 상태와 결과·점수·근거를 검토한다.",
+      "archetype": "A7",
+      "roles": [
+        "evaluation_result_workspace"
+      ],
+      "structure": [
+        "status_filter_or_queue",
+        "application_result",
+        "item_scores_and_comments",
+        "artifact_evaluation"
+      ],
+      "states": [
+        "completed",
+        "running",
+        "waiting",
+        "failed"
+      ],
+      "actions": [
+        "filter_status",
+        "select_application",
+        "inspect_result"
+      ],
+      "relationships": {
+        "from": [
+          "ai-review-dashboard"
+        ]
+      },
+      "invariants": [
+        "AI evaluation is operational/admin context, not human reviewer UI",
+        "unfinished results show progress rather than fabricated scores"
+      ],
+      "evidence": {
+        "policy": "SITEMAP J series"
+      }
+    },
+    {
+      "key": "ai-review-templates",
+      "screenId": "J-03",
+      "name": "AI 심사 템플릿 목록",
+      "audience": [
+        "admin"
+      ],
+      "purpose": "AI 심사 템플릿과 공통 스킬을 생성·수정·삭제·활성화한다.",
+      "archetype": "A6",
+      "roles": [
+        "configuration_management"
+      ],
+      "structure": [
+        "template_summary",
+        "template_table_or_list",
+        "management_actions"
+      ],
+      "states": [
+        "active",
+        "inactive",
+        "empty"
+      ],
+      "actions": [
+        "create_template",
+        "edit_template",
+        "delete_template",
+        "activate_template",
+        "manage_common_skill"
+      ],
+      "relationships": {
+        "to": [
+          "ai-review-template-edit"
+        ]
+      },
+      "invariants": [
+        "admin-only"
+      ],
+      "evidence": {
+        "policy": "SITEMAP J series"
+      }
+    },
+    {
+      "key": "ai-review-template-edit",
+      "screenId": "J-04",
+      "name": "AI 심사 템플릿 편집",
+      "audience": [
+        "admin"
+      ],
+      "purpose": "평가 에이전트·항목·시스템 프롬프트·사용자 메시지 템플릿·변수를 편집한다.",
+      "archetype": "A5",
+      "roles": [
+        "configuration_editing"
+      ],
+      "structure": [
+        "step_or_section_navigation",
+        "configuration_workspace",
+        "prompt_and_variable_fields",
+        "save_action"
+      ],
+      "states": [
+        "editing",
+        "validation_error",
+        "saved"
+      ],
+      "actions": [
+        "edit_configuration",
+        "save"
+      ],
+      "relationships": {
+        "from": [
+          "ai-review-templates"
+        ]
+      },
+      "invariants": [
+        "admin-only",
+        "AI-review scoring policy is separate from human-review scoring"
+      ],
+      "evidence": {
+        "policy": "SITEMAP J series"
+      }
+    }
+  ],
+  "retrieval": {
+    "queryFields": [
+      "purpose",
+      "archetype",
+      "roles",
+      "structure",
+      "states",
+      "actions",
+      "relationships",
+      "invariants"
+    ],
+    "rankingHints": [
+      "current-policy match outranks superficial visual similarity",
+      "same user goal/work loop outranks same component appearance",
+      "current baseline outranks legacy baseline",
+      "exact state/action overlap raises relevance",
+      "semantic similarity never authorizes direct composition without inspecting Figma evidence"
+    ],
+    "output": {
+      "candidateClasses": [
+        "exact_reference",
+        "partial_reference",
+        "supporting_reference",
+        "no_suitable_reference"
+      ],
+      "requiresReason": true,
+      "requiresCurrentVsLegacy": true
+    }
+  }
+}
