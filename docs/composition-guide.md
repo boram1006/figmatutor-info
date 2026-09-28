@@ -4,7 +4,8 @@
 즉 카드·배지·버튼 같은 조합 단위를 **기존 화면과 동일한 규칙으로** 구성하는 방법을 정리한다.
 
 > 원칙: 값을 발명하지 않는다. 규칙은 **기존에 그려진(그리고 토큰에 바인딩된) 화면을 실측**해서 도출한다.
-> 근거: `design/operations/rebind-v5/snapshot-v5.json`의 A-30 카드 `Card-PENDING`(1:23081)·`Card-SUBMITTED`(1:23104) 실측.
+> 전역 시각 문법은 `design/03-design-rules/generation/product-visual-grammar.md`를 따른다. 이 문서의 A-30 항목은 특정 workflow의 local composition evidence이며 전체 서비스 규칙을 대체하지 않는다.
+> A-30 카드 예시는 `design/operations/rebind-v5/snapshot-v5.json`의 `Card-PENDING`(1:23081)·`Card-SUBMITTED`(1:23104) 실측.
 > 새로 그리는 조합은 raw hex를 쓰지 않고 **전부 semantic 토큰**에 바인딩한다(기존 화면엔 raw가 섞여 있으나 답습하지 않는다).
 
 ---
