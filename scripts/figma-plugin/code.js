@@ -735,6 +735,7 @@ async function runCreate(spec) {
 
     if (node.type === 'CLONE') {
       restoreContextualRootSizing(n, cloneBuildResult?.rootContextSizing || null);
+      verifyContextualRootSizing(n, cloneBuildResult?.rootContextSizing || null);
     }
 
     // Explicit placement for NEW_CONSTRUCTION overlays/modals and other composed nodes.
@@ -745,9 +746,12 @@ async function runCreate(spec) {
     if (node.type === 'CLONE') {
       // 새 parent로 reparent한 뒤에도 구조/style invariant가 보존되는지 확인한다.
       const cloneAfterAttach = await captureCloneVerificationTree(n);
+      const compositionAllowed = new Map();
+      allowCloneChange(compositionAllowed, '0', 'layoutSizingHorizontal');
+      allowCloneChange(compositionAllowed, '0', 'layoutSizingVertical');
       const compositionDiffs = compareCloneTrees(cloneBeforeAttach, cloneAfterAttach, {
         mode: 'postPatch',
-        allowed: new Map(),
+        allowed: compositionAllowed,
       });
       const compositionUnexpected = compositionDiffs.filter((d) => d.category !== 'geometry');
       const compositionGeometry = compositionDiffs.filter((d) => d.category === 'geometry');
@@ -1444,6 +1448,37 @@ function restoreContextualRootSizing(node, sizing) {
   }
 }
 
+
+function verifyContextualRootSizing(node, sizing) {
+  if (!node || !sizing) return;
+  const parentIsAutoLayout =
+    node.parent &&
+    'layoutMode' in node.parent &&
+    node.parent.layoutMode !== 'NONE';
+  if (!parentIsAutoLayout) return;
+
+  if (
+    sizing.layoutSizingHorizontal &&
+    'layoutSizingHorizontal' in node &&
+    node.layoutSizingHorizontal !== sizing.layoutSizingHorizontal
+  ) {
+    throw new Error(
+      'clone contextual sizing 복원 실패: layoutSizingHorizontal expected=' +
+      sizing.layoutSizingHorizontal + ' actual=' + node.layoutSizingHorizontal
+    );
+  }
+  if (
+    sizing.layoutSizingVertical &&
+    'layoutSizingVertical' in node &&
+    node.layoutSizingVertical !== sizing.layoutSizingVertical
+  ) {
+    throw new Error(
+      'clone contextual sizing 복원 실패: layoutSizingVertical expected=' +
+      sizing.layoutSizingVertical + ' actual=' + node.layoutSizingVertical
+    );
+  }
+}
+
 async function cloneAndPatchNode(source, options = {}) {
   if (!source || typeof source.clone !== 'function')
     throw new Error('clone 가능한 source 노드 필요');
@@ -1457,9 +1492,12 @@ async function cloneAndPatchNode(source, options = {}) {
     restoreContextualRootSizing(clone, rootContextSizing);
 
     const cloneBefore = await captureCloneVerificationTree(clone);
+    const prePatchAllowed = new Map();
+    allowCloneChange(prePatchAllowed, '0', 'layoutSizingHorizontal');
+    allowCloneChange(prePatchAllowed, '0', 'layoutSizingVertical');
     const prePatchDiffs = compareCloneTrees(sourceBefore, cloneBefore, {
-      mode: 'prePatch',
-      allowed: new Map(),
+      mode: 'postPatch',
+      allowed: prePatchAllowed,
     });
     if (prePatchDiffs.length) {
       throw new Error(
@@ -1531,6 +1569,11 @@ async function cloneAndPatchNode(source, options = {}) {
     const clonePathById = buildRelativePathMap(clone);
     const allowedChanges = new Map();
     const allowedSubtrees = [];
+    // Root HUG/FILL/FIXED is contextual to the parent auto-layout and may differ
+    // while the clone is temporarily detached/reparented. Verify it separately
+    // after final attachment instead of treating it as an intrinsic clone invariant.
+    allowCloneChange(allowedChanges, '0', 'layoutSizingHorizontal');
+    allowCloneChange(allowedChanges, '0', 'layoutSizingVertical');
     if (options.name) allowCloneChange(allowedChanges, '0', 'name');
 
     for (const plan of patchPlans) {
@@ -1723,6 +1766,7 @@ async function runDuplicate(spec) {
       }
       destination.appendChild(clone);
       restoreContextualRootSizing(clone, cloned.rootContextSizing || null);
+      verifyContextualRootSizing(clone, cloned.rootContextSizing || null);
 
       if (item.parentId && clone.parent?.id !== item.parentId)
         throw new Error(
@@ -1732,9 +1776,12 @@ async function runDuplicate(spec) {
 
       // reparent 후에도 구조/style invariant는 동일해야 한다.
       const afterAttach = await captureCloneVerificationTree(clone);
+      const compositionAllowed = new Map();
+      allowCloneChange(compositionAllowed, '0', 'layoutSizingHorizontal');
+      allowCloneChange(compositionAllowed, '0', 'layoutSizingVertical');
       const compositionDiffs = compareCloneTrees(beforeAttach, afterAttach, {
         mode: 'postPatch',
-        allowed: new Map(),
+        allowed: compositionAllowed,
       });
       const compositionUnexpected = compositionDiffs.filter((d) => d.category !== 'geometry');
       const compositionGeometry = compositionDiffs.filter((d) => d.category === 'geometry');
