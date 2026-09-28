@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "task": "v6-judging-result/A-40",
   "variant": "v4-lineage-shell",
-  "status": "WAITING_FOR_PREDECESSOR_SHELL_EXTRACT",
+  "status": "READY_WITH_EXISTING_V5_SNAPSHOT",
   "objective": "Generate A-40 by inheriting the current A-30 page shell and replacing only task content, then compose result content from internal patterns/DS.",
   "predecessor": {
     "screenId": "A-30",
@@ -45,22 +45,39 @@
     ]
   },
   "generationSequence": [
-    "extract A-30 full subtree",
-    "identify stable shell nodes and replaceable content region",
-    "clone A-30 root or closest shell container",
-    "preserve shell nodes unchanged",
-    "remove/hide predecessor-specific task content",
-    "insert A-40 task content",
+    "reuse existing current V5 snapshot; no new extract required",
+    "clone A-30 Header, Page Header Description, Sidebar, Title Row",
+    "reconstruct only measured Main/Layout/Body containers",
+    "compose A-40 result content inside inherited 855px Body",
     "validate tokens/components/variant-scoped patches",
     "plugin execute",
     "extract + screenshot A-40 v4",
-    "compare against A-30 shell fidelity first, then composition quality"
+    "compare A-30 shell fidelity first, then A-40 composition quality"
   ],
   "gate": {
-    "blockCreateUntil": [
-      "A-30 scoped extract saved as a40-v4-a30-shell-snapshot.json",
-      "shell/content boundary is identified from real node IDs",
-      "no shell node is guessed"
+    "passed": [
+      "existing snapshot contains full A-30 subtree",
+      "shell/content boundary identified from real node IDs",
+      "no shell node guessed"
     ]
+  },
+  "shellEvidence": {
+    "source": "design/operations/v5-latest-snapshot/snapshot-v5-latest.json",
+    "predecessorFrame": "1:23009",
+    "confirmedGeometry": {
+      "frame": "1440x1024",
+      "header": "1440x72; padding 0 120",
+      "main": "1200x952; padding top/bottom 32",
+      "layout": "280 sidebar + 32 gap + 855 body"
+    },
+    "confirmedNodes": {
+      "header": "1:23010",
+      "pageHeaderDescriptionMargin": "1:23021",
+      "pageHeaderDescriptionText": "1:23023",
+      "sidebar": "1:23025",
+      "body": "1:23072",
+      "titleRow": "1:23073",
+      "titleText": "1:23075"
+    }
   }
 }
