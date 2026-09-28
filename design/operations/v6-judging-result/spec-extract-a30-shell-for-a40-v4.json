@@ -1,0 +1,11 @@
+{
+  "op": "extract",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "stage": "screens",
+  "inputDigest": "v6-a40-v4-lineage-shell-2026-09-28",
+  "frameIds": [
+    "1:23009"
+  ],
+  "_note": "V4 mandatory predecessor-shell inspection. Extract the entire A-30_my-report-status subtree before any A-40 create/duplicate spec. Save output to design/operations/v6-judging-result/a40-v4-a30-shell-snapshot.json. Do not inspect or use Stitch or A-40 v1/v2/v3 artifacts for composition."
+}
