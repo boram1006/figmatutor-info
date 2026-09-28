@@ -43,7 +43,7 @@ inclusion: always
 | "기존 화면 근거 수집/분석" (선택) | `collect-references` → `analyze-references` |
 | "화면 구조 잡아줘" | `build-structure` |
 | "컴포넌트/화면 만들어줘/추가해줘" | `create-figma` |
-| "새 PRD로 화면 만들어줘", "이 PRD대로 그려줘" | `docs/new-screen-workflow.md` 절차 (PRD→requirements→그리기→screens/verification) |
+| "새 PRD로 화면 만들어줘", "이 PRD대로 그려줘" | 신규 기능이면 `docs/new-screen-exploration-lock-workflow.md` → `docs/new-screen-workflow.md` 순서. EXPLORE→LOCK→reference/composition→Figma→verification |
 | "기존 화면 토큰 바인딩해줘", "색·폰트가 안 붙었어", "raw 값 정리해줘" | `docs/rebind-existing-screen-workflow.md` 절차 (진단→색 rebind→타이포 size 배정→재추출 검증) |
 | "이런 기능 필요해", "PRD 뽑아줘", "기획 정리해줘" | `docs/prd-authoring-workflow.md` 절차 (요청→8블록 PRD 초안→부족분 질문→확정) |
 | "검증해줘", "결함 찾아줘" | `audit-design` |
@@ -76,7 +76,7 @@ inclusion: always
 화면 목적에 맞는 archetype·density·layout·component usage·pattern·visual hierarchy·state 규칙을 선택해서 적용한다.
 일반적인 SaaS 관습보다 실제 기존 화면과 PRD 근거를 우선한다.
 
-- **신규 화면 생성**: 먼저 사용자/task/outcome을 분석한다. 기존 유형이면 archetype/pattern을 재사용하고, 기존 유형으로 설명되지 않는 신규 기획이면 `design/03-design-rules/generation/novel-screen-reasoning.md`를 따라 pattern 조합 → Candidate Pattern 순으로 판단한다. Product Decision은 근거 없이 발명하지 않는다.
+- **신규 화면 생성**: 먼저 `EXPLORE → LOCK`으로 product candidate와 확정 범위를 분리한다. 발산 아이디어는 제안 가능하지만 승인 전 정본/Figma spec에 넣지 않는다. 그 다음 사용자/task/outcome을 분석한다. 기존 유형이면 archetype/pattern을 재사용하고, 기존 유형으로 설명되지 않는 신규 기획이면 `design/03-design-rules/generation/novel-screen-reasoning.md`를 따라 pattern 조합 → Candidate Pattern 순으로 판단한다. Product Decision은 근거 없이 발명하지 않는다.
 - **기존 화면 수정/기능 추가**: 반드시 `design/03-design-rules/generation/existing-screen-modification.md`를 먼저 읽고, 기존 화면을 baseline으로 유지한 채 ADD/MODIFY/REMOVE delta만 적용한다. PRD에 언급되지 않은 영역은 변경하지 않는다.
 - 기존 component instance/JSON 구조가 있으면 새로 비슷하게 만들지 말고 동일 component reference/instance structure를 재사용한다.
 - 근거 없는 Card/Table 변환, 고정 pane 비율, 속성 개수 기반 threshold, 임의의 spacing/width 재설계를 하지 않는다.
