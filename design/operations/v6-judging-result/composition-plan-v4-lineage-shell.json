@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "task": "v6-judging-result/A-40",
+  "variant": "v4-lineage-shell",
+  "status": "WAITING_FOR_PREDECESSOR_SHELL_EXTRACT",
+  "objective": "Generate A-40 by inheriting the current A-30 page shell and replacing only task content, then compose result content from internal patterns/DS.",
+  "predecessor": {
+    "screenId": "A-30",
+    "frameId": "1:23009",
+    "frameName": "A-30_my-report-status",
+    "parentSectionId": "1:23008",
+    "role": "shell-source-of-truth"
+  },
+  "shellLock": {
+    "inherit": [
+      "page/root geometry",
+      "header/global navigation",
+      "My Page navigation/sidebar",
+      "content container geometry",
+      "page margins/width",
+      "selected application context if present"
+    ],
+    "doNotInvent": [
+      "header",
+      "sidebar",
+      "top navigation",
+      "brand color",
+      "page-level spacing",
+      "root column structure"
+    ],
+    "patternScope": "announcement/evaluation patterns may be used only inside the task-content region."
+  },
+  "taskContent": {
+    "order": [
+      "result hero",
+      "total score",
+      "AI/Human review summaries",
+      "actions"
+    ],
+    "productSource": "design/operations/prd-v6/PRD.md",
+    "references": [
+      "Pattern 8 Announcement Hero + Follow-up Action for result expression only",
+      "AI/human evaluation manifests for information grouping only",
+      "current Button/Tag DS instances"
+    ]
+  },
+  "generationSequence": [
+    "extract A-30 full subtree",
+    "identify stable shell nodes and replaceable content region",
+    "clone A-30 root or closest shell container",
+    "preserve shell nodes unchanged",
+    "remove/hide predecessor-specific task content",
+    "insert A-40 task content",
+    "validate tokens/components/variant-scoped patches",
+    "plugin execute",
+    "extract + screenshot A-40 v4",
+    "compare against A-30 shell fidelity first, then composition quality"
+  ],
+  "gate": {
+    "blockCreateUntil": [
+      "A-30 scoped extract saved as a40-v4-a30-shell-snapshot.json",
+      "shell/content boundary is identified from real node IDs",
+      "no shell node is guessed"
+    ]
+  }
+}
