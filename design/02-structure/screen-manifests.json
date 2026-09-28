@@ -547,9 +547,8 @@
       ],
       "structure": [
         "report_status_card",
-        "primary_state",
-        "content_completion",
-        "secondary_action_needed_state",
+        "visible_status",
+        "content_completion_when_in_progress",
         "next_action_cta"
       ],
       "states": [
@@ -577,7 +576,8 @@
       "invariants": [
         "initial completion 7/8",
         "completed content 8/8",
-        "post-submit edit keeps SUBMITTED primary state and adds action-needed state"
+        "after post-submit edits, underlying workflow keeps prior submitted version and enters changed-after-submit state",
+        "A-30 does not show Green submitted together with the changed-after-submit state; visible status is Warning 재제출 필요 only"
       ],
       "figmaEvidence": {
         "frameId": "1:23009",
