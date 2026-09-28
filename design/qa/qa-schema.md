@@ -71,8 +71,18 @@ notes: |
 예: 저장 버튼 클릭 시 API 호출, 모달 열기/닫기, 다음 지원서 이동
 
 ### STATE
-상태별 UI와 전이
-예: DRAFT→SUBMITTED 전이 트리거, 각 상태별 배지·CTA·부가표시
+상태별 UI와 전이.
+상태 전이만 검증하지 않고, 각 상태에서 실제로 노출되는 visible UI를 함께 inventory한다.
+
+필수 점검 후보:
+- badge / status label
+- progress / count
+- 날짜·시간·수정일시 등 metadata
+- 상태별 안내 문구
+- CTA label / 노출 / 활성 여부
+- 상태에 따라 추가·제거되는 부가표시
+
+예: DRAFT→SUBMITTED 전이 트리거, 각 상태별 배지·CTA·수정일시·부가표시
 
 ### VALIDATION
 입력 제한, 빈 상태, 에러, loading, 마감, 권한 예외 등
@@ -189,6 +199,25 @@ notes: |
     배너 노출 여부 = 자동 검증 가능.
     배너 색상·아이콘 시각 확인 = 사람이 한다.
 ```
+
+---
+
+## Visible UI Coverage 원칙
+
+상태가 있는 화면은 transition matrix만으로 coverage 완료로 간주하지 않는다.
+
+각 상태마다 source에 존재하는 `badge / progress / metadata / copy / CTA`를 확인하고,
+각 요소가 최소 하나의 QA case에 연결되는지 점검한다.
+
+예:
+
+| State | Badge | Progress | Metadata | CTA |
+|---|---|---|---|---|
+| IN_PROGRESS | 본선 진행중 | 7/8 | 수정일시 | 이어 작성하기 |
+| SUBMITTED | 제출완료 | - | 수정일시 | 제출 내용 보기 |
+| CHANGED_AFTER_SUBMIT | 재제출 필요 | - | 수정일시 | 수정사항 제출하기 |
+
+한 상태의 transition TC가 존재해도 위 visible element가 검증되지 않으면 coverage gap이다.
 
 ---
 
