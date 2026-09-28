@@ -10,6 +10,7 @@
 **이 워크플로우는 "지금부터 새로 만드는 화면"에만 적용한다.**
 
 > PRD가 아직 없고 기능 요청만 있으면, 먼저 **`docs/prd-authoring-workflow.md`** 로 PRD를 생성한 뒤 이 문서로 온다.
+> 완전히 새로운 기능/화면은 PRD 초안을 바로 Figma로 보내지 않고 **`docs/new-screen-exploration-lock-workflow.md`** 의 EXPLORE → LOCK을 먼저 수행한다.
 > 기존 기능의 새 버전/변형을 만들기 전에는 **`design/02-structure/SERVICE_EVOLUTION.md`** 에서 current baseline과 legacy evidence를 구분한다.
 > 기존 화면 유형으로 설명되지 않는 완전히 새로운 기획이면 화면을 그리기 전에 **`design/03-design-rules/generation/novel-screen-reasoning.md`** 를 적용한다.
 > 이때 Product Decision은 임의로 만들지 않고, Design Decision만 기존 archetype/pattern 근거를 조합해 판단한다.
@@ -79,6 +80,17 @@
 - 빈 상태 + CTA는 화면마다 필수 정의
 
 ---
+
+## 1.4. 신규 기능 발산과 Lock
+
+완전히 새로운 화면에서는 초기 PRD에 없는 유용한 기능을 제안할 수 있다.
+다만 발산 아이디어는 `CANDIDATE_PRODUCT`로 분리하고, 승인 전에는 requirements/QA/Figma spec에 넣지 않는다.
+
+기본 흐름:
+`EXPLORE(텍스트/구조) → LOCK(제품 범위 확정) → COMPOSE → Figma 생성`
+
+여러 Figma 시안을 병렬 생성하는 것이 기본이 아니다.
+상세 분류와 gate는 `docs/new-screen-exploration-lock-workflow.md`를 따른다.
 
 ## 1.5. 신규 UX 구조 판단
 
@@ -213,6 +225,19 @@ node scripts/harness.mjs check --phase inputs
 PASS 확인. `status: "ready"` 유지.
 
 ---
+
+## 2.5. Composition Plan — Figma spec 전 필수
+
+신규 화면은 Pattern Retrieval 후 바로 JSON을 작성하지 않는다.
+작업 폴더에 `composition-plan.json`을 만들고 각 영역에 대해
+`purpose / source / reuseMode / productScope / inspectBeforeBuild`를 기록한다.
+
+- productScope는 `LOCKED_CORE` 또는 EXPLORE/LOCK에서 `APPROVED`된 항목만 허용한다.
+- `CANDIDATE_PRODUCT`, `CONFLICT`, `UNSUPPORTED_DETAIL`은 생성 spec에 들어가면 안 된다.
+- reference candidate가 있으면 실제 Figma subtree를 확인한 뒤 CLONE 여부를 결정한다.
+- 적합한 reference가 없으면 `no_suitable_reference`를 명시하고 NEW_CONSTRUCTION을 허용한다.
+
+composition plan 없이 primitive FRAME/TEXT부터 만드는 것은 신규 화면 생성 절차 위반이다.
 
 ## 3. 화면 그리기 (Figma 플러그인)
 
