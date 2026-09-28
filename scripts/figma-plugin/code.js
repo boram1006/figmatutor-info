@@ -733,6 +733,10 @@ async function runCreate(spec) {
     if (parent) parent.appendChild(n);
     else page.appendChild(n);
 
+    if (node.type === 'CLONE') {
+      restoreContextualRootSizing(n, cloneBuildResult?.rootContextSizing || null);
+    }
+
     // Explicit placement for NEW_CONSTRUCTION overlays/modals and other composed nodes.
     // Position is optional; when omitted, existing auto-layout/page behavior is preserved.
     if (typeof node.x === 'number') n.x = node.x;
@@ -1405,6 +1409,41 @@ function round2(x) {
 //   ]
 // }
 // ===========================================================================
+function captureContextualRootSizing(node) {
+  return {
+    layoutSizingHorizontal:
+      'layoutSizingHorizontal' in node ? node.layoutSizingHorizontal : null,
+    layoutSizingVertical:
+      'layoutSizingVertical' in node ? node.layoutSizingVertical : null,
+  };
+}
+
+function restoreContextualRootSizing(node, sizing) {
+  if (!node || !sizing) return;
+  // Figma may reset an auto-layout child's HUG/FILL/FIXED sizing when clone()
+  // creates it or when it is reparented. These are parent-contextual properties,
+  // but for shell inheritance we want the source root's sizing contract to survive
+  // whenever the destination parent supports the same auto-layout semantics.
+  if (
+    sizing.layoutSizingHorizontal &&
+    'layoutSizingHorizontal' in node &&
+    node.parent &&
+    'layoutMode' in node.parent &&
+    node.parent.layoutMode !== 'NONE'
+  ) {
+    node.layoutSizingHorizontal = sizing.layoutSizingHorizontal;
+  }
+  if (
+    sizing.layoutSizingVertical &&
+    'layoutSizingVertical' in node &&
+    node.parent &&
+    'layoutMode' in node.parent &&
+    node.parent.layoutMode !== 'NONE'
+  ) {
+    node.layoutSizingVertical = sizing.layoutSizingVertical;
+  }
+}
+
 async function cloneAndPatchNode(source, options = {}) {
   if (!source || typeof source.clone !== 'function')
     throw new Error('clone 가능한 source 노드 필요');
@@ -1412,8 +1451,10 @@ async function cloneAndPatchNode(source, options = {}) {
   let clone = null;
   try {
     const sourceBefore = await captureCloneVerificationTree(source);
+    const rootContextSizing = captureContextualRootSizing(source);
 
     clone = source.clone();
+    restoreContextualRootSizing(clone, rootContextSizing);
 
     const cloneBefore = await captureCloneVerificationTree(clone);
     const prePatchDiffs = compareCloneTrees(sourceBefore, cloneBefore, {
@@ -1616,6 +1657,7 @@ async function cloneAndPatchNode(source, options = {}) {
     return {
       clone,
       patchReport,
+      rootContextSizing,
       verification: {
         prePatch: {
           passed: true,
@@ -1680,6 +1722,7 @@ async function runDuplicate(spec) {
           throw new Error('duplicate parentId가 지정 page 밖에 있음: ' + item.parentId);
       }
       destination.appendChild(clone);
+      restoreContextualRootSizing(clone, cloned.rootContextSizing || null);
 
       if (item.parentId && clone.parent?.id !== item.parentId)
         throw new Error(
