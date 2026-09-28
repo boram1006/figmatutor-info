@@ -104,6 +104,26 @@ PRD의 각 블록에서 테스트 가능한 요구사항을 추출한다.
 추출 시 반드시 **source 위치**를 기록한다.
 예: `v3 PRD / A-01 / 2.2 지원서 상태`
 
+### 2.5단계 — 화면별 Visible UI Inventory
+
+상태 전이만 추출하고 끝내지 않는다. 각 화면/상태마다 사용자가 실제로 보는 핵심 정보를 먼저 inventory로 만든다.
+
+최소 확인 항목:
+- status badge / status label
+- progress / count
+- 날짜·시간·수정일시 등 metadata
+- 주요 안내 문구
+- primary / secondary CTA와 enabled/disabled 여부
+- 상태에 따라 나타나거나 사라지는 보조 정보
+
+예: A-30처럼 카드가 상태에 따라 바뀌는 화면은 `본선 진행중 / 제출완료 / 재제출 필요 / 본선 미진출` 각각에 대해
+**badge + progress + metadata + CTA**를 독립적으로 확인한다.
+
+중요:
+- "상태가 맞다"라는 한 TC로 위 요소를 뭉개지 않는다.
+- source에 명시된 visible element가 하나라도 있으면 해당 element의 존재/값을 검증하는 TC가 있는지 확인한다.
+- state transition coverage와 visible UI coverage를 별도로 본다.
+
 ### 3단계 — QA Case 생성
 
 `design/qa/qa-schema.md`의 필드 정의에 맞춰 각 케이스를 작성한다.
@@ -221,6 +241,10 @@ category=`VISUAL`인 케이스는 모두 `automationCandidate: false`다.
 - [ ] 기존 화면 modification rule과 충돌하지 않는가
 - [ ] Visual QA를 무리하게 자동화 대상으로 분류하지 않았는가
 - [ ] 모든 확정 QA에 source trace가 있는가
+- [ ] 각 화면의 visible UI inventory(status badge / progress / metadata / 안내 / CTA)를 확인했는가
+- [ ] 각 상태에서 badge·CTA만 보고 metadata(예: 수정일시)를 빠뜨리지 않았는가
+- [ ] state transition TC와 visible UI TC를 구분했는가
+- [ ] manual checklist가 "무엇을 조작하고 무엇이 나오면 Pass인지" 실행자가 이해할 만큼 구체적인가
 - [ ] INFERRED 항목은 automationCandidate: false인가
 
 ---
