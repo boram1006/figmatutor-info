@@ -76,6 +76,7 @@ inclusion: always
 화면 목적에 맞는 archetype·density·layout·component usage·pattern·visual hierarchy·state 규칙을 선택해서 적용한다.
 일반적인 SaaS 관습보다 실제 기존 화면과 PRD 근거를 우선한다.
 
+- **전체 서비스 visual grammar 선행 (필수)**: 특정 predecessor나 단일 화면을 보기 전에 `design/03-design-rules/generation/product-visual-grammar.md`를 먼저 적용한다. 전체 extracted screen set에서 반복되는 typography/spacing/surface/outline/grouping 문법을 제품 공통 기준으로 사용하고, 그 다음 current screen family와 predecessor를 좁혀간다. 외부 Stitch HTML/CSS/image는 composition source일 뿐 visual style source가 아니다.
 - **신규 화면 생성**: 먼저 `EXPLORE → LOCK`으로 product candidate와 확정 범위를 분리한다. 발산 아이디어는 제안 가능하지만 승인 전 정본/Figma spec에 넣지 않는다. 그 다음 사용자/task/outcome을 분석한다. 기존 유형이면 archetype/pattern을 재사용하고, 기존 유형으로 설명되지 않는 신규 기획이면 `design/03-design-rules/generation/novel-screen-reasoning.md`를 따라 pattern 조합 → Candidate Pattern 순으로 판단한다. Product Decision은 근거 없이 발명하지 않는다.
 - **기존 화면 수정/기능 추가**: 반드시 `design/03-design-rules/generation/existing-screen-modification.md`를 먼저 읽고, 기존 화면을 baseline으로 유지한 채 ADD/MODIFY/REMOVE delta만 적용한다. PRD에 언급되지 않은 영역은 변경하지 않는다.
 - **Workflow lineage shell inheritance (필수)**: 신규 화면이라도 진입 경로의 직전 화면(predecessor)이 현재 Figma evidence를 가진다면 root page shell을 새로 발명하지 않는다. 먼저 predecessor의 실제 frame subtree를 inspect/extract하고 header/navigation/sidebar/content-frame geometry를 baseline으로 고정한다. 신규 화면은 그 shell을 clone/reference한 뒤 task-specific content region만 ADD/MODIFY/REMOVE한다. generic archetype/pattern은 shell을 대체할 수 없고, 본문 내부 composition에만 사용한다. predecessor evidence를 확인하지 않은 상태에서는 새 root layout의 op:create를 생성 금지한다.
