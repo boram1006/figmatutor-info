@@ -81,3 +81,25 @@
 4. 색은 raw hex 금지, **semantic 토큰**에 바인딩. 타이포는 `Text/*` 스타일.
 5. `op:create`로 그리되, 기존 프레임에 붙일 땐 `parentId`로 섹션/부모를 지정한다.
 6. 그린 뒤 재추출로 raw 잔존·미스타일이 없는지 검증한다(`rebind-existing-screen-workflow.md` 6절).
+
+---
+
+## 5. Workflow lineage shell inheritance
+
+신규 화면이라도 사용자가 **기존 화면에서 항목을 선택해 진입하는 후속 화면**이면 페이지 전체를 새로 디자인하지 않는다.
+
+### 우선순위
+1. PRD의 진입 경로에서 immediate predecessor를 찾는다.
+2. predecessor에 current Figma frameId가 있으면 그 frame 전체 subtree를 먼저 extract한다.
+3. header / global navigation / My Page navigation / sidebar / content container / page margin·width를 **shell baseline**으로 고정한다.
+4. 새 기능은 shell 내부의 task content region만 교체·확장한다.
+5. archetype/pattern은 task content region의 배치 참고로만 사용한다. shell을 대체하면 안 된다.
+
+### 생성 규칙
+- predecessor evidence가 있는데 inspect 없이 blank root frame부터 op:create 하는 것을 금지한다.
+- 가능한 경우 op:duplicate로 predecessor frame을 Exact Clone하고, 새 화면에 필요 없는 content만 제거/비표시한 뒤 신규 content를 삽입한다.
+- shell geometry를 알 수 없는 경우 먼저 scoped op:extract를 생성하고, extract 결과가 저장되기 전에는 최종 create/duplicate spec을 확정하지 않는다.
+- 색·헤더·좌측 navigation을 일반 SaaS 관습으로 보완하지 않는다. 실제 predecessor가 source of truth다.
+
+### A-40 적용 예
+PRD 진입은 A-30 내 지원 현황 → 지원서 카드 → 심사 결과 보기 → A-40 이다. 따라서 A-30_my-report-status (1:23009) 전체 page composition이 A-40 shell의 1순위 reference다. Announcement Hero는 A-40 본문 내부의 결과 표현에만 적용한다.
