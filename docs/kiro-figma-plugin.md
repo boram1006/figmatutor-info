@@ -156,6 +156,7 @@ INSTANCE 규칙:
 - 상태색은 `variantProperties/componentProperties`로 상태를 바꿔 Design System 정의를 따른다.
 - 현재 Button처럼 라벨이 component text property로 노출되지 않은 컴포넌트는 `patches`로 텍스트만 최소 override할 수 있다.
 - INSTANCE `patches`는 `sourceNodeId` 또는 strict `nodeName + expectedMatches`를 사용하고 `characters / rename / visible`만 허용한다. `fillBinding/fillColor` 같은 visual patch는 금지한다.
+- **`patches`의 `nodeName`은 `components/snapshot.json`에서 확인한 실제 노드 이름만 쓴다.** 이 문서/다른 스펙의 예시에 나오는 `Label` 같은 이름을 그대로 추측해 쓰지 않는다. 컴포넌트마다, variant마다 내부 텍스트 노드 이름이 다를 수 있다(예: 현 Button은 `지원하기`/`지원취소`, Tag는 `active`/`미심사`). 실제 이름을 모르면 스냅샷에서 먼저 확인한다. 존재하지 않는 `nodeName`은 `npm run validate-tokens`가 실행 전에 실패시킨다.
 - `componentProperties`는 실제 snapshot에 존재하는 property key만 사용한다. 문서 예시를 근거로 property 이름을 발명하지 않는다.
 
 ### `op: "extract"` — 스냅샷 추출

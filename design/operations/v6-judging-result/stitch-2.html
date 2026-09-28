@@ -1,0 +1,217 @@
+<!--
+====================================================================
+[Stitch 생성 코드 #2]
+Google Stitch로 생성한 두 번째 화면 코드를 아래에 그대로 붙여넣어 주세요.
+- HTML / HTML+CSS / HTML+Tailwind 무엇이든 괜찮습니다.
+- Kiro가 이 코드를 읽고 현재 A-40 스펙과 비교해 개선점을 정리합니다.
+- 이 화면이 무엇인지 한 줄 메모를 남겨주시면 비교가 더 정확합니다. 예: "v6 화면이고 동일한 PRD를 제공함"
+메모:
+====================================================================
+-->
+
+<!-- ↓↓↓ Stitch 코드 #2 붙여넣기 시작 ↓↓↓ -->
+<!DOCTYPE html>
+
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-container-lowest":"#ffffff","primary":"#bf0008","secondary-container":"#de2c31","on-primary-fixed-variant":"#930004","surface-container":"#e9edff","error":"#ba1a1a","secondary-fixed":"#ffdad7","surface-variant":"#dce2f7","tertiary-fixed-dim":"#ffb77d","primary-fixed-dim":"#ffb4a9","inverse-surface":"#293040","on-tertiary-fixed":"#2f1500","surface-container-highest":"#dce2f7","on-error-container":"#93000a","surface":"#f9f9ff","on-tertiary-container":"#ffffff","on-secondary-fixed":"#410004","surface-bright":"#f9f9ff","error-container":"#ffdad6","surface-container-high":"#e1e8fd","on-tertiary":"#ffffff","outline-variant":"#e8bcb6","secondary-fixed-dim":"#ffb3ad","surface-container-low":"#f1f3ff","on-surface":"#141b2b","on-error":"#ffffff","tertiary":"#904c00","tertiary-container":"#b46100","on-tertiary-fixed-variant":"#6e3900","on-primary-fixed":"#410001","background":"#f9f9ff","on-secondary-fixed-variant":"#930012","on-primary":"#ffffff","on-secondary":"#ffffff","primary-container":"#ea1917","tertiary-fixed":"#ffdcc3","outline":"#936e69","on-primary-container":"#ffffff","inverse-on-surface":"#edf0ff","on-surface-variant":"#5e3f3b","on-secondary-container":"#fffbff","primary-fixed":"#ffdad5","inverse-primary":"#ffb4a9","on-background":"#141b2b","surface-dim":"#d3daef","secondary":"#ba081c","surface-tint":"#c00008"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"space-xs":"0.25rem","space-sm":"0.5rem","space-md":"1rem","margin":"2rem","gutter":"1.5rem","space-lg":"1.5rem","space-xl":"2rem"},fontFamily:{"label-sm":["Inter"],"body-sm":["Inter"],"headline-sm":["Inter"],"body-lg":["Inter"],"label-md":["Inter"],"headline-lg":["Inter"],"display-lg":["Inter"],"body-md":["Inter"]},fontSize:{"label-sm":["11px",{lineHeight:"14px",letterSpacing:"0.02em",fontWeight:"600"}],"body-sm":["13px",{lineHeight:"18px",fontWeight:"400"}],"headline-sm":["18px",{lineHeight:"26px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-lg":["16px",{lineHeight:"24px",letterSpacing:"-0.005em",fontWeight:"500"}],"label-md":["13px",{lineHeight:"16px",fontWeight:"600"}],"headline-lg":["24px",{lineHeight:"32px",letterSpacing:"-0.015em",fontWeight:"700"}],"display-lg":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"body-md":["14px",{lineHeight:"20px",fontWeight:"400"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased min-h-screen"><header class="fixed top-0 left-0 right-0 h-16 z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="max-w-[1280px] mx-auto px-margin h-full flex items-center justify-between"><div class="flex items-center gap-space-md"><span class="font-headline-lg text-headline-lg font-bold tracking-tight text-on-surface">LGE AX Hackathon 2026</span></div><div class="flex items-center gap-gutter"><nav class="hidden md:flex items-center gap-space-lg"><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="home" href="#">홈</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="final-submission" href="#">최종 제출</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="notices" href="#">공지사항</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">FAQ</a></nav><a class="inline-flex items-center justify-center px-space-md py-space-xs h-10 rounded-lg bg-primary-container text-on-primary-container font-label-md text-label-md hover:bg-secondary-container transition-colors shadow-sm" data-path="application-status" href="#">마이페이지</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-16 bg-surface"><div class="w-full bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.02)]"><div class="max-w-[1280px] mx-auto px-margin py-space-lg"><h1 class="font-headline-lg text-headline-lg text-on-surface font-bold">마이페이지</h1><p class="mt-space-xs font-body-md text-body-md text-on-surface-variant">내 정보와 신청 현황을 확인하고 관리할 수 있습니다.</p></div></div><div class="max-w-[1280px] mx-auto px-margin py-space-xl"><div class="flex flex-col lg:flex-row gap-space-xl items-start"><aside class="w-full lg:w-[280px] shrink-0 bg-surface-container-lowest rounded-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] p-space-lg"><div class="flex items-center gap-space-md pb-space-lg"><div class="w-12 h-12 rounded-full ring-2 ring-primary-container p-0.5 flex items-center justify-center bg-surface-container-low"><div class="w-full h-full rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[22px]">person</span></div></div><div class="flex-1 min-w-0"><div class="font-headline-sm text-headline-sm text-on-surface truncate">최보람</div><div class="font-body-sm text-body-sm text-on-surface-variant truncate">참가자 (일반)</div></div><button class="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-0.5 font-label-sm text-label-sm" title="로그아웃" type="button"><span class="material-symbols-outlined text-[16px]">logout</span>로그아웃</button></div><nav class="flex flex-col gap-space-xs pt-space-md" data-active-classes="bg-error-container text-primary-container font-semibold border-l-4 border-primary-container"><a class="flex items-center h-11 px-space-md rounded-xl text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all font-label-md text-label-md" data-path="profile-info" href="#"><span class="material-symbols-outlined mr-space-sm text-[20px]">account_circle</span>내 정보</a><a aria-current="page" class="flex items-center h-11 px-space-md rounded-xl transition-all bg-error-container text-primary-container font-semibold border-l-4 border-primary-container" data-path="application-status" href="#"><span class="material-symbols-outlined mr-space-sm text-[20px]">description</span>내 지원 현황</a><a class="flex items-center h-11 px-space-md rounded-xl text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all font-label-md text-label-md" data-path="my-team" href="#"><span class="material-symbols-outlined mr-space-sm text-[20px]">groups</span>내 팀</a><a class="flex items-center h-11 px-space-md rounded-xl text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all font-label-md text-label-md" data-path="teambuilding-status" href="#"><span class="material-symbols-outlined mr-space-sm text-[20px]">handshake</span>팀빌딩 지원 현황</a></nav></aside><div class="flex-1 min-w-0 w-full"><div class="flex flex-col w-full">
+<!-- Breadcrumb & Top Bar Navigation -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm mb-space-lg">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
+<a class="inline-flex items-center gap-1 hover:text-primary transition-colors" data-path="application-status" href="#">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        내 지원 현황으로 돌아가기
+      </a>
+<span class="text-outline-variant">/</span>
+<span class="text-on-surface font-semibold">심사 결과 확인</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm self-start sm:self-auto">
+<span class="material-symbols-outlined text-[16px] text-primary">schedule</span>
+<span>결과 발표일: <strong class="text-on-surface font-semibold">2026.09.28 14:00 KST</strong></span>
+</div>
+</div>
+<!-- Project Meta Title Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm mb-space-lg">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex-1 min-w-0">
+<div class="flex flex-wrap items-center gap-space-xs mb-space-xs">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container text-on-surface font-semibold">
+            본선 진출 TOP 30
+          </span>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-sm text-label-sm bg-error-container text-primary font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container mr-1.5 animate-pulse"></span>
+            본선 심사 완료
+          </span>
+<span class="text-on-surface-variant font-body-sm text-body-sm">· 접수번호: LG-AX26-T0142</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight truncate">
+          AI 기반 코드 리뷰 자동화 시스템
+        </h2>
+<div class="flex items-center gap-space-md mt-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="flex items-center gap-1 font-medium text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-primary">groups</span>
+            CodeReview Team
+          </span>
+<span>·</span>
+<span>팀장: 최보람 (외 3명)</span>
+<span>·</span>
+<span>트랙: 엔터프라이즈 AI 설루션</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="inline-flex items-center gap-1.5 px-space-md py-space-sm h-10 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container hover:text-primary transition-all font-label-md text-label-md shadow-xs" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+          심사 리포트 PDF
+        </button>
+</div>
+</div>
+</div>
+<!-- Celebratory Award Hero Banner -->
+<div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-error-container/70 via-surface-container-lowest to-tertiary-fixed/40 p-space-xl shadow-md mb-space-xl">
+<!-- Ambient Red & Amber Accents -->
+<div class="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-primary-container/10 blur-3xl pointer-events-none"></div>
+<div class="absolute -left-12 -bottom-12 w-48 h-48 rounded-full bg-tertiary-fixed-dim/20 blur-2xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-space-lg">
+<div class="flex-1">
+<div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-primary-container to-secondary text-on-primary font-label-md text-label-md shadow-md mb-space-sm">
+<span class="material-symbols-outlined text-[18px] text-tertiary-fixed">emoji_events</span>
+<span>최종 순위: 본선 2위 · 최우수상 (Excellence Award)</span>
+</div>
+<h3 class="font-display-lg text-display-lg font-bold text-on-surface tracking-tight mt-space-xs">
+          축하합니다! CodeReview Team이 <br class="hidden sm:inline"/>
+<span class="text-primary-container">본선 2위(최우수상)</span>에 입상하셨습니다.
+        </h3>
+<p class="mt-space-sm font-body-lg text-body-lg text-on-surface-variant max-w-2xl leading-relaxed">
+          총 30개 본선 경쟁팀 중 엄격한 AI 정량·정성 분석과 LG전자 DX/AX 전문 심사위원단의 종합 합의를 거쳐 최종 입상작으로 선정되었습니다.
+        </p>
+</div>
+<!-- Trophy Badge Accent -->
+<div class="shrink-0 self-center md:self-auto flex flex-col items-center justify-center p-space-lg rounded-2xl bg-surface-container-lowest/90 backdrop-blur-md shadow-lg min-w-[200px] text-center">
+<div class="w-16 h-16 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary shadow-inner mb-space-xs">
+<span class="material-symbols-outlined text-[36px]" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-tertiary-container font-bold">Runner-Up</span>
+<span class="font-headline-lg text-headline-lg text-on-surface font-extrabold mt-0.5">상금 1,000만원</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">및 LG 채용 가산점</span>
+</div>
+</div>
+</div>
+<!-- Score Summary Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md mb-space-xl"><!-- Card 1: Final Tier Grade --><div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm relative overflow-hidden flex flex-col justify-between"><div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-container to-secondary"></div><div class="flex items-center justify-between"><span class="font-label-md text-label-md text-on-surface-variant">최종 평가 등급</span><span class="w-8 h-8 rounded-lg bg-error-container text-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-[20px]">verified</span></span></div><div class="mt-space-md"><div class="flex items-baseline gap-1.5"><span class="font-display-lg text-display-lg font-extrabold text-primary-container tracking-tight">Tier 1</span><span class="font-headline-sm text-headline-sm text-primary font-semibold">최우수</span></div><p class="font-body-sm text-body-sm text-on-surface-variant mt-1">상위 5% 백분위 티어 배정</p></div></div><!-- Card 2: Overall Rank --><div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm relative overflow-hidden flex flex-col justify-between"><div class="absolute top-0 left-0 right-0 h-1 bg-tertiary-container"></div><div class="flex items-center justify-between"><span class="font-label-md text-label-md text-on-surface-variant">종합 최종 순위</span><span class="w-8 h-8 rounded-lg bg-tertiary-fixed text-tertiary-container flex items-center justify-center"><span class="material-symbols-outlined text-[20px]">military_tech</span></span></div><div class="mt-space-md"><div class="flex items-baseline gap-1.5"><span class="font-display-lg text-display-lg font-extrabold text-on-surface tracking-tight">TOP 2</span><span class="font-headline-sm text-headline-sm text-on-surface-variant font-medium">/ 30팀</span></div><p class="font-body-sm text-body-sm text-tertiary font-semibold mt-1">최우수상(입상작) 확정</p></div></div><!-- Card 3: AI Comprehensive Assessment --><div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm relative overflow-hidden flex flex-col justify-between"><div class="flex items-center justify-between"><span class="font-label-md text-label-md text-on-surface-variant">AI 심사 종합 판정</span><span class="w-8 h-8 rounded-lg bg-surface-container text-on-surface flex items-center justify-center"><span class="material-symbols-outlined text-[20px]">neurology</span></span></div><div class="mt-space-md"><div class="flex items-baseline gap-1.5"><span class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight">탁월</span><span class="font-label-md text-label-md text-primary font-medium">(Exemplary)</span></div><div class="flex items-center gap-1 mt-space-xs"><span class="inline-flex items-center px-2 py-0.5 rounded font-label-sm text-label-sm bg-error-container text-primary font-semibold">5개 역량 ALL PASS</span></div></div></div><!-- Card 4: Human Review Consensus --><div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm relative overflow-hidden flex flex-col justify-between"><div class="flex items-center justify-between"><span class="font-label-md text-label-md text-on-surface-variant">전문 심사위원 합의</span><span class="w-8 h-8 rounded-lg bg-surface-container text-on-surface flex items-center justify-center"><span class="material-symbols-outlined text-[20px]">rate_review</span></span></div><div class="mt-space-md"><div class="flex items-baseline gap-1.5"><span class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight">만장일치</span><span class="font-label-md text-label-md text-on-surface-variant font-medium">추천</span></div><div class="flex items-center gap-1 mt-space-xs"><span class="inline-flex items-center px-2 py-0.5 rounded font-label-sm text-label-sm bg-surface-container-low text-on-surface font-semibold">현업 즉시 도입 적격</span></div></div></div></div>
+<!-- Disclaimer Notice -->
+<div class="flex items-center gap-space-xs px-space-md py-space-sm rounded-lg bg-surface-container-low text-on-surface-variant font-body-sm text-body-sm mb-space-xl"><span class="material-symbols-outlined text-[16px] text-primary">info</span><span>본 심사 결과는 참가팀 간 불필요한 점수 줄세우기 방지 및 정성적 역량 중심 피드백을 위해 절대 점수를 미공개하며, 수상 순위 및 정성 평가 등급(Grade/Band)으로 제공됩니다.</span></div>
+<!-- Two-Column Review Breakdown -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-space-xl mb-space-xl">
+<!-- Column 1: AI Automated Evaluation -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm flex flex-col justify-between"><div><div class="flex items-center justify-between mb-space-md"><div class="flex items-center gap-space-xs"><span class="w-8 h-8 rounded-lg bg-error-container text-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-[20px]">auto_awesome</span></span><h4 class="font-headline-sm text-headline-sm text-on-surface font-bold">AI 정량·정성 심사 요약</h4></div><span class="px-2.5 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container-low text-on-surface font-semibold">AI 평가 완료 (5개 영역 역량 분석)</span></div><p class="font-body-md text-body-md text-on-surface-variant mb-space-lg">최종 보고서 8개 필수 항목 및 제출 소스코드 품질, 기능 구현 완성도를 머신러닝 엔진이 다면 분석한 결과입니다.</p><!-- Qualitative Competency Breakdown Bars --><div class="flex flex-col gap-space-md mb-space-lg"><div><div class="flex justify-between items-center text-body-sm font-body-sm mb-1"><span class="font-medium text-on-surface">1. 보고서 완성도 및 논리적 체계성</span><span class="px-2 py-0.5 rounded font-label-sm text-label-sm bg-error-container text-primary font-bold">탁월 (Top Tier)</span></div><div class="w-full bg-surface-container-low h-2 rounded-full overflow-hidden"><div class="bg-primary-container h-full rounded-full transition-all duration-500" style="width: 96%"></div></div></div><div><div class="flex justify-between items-center text-body-sm font-body-sm mb-1"><span class="font-medium text-on-surface">2. 기술적 독창성 및 구현 난이도</span><span class="px-2 py-0.5 rounded font-label-sm text-label-sm bg-error-container text-primary font-bold">탁월 (Top Tier)</span></div><div class="w-full bg-surface-container-low h-2 rounded-full overflow-hidden"><div class="bg-primary-container h-full rounded-full transition-all duration-500" style="width: 94%"></div></div></div><div><div class="flex justify-between items-center text-body-sm font-body-sm mb-1"><span class="font-medium text-on-surface">3. 소스코드 구조 및 테스트 완성도</span><span class="px-2 py-0.5 rounded font-label-sm text-label-sm bg-error-container text-primary font-bold">탁월 (Top Tier)</span></div><div class="w-full bg-surface-container-low h-2 rounded-full overflow-hidden"><div class="bg-primary-container h-full rounded-full transition-all duration-500" style="width: 95%"></div></div></div><div><div class="flex justify-between items-center text-body-sm font-body-sm mb-1"><span class="font-medium text-on-surface">4. LG AX 생태계 적합성 및 실효성</span><span class="px-2 py-0.5 rounded font-label-sm text-label-sm bg-surface-container text-on-surface font-bold">우수 (High)</span></div><div class="w-full bg-surface-container-low h-2 rounded-full overflow-hidden"><div class="bg-primary-container h-full rounded-full transition-all duration-500" style="width: 93%"></div></div></div><div><div class="flex justify-between items-center text-body-sm font-body-sm mb-1"><span class="font-medium text-on-surface">5. 요구 기능 일치도 (8개 과제 항목)</span><span class="px-2 py-0.5 rounded font-label-sm text-label-sm bg-error-container text-primary font-bold">탁월 (Top Tier)</span></div><div class="w-full bg-surface-container-low h-2 rounded-full overflow-hidden"><div class="bg-primary-container h-full rounded-full transition-all duration-500" style="width: 94%"></div></div></div></div><!-- AI Comment Box --><div class="p-space-md rounded-xl bg-surface-container-low"><div class="flex items-center gap-1.5 text-primary-container font-label-md text-label-md mb-space-xs"><span class="material-symbols-outlined text-[16px]">smart_toy</span>AI 종합 분석 의견</div><p class="font-body-sm text-body-sm text-on-surface leading-relaxed">"제출된 코드베이스의 아키텍처 모듈화 수준이 최상위권이며, 보고서 8대 필수 요구항목이 실제 구현된 기능과 완전 일치하는 완성도를 입증했습니다. 특히 GitHub 액션 연동 CI/CD 파이프라인의 견고함과 실무 환경 대비 예외 처리 완성도에서 최고 역량 평가를 획득했습니다."</p></div></div></div>
+<!-- Column 2: Expert Panel Review -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="w-8 h-8 rounded-lg bg-surface-container text-on-surface flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">badge</span>
+</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold">휴먼 전문 심사위원단 총평</h4>
+</div>
+<span class="px-2.5 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container text-on-surface font-semibold">
+            심사위원 5인 합의
+          </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-space-lg">
+          LG전자 AI 연구원 및 소프트웨어 센터 전문가 5인이 팀 결과물에 대해 다면 정성 평가를 진행하였습니다.
+        </p>
+<!-- Highlights Tags -->
+<div class="mb-space-lg">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold tracking-wider block mb-space-xs">
+            Key Review Highlights
+          </span>
+<div class="flex flex-wrap gap-space-xs">
+<span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface-container-low text-on-surface font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary-container">check_circle</span>
+              현업 도입 가능성 최상
+            </span>
+<span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface-container-low text-on-surface font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary-container">check_circle</span>
+              직관적인 UI와 안정적 성능
+            </span>
+<span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface-container-low text-on-surface font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary-container">check_circle</span>
+              체계적인 테스트 케이스 구축
+            </span>
+<span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface-container-low text-on-surface font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary-container">check_circle</span>
+              우수한 팀원 간 협업 분업화
+            </span>
+</div>
+</div>
+<!-- Expert Panel Quote Container -->
+<div class="p-space-lg rounded-xl bg-surface-container-low relative">
+<span class="material-symbols-outlined text-outline-variant text-[32px] absolute top-space-md right-space-md select-none opacity-40">format_quote</span>
+<div class="flex items-center gap-space-xs mb-space-xs">
+<div class="w-6 h-6 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-bold text-[10px]">LG</div>
+<span class="font-label-md text-label-md text-on-surface font-bold">심사위원단 종합 평가 의견</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed mt-space-xs pr-space-lg">
+            "AI 기술 적용의 실효성과 LG 제품군/사내 개발 환경에 즉각 도입 가능한 확장성이 가장 돋보인 우수 프로젝트입니다. 데모 시연과 최종 보고서 전반에서 문제 정의부터 해결 프로세스가 매끄럽고 설득력 있게 전개되었습니다. 특히 LLM 할루시네이션 완화를 위한 듀얼 인스펙션 설계가 매우 인상적이었습니다."
+          </p>
+<div class="mt-space-md pt-space-xs flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm">
+<span>본선 기술 심사 분과위원회</span>
+<span>심사위원 전원 만장일치 최우수상 추천</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Submission Reference Image & Gallery Section -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm mb-space-xl">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm mb-space-md">
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold">본선 평가 제출 자료 스냅샷</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">심사위원단에 제공된 최종 시연 데모 및 코드베이스 리뷰 인터페이스 원본</p>
+</div>
+<a class="inline-flex items-center gap-1 font-label-md text-label-md text-primary-container hover:underline" data-path="submission-viewer" href="#">
+        전체 제출 문서 보기 (8개 항목)
+        <span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</a>
+</div>
+<div class="w-full rounded-xl overflow-hidden shadow-xs bg-surface-container">
+<img alt="LGE AX Hackathon 본선 제출 시스템 및 코드 리뷰 인터페이스 스크린샷" class="w-full h-auto object-cover max-h-[380px]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDh_YXPPJcHTUWsNIL96F4v7zf7UV6chb5xVakDpoa7b2h1EbAOgy7DBxmyKRula5rmxm68MXG5eGozajd__AtxceY9CxWdXufeSPIp35Rx8oJa-VVZcYlj_fTi0YHMC0m5JzzidUglzeqRoNXFtWOmnkhmr0ONvtK7nbTHTvKGlTEsYg0tvr1wMYnzXJbZHQr6XS1CJJDYXlqv3ez17GZFmz8CfnczuzdpBpU-tipz8_BC-8p17OIFgVDB1Sjx45UK"/>
+</div>
+</div>
+<!-- Action CTA Buttons (Connecting to A-32 & A-41) -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-space-md p-space-lg rounded-2xl bg-surface-container-lowest shadow-sm mb-space-lg">
+<div class="flex items-center gap-space-sm">
+<span class="w-10 h-10 rounded-full bg-surface-container-low text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">contact_support</span>
+</span>
+<div>
+<div class="font-label-md text-label-md text-on-surface font-bold">심사 결과 이의신청 및 세부 문의</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">공시일로부터 3일 이내 운영사무국 이메일을 통해 접수 가능합니다.</div>
+</div>
+</div>
+<div class="flex items-center gap-space-sm w-full sm:w-auto">
+<a class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-space-lg py-space-sm h-11 rounded-lg bg-surface-container text-on-surface hover:bg-surface-variant transition-colors font-label-md text-label-md" data-path="submission-view" href="#">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+        최종 제출 내용 보기 (A-32)
+      </a>
+<a class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-space-lg py-space-sm h-11 rounded-lg bg-primary-container text-on-primary-container hover:bg-secondary-container transition-colors shadow-sm font-label-md text-label-md" data-path="detailed-scores" href="#"><span>심사 상세 피드백 및 코멘트 전문 보기 (A-41)</span><span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
+</div>
+</div>
+<!-- Next Steps & Ceremony Alert Banner -->
+<div class="p-space-lg rounded-xl bg-gradient-to-r from-amber-500/10 via-surface-container-low to-primary-container/10 shadow-xs flex items-start gap-space-md">
+<div class="w-8 h-8 rounded-lg bg-tertiary text-on-tertiary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[18px]">event</span>
+</div>
+<div class="flex-1">
+<div class="font-label-md text-label-md text-on-surface font-bold mb-0.5">
+        시상식 및 오프라인 네트워킹 데이 안내 (2026.10.15 예정)
+      </div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+        입상팀(1위~5위) 대상 상금 지급 및 상장 수여식은 서울 마곡 LG사이언스파크 ISC에서 진행됩니다. 세부 이동 일정 및 등록 안내는 팀장 연락처 및 등록 이메일로 별도 통보됩니다.
+      </p>
+</div>
+</div>
+</div></div></div></div></main><footer class="w-full bg-surface-container-lowest shadow-[0_-1px_8px_rgba(0,0,0,0.03)] mt-space-xl py-space-xl"><div class="max-w-[1280px] mx-auto px-margin flex flex-col md:flex-row justify-between items-center gap-space-md text-on-surface-variant font-body-sm text-body-sm"><div>© 2026 LG Electronics. All rights reserved. AX Hackathon Secretariat.</div><div class="flex items-center gap-space-lg"><a class="hover:text-on-surface transition-colors" href="#">이용약관</a><a class="hover:text-on-surface transition-colors" href="#">개인정보처리방침</a><a class="hover:text-on-surface transition-colors" href="#">문의하기</a></div></div></footer></body></html>
+
+<!-- ↑↑↑ Stitch 코드 #2 붙여넣기 끝 ↑↑↑ -->

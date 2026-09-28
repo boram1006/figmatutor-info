@@ -21,6 +21,7 @@ const repoRoot = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const TOKENS = 'design/03-design-rules/tokens/tokens.json';
 const EXT = 'design/03-design-rules/components/token-extensions.json';
 const CATALOG = 'design/03-design-rules/components/catalog.json';
+const COMPONENT_SNAPSHOT = 'design/03-design-rules/components/snapshot.json';
 
 function readJson(p) {
   return JSON.parse(readFileSync(p, 'utf8').replace(/^\uFEFF/, ''));
@@ -40,6 +41,45 @@ function loadTokenSets() {
   return { semantic, textStyles };
 }
 
+// 컴포넌트 nodeId별로 스냅샷 서브트리(마스터/variant 내부)의 모든 노드 이름 집합을 만든다.
+// INSTANCE patch의 nodeName이 실제로 그 컴포넌트 안에 존재하는 이름인지 대조하기 위한 것.
+// 노드 이름 원본은 snapshot.json이며, 여기서만 읽어 stale 중복을 만들지 않는다.
+function loadComponentNodeNames() {
+  const snapPath = resolve(repoRoot, COMPONENT_SNAPSHOT);
+  if (!existsSync(snapPath)) return null; // 스냅샷이 없으면 이 검사는 건너뛴다(다른 게이트가 잡음).
+  let snap;
+  try {
+    snap = readJson(snapPath);
+  } catch {
+    return null;
+  }
+  const all = (snap.frames || []).flatMap((f) => f.nodes || []);
+  const byId = new Map(all.map((n) => [n.id, n]));
+  // setId -> 그 서브트리의 모든 노드 이름 집합
+  const namesBySet = new Map();
+  const setIds = all
+    .filter((n) => ['COMPONENT', 'COMPONENT_SET'].includes(n.type))
+    .map((n) => n.id);
+  for (const setId of setIds) {
+    const kids = new Set([setId]);
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (const n of all) {
+        if (!kids.has(n.id) && n.parentId && kids.has(n.parentId)) {
+          kids.add(n.id);
+          changed = true;
+        }
+      }
+    }
+    const names = new Set(
+      [...kids].map((id) => byId.get(id)?.name).filter((x) => typeof x === 'string')
+    );
+    namesBySet.set(setId, names);
+  }
+  return namesBySet;
+}
+
 function collectRefs(node, path, tokenRefs, componentRefs) {
   if (Array.isArray(node)) {
     node.forEach((v, i) => collectRefs(v, `${path}[${i}]`, tokenRefs, componentRefs));
@@ -52,6 +92,12 @@ function collectRefs(node, path, tokenRefs, componentRefs) {
       componentNodeId: node.componentNodeId,
       at: path,
       name: node.name || node.key || null,
+      // patch nodeName들을 함께 수집한다. 이 이름은 컴포넌트 스냅샷 서브트리에 실재해야 한다.
+      patchNodeNames: Array.isArray(node.patches)
+        ? node.patches
+            .filter((p) => p && typeof p.nodeName === 'string')
+            .map((p) => ({ nodeName: p.nodeName, at: `${path}.patches` }))
+        : [],
     });
   }
 
@@ -120,6 +166,7 @@ else {
 const { semantic, textStyles } = loadTokenSets();
 const catalog = readJson(resolve(repoRoot, CATALOG));
 const catalogNodeIds = new Set((catalog.components || []).map((c) => c.nodeId));
+const componentNodeNames = loadComponentNodeNames(); // Map<setId, Set<name>> | null
 
 let hadError = false;
 let checked = 0;
@@ -168,6 +215,22 @@ for (const sp of specPaths) {
         value: c.componentNodeId,
         at: c.at,
       });
+    } else if (componentNodeNames && Array.isArray(c.patchNodeNames)) {
+      // componentNodeId가 유효할 때만 patch nodeName이 실제 컴포넌트 서브트리에 있는지 검사한다.
+      // 스냅샷이 없으면(componentNodeNames === null) 이 검사는 건너뛴다.
+      const names = componentNodeNames.get(c.componentNodeId);
+      for (const p of c.patchNodeNames) {
+        if (names && !names.has(p.nodeName)) {
+          bad.push({
+            kind: 'patchNodeName',
+            field: 'patches.nodeName',
+            value: p.nodeName,
+            componentNodeId: c.componentNodeId,
+            names,
+            at: p.at,
+          });
+        }
+      }
     }
   }
 
@@ -189,6 +252,22 @@ for (const sp of specPaths) {
         `  - ${b.field}="${b.value}" 는 catalog.json에 등록된 component nodeId가 아님 (${b.at})`
       );
       console.error('    Design System을 수동 extract하고 catalog.json을 먼저 갱신하라.');
+      continue;
+    }
+
+    if (b.kind === 'patchNodeName') {
+      console.error(
+        `  - patches.nodeName="${b.value}" 는 컴포넌트(${b.componentNodeId}) 스냅샷에 없는 노드 이름 (${b.at})`
+      );
+      const stem = String(b.value);
+      const near = [...(b.names || [])]
+        .filter((n) => n && (n.includes(stem) || stem.includes(n)))
+        .slice(0, 8);
+      const sample = near.length ? near : [...(b.names || [])].slice(0, 12);
+      if (sample.length) console.error(`    실제 노드 이름(일부): ${sample.join(', ')}`);
+      console.error(
+        '    "Label" 같은 문서 예시 이름을 추측해 쓰지 말고, components/snapshot.json의 실제 노드 이름을 사용하라.'
+      );
       continue;
     }
 

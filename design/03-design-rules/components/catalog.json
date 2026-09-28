@@ -6,23 +6,154 @@
       "nodeId": "1:637",
       "height": "hug",
       "states": [
-        "solid-default",
-        "solid-disabled",
-        "outlined-default",
-        "outlined-disabled"
+        "solid-primary-default",
+        "solid-primary-disabled",
+        "solid-neutral-default",
+        "outlined-primary-default",
+        "outlined-primary-disabled",
+        "outlined-neutral-default"
       ],
       "semanticTokens": [
-        "background-surface",
-        "border-disabled",
+        "accent-indigo-s",
         "text-accent",
         "text-inverse",
-        "text-disabled",
-        "text-quaternary",
-        "accent-indigo-s",
         "radius-8",
         "radius-12",
         "radius-999",
-        "dark-text-slate"
+        "dark-text-slate",
+        "border-disabled",
+        "text-quaternary",
+        "text-disabled"
+      ]
+    },
+    {
+      "id": "Dropdown Menu",
+      "nodeId": "1:710",
+      "height": "hug",
+      "states": [
+        "normal",
+        "selected"
+      ],
+      "semanticTokens": [
+        "text-inverse",
+        "accent-indigo-s",
+        "text-disabled",
+        "text-primary",
+        "background-surface",
+        "border-focus",
+        "border-disabled",
+        "text-tertiary"
+      ]
+    },
+    {
+      "id": "Switch",
+      "nodeId": "1:730",
+      "height": "hug",
+      "states": [
+        "active-enabled",
+        "active-disabled",
+        "inactive-enabled",
+        "inactive-disabled"
+      ],
+      "semanticTokens": [
+        "text-inverse",
+        "accent-indigo-s",
+        "text-disabled"
+      ]
+    },
+    {
+      "id": "Radio Button",
+      "nodeId": "1:739",
+      "height": "hug",
+      "states": [
+        "active-enabled",
+        "active-disabled",
+        "inactive-enabled",
+        "inactive-disabled"
+      ],
+      "semanticTokens": [
+        "text-inverse",
+        "accent-indigo-s",
+        "text-accent",
+        "text-disabled"
+      ]
+    },
+    {
+      "id": "checkbox",
+      "nodeId": "1:750",
+      "height": "hug",
+      "states": [
+        "active-enabled",
+        "active-disabled",
+        "inactive-enabled",
+        "inactive-disabled"
+      ],
+      "semanticTokens": [
+        "text-inverse",
+        "accent-indigo-s",
+        "text-accent",
+        "text-disabled"
+      ]
+    },
+    {
+      "id": "Text Field",
+      "nodeId": "1:761",
+      "height": "hug",
+      "states": [
+        "enable-inactive",
+        "enable-active",
+        "disabled-inactive",
+        "focused-inactive",
+        "focused-active"
+      ],
+      "semanticTokens": [
+        "text-inverse",
+        "accent-indigo-s",
+        "background-surface",
+        "text-secondary",
+        "text-primary",
+        "text-tertiary",
+        "text-disabled",
+        "text-quaternary"
+      ]
+    },
+    {
+      "id": "Text Area",
+      "nodeId": "1:800",
+      "height": "hug",
+      "states": [
+        "enable-inactive",
+        "enable-active",
+        "disabled-inactive",
+        "focused-inactive",
+        "focused-active"
+      ],
+      "semanticTokens": [
+        "text-inverse",
+        "accent-indigo-s",
+        "background-surface",
+        "text-primary",
+        "space-8",
+        "text-disabled",
+        "border-focus",
+        "text-quaternary",
+        "text-tertiary"
+      ]
+    },
+    {
+      "id": "Toast",
+      "nodeId": "1:848",
+      "height": "hug",
+      "states": [
+        "line1-left",
+        "line1-center",
+        "line2-left",
+        "line2-center"
+      ],
+      "semanticTokens": [
+        "text-inverse",
+        "accent-indigo-s",
+        "text-primary"
       ]
     },
     {
@@ -30,17 +161,20 @@
       "nodeId": "1:877",
       "height": "hug",
       "states": [
-        "accent",
-        "primary",
-        "secondary"
+        "accent-small",
+        "accent-medium",
+        "secondary-small",
+        "secondary-medium",
+        "primary-small",
+        "primary-medium"
       ],
       "semanticTokens": [
-        "text-accent",
         "accent-indigo-s",
-        "space-4",
-        "radius-999"
+        "text-accent",
+        "dark-text-slate",
+        "space-4"
       ]
     }
   ],
-  "_sourceNote": "2026-09-26 manual Design System extract: Button solid-disabled background resolves via dark-text-slate. Full canonical components snapshot refresh still required because current components/snapshot.json is from the previous fileKey."
+  "_sourceNote": "2026-09-28 canonical refresh: merged components-refresh-20260926 ds-1~6 (fileKey t00UvcVe1M6llSJFyXcDkG). states are readable variant labels; semanticTokens extracted from actual fills/strokes/metric bindings in components/snapshot.json."
 }
