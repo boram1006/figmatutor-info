@@ -3,7 +3,7 @@
   "fileKey": "t00UvcVe1M6llSJFyXcDkG",
   "pageName": "design",
   "_task": "v6 A-40 blind-v3-strict: compose only from V6 PRD + manifest + patterns + DS.",
-  "_notes": "Do not modify v1/v2. Strict PRD order: hero -> total score -> AI/Human 2-column summaries -> actions. Sample values are illustrative data only.",
+  "_notes": "Do not modify v1/v2. Strict PRD order: hero -> total score -> AI/Human 2-column summaries -> actions. Numeric score value is an explicit placeholder (00/100); no AI/Human weighting or derived totals are invented.",
   "nodes": [
     {
       "type": "FRAME",
@@ -229,7 +229,7 @@
               "type": "TEXT",
               "name": "Score Value",
               "textStyle": "Text/h1-bold",
-              "characters": "94 / 100",
+              "characters": "00 / 100",
               "fills": [
                 {
                   "type": "SOLID",
@@ -357,18 +357,6 @@
                       "binding": "text-secondary"
                     }
                   ]
-                },
-                {
-                  "type": "TEXT",
-                  "name": "AI Score",
-                  "textStyle": "Text/h4-medium",
-                  "characters": "AI 총점 57 / 60",
-                  "fills": [
-                    {
-                      "type": "SOLID",
-                      "binding": "text-accent"
-                    }
-                  ]
                 }
               ]
             },
@@ -470,18 +458,6 @@
                     {
                       "type": "SOLID",
                       "binding": "text-secondary"
-                    }
-                  ]
-                },
-                {
-                  "type": "TEXT",
-                  "name": "Human Score",
-                  "textStyle": "Text/h4-medium",
-                  "characters": "휴먼 총점 37 / 40",
-                  "fills": [
-                    {
-                      "type": "SOLID",
-                      "binding": "text-accent"
                     }
                   ]
                 }
