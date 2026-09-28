@@ -5,6 +5,16 @@
 목적은 기존 화면을 억지로 복제하는 것이 아니라,
 기존 서비스의 UX 원리·패턴·컴포넌트·토큰을 근거로 새로운 조합을 만드는 것이다.
 
+## 0. 신규 기획은 EXPLORE → LOCK 후 디자인한다
+
+신규 화면은 초안 단계에서 발산을 허용한다.
+PRD에 없는 기능도 유용한 후보라면 `CANDIDATE_PRODUCT`로 제안할 수 있다.
+
+하지만 승인 전에는 정본 PRD/requirements/QA/Figma spec에 넣지 않는다.
+`docs/new-screen-exploration-lock-workflow.md`의 분류와 Lock 절차를 먼저 적용한다.
+
+즉 Product Decision은 "제안 금지"가 아니라 **"제안 가능, 자동 채택 금지"**다.
+
 ## 1. 먼저 Product Decision과 Design Decision을 분리한다
 
 ### Product Decision — AI가 임의로 결정하지 않는다
@@ -16,8 +26,9 @@
 - 평가 의견을 어디까지 노출할지
 - 데이터 보존/마감/제한 규칙
 
-PRD나 확정 문서에 없으면 `OPEN_QUESTION`으로 남긴다.
-일반 서비스 관례로 채우지 않는다.
+PRD나 확정 문서에 없으면 `CANDIDATE_PRODUCT` 또는 `OPEN_QUESTION`으로 남긴다.
+유용한 신규 기능을 제안할 수는 있지만, 사용자가 APPROVED하기 전에는 화면 정본에 넣지 않는다.
+일반 서비스 관례로 확정값을 채우지 않는다.
 
 ### Design Decision — 근거를 조합해 AI가 판단할 수 있다
 예:
