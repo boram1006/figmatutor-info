@@ -68,6 +68,22 @@
   action: "A-30 상단 안내를 확인한다."
   expected: "'10월 16일까지 제출을 완료해주세요. 제출완료 이후에도 제출 마감 전까지는 수정 가능합니다.'가 표시된다."
 
+- id: QA-V5-A30-009
+  screen: "A-30 내 지원 현황"
+  category: STATE
+  priority: P1
+  precondition: "본선 진출 후 최종보고서를 작성 중이며 아직 최종 제출하지 않았다."
+  action: "A-30의 최종보고서 카드 상태 배지를 확인한다."
+  expected: "상태 배지에 Red '본선 진행중'이 표시된다."
+
+- id: QA-V5-A30-010
+  screen: "A-30 내 지원 현황"
+  category: DATA
+  priority: P1
+  precondition: "A-30 최종보고서 카드가 표시되어 있다."
+  action: "카드의 수정일시 정보를 확인한다."
+  expected: "최종보고서 카드에 수정일시 정보가 제공된다."
+
 - id: QA-V5-A31-001
   screen: "A-31 최종보고서 스텝 폼"
   category: DATA
