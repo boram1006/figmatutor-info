@@ -1,0 +1,127 @@
+{
+  "op": "create",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "_task": "v6-judging-result / A-40 blind-v2. Blind generation: Stitch excluded until post-generation comparison.",
+  "_notes": "Preserve existing A-40 v1. Place blind-v2 separately at x=2800,y=3600. Composition follows participant context -> result/score -> AI+human evidence -> actions.",
+  "nodes": [
+    {
+      "type": "FRAME",
+      "key": "a40BlindV2",
+      "name": "A-40_judging-result_blind-v2",
+      "x": 2800,
+      "y": 3600,
+      "width": 1440,
+      "height": 1120,
+      "metadata": {"role":"screen","release":"v6","screenId":"A-40","variant":"blind-v2","state":"AWARDED_RANK","viewportId":"desktop"},
+      "layout": {"mode":"VERTICAL","primaryAxisSizingMode":"FIXED","counterAxisSizingMode":"FIXED","primaryAxisAlignItems":"MIN","counterAxisAlignItems":"MIN"},
+      "metrics": {"paddingTop":48,"paddingRight":120,"paddingBottom":48,"paddingLeft":120,"itemSpacing":24},
+      "bindings": {"paddingTop":"space-48","paddingRight":"space-120","paddingBottom":"space-48","paddingLeft":"space-120","itemSpacing":"space-24"},
+      "fills": [{"type":"SOLID","binding":"background-primary"}],
+      "children": [
+        {
+          "type":"FRAME","name":"Participant Context",
+          "layout":{"mode":"VERTICAL","primaryAxisSizingMode":"AUTO","counterAxisSizingMode":"FIXED","primaryAxisAlignItems":"MIN","counterAxisAlignItems":"MIN"},
+          "layoutSizingHorizontal":"FILL",
+          "metrics":{"itemSpacing":6},
+          "children":[
+            {"type":"TEXT","name":"Context Label","textStyle":"Text/body-sm-semibold","characters":"마이페이지 · 내 지원 현황","fills":[{"type":"SOLID","binding":"text-accent"}]},
+            {"type":"TEXT","name":"Page Title","textStyle":"Text/h2-bold","characters":"심사 결과","fills":[{"type":"SOLID","binding":"text-primary"}]},
+            {"type":"TEXT","name":"Page Description","textStyle":"Text/body-sm","characters":"최종 심사가 완료되었습니다. 우리 팀의 결과와 심사 요약을 확인해 보세요.","fills":[{"type":"SOLID","binding":"text-secondary"}]}
+          ]
+        },
+        {
+          "type":"FRAME","name":"Result Hero",
+          "layout":{"mode":"HORIZONTAL","primaryAxisSizingMode":"FIXED","counterAxisSizingMode":"FIXED","primaryAxisAlignItems":"SPACE_BETWEEN","counterAxisAlignItems":"CENTER"},
+          "layoutSizingHorizontal":"FILL",
+          "height":300,
+          "metrics":{"paddingTop":40,"paddingRight":40,"paddingBottom":40,"paddingLeft":40,"itemSpacing":32,"topLeftRadius":24,"topRightRadius":24,"bottomLeftRadius":24,"bottomRightRadius":24},
+          "bindings":{"paddingTop":"space-40","paddingRight":"space-40","paddingBottom":"space-40","paddingLeft":"space-40","itemSpacing":"space-32","topLeftRadius":"radius-24","topRightRadius":"radius-24","bottomLeftRadius":"radius-24","bottomRightRadius":"radius-24"},
+          "fills":[{"type":"SOLID","binding":"award-first"}],
+          "children":[
+            {
+              "type":"FRAME","name":"Result Message",
+              "layout":{"mode":"VERTICAL","primaryAxisSizingMode":"AUTO","counterAxisSizingMode":"AUTO","primaryAxisAlignItems":"MIN","counterAxisAlignItems":"MIN"},
+              "layoutSizingHorizontal":"FILL",
+              "metrics":{"itemSpacing":14},
+              "bindings":{"itemSpacing":"space-16"},
+              "children":[
+                {"type":"INSTANCE","key":"blindRankTag","name":"Rank Tag","componentNodeId":"1:877","variantProperties":{"속성 1":"Primary","속성 2":"Medium"},"layoutSizingHorizontal":"HUG","layoutSizingVertical":"HUG","patches":[{"nodeName":"미심사","characters":"대상 · 1위","expectedMatches":1}]},
+                {"type":"TEXT","name":"Hero Title","textStyle":"Text/display","characters":"축하합니다! 최종 1위입니다","fills":[{"type":"SOLID","binding":"text-primary"}]},
+                {"type":"TEXT","name":"Hero Team","textStyle":"Text/h4-medium","characters":"팀 코드리뷰 · AI 기반 심사 자동화 서비스","fills":[{"type":"SOLID","binding":"text-secondary"}]},
+                {"type":"TEXT","name":"Hero Note","textStyle":"Text/body-sm","characters":"AI 심사와 휴먼 심사를 모두 반영한 최종 결과입니다.","fills":[{"type":"SOLID","binding":"text-secondary"}]}
+              ]
+            },
+            {
+              "type":"FRAME","name":"Total Score Panel","width":250,
+              "layout":{"mode":"VERTICAL","primaryAxisSizingMode":"FIXED","counterAxisSizingMode":"FIXED","primaryAxisAlignItems":"CENTER","counterAxisAlignItems":"CENTER"},
+              "metrics":{"paddingTop":28,"paddingRight":24,"paddingBottom":28,"paddingLeft":24,"itemSpacing":8,"topLeftRadius":16,"topRightRadius":16,"bottomLeftRadius":16,"bottomRightRadius":16},
+              "bindings":{"paddingTop":"space-24","paddingRight":"space-24","paddingBottom":"space-24","paddingLeft":"space-24","itemSpacing":"space-8","topLeftRadius":"radius-16","topRightRadius":"radius-16","bottomLeftRadius":"radius-16","bottomRightRadius":"radius-16"},
+              "fills":[{"type":"SOLID","binding":"background-surface"}],
+              "children":[
+                {"type":"TEXT","name":"Score Label","textStyle":"Text/body-sm","characters":"최종 총점","fills":[{"type":"SOLID","binding":"text-secondary"}]},
+                {"type":"TEXT","name":"Score Value","textStyle":"Text/h1-bold","characters":"94","fills":[{"type":"SOLID","binding":"text-accent"}]},
+                {"type":"TEXT","name":"Score Unit","textStyle":"Text/body-sm","characters":"/ 100","fills":[{"type":"SOLID","binding":"text-secondary"}]}
+              ]
+            }
+          ]
+        },
+        {
+          "type":"FRAME","name":"Review Evidence Header",
+          "layout":{"mode":"VERTICAL","primaryAxisSizingMode":"AUTO","counterAxisSizingMode":"FIXED","primaryAxisAlignItems":"MIN","counterAxisAlignItems":"MIN"},
+          "layoutSizingHorizontal":"FILL","metrics":{"itemSpacing":4},
+          "children":[
+            {"type":"TEXT","name":"Review Heading","textStyle":"Text/h3-bold","characters":"심사 요약","fills":[{"type":"SOLID","binding":"text-primary"}]},
+            {"type":"TEXT","name":"Review Description","textStyle":"Text/body-sm","characters":"AI 심사와 휴먼 심사에서 확인된 핵심 내용을 나누어 보여드립니다.","fills":[{"type":"SOLID","binding":"text-secondary"}]}
+          ]
+        },
+        {
+          "type":"FRAME","name":"Review Summary Row",
+          "layout":{"mode":"HORIZONTAL","primaryAxisSizingMode":"FIXED","counterAxisSizingMode":"AUTO","primaryAxisAlignItems":"MIN","counterAxisAlignItems":"MIN"},
+          "layoutSizingHorizontal":"FILL","metrics":{"itemSpacing":24},"bindings":{"itemSpacing":"space-24"},
+          "children":[
+            {
+              "type":"FRAME","name":"AI Review Card",
+              "layout":{"mode":"VERTICAL","primaryAxisSizingMode":"AUTO","counterAxisSizingMode":"FIXED","primaryAxisAlignItems":"MIN","counterAxisAlignItems":"MIN"},
+              "layoutSizingHorizontal":"FILL",
+              "metrics":{"paddingTop":28,"paddingRight":28,"paddingBottom":28,"paddingLeft":28,"itemSpacing":14,"topLeftRadius":16,"topRightRadius":16,"bottomLeftRadius":16,"bottomRightRadius":16},
+              "bindings":{"paddingTop":"space-24","paddingRight":"space-24","paddingBottom":"space-24","paddingLeft":"space-24","itemSpacing":"space-16","topLeftRadius":"radius-16","topRightRadius":"radius-16","bottomLeftRadius":"radius-16","bottomRightRadius":"radius-16"},
+              "fills":[{"type":"SOLID","binding":"background-surface"}],"strokes":[{"type":"SOLID","binding":"border-default"}],
+              "children":[
+                {"type":"INSTANCE","key":"blindAiTag","name":"AI Tag","componentNodeId":"1:877","variantProperties":{"속성 1":"Accent","속성 2":"Small"},"layoutSizingHorizontal":"HUG","layoutSizingVertical":"HUG","patches":[{"nodeName":"active","characters":"AI 심사","expectedMatches":1}]},
+                {"type":"TEXT","name":"AI Title","textStyle":"Text/h4","characters":"AI 심사 요약","fills":[{"type":"SOLID","binding":"text-primary"}]},
+                {"type":"TEXT","name":"AI Scope","textStyle":"Text/body-sm-semibold","characters":"최종보고서 8개 항목 + 소스코드","fills":[{"type":"SOLID","binding":"text-secondary"}]},
+                {"type":"TEXT","name":"AI Comment","textStyle":"Text/body-sm","characters":"최종보고서와 소스코드 전반의 완성도가 높게 평가되었습니다. 상세 화면에서 항목별 점수와 코멘트를 확인할 수 있습니다.","fills":[{"type":"SOLID","binding":"text-secondary"}]},
+                {"type":"TEXT","name":"AI Score","textStyle":"Text/h4-medium","characters":"AI 총점 57 / 60","fills":[{"type":"SOLID","binding":"text-accent"}]}
+              ]
+            },
+            {
+              "type":"FRAME","name":"Human Review Card",
+              "layout":{"mode":"VERTICAL","primaryAxisSizingMode":"AUTO","counterAxisSizingMode":"FIXED","primaryAxisAlignItems":"MIN","counterAxisAlignItems":"MIN"},
+              "layoutSizingHorizontal":"FILL",
+              "metrics":{"paddingTop":28,"paddingRight":28,"paddingBottom":28,"paddingLeft":28,"itemSpacing":14,"topLeftRadius":16,"topRightRadius":16,"bottomLeftRadius":16,"bottomRightRadius":16},
+              "bindings":{"paddingTop":"space-24","paddingRight":"space-24","paddingBottom":"space-24","paddingLeft":"space-24","itemSpacing":"space-16","topLeftRadius":"radius-16","topRightRadius":"radius-16","bottomLeftRadius":"radius-16","bottomRightRadius":"radius-16"},
+              "fills":[{"type":"SOLID","binding":"background-surface"}],"strokes":[{"type":"SOLID","binding":"border-default"}],
+              "children":[
+                {"type":"INSTANCE","key":"blindHumanTag","name":"Human Tag","componentNodeId":"1:877","variantProperties":{"속성 1":"secondary","속성 2":"Small"},"layoutSizingHorizontal":"HUG","layoutSizingVertical":"HUG","patches":[{"nodeName":"미심사","characters":"휴먼 심사","expectedMatches":1}]},
+                {"type":"TEXT","name":"Human Title","textStyle":"Text/h4","characters":"휴먼 심사 요약","fills":[{"type":"SOLID","binding":"text-primary"}]},
+                {"type":"TEXT","name":"Human Comment Label","textStyle":"Text/body-sm-semibold","characters":"심사 의견","fills":[{"type":"SOLID","binding":"text-secondary"}]},
+                {"type":"TEXT","name":"Human Comment","textStyle":"Text/body-sm","characters":"실사용 시나리오가 구체적이고 데모 완성도가 높습니다. 상용화 로드맵을 조금 더 보완하면 좋겠습니다.","fills":[{"type":"SOLID","binding":"text-secondary"}]},
+                {"type":"TEXT","name":"Human Score","textStyle":"Text/h4-medium","characters":"휴먼 총점 37 / 40","fills":[{"type":"SOLID","binding":"text-accent"}]}
+              ]
+            }
+          ]
+        },
+        {
+          "type":"FRAME","name":"Action Row",
+          "layout":{"mode":"HORIZONTAL","primaryAxisSizingMode":"FIXED","counterAxisSizingMode":"AUTO","primaryAxisAlignItems":"MAX","counterAxisAlignItems":"CENTER"},
+          "layoutSizingHorizontal":"FILL","metrics":{"itemSpacing":12},"bindings":{"itemSpacing":"space-12"},
+          "children":[
+            {"type":"INSTANCE","key":"blindReportBtn","name":"최종 제출 내용 보기","componentNodeId":"1:637","variantProperties":{"variant":"outlined","size":"Medium","shape":"Rounded","state":"default","tone":"neutral"},"layoutSizingHorizontal":"HUG","layoutSizingVertical":"HUG","patches":[{"nodeName":"지원취소","characters":"최종 제출 내용 보기 →","expectedMatches":1}]},
+            {"type":"INSTANCE","key":"blindDetailBtn","name":"심사 상세 보기","componentNodeId":"1:637","variantProperties":{"variant":"solid","size":"Medium","shape":"Rounded","state":"default","tone":"primary"},"layoutSizingHorizontal":"HUG","layoutSizingVertical":"HUG","patches":[{"nodeName":"지원하기","characters":"심사 상세 보기 →","expectedMatches":1}]}
+          ]
+        }
+      ]
+    }
+  ]
+}
