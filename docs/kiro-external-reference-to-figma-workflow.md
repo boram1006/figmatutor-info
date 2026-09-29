@@ -531,7 +531,11 @@ Before generating:
 3. change only the new release/task content unless the user explicitly asks to redesign the format
 4. if multiple historical formats exist, use the latest canonical one or ask only when the canonical source is genuinely ambiguous
 
-For Figma PRD yellow boxes, the current baseline is the existing v5 PRD yellow-box pattern:
+For Figma PRD yellow boxes, separate the two baselines:
+- **information hierarchy / numbering**: v1·v3 PRD structure (`1.` → `1.1.`, `2.` → `2.1.`; 8-block PRD)
+- **visual presentation**: existing v5 PRD yellow-box pattern
+
+The v5 visual pattern is:
 - 900px fixed width
 - warning/yellow surface
 - 48px padding
