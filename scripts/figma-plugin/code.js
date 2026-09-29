@@ -345,14 +345,20 @@ async function runExtract(spec) {
     throw new Error('요청한 frameId 없음');
   if (CONFIG.frameNames.length && !CONFIG.frameNames.every((name) => targets.some((n) => n.name === name))) {
     const missing = CONFIG.frameNames.filter((name) => !targets.some((n) => n.name === name));
+    const tokens = [...new Set(
+      missing.flatMap((name) =>
+        name.toLowerCase().split(/[^a-z0-9가-힣]+/).filter((t) => t.length >= 2)
+      )
+    )].slice(0, 8);
     const hints = page.findAll((n) => {
       if (n.visible === false || !eligibleTypes.includes(n.type)) return false;
       const lower = n.name.toLowerCase();
-      return lower.includes('tb') || lower.includes('team');
+      return tokens.some((t) => lower.includes(t));
     }).slice(0, 20).map((n) => ({ id: n.id, type: n.type, name: n.name, parent: n.parent?.name || null }));
     throw new Error(
       '요청한 frameName 없음: ' + missing.join(', ') +
-      '\nTB/team page candidates=' + JSON.stringify(hints)
+      '\nsearchTokens=' + JSON.stringify(tokens) +
+      '\npage candidates=' + JSON.stringify(hints)
     );
   }
   const frames = [];
