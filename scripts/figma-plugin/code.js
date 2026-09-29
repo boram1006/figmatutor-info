@@ -917,6 +917,10 @@ async function runCreate(spec) {
         if (node.type === 'INSTANCE' && node.allowResize !== true)
           throw new Error('INSTANCE width/height 직접 resize 금지. 필요하면 allowResize:true를 명시: ' + (node.name || node.key || n.id));
         n.resize(node.width, node.height);
+      } else if (node.type === 'TEXT' && typeof node.width === 'number') {
+        // Bounded text width with auto-growing height. This prevents long copy from
+        // expanding horizontally beyond its owning card/content rail.
+        n.resize(node.width, Math.max(1, n.height));
       }
 
       if (node.fills) n.fills = node.fills.map((p) => paintFrom(p, semanticByName, imageHashes));
@@ -938,6 +942,21 @@ async function runCreate(spec) {
     if (node.type !== 'CLONE') {
       if (node.layoutSizingVertical && 'layoutSizingVertical' in n) n.layoutSizingVertical = node.layoutSizingVertical;
       if (node.layoutSizingHorizontal && 'layoutSizingHorizontal' in n) n.layoutSizingHorizontal = node.layoutSizingHorizontal;
+
+      if (node.type === 'TEXT' && 'textAutoResize' in n) {
+        const allowedTextResize = new Set(['NONE', 'WIDTH_AND_HEIGHT', 'HEIGHT', 'TRUNCATE']);
+        if (node.textAutoResize !== undefined) {
+          if (!allowedTextResize.has(node.textAutoResize))
+            throw new Error('TEXT textAutoResize 불가값: ' + node.textAutoResize + ' node=' + (node.name || n.id));
+          n.textAutoResize = node.textAutoResize;
+        } else if (
+          node.layoutSizingHorizontal === 'FILL' ||
+          (typeof node.width === 'number' && typeof node.height !== 'number')
+        ) {
+          // Product copy must wrap inside the allocated content width by default.
+          n.textAutoResize = 'HEIGHT';
+        }
+      }
     }
 
     // Metadata (shared plugin data)
@@ -951,7 +970,39 @@ async function runCreate(spec) {
     return n;
   }
 
+  function validateGeneratedTextContainment(root) {
+    const queue = [root];
+    const errors = [];
+    while (queue.length) {
+      const current = queue.shift();
+      if ('children' in current) for (const child of current.children) queue.push(child);
+      if (current.type !== 'TEXT') continue;
+      const parent = current.parent;
+      if (!parent || parent.type !== 'FRAME' || parent.layoutMode === 'NONE') continue;
+      const tb = current.absoluteBoundingBox;
+      const pb = parent.absoluteBoundingBox;
+      if (!tb || !pb) continue;
+      const left = pb.x + (typeof parent.paddingLeft === 'number' ? parent.paddingLeft : 0);
+      const right = pb.x + pb.width - (typeof parent.paddingRight === 'number' ? parent.paddingRight : 0);
+      const epsilon = 1.5;
+      if (tb.x < left - epsilon || tb.x + tb.width > right + epsilon) {
+        errors.push({
+          id: current.id,
+          name: current.name,
+          parentId: parent.id,
+          parentName: parent.name,
+          textAutoResize: current.textAutoResize,
+          textWidth: current.width,
+          allowedWidth: Math.max(0, right - left),
+        });
+      }
+    }
+    if (errors.length)
+      throw new Error('생성 TEXT가 parent content box를 벗어남. width/FILL + textAutoResize=HEIGHT로 wrap 필요: ' + JSON.stringify(errors.slice(0, 12)));
+  }
+
   const roots = spec.nodes || spec.frames || [];
+  const builtRoots = [];
   for (const node of roots) {
     // If a top-level node names an existing parent (e.g. a SECTION), append into it.
     let parent = null;
@@ -961,8 +1012,10 @@ async function runCreate(spec) {
       if (!('appendChild' in p)) throw new Error('parentId 노드가 자식을 가질 수 없음: ' + node.parentId);
       parent = p;
     }
-    await build(node, parent);
+    builtRoots.push(await build(node, parent));
   }
+
+  for (const root of builtRoots) validateGeneratedTextContainment(root);
 
   return {
     op: 'create',
