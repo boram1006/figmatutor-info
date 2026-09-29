@@ -70,3 +70,21 @@ npm run audit
   3. duplicate names MUST fail closed; do not ask the user to rename Figma nodes just to satisfy the harness.
   4. if two same-name candidates are both plausible, extract both by ID and apply a structure/archetype sanity gate before choosing one.
   5. renaming canonical Figma nodes is a product/design change and must never be used as a harness workaround.
+
+
+### Text containment false-positive — HUG text
+- Failure: create-time containment guard reported many false positives after A-40 v4.
+- Examples included Breadcrumb microcopy, Honors labels, Highlight top labels/icons, and Reviewer header labels.
+- Root cause:
+  - guard treated all TEXT as if it must wrap inside parent content width.
+  - intentional HUG / `WIDTH_AND_HEIGHT` text in horizontal auto-layout was incorrectly considered overflow.
+  - some FILL child frames had not yet resolved to a meaningful width, producing temporary 1px/100px parent widths.
+- Harness fix:
+  1. containment guard now checks only bounded text (`HEIGHT/NONE/TRUNCATE` or horizontal FILL).
+  2. HUG / `WIDTH_AND_HEIGHT` microcopy is excluded from wrap containment.
+  3. unresolved tiny HUG/auto parents are not used as containment boundaries.
+  4. important rails/grids/cards should still receive explicit width evidence when geometry matters.
+- Permanent rule:
+  - **Long copy wraps; microcopy may HUG.**
+  - Do not solve text overflow by globally forcing every TEXT node to bounded wrap.
+  - A rail/card that must be centered or split into columns should have explicit width/geometry evidence rather than relying on transient Figma auto-layout defaults.
