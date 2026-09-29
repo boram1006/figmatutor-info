@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 3,
+  "task": "<task-id>/<screen-id>",
+  "variant": "external-code-informed-v1",
+  "status": "DRAFT",
+  "sourceMap": "design/operations/<task-id>/external-source-map.md",
+  "sourceAnalysis": "design/operations/<task-id>/external-code-analysis.md",
+  "targetArchetype": {
+    "primary": "<A1-A9 or novel>",
+    "supporting": [],
+    "rationale": "<why>"
+  },
+  "navigationContext": {
+    "depth": "<hub|child-detail|workflow-step|workspace|finalization>",
+    "immediateParent": "<actual parent>",
+    "returnPath": "<explicit route>",
+    "localNavigationDecision": "<KEEP / REMOVE / MODIFY and why>"
+  },
+  "alignmentEvidence": {
+    "railMode": "<CENTERED_DETAIL_RAIL|FULL_WIDTH|SPLIT_WORKSPACE|...>",
+    "viewportWidth": 1440,
+    "contentWidth": 1200,
+    "centeringRule": "<measured/aligned rule>"
+  },
+  "surfacePolicy": {
+    "groupBoundaryRule": "Use minimum sufficient cue. Layout wrappers are transparent; semantic cards use product card treatment.",
+    "heroTreatment": "<none or semantic bounded expression>",
+    "ordinarySections": "<surface rule>"
+  },
+  "contentPolicy": "Only LOCKED_CORE/APPROVED content is production truth.",
+  "regions": [
+    {
+      "region": "<region-id>",
+      "purpose": "<user question solved>",
+      "source": "<source-map region/source>",
+      "reuseMode": "NEW_CONSTRUCTION",
+      "productScope": "LOCKED_CORE",
+      "inspectBeforeBuild": false,
+      "visualEvidence": {
+        "typography": "<product evidence>",
+        "spacing": "<product evidence>",
+        "surface": "<product evidence>",
+        "radius": "<product evidence>"
+      },
+      "externalSource": {
+        "type": "STITCH",
+        "keep": [
+          "grouping",
+          "section-order",
+          "relative-emphasis",
+          "density-intent"
+        ],
+        "translateWithProductGrammar": [
+          "typography",
+          "spacing",
+          "surface",
+          "radius"
+        ]
+      }
+    }
+  ],
+  "excludedActions": []
+}
