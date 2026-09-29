@@ -72,6 +72,14 @@ Prefer HTML/CSS as external composition evidence.
 
 Use Stitch→Figma copied code only as an appendix when HTML/CSS + captures are insufficient to reproduce geometry/auto-layout relationships. Never let Figma-copy styling override product Figma/DS rules.
 
+## Large files
+
+If a spec/analysis file is large, do not write it in one shot.
+Create a valid skeleton, then append/patch logical sections one at a time.
+Finish with JSON parse + relevant validator before commit.
+
+For state variants, do not invent product policy/content that is not in locked scope.
+
 ## Output discipline
 
 Keep work in small commits and report:
