@@ -5,7 +5,7 @@
   "_task": "v6 A-40 NOT_AWARDED (미입상) — code-informed-v4 base에서 상태 확장",
   "_base": "design/operations/v6-judging-result/spec-create-a40-code-informed-v4.json",
   "_contentStatus": "MOCK_FOR_VISUAL_EXPLORATION",
-  "_notes": "v4(AWARDED_RANK) 대비 미입상 차이만 반영. Hero 축하 gradient/트로피 → 중립 헤더(background-subtle). 순위 배지(Primary) → 중립(secondary '본선 미입상'). Project Meta 배지 → '본선 진출 TOP 30'. 시상식 안내 → 결과/피드백 후속 안내. 구조/토큰/1200 rail/헤더 CLONE(1:23010)/투명 래퍼/텍스트 wrap는 v4와 동일. 좌표만 x=12800. Peer horizontal cards use vertical FILL for equal height. NOT_AWARDED follow-up copy is neutralized to avoid unsupported policy/channel claims. NOT_AWARDED hero now states the final outcome explicitly in the first viewport; TOP 30 remains supporting context rather than the final result.",
+  "_notes": "v4(AWARDED_RANK) 대비 미입상 차이만 반영. Hero 축하 gradient/트로피 → 중립 헤더(background-subtle). 순위 배지(Primary) → 중립(secondary '본선 미입상'). Project Meta 배지 → '본선 진출 TOP 30'. 시상식 안내 → 결과/피드백 후속 안내. 구조/토큰/1200 rail/헤더 CLONE(1:23010)/투명 래퍼/텍스트 wrap는 v4와 동일. 좌표만 x=12800. Peer horizontal cards use vertical FILL for equal height. NOT_AWARDED follow-up copy is neutralized to avoid unsupported policy/channel claims. NOT_AWARDED hero now states the final outcome explicitly in the first viewport; TOP 30 remains supporting context rather than the final result. Final follow-up is a non-redundant closure rather than another result/feedback instruction.",
   "nodes": [
     {
       "type": "FRAME",
@@ -1649,7 +1649,7 @@
                       "type": "TEXT",
                       "name": "Followup Title",
                       "textStyle": "Text/body-sm-semibold",
-                      "characters": "심사 결과 안내",
+                      "characters": "본선 심사까지 수고 많으셨습니다.",
                       "fills": [
                         {
                           "type": "SOLID",
@@ -1664,7 +1664,7 @@
                       "type": "TEXT",
                       "name": "Followup Body",
                       "textStyle": "Text/body-sm",
-                      "characters": "심사 과정에서 확인된 주요 강점과 평가 의견을 아래에서 확인하실 수 있습니다.",
+                      "characters": "이번 피드백이 다음 도전을 준비하는 데 도움이 되길 바랍니다.",
                       "fills": [
                         {
                           "type": "SOLID",
