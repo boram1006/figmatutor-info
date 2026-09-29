@@ -23,12 +23,13 @@ figma.ui.onmessage = async (msg) => {
   try {
     let result;
     if (spec.op === 'extract') result = await runExtract(spec);
+    else if (spec.op === 'discover') result = await runDiscover(spec);
     else if (spec.op === 'create') result = await runCreate(spec);
     else if (spec.op === 'screenshot') result = await runScreenshot(spec);
     else if (spec.op === 'rebind') result = await runRebind(spec);
     else if (spec.op === 'duplicate') result = await runDuplicate(spec);
     else if (spec.op === 'update') result = await runUpdate(spec);
-    else throw new Error('알 수 없는 op: ' + spec.op + ' (create/extract/screenshot/rebind/duplicate/update 중 하나)');
+    else throw new Error('알 수 없는 op: ' + spec.op + ' (create/extract/discover/screenshot/rebind/duplicate/update 중 하나)');
     figma.ui.postMessage({ type: 'result', op: spec.op, result });
   } catch (e) {
     figma.ui.postMessage({ type: 'error', message: e.message });
@@ -50,6 +51,40 @@ function hexToRgb(hex) {
   if (!m) throw new Error('색상 형식 오류: ' + hex);
   const v = (h) => parseInt(h, 16) / 255;
   return { r: v(m[1]), g: v(m[2]), b: v(m[3]), ...(m[4] ? { a: v(m[4]) } : {}) };
+}
+
+// ===========================================================================
+// DISCOVER — lightweight page node-name discovery (no snapshot payload)
+// ===========================================================================
+async function runDiscover(spec) {
+  if (!spec.pageName) throw new Error('discover 스펙에 pageName 필요');
+  if (figma.fileKey && spec.fileKey && figma.fileKey !== spec.fileKey)
+    throw new Error('다른 Figma 파일');
+
+  const page = figma.root.children.find((p) => p.name === spec.pageName);
+  if (!page) throw new Error('페이지 없음: ' + spec.pageName);
+  await figma.setCurrentPageAsync(page);
+
+  const raw = Array.isArray(spec.terms) ? spec.terms : [];
+  const terms = [...new Set(raw.map((x) => String(x).trim().toLowerCase()).filter(Boolean))];
+  if (!terms.length) throw new Error('discover 스펙에 terms 필요');
+
+  const eligibleTypes = ['FRAME', 'SECTION', 'COMPONENT', 'COMPONENT_SET', 'INSTANCE'];
+  const matches = page.findAll((n) => {
+    if (n.visible === false || !eligibleTypes.includes(n.type)) return false;
+    const hay = n.name.toLowerCase();
+    return terms.some((t) => hay.includes(t));
+  }).slice(0, 100).map((n) => ({
+    id: n.id,
+    type: n.type,
+    name: n.name,
+    parentId: n.parent?.id || null,
+    parentName: n.parent?.name || null,
+    width: 'width' in n ? n.width : null,
+    height: 'height' in n ? n.height : null,
+  }));
+
+  return { pageId: page.id, pageName: page.name, terms, matches };
 }
 
 // ===========================================================================
