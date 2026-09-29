@@ -370,14 +370,21 @@ async function runExtract(spec) {
   if (duplicateRequestedNames.length)
     throw new Error('동일 이름 프레임 중복: ' + duplicateRequestedNames.join(', '));
 
-  const idTargets = CONFIG.frameIds.length ? all.filter((n) => requestedIds.has(n.id)) : [];
+  const descendantIdCandidates = CONFIG.frameIds.length
+    ? page.findAll((n) => n.visible !== false && eligibleTypes.includes(n.type) && requestedIds.has(n.id))
+    : [];
+  const idTargets = CONFIG.frameIds.length
+    ? [...all.filter((n) => requestedIds.has(n.id)), ...descendantIdCandidates.filter((n) => !all.some((x) => x.id === n.id))]
+    : [];
   const nameTargets = CONFIG.frameNames.length ? descendantCandidates : [];
   const targets = (CONFIG.frameIds.length || CONFIG.frameNames.length)
     ? [...idTargets, ...nameTargets.filter((n) => !idTargets.some((x) => x.id === n.id))]
     : all;
 
-  if (CONFIG.frameIds.length && !CONFIG.frameIds.every((id) => targets.some((n) => n.id === id)))
-    throw new Error('요청한 frameId 없음');
+  if (CONFIG.frameIds.length && !CONFIG.frameIds.every((id) => targets.some((n) => n.id === id))) {
+    const missingIds = CONFIG.frameIds.filter((id) => !targets.some((n) => n.id === id));
+    throw new Error('요청한 frameId 없음: ' + missingIds.join(', '));
+  }
   if (CONFIG.frameNames.length && !CONFIG.frameNames.every((name) => targets.some((n) => n.name === name))) {
     const missing = CONFIG.frameNames.filter((name) => !targets.some((n) => n.name === name));
     const tokens = [...new Set(
