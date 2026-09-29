@@ -121,6 +121,8 @@ Medium
 - 진행 중인 항목은 progress와 last modified를 함께 보여준다.
 - 완료 항목은 submitted timestamp와 read-only/view action을 우선한다.
 - 개인 화면이라는 이유만으로 모든 데이터를 card로 만들지 않는다.
+- **A4 hub의 child/detail 화면에는 A4 sidebar를 자동 상속하지 않는다.** `내 지원 현황 → 특정 지원서/결과`처럼 한 단계 내려간 화면은 immediate parent로 돌아가는 back/breadcrumb를 우선하고, sidebar 클릭이 중간 depth를 건너뛰면 sidebar를 제거한다.
+- child/detail 화면의 content rail은 hub의 body width를 기계적으로 상속하지 않고, 실제 task density와 external/current evidence를 보고 centered detail rail 또는 wider content rail을 선택한다.
 
 Evidence: 지원하기 A-01, 최종보고서 진입점, 마이페이지 통합 지원 현황.
 
