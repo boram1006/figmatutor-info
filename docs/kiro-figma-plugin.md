@@ -26,6 +26,32 @@
 3. 이후 매 단계마다 재설치할 필요 없다. Plugins → Development → **Design Flow Harness**로 실행한다.
 4. 플러그인은 재사용형이다. 실행할 때마다 붙여넣는 스펙 JSON의 `op` 필드로 동작이 결정된다.
 
+## 외부 캡처 / Stitch 코드 기반 신규 화면
+
+사용자가 외부 캡처의 일부 영역을 선택하거나 Stitch HTML/CSS를 제공해 신규 화면을 만들 때는
+일반 `op:create` 절차로 바로 들어가지 않는다.
+
+먼저 반드시:
+
+`docs/kiro-external-reference-to-figma-workflow.md`
+
+를 따른다.
+
+이 workflow가 다음을 정의한다:
+- 캡처/HTML-CSS/Figma-copy code 저장 위치
+- region별 "어떤 부분이 왜 좋은지" 기록 형식
+- external code와 product visual grammar의 우선순위
+- navigation depth / centered rail / text wrap / surface-card 구분
+- spacing/radius variable binding
+- peer card equal-height
+- optional Figma-copy appendix 사용 조건
+- 생성 후 extract/screenshot 검증
+
+작업 시작 템플릿:
+`design/operations/_templates/external-reference/`
+
+---
+
 ## 왕복 흐름 (모든 Figma 단계 공통)
 
 ```
