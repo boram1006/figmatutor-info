@@ -4,7 +4,7 @@
 > Screen ID: A-40
 > Audience: 본선 TOP30 참가자
 > Entry: 마이페이지 → 내 지원 현황 → 선택한 지원서 → 심사 결과 보기
-> Supported states: `AWARDED_RANK`, `AWARDED_SPECIAL`, `NOT_AWARDED`
+> Supported states: `AWARDED`, `NOT_AWARDED`
 > Status: current implementation-aligned PRD
 
 ---
@@ -96,16 +96,21 @@
 
 ## 4. 상태별 UI
 
-### 4.1 AWARDED_RANK
+### 4.1 AWARDED
 
 목적:
-- 수상 여부, 순위, 상 이름을 첫 viewport에서 명확히 전달
+- 수상 여부와 상 결과를 첫 viewport에서 명확히 전달
+- 순위상/특별상은 별도 화면 상태가 아니라 동일한 AWARDED UI에서 데이터만 달라진다
+
+표시 데이터:
+- `awardName`: 최우수상 / 우수상 / 특별상 등
+- `rank`: 순위가 있는 상에만 표시, 특별상은 생략 가능
 
 예시:
 - headline: `축하합니다! CodeReview Team이 본선 2위(최우수상)에 입상했습니다.`
 - result object:
   - `FINAL RESULT`
-  - `본선 2위`
+  - `본선 2위` (순위가 있을 때)
   - `최우수상`
 
 Visual:
@@ -117,13 +122,12 @@ Visual:
 - 수상 후 실제 확정된 후속 안내가 있을 때 제공
 - 정확한 일정/장소/연락 채널은 확정 데이터가 있을 때만 노출
 
-### 4.2 AWARDED_SPECIAL
+특별상도 동일:
+- 같은 hero/section/layout을 사용한다.
+- 별도 상태/화면 구조를 만들지 않는다.
+- 확정된 `awardName`만 바뀌며, 순위가 없으면 rank 줄을 생략한다.
 
-- 기본 구조는 `AWARDED_RANK`와 동일
-- 순위 대신 확정된 특별상 이름을 표시
-- 별도의 IA를 만들지 않는다
-
-### 4.3 NOT_AWARDED
+### 4.2 NOT_AWARDED
 
 목적:
 - 미입상 결과를 명확하게 전달하되 불필요하게 실패를 강조하지 않는다
@@ -217,8 +221,7 @@ Visual:
 - reviewer comments
 
 상태별:
-- AWARDED_RANK: rank, award name
-- AWARDED_SPECIAL: special award name
+- AWARDED: award name, optional rank
 - NOT_AWARDED: final result = not awarded, prior-stage context if needed
 - follow-up/closure data: 확정된 경우에만 사용
 
