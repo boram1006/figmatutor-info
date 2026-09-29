@@ -74,7 +74,13 @@ Lock된 product scope만 사용해 composition plan을 만든 뒤 Figma spec을 
 - follow-up information 배치
 - CTA hierarchy
 
-→ `DESIGN_IDEA` 또는 reference evidence로 사용 가능.
+→ `DESIGN_IDEA` 또는 composition evidence로 사용 가능.
+
+단, external composition은 **visual truth가 아니다**.
+- grouping/section sequence/relative emphasis/density intent는 보존 가능
+- typography/spacing/radius/color/surface/shell/component styling은 existing Figma grammar로 번역
+- target archetype을 먼저 선택한 뒤 그 archetype의 current evidence를 적용
+- A-30처럼 한 화면의 shell을 전체 서비스 규칙으로 일반화하지 않음
 
 ### 자동으로 가져오면 안 되는 것
 - 새 기능
