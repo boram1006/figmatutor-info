@@ -496,3 +496,21 @@ Example for NOT_AWARDED:
 - headline: `이번 본선에서는 수상팀으로 선정되지 않았습니다.`
 - secondary context: strengths / review feedback
 - prior achievement such as `TOP 30` remains contextual metadata, not the final-result label
+
+
+### Result-screen closure must not repeat already-delivered content
+
+For result/decision screens, the final follow-up region must close the experience rather than re-announce content that the user has already seen above.
+
+- do not use phrases such as "아래에서 확인하실 수 있습니다" when the referenced feedback/result is already presented earlier on the same screen
+- avoid duplicating the same information summary in both the body and the closing band
+- the final region should provide one of:
+  - a brief respectful closure
+  - a clearly supported next step
+  - a neutral acknowledgment of effort/participation
+- for `NOT_AWARDED`, prefer a respectful closing tone over promotional or overly optimistic language
+- do not invent unsupported future programs, channels, benefits, dates, or obligations merely to fill the final region
+
+Example closure:
+- `본선 심사까지 수고 많으셨습니다.`
+- `이번 피드백이 다음 도전을 준비하는 데 도움이 되길 바랍니다.`
