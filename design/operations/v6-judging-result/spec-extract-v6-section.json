@@ -1,0 +1,11 @@
+{
+  "op": "extract",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "stage": "screens",
+  "inputDigest": "v6-judging-result-section-161-3738",
+  "frameIds": [
+    "161:3738"
+  ],
+  "_note": "Exact SECTION nodeId for v6. 심사결과. Use this after manual Figma edits to resync the two result frames and PRD box."
+}
