@@ -465,3 +465,17 @@ For A2 or A4+A2 result screens:
 - surrounding functional sections return to normal product surfaces.
 
 Therefore `external color cannot be copied` does **not** mean `generated result screens must be colorless`.
+
+
+### Peer card row equal-height rule
+
+When 2 or more peer cards are arranged horizontally in the same row/grid:
+
+- cards in the same visual row must resolve to the **same height**
+- the row/grid may HUG its tallest child, but each peer card should use vertical **FILL/STRETCH** within that row
+- do not leave peer cards as independent vertical HUG when content length differs
+- internal card content may still HUG and use `SPACE_BETWEEN` or flexible spacer patterns so footers/tags align consistently
+- this applies to comparison cards, highlight cards, reviewer cards, KPI peer cards and similar same-level entities
+- exception: intentionally asymmetric editorial/masonry compositions must be explicitly documented in the composition plan
+
+Reason: equal-height peer cards preserve scanability, alignment and comparison rhythm.
