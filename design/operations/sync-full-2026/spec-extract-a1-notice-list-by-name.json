@@ -1,0 +1,11 @@
+{
+  "op": "extract",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "stage": "screens",
+  "inputDigest": "a1-notice-list-visual-rule-analysis-2026-09-29",
+  "frameNames": [
+    "1_Notice (Updated)"
+  ],
+  "_note": "A1 representative screen only. Exact descendant frame-name extraction using manifest evidence sourceFrame=1_Notice (Updated)@design. Save result as design/operations/sync-full-2026/snapshot-a1-notice-list.json."
+}
