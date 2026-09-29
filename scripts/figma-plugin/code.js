@@ -908,19 +908,24 @@ async function runCreate(spec) {
         if (node.layout.mode && node.layout.mode !== 'NONE') {
           if (node.layout.primaryAxisSizingMode) n.primaryAxisSizingMode = node.layout.primaryAxisSizingMode;
           if (node.layout.counterAxisSizingMode) n.counterAxisSizingMode = node.layout.counterAxisSizingMode;
+          if (node.layout.primaryAxisAlignItems) n.primaryAxisAlignItems = node.layout.primaryAxisAlignItems;
+          if (node.layout.counterAxisAlignItems) n.counterAxisAlignItems = node.layout.counterAxisAlignItems;
+          if (node.layout.layoutWrap && 'layoutWrap' in n) n.layoutWrap = node.layout.layoutWrap;
         }
       }
 
       // Size (before HUG/FILL constraints)
       // INSTANCE는 명시적으로 allowResize:true인 경우만 resize한다. 기본은 component geometry 보존.
-      if (typeof node.width === 'number' && typeof node.height === 'number') {
+      if (typeof node.width === 'number' || typeof node.height === 'number') {
         if (node.type === 'INSTANCE' && node.allowResize !== true)
           throw new Error('INSTANCE width/height 직접 resize 금지. 필요하면 allowResize:true를 명시: ' + (node.name || node.key || n.id));
-        n.resize(node.width, node.height);
-      } else if (node.type === 'TEXT' && typeof node.width === 'number') {
-        // Bounded text width with auto-growing height. This prevents long copy from
-        // expanding horizontally beyond its owning card/content rail.
-        n.resize(node.width, Math.max(1, n.height));
+
+        const targetWidth = typeof node.width === 'number' ? node.width : n.width;
+        const targetHeight = typeof node.height === 'number' ? node.height : n.height;
+
+        // Width-only / height-only sizing must work for FRAME/TEXT/etc.
+        // Previously FRAME width-only specs silently remained at Figma's ~100px default.
+        n.resize(targetWidth, Math.max(1, targetHeight));
       }
 
       if (node.fills) n.fills = await Promise.all(node.fills.map((p) => paintFrom(p, semanticByName, imageHashes)));
