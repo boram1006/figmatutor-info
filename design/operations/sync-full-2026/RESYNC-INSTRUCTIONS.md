@@ -88,3 +88,21 @@ npm run audit
   - **Long copy wraps; microcopy may HUG.**
   - Do not solve text overflow by globally forcing every TEXT node to bounded wrap.
   - A rail/card that must be centered or split into columns should have explicit width/geometry evidence rather than relying on transient Figma auto-layout defaults.
+
+
+### Create layout collapse — width-only and alignment ignored
+- Failure: A-40 code-informed v4 rendered as a narrow vertical column despite a 1200px centered detail rail in the spec.
+- Root causes in plugin create:
+  1. generic node resize ran only when **both** width and height were provided. FRAME nodes with width-only evidence silently stayed at Figma's default ~100px width.
+  2. `primaryAxisAlignItems` / `counterAxisAlignItems` / `layoutWrap` from the spec were parsed but not applied to created auto-layout nodes.
+- Symptoms:
+  - 1200px detail rail collapsed to ~100px
+  - card grids became vertical/narrow
+  - text wrapped one or two characters per line
+  - root/content centering declared in JSON had no visual effect
+- Harness fix:
+  - width-only and height-only resizing now apply to FRAME/TEXT/other resizable nodes
+  - auto-layout alignment properties and layoutWrap are applied during create
+- Permanent rule:
+  - generation contracts are not valid merely because JSON contains geometry/alignment fields; plugin create must have parity with the extract/layout schema.
+  - when a generated layout collapses globally, inspect create-runtime property application before compensating by changing design rules or adding arbitrary widths.
