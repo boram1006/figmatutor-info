@@ -165,6 +165,28 @@ If not, add the minimum necessary grouping cue: stronger spacing, surface contra
 
 ---
 
+
+
+### Layout wrapper vs semantic surface
+
+Generated FRAME does not automatically mean "card".
+
+- **layout wrapper / row / grid / section container** → transparent by default
+- **semantic card / entity card / review card / project meta card** → explicit product surface
+- **hero / semantic notice / campaign band** → explicit state-appropriate surface
+
+For ordinary peer cards in this product, the preferred baseline is:
+- `background-primary`
+- neutral outline such as `border-default`
+- radius 16 for the card
+- product spacing cadence
+- no shadow unless the card genuinely needs elevation
+
+This prevents external HTML's common `white + shadow` treatment from silently becoming the product card style.
+The earlier rule "outline is not mandatory" still applies to wrappers, bands, hero regions and groups whose boundary is already clear; it does **not** mean product card entities should lose their established outline treatment.
+
+---
+
 ## 5. Border, background and nested-surface hierarchy
 
 Use visual levels consistently:
