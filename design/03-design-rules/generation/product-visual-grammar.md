@@ -479,3 +479,20 @@ When 2 or more peer cards are arranged horizontally in the same row/grid:
 - exception: intentionally asymmetric editorial/masonry compositions must be explicitly documented in the composition plan
 
 Reason: equal-height peer cards preserve scanability, alignment and comparison rhythm.
+
+### Result-state clarity in the first viewport
+
+For result/decision screens, the primary outcome must be understandable in the first viewport without requiring interpretation from supporting copy.
+
+- do not use a generic status such as "심사가 완료되었습니다" as the main headline when the actual user question is "수상했는가 / 선정되었는가"
+- the hero must state the outcome itself in neutral, respectful language
+- supporting copy may then explain context, strengths, next steps, or feedback
+- historical achievements (for example "TOP 30 본선 진출") must not visually compete with or replace the current final outcome
+- the right-side/result object must represent the current result state, not only prior-stage achievement
+- avoid unnecessarily harsh failure language; clarity is required, humiliation is not
+
+Example for NOT_AWARDED:
+- state tag: `본선 미입상`
+- headline: `이번 본선에서는 수상팀으로 선정되지 않았습니다.`
+- secondary context: strengths / review feedback
+- prior achievement such as `TOP 30` remains contextual metadata, not the final-result label
