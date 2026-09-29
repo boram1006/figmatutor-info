@@ -8,8 +8,7 @@
   "networkAccess": {
     "allowedDomains": ["none"],
     "devAllowedDomains": [
-      "http://localhost:3845",
-      "http://127.0.0.1:3845"
+      "http://localhost:3845"
     ],
     "reasoning": "Development plugin may connect only to the local Design Flow Harness bridge."
   },
