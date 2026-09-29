@@ -1,0 +1,279 @@
+{
+  "pageId": "1:987",
+  "pageName": "design",
+  "terms": [
+    "h-02",
+    "first-round-result",
+    "rv-01",
+    "rv-02",
+    "final-review",
+    "j-01",
+    "j-02",
+    "j-03",
+    "dashboard",
+    "template"
+  ],
+  "matches": [
+    {
+      "id": "1:2349",
+      "type": "FRAME",
+      "name": "RV-01_first-review",
+      "parentId": "1:2348",
+      "parentName": "v1. 심사 페이지",
+      "width": 1440,
+      "height": 1042
+    },
+    {
+      "id": "1:2687",
+      "type": "FRAME",
+      "name": "RV-01_first-review",
+      "parentId": "1:2348",
+      "parentName": "v1. 심사 페이지",
+      "width": 1440,
+      "height": 1042
+    },
+    {
+      "id": "1:3126",
+      "type": "FRAME",
+      "name": "RV-01_first-review-finalize",
+      "parentId": "1:2348",
+      "parentName": "v1. 심사 페이지",
+      "width": 1440,
+      "height": 1042
+    },
+    {
+      "id": "1:3666",
+      "type": "FRAME",
+      "name": "RV-01_first-review-finalize",
+      "parentId": "1:2348",
+      "parentName": "v1. 심사 페이지",
+      "width": 1440,
+      "height": 1042
+    },
+    {
+      "id": "1:4435",
+      "type": "FRAME",
+      "name": "RV-01_first-review-finalize_AIsummary",
+      "parentId": "1:2348",
+      "parentName": "v1. 심사 페이지",
+      "width": 1440,
+      "height": 1320
+    },
+    {
+      "id": "1:5643",
+      "type": "FRAME",
+      "name": "RV-01_first-review-finalize_SUBMITTED",
+      "parentId": "1:2348",
+      "parentName": "v1. 심사 페이지",
+      "width": 1440,
+      "height": 1042
+    },
+    {
+      "id": "1:6567",
+      "type": "FRAME",
+      "name": "RV-02_final-review-unfolded",
+      "parentId": "1:6566",
+      "parentName": "v1. 최종 심사 페이지",
+      "width": 1920,
+      "height": 1042
+    },
+    {
+      "id": "1:7373",
+      "type": "FRAME",
+      "name": "RV-02_final-review_folded",
+      "parentId": "1:6566",
+      "parentName": "v1. 최종 심사 페이지",
+      "width": 1920,
+      "height": 1042
+    },
+    {
+      "id": "1:10426",
+      "type": "FRAME",
+      "name": "H-02_first-round-result_H1",
+      "parentId": "1:8865",
+      "parentName": "v1. 공통 페이지",
+      "width": 1440,
+      "height": 3662
+    },
+    {
+      "id": "1:13680",
+      "type": "FRAME",
+      "name": "J-02_ai-review-result_Reviewing",
+      "parentId": "1:13679",
+      "parentName": "v2. AI 심사 페이지",
+      "width": 1440,
+      "height": 1921
+    },
+    {
+      "id": "1:14166",
+      "type": "FRAME",
+      "name": "J-01_ai-review-dashboard",
+      "parentId": "1:13679",
+      "parentName": "v2. AI 심사 페이지",
+      "width": 1440,
+      "height": 1137.5
+    },
+    {
+      "id": "1:14181",
+      "type": "FRAME",
+      "name": "Dashboard Summary Cards - Improved",
+      "parentId": "1:14168",
+      "parentName": "Frame",
+      "width": 1200,
+      "height": 197.5
+    },
+    {
+      "id": "1:14566",
+      "type": "FRAME",
+      "name": "J-03_ai-review-template-list",
+      "parentId": "1:13679",
+      "parentName": "v2. AI 심사 페이지",
+      "width": 1440,
+      "height": 891
+    },
+    {
+      "id": "1:14812",
+      "type": "FRAME",
+      "name": "J-03_ai-review-template-list_commonSkill",
+      "parentId": "1:13679",
+      "parentName": "v2. AI 심사 페이지",
+      "width": 1440,
+      "height": 1475
+    },
+    {
+      "id": "1:14945",
+      "type": "FRAME",
+      "name": "J-04_ai-review-template-edit",
+      "parentId": "1:13679",
+      "parentName": "v2. AI 심사 페이지",
+      "width": 1440,
+      "height": 2292.5
+    },
+    {
+      "id": "1:15514",
+      "type": "FRAME",
+      "name": "J-04_ai-review-template-edit_RubrickAdd",
+      "parentId": "1:13679",
+      "parentName": "v2. AI 심사 페이지",
+      "width": 560,
+      "height": 542.5
+    },
+    {
+      "id": "1:15598",
+      "type": "FRAME",
+      "name": "J-04_ai-review-template-edit_RubrickEdit",
+      "parentId": "1:13679",
+      "parentName": "v2. AI 심사 페이지",
+      "width": 560,
+      "height": 499.5
+    },
+    {
+      "id": "1:15667",
+      "type": "FRAME",
+      "name": "J-04_ai-review-template-edit_RubrickNone",
+      "parentId": "1:13679",
+      "parentName": "v2. AI 심사 페이지",
+      "width": 1052,
+      "height": 296
+    },
+    {
+      "id": "1:15697",
+      "type": "FRAME",
+      "name": "J-04_ai-review-template-edit_addVariables",
+      "parentId": "1:13679",
+      "parentName": "v2. AI 심사 페이지",
+      "width": 2723,
+      "height": 786
+    },
+    {
+      "id": "1:16040",
+      "type": "FRAME",
+      "name": "J-04_ai-review-template-edit_test_01",
+      "parentId": "1:13679",
+      "parentName": "v2. AI 심사 페이지",
+      "width": 1060,
+      "height": 332
+    },
+    {
+      "id": "1:16081",
+      "type": "FRAME",
+      "name": "J-04_ai-review-template-edit_test_03",
+      "parentId": "1:13679",
+      "parentName": "v2. AI 심사 페이지",
+      "width": 1060,
+      "height": 465
+    },
+    {
+      "id": "1:16165",
+      "type": "FRAME",
+      "name": "J-04_ai-review-template-edit_test_variables",
+      "parentId": "1:13679",
+      "parentName": "v2. AI 심사 페이지",
+      "width": 1060,
+      "height": 457
+    },
+    {
+      "id": "1:16229",
+      "type": "FRAME",
+      "name": "J-04_ai-review-template-edit_test_02",
+      "parentId": "1:13679",
+      "parentName": "v2. AI 심사 페이지",
+      "width": 1060,
+      "height": 472
+    },
+    {
+      "id": "1:16292",
+      "type": "FRAME",
+      "name": "J-03_ai-review-template_addModal",
+      "parentId": "1:13679",
+      "parentName": "v2. AI 심사 페이지",
+      "width": 1280,
+      "height": 800
+    },
+    {
+      "id": "1:16346",
+      "type": "FRAME",
+      "name": "J-02_ai-review-result",
+      "parentId": "1:13679",
+      "parentName": "v2. AI 심사 페이지",
+      "width": 1440,
+      "height": 2180
+    },
+    {
+      "id": "1:16996",
+      "type": "FRAME",
+      "name": "J-02_ai-review-result_notSUBMITTED",
+      "parentId": "1:13679",
+      "parentName": "v2. AI 심사 페이지",
+      "width": 1440,
+      "height": 2180
+    },
+    {
+      "id": "1:17295",
+      "type": "FRAME",
+      "name": "J-02_ai-review-result_codeReview",
+      "parentId": "1:13679",
+      "parentName": "v2. AI 심사 페이지",
+      "width": 1440,
+      "height": 2180
+    },
+    {
+      "id": "1:17840",
+      "type": "FRAME",
+      "name": "J-03_ai-review-template-list_commonSklil_modal",
+      "parentId": "1:13679",
+      "parentName": "v2. AI 심사 페이지",
+      "width": 1040,
+      "height": 790
+    },
+    {
+      "id": "1:22713",
+      "type": "FRAME",
+      "name": "H-02_first-round-result_H2",
+      "parentId": "1:21542",
+      "parentName": "v4. 하반기 해커톤용",
+      "width": 1440,
+      "height": 2117
+    }
+  ]
+}
