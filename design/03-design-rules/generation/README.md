@@ -27,7 +27,7 @@
 10. `patterns.md`에서 기존 복합 패턴을 우선 재사용한다.
 11. 실제 Figma 자산 후보는 **Pattern Registry retrieval**로 먼저 찾는다. `design/03-design-rules/patterns/registry.json`의 semantic/evidence 정보와 최신 extract로 resolve된 source만 사용한다. 0건/다수 매칭 node ID를 추측하지 않는다.
 12. resolved source가 있으면 `design/03-design-rules/visual-dna.md`에 따라 **Visual DNA evidence**를 확인한다. 반복 source의 동일 값만 invariant로 보고, 차이는 observation으로 유지하며 평균값을 새 규칙으로 만들지 않는다. single source는 전역 규칙으로 승격하지 않는다.
-13. 외부 composition source(Stitch/image)를 사용하거나 NEW_CONSTRUCTION이 포함되면 `composition-plan.json`을 만들고 먼저 검증한다.
+13. 외부 composition source(Stitch/image/HTML-CSS)를 사용하거나 NEW_CONSTRUCTION이 포함되면 먼저 `docs/kiro-external-reference-to-figma-workflow.md`를 따른다. 캡처는 region selection anchor, HTML/CSS는 composition evidence, 기존 Figma/DS는 visual truth로 구분한다. 그 다음 `composition-plan.json`을 만들고 검증한다.
    ```sh
    npm run composition:validate -- --plan design/operations/<task>/composition-plan.json
    ```
