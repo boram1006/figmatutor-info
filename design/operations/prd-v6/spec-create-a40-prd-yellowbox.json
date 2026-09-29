@@ -2,15 +2,15 @@
   "op": "create",
   "fileKey": "t00UvcVe1M6llSJFyXcDkG",
   "pageName": "design",
-  "_formatBaseline": "design/operations/prd-v5/spec-create-yellowbox.json",
-  "_note": "v5 PRD yellow-box format inherited; content updated for v6 A-40 only.",
+  "_structureBaseline": "v1/v3 PRD hierarchical numbering + 8 blocks",
+  "_visualBaseline": "design/operations/prd-v5/spec-create-yellowbox.json",
   "nodes": [
     {
       "type": "FRAME",
       "name": "v6 PRD (노란 박스)",
       "parentId": "161:3738",
       "width": 900,
-      "height": 2200,
+      "height": 3000,
       "layout": {
         "mode": "VERTICAL",
         "primaryAxisSizingMode": "AUTO",
@@ -49,7 +49,7 @@
           "type": "TEXT",
           "name": "lead",
           "textStyle": "Text/body",
-          "characters": "본선 TOP30 참가자가 최종 심사 결과를 확인하는 화면. 마이페이지 → 내 지원 현황 → 선택한 지원서 → 심사 결과 보기로 진입한다. 수상/미입상 여부는 첫 화면에서 바로 이해되어야 하며, 이후 핵심 강점과 심사위원 평가를 확인한다.",
+          "characters": "본선 TOP30 참가자가 최종 심사 결과를 확인하는 A-40 화면. 수상/미입상 여부를 첫 화면에서 명확히 전달하고, 이후 핵심 강점과 심사위원 평가를 확인한다.",
           "fills": [
             {
               "type": "SOLID",
@@ -61,9 +61,9 @@
         },
         {
           "type": "TEXT",
-          "name": "a40",
+          "name": "sec:1",
           "textStyle": "Text/h2",
-          "characters": "A-40 · 심사 결과",
+          "characters": "1. 화면 개요",
           "fills": [
             {
               "type": "SOLID",
@@ -75,9 +75,9 @@
         },
         {
           "type": "TEXT",
-          "name": "h:진입/개요",
+          "name": "h:1.1",
           "textStyle": "Text/h3-bold",
-          "characters": "진입/개요",
+          "characters": "1.1. 목적",
           "fills": [
             {
               "type": "SOLID",
@@ -89,9 +89,9 @@
         },
         {
           "type": "TEXT",
-          "name": "b:진입/개요",
+          "name": "b:1.1",
           "textStyle": "Text/body-sm",
-          "characters": "마이페이지 → 내 지원 현황 → 선택한 지원서 → [심사 결과 보기]. A-40은 선택된 지원 건의 child/detail 화면이며 My Page sidebar는 사용하지 않는다. 상단 [← 내 지원 현황으로 돌아가기]로 상위 목록에 복귀한다. 결과 발표 전에는 진입 CTA를 기본적으로 노출하지 않는다.",
+          "characters": "참가자가 ‘우리 팀의 최종 결과가 무엇인가?’를 첫 viewport에서 바로 이해하도록 한다. 결과 상태를 ‘심사 완료’ 같은 일반 문구로 흐리지 않는다.",
           "fills": [
             {
               "type": "SOLID",
@@ -103,9 +103,9 @@
         },
         {
           "type": "TEXT",
-          "name": "h:상태 머신",
+          "name": "h:1.2",
           "textStyle": "Text/h3-bold",
-          "characters": "상태 머신",
+          "characters": "1.2. 대상/역할",
           "fills": [
             {
               "type": "SOLID",
@@ -117,9 +117,9 @@
         },
         {
           "type": "TEXT",
-          "name": "b:상태 머신",
+          "name": "b:1.2",
           "textStyle": "Text/body-sm",
-          "characters": "상태는 AWARDED / NOT_AWARDED 두 가지로 본다. 순위상과 특별상은 별도 화면 상태가 아니라 동일한 AWARDED UI에서 awardName과 optional rank만 달라진다. AWARDED는 순위가 있으면 rank+awardName, 특별상은 awardName 중심으로 표시한다. NOT_AWARDED는 최종 결과를 '수상 미선정'으로 명확히 표시한다.",
+          "characters": "대상은 본선 TOP30 참가자. A-40은 선택된 지원 건의 결과를 조회하는 child/detail 화면이며, 수상/미입상 상태가 달라도 같은 화면 구조를 사용한다.",
           "fills": [
             {
               "type": "SOLID",
@@ -131,121 +131,9 @@
         },
         {
           "type": "TEXT",
-          "name": "h:상태별 UI",
-          "textStyle": "Text/h3-bold",
-          "characters": "상태별 UI",
-          "fills": [
-            {
-              "type": "SOLID",
-              "color": "#111111",
-              "binding": "text-primary"
-            }
-          ],
-          "layoutSizingHorizontal": "FILL"
-        },
-        {
-          "type": "TEXT",
-          "name": "b:상태별 UI",
-          "textStyle": "Text/body-sm",
-          "characters": "AWARDED: 첫 viewport에서 수상 여부·상명·필요 시 순위를 직접 표시하고 bounded celebration treatment를 사용할 수 있다. NOT_AWARDED: 상태 tag '본선 미입상', headline '이번 본선에서는 수상팀으로 선정되지 않았습니다.', result '수상 미선정'. '본선 진출 TOP 30'은 이전 단계 성과이므로 보조 context로만 표시한다.",
-          "fills": [
-            {
-              "type": "SOLID",
-              "color": "#111111",
-              "binding": "text-primary"
-            }
-          ],
-          "layoutSizingHorizontal": "FILL"
-        },
-        {
-          "type": "TEXT",
-          "name": "h:정보 구조",
-          "textStyle": "Text/h3-bold",
-          "characters": "정보 구조",
-          "fills": [
-            {
-              "type": "SOLID",
-              "color": "#111111",
-              "binding": "text-primary"
-            }
-          ],
-          "layoutSizingHorizontal": "FILL"
-        },
-        {
-          "type": "TEXT",
-          "name": "b:정보 구조",
-          "textStyle": "Text/body-sm",
-          "characters": "공통 구조: 프로젝트 Context → 최종 결과 Hero → 핵심 강점 3개 → 심사위원 종합 평가(패널 총평 + 개별 평가) → 상태별 후속 안내/마무리. 상태가 달라도 별도 IA를 만들지 않는다. 심사 상세 보기 / 최종 제출 내용 보기 action은 현재 A-40 범위에 포함하지 않는다.",
-          "fills": [
-            {
-              "type": "SOLID",
-              "color": "#111111",
-              "binding": "text-primary"
-            }
-          ],
-          "layoutSizingHorizontal": "FILL"
-        },
-        {
-          "type": "TEXT",
-          "name": "h:미입상 마무리",
-          "textStyle": "Text/h3-bold",
-          "characters": "미입상 마무리",
-          "fills": [
-            {
-              "type": "SOLID",
-              "color": "#111111",
-              "binding": "text-primary"
-            }
-          ],
-          "layoutSizingHorizontal": "FILL"
-        },
-        {
-          "type": "TEXT",
-          "name": "b:미입상 마무리",
-          "textStyle": "Text/body-sm",
-          "characters": "NOT_AWARDED 마지막 영역은 추가 정보 반복이 아니라 closure로 끝낸다. Title: '본선 심사까지 수고 많으셨습니다.' Body: '이번 경험을 바탕으로 다음 도전에서도 좋은 결과를 기대하겠습니다.' 본문에서 이미 제공한 평가를 다시 안내하거나 미확정 프로그램·채널·혜택을 새로 만들지 않는다.",
-          "fills": [
-            {
-              "type": "SOLID",
-              "color": "#111111",
-              "binding": "text-primary"
-            }
-          ],
-          "layoutSizingHorizontal": "FILL"
-        },
-        {
-          "type": "TEXT",
-          "name": "h:표기/레이아웃",
-          "textStyle": "Text/h3-bold",
-          "characters": "표기/레이아웃",
-          "fills": [
-            {
-              "type": "SOLID",
-              "color": "#111111",
-              "binding": "text-primary"
-            }
-          ],
-          "layoutSizingHorizontal": "FILL"
-        },
-        {
-          "type": "TEXT",
-          "name": "b:표기/레이아웃",
-          "textStyle": "Text/body-sm",
-          "characters": "Desktop 1440, centered 1200 detail rail. Layout wrapper는 투명, semantic card만 product surface+outline. 긴 텍스트는 content width 안에서 wrap. 동일 row의 peer card는 같은 높이(FILL/STRETCH). spacing/radius는 기존 DS token 값과 실제 Figma variable binding을 사용한다.",
-          "fills": [
-            {
-              "type": "SOLID",
-              "color": "#111111",
-              "binding": "text-primary"
-            }
-          ],
-          "layoutSizingHorizontal": "FILL"
-        },
-        {
-          "type": "TEXT",
-          "name": "common",
+          "name": "sec:2",
           "textStyle": "Text/h2",
-          "characters": "릴리즈 공통 규칙 · 의존관계",
+          "characters": "2. 진입 경로 + 조건",
           "fills": [
             {
               "type": "SOLID",
@@ -257,9 +145,9 @@
         },
         {
           "type": "TEXT",
-          "name": "h:공통 규칙",
+          "name": "h:2.1",
           "textStyle": "Text/h3-bold",
-          "characters": "공통 규칙",
+          "characters": "2.1. 진입 경로",
           "fills": [
             {
               "type": "SOLID",
@@ -271,9 +159,9 @@
         },
         {
           "type": "TEXT",
-          "name": "b:공통 규칙",
+          "name": "b:2.1",
           "textStyle": "Text/body-sm",
-          "characters": "결과 화면은 첫 viewport에서 상태가 해석 없이 명확해야 한다. '심사가 완료되었습니다' 같은 일반 상태만으로 최종 결과를 대신하지 않는다. 미입상은 결과를 숨기지 않되 '탈락/실패'처럼 필요 이상으로 강한 표현을 사용하지 않는다. 심사 평가 데이터 이상으로 수상·미입상 원인을 추론하지 않는다.",
+          "characters": "마이페이지 → 내 지원 현황 → 선택한 지원서 → [심사 결과 보기]. 상단 [← 내 지원 현황으로 돌아가기]로 상위 목록에 복귀한다. My Page sidebar는 사용하지 않는다.",
           "fills": [
             {
               "type": "SOLID",
@@ -285,9 +173,9 @@
         },
         {
           "type": "TEXT",
-          "name": "h:의존관계",
+          "name": "h:2.2",
           "textStyle": "Text/h3-bold",
-          "characters": "의존관계",
+          "characters": "2.2. 진입 조건",
           "fills": [
             {
               "type": "SOLID",
@@ -299,9 +187,457 @@
         },
         {
           "type": "TEXT",
-          "name": "b:의존관계",
+          "name": "b:2.2",
           "textStyle": "Text/body-sm",
-          "characters": "A-30의 결과 보기 진입 조건은 본선 진출 + 최종 제출 완료 + 심사 종료 + 결과 발표. A-40의 결과·강점·심사위원 코멘트는 실제 심사 데이터에 의존한다. 수상 후속 일정/장소/혜택/연락 채널은 확정 정보가 있을 때만 노출한다.",
+          "characters": "본선 진출(TOP30) + 최종 제출 완료 + 심사 종료 + 결과 발표 완료 시 진입한다. 결과 발표 전에는 결과 보기 CTA를 기본적으로 노출하지 않는다.",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "sec:3",
+          "textStyle": "Text/h2",
+          "characters": "3. 데이터 로딩 정책 + 예외",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "h:3.1",
+          "textStyle": "Text/h3-bold",
+          "characters": "3.1. 필수 데이터",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "b:3.1",
+          "textStyle": "Text/body-sm",
+          "characters": "application/project identity, team identity, final result state, highlight items, panel consensus, reviewer comments. AWARDED는 awardName과 optional rank가 추가된다.",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "h:3.2",
+          "textStyle": "Text/h3-bold",
+          "characters": "3.2. 로딩/에러/빈상태",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "b:3.2",
+          "textStyle": "Text/body-sm",
+          "characters": "로딩·에러는 기존 서비스 공통 패턴을 재사용한다. 표시할 결과가 없는 예외는 별도 빈상태를 발명하지 않고 실제 요구가 확인될 때 정의한다.",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "sec:4",
+          "textStyle": "Text/h2",
+          "characters": "4. 상태 머신",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "h:4.1",
+          "textStyle": "Text/h3-bold",
+          "characters": "4.1. AWARDED",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "b:4.1",
+          "textStyle": "Text/body-sm",
+          "characters": "순위상과 특별상을 별도 화면 상태로 나누지 않는다. 동일 AWARDED UI를 사용하고 awardName과 optional rank만 달라진다. 순위가 있는 상은 rank+awardName, 특별상은 awardName 중심으로 표시한다.",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "h:4.2",
+          "textStyle": "Text/h3-bold",
+          "characters": "4.2. NOT_AWARDED",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "b:4.2",
+          "textStyle": "Text/body-sm",
+          "characters": "본선 TOP30이나 수상팀으로 선정되지 않은 상태. 최종 결과는 ‘수상 미선정’으로 명확히 표시하며, ‘본선 진출 TOP 30’은 이전 단계 성과/보조 context로만 사용한다.",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "sec:5",
+          "textStyle": "Text/h2",
+          "characters": "5. 상태별 UI",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "h:5.1",
+          "textStyle": "Text/h3-bold",
+          "characters": "5.1. AWARDED UI",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "b:5.1",
+          "textStyle": "Text/body-sm",
+          "characters": "첫 viewport에서 수상 여부·상명·필요 시 순위를 직접 표시한다. bounded celebration treatment를 허용하되 product semantic/award token을 사용한다. 이후 핵심 강점 3개와 패널 총평·개별 심사 의견을 제공한다.",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "h:5.2",
+          "textStyle": "Text/h3-bold",
+          "characters": "5.2. NOT_AWARDED UI",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "b:5.2",
+          "textStyle": "Text/body-sm",
+          "characters": "상태 tag ‘본선 미입상’, headline ‘이번 본선에서는 수상팀으로 선정되지 않았습니다.’, result object ‘수상 미선정’. Celebration 표현은 쓰지 않고 neutral result treatment를 사용한다.",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "h:5.3",
+          "textStyle": "Text/h3-bold",
+          "characters": "5.3. 미입상 마무리",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "b:5.3",
+          "textStyle": "Text/body-sm",
+          "characters": "Title: ‘본선 심사까지 수고 많으셨습니다.’ Body: ‘이번 경험을 바탕으로 다음 도전에서도 좋은 결과를 기대하겠습니다.’ 본문에서 이미 제공한 평가를 다시 안내하지 않고, 미확정 프로그램·채널·혜택을 새로 만들지 않는다.",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "sec:6",
+          "textStyle": "Text/h2",
+          "characters": "6. 정렬·버튼 규칙",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "h:6.1",
+          "textStyle": "Text/h3-bold",
+          "characters": "6.1. 액션",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "b:6.1",
+          "textStyle": "Text/body-sm",
+          "characters": "현재 A-40에는 [심사 상세 보기], [최종 제출 내용 보기]를 추가하지 않는다. 결과 확인과 평가 정보 열람에 집중한다.",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "h:6.2",
+          "textStyle": "Text/h3-bold",
+          "characters": "6.2. 카드 정렬",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "b:6.2",
+          "textStyle": "Text/body-sm",
+          "characters": "핵심 강점과 reviewer card는 같은 위계의 peer card로 배치하며, 같은 horizontal row에서는 동일 높이(FILL/STRETCH)를 유지한다.",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "sec:7",
+          "textStyle": "Text/h2",
+          "characters": "7. 표기 규칙",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "h:7.1",
+          "textStyle": "Text/h3-bold",
+          "characters": "7.1. 결과 표현",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "b:7.1",
+          "textStyle": "Text/body-sm",
+          "characters": "결과는 첫 viewport에서 해석 없이 이해되어야 한다. 미입상 상태를 숨기지 않되 ‘탈락/실패’처럼 필요 이상으로 강한 표현은 사용하지 않는다.",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "h:7.2",
+          "textStyle": "Text/h3-bold",
+          "characters": "7.2. 데이터/문구 경계",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "b:7.2",
+          "textStyle": "Text/body-sm",
+          "characters": "디자인 exploration용 프로젝트명·평가 문구·심사위원 코멘트는 실제 제품 정책/실데이터와 구분한다. 확정 근거 없는 상금·혜택·일정·장소·채널·점수 산식·미입상 원인을 추가하지 않는다.",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "sec:8",
+          "textStyle": "Text/h2",
+          "characters": "8. 레이아웃·인터랙션 세부",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "h:8.1",
+          "textStyle": "Text/h3-bold",
+          "characters": "8.1. 레이아웃",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "b:8.1",
+          "textStyle": "Text/body-sm",
+          "characters": "Desktop 1440, centered 1200 detail rail. 상태가 달라도 공통 section order와 IA를 유지한다. Layout wrapper는 투명하고 semantic card만 product surface+outline을 사용한다.",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "h:8.2",
+          "textStyle": "Text/h3-bold",
+          "characters": "8.2. Design System",
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#111111",
+              "binding": "text-primary"
+            }
+          ],
+          "layoutSizingHorizontal": "FILL"
+        },
+        {
+          "type": "TEXT",
+          "name": "b:8.2",
+          "textStyle": "Text/body-sm",
+          "characters": "긴 텍스트는 content width 안에서 wrap한다. spacing/radius는 기존 DS token 값과 실제 Figma variable binding을 사용한다. 외부 HTML/CSS는 composition evidence로만 사용하며 product visual grammar로 변환한다.",
           "fills": [
             {
               "type": "SOLID",
@@ -315,7 +651,7 @@
           "type": "TEXT",
           "name": "note",
           "textStyle": "Text/caption",
-          "characters": "※ 디자인 exploration에 사용된 프로젝트명·평가 문구·심사위원 코멘트는 실제 제품 정책/심사 데이터와 구분한다. 화면 구조와 상태 표현은 A-40 PRD 기준이며, 미확정 정보는 사실값으로 승격하지 않는다.",
+          "characters": "※ PRD 정보 구조는 v1·v3의 계층 넘버링/8블록을 따르고, Figma 노란 박스의 시각 형식은 v5 yellow-box를 따른다.",
           "fills": [
             {
               "type": "SOLID",
