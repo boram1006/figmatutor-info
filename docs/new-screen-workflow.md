@@ -326,6 +326,7 @@ Figma는 무료 계정 + 플러그인 왕복으로 다룬다(MCP 없음). 상세
   - 주 액션 버튼: `primaryActionId` (requirements의 primaryAction.id와 일치, 상태당 1개)
   - 탭 대상: `tapTarget`, 이미지 슬롯: `slotId`/`assetId`, 반복 UI: `reusable`
 - **레이아웃**: 고정 높이 대신 HUG(자동)를 기본으로. 자식이 부모를 넘지 않게.
+- 단, 같은 row/grid에서 동일 위계의 카드가 2개 이상 가로 배치되면 **카드 높이는 row 안에서 동일하게 맞춘다**. row는 tallest child 기준으로 HUG할 수 있지만, 각 peer card는 세로 FILL/STRETCH를 사용한다. 내용량 차이 때문에 카드 높이가 제각각이면 완료로 보지 않는다.
 
 레이아웃 초안이 필요하면 플러그인 `op:create`를 사용한다. 이때 하나의 screen FRAME 안에서 `INSTANCE`와 `CLONE`을 우선 조합하고, 정말 없는 구조만 primitive로 만든다. `op:create` 실행 자체는 게이트 통과 조건이 아니며, 생성 후 반드시 extract + screenshot으로 실제 결과를 다시 검증한다.
 
