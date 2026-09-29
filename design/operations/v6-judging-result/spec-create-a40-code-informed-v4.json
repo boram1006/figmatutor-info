@@ -6,7 +6,7 @@
   "_compositionPlan": "design/operations/v6-judging-result/composition-plan-code-informed-v4.json",
   "_sourceAnalysis": "design/operations/v6-judging-result/STITCH-CODE-ANALYSIS-v4.md",
   "_contentStatus": "MOCK_FOR_VISUAL_EXPLORATION",
-  "_notes": "No My Page sidebar. Centered 1200 detail rail. Long text wraps. Outlines are not default. Hero and follow-up may use semantic-token gradients. Code source 1=hero/follow-up, source 2=highlights/panel review.",
+  "_notes": "No My Page sidebar. Centered 1200 detail rail. Long text wraps. Outlines are not default. Hero and follow-up may use semantic-token gradients. Code source 1=hero/follow-up, source 2=highlights/panel review. Explicit 1200 rail/card widths added after v4 containment failure; HUG microcopy remains HUG, long copy wraps by HEIGHT.",
   "nodes": [
     {
       "type": "FRAME",
@@ -68,7 +68,7 @@
             {
               "type": "FRAME",
               "name": "Breadcrumb Row",
-              "layoutSizingHorizontal": "FILL",
+              "layoutSizingHorizontal": "FIXED",
               "layoutSizingVertical": "HUG",
               "layout": {
                 "mode": "HORIZONTAL",
@@ -126,12 +126,13 @@
                   "layoutSizingVertical": "HUG",
                   "textAutoResize": "WIDTH_AND_HEIGHT"
                 }
-              ]
+              ],
+              "width": 1200
             },
             {
               "type": "FRAME",
               "name": "Project Meta",
-              "layoutSizingHorizontal": "FILL",
+              "layoutSizingHorizontal": "FIXED",
               "layoutSizingVertical": "HUG",
               "layout": {
                 "mode": "VERTICAL",
@@ -207,17 +208,18 @@
                   "layoutSizingVertical": "HUG",
                   "textAutoResize": "HEIGHT"
                 }
-              ]
+              ],
+              "width": 1200
             },
             {
               "type": "FRAME",
               "name": "Celebration Hero",
-              "layoutSizingHorizontal": "FILL",
+              "layoutSizingHorizontal": "FIXED",
               "layoutSizingVertical": "HUG",
               "layout": {
                 "mode": "HORIZONTAL",
                 "primaryAxisSizingMode": "FIXED",
-                "counterAxisSizingMode": "AUTO",
+                "counterAxisSizingMode": "FIXED",
                 "primaryAxisAlignItems": "SPACE_BETWEEN",
                 "counterAxisAlignItems": "CENTER"
               },
@@ -258,7 +260,7 @@
                 {
                   "type": "FRAME",
                   "name": "Hero Copy",
-                  "layoutSizingHorizontal": "FILL",
+                  "layoutSizingHorizontal": "FIXED",
                   "layoutSizingVertical": "HUG",
                   "layout": {
                     "mode": "VERTICAL",
@@ -320,7 +322,8 @@
                       "layoutSizingVertical": "HUG",
                       "textAutoResize": "HEIGHT"
                     }
-                  ]
+                  ],
+                  "width": 884
                 },
                 {
                   "type": "FRAME",
@@ -415,12 +418,13 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "width": 1200
             },
             {
               "type": "FRAME",
               "name": "Highlights Section",
-              "layoutSizingHorizontal": "FILL",
+              "layoutSizingHorizontal": "FIXED",
               "layoutSizingVertical": "HUG",
               "layout": {
                 "mode": "VERTICAL",
@@ -499,12 +503,12 @@
                 {
                   "type": "FRAME",
                   "name": "Highlights Grid",
-                  "layoutSizingHorizontal": "FILL",
+                  "layoutSizingHorizontal": "FIXED",
                   "layoutSizingVertical": "HUG",
                   "layout": {
                     "mode": "HORIZONTAL",
                     "primaryAxisSizingMode": "FIXED",
-                    "counterAxisSizingMode": "AUTO",
+                    "counterAxisSizingMode": "FIXED",
                     "primaryAxisAlignItems": "MIN",
                     "counterAxisAlignItems": "MIN"
                   },
@@ -515,7 +519,7 @@
                     {
                       "type": "FRAME",
                       "name": "Highlight Card",
-                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingHorizontal": "FIXED",
                       "layoutSizingVertical": "HUG",
                       "layout": {
                         "mode": "VERTICAL",
@@ -636,12 +640,13 @@
                           "layoutSizingVertical": "HUG",
                           "textAutoResize": "HEIGHT"
                         }
-                      ]
+                      ],
+                      "width": 389
                     },
                     {
                       "type": "FRAME",
                       "name": "Highlight Card",
-                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingHorizontal": "FIXED",
                       "layoutSizingVertical": "HUG",
                       "layout": {
                         "mode": "VERTICAL",
@@ -762,12 +767,13 @@
                           "layoutSizingVertical": "HUG",
                           "textAutoResize": "HEIGHT"
                         }
-                      ]
+                      ],
+                      "width": 389
                     },
                     {
                       "type": "FRAME",
                       "name": "Highlight Card",
-                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingHorizontal": "FIXED",
                       "layoutSizingVertical": "HUG",
                       "layout": {
                         "mode": "VERTICAL",
@@ -888,16 +894,19 @@
                           "layoutSizingVertical": "HUG",
                           "textAutoResize": "HEIGHT"
                         }
-                      ]
+                      ],
+                      "width": 389
                     }
-                  ]
+                  ],
+                  "width": 1200
                 }
-              ]
+              ],
+              "width": 1200
             },
             {
               "type": "FRAME",
               "name": "Panel Review Section",
-              "layoutSizingHorizontal": "FILL",
+              "layoutSizingHorizontal": "FIXED",
               "layoutSizingVertical": "HUG",
               "layout": {
                 "mode": "VERTICAL",
@@ -976,12 +985,12 @@
                 {
                   "type": "FRAME",
                   "name": "Consensus Quote",
-                  "layoutSizingHorizontal": "FILL",
+                  "layoutSizingHorizontal": "FIXED",
                   "layoutSizingVertical": "HUG",
                   "layout": {
                     "mode": "HORIZONTAL",
                     "primaryAxisSizingMode": "AUTO",
-                    "counterAxisSizingMode": "AUTO",
+                    "counterAxisSizingMode": "FIXED",
                     "primaryAxisAlignItems": "MIN",
                     "counterAxisAlignItems": "MIN"
                   },
@@ -1033,17 +1042,18 @@
                       "layoutSizingVertical": "HUG",
                       "textAutoResize": "HEIGHT"
                     }
-                  ]
+                  ],
+                  "width": 1200
                 },
                 {
                   "type": "FRAME",
                   "name": "Reviewer Grid",
-                  "layoutSizingHorizontal": "FILL",
+                  "layoutSizingHorizontal": "FIXED",
                   "layoutSizingVertical": "HUG",
                   "layout": {
                     "mode": "HORIZONTAL",
                     "primaryAxisSizingMode": "FIXED",
-                    "counterAxisSizingMode": "AUTO",
+                    "counterAxisSizingMode": "FIXED",
                     "primaryAxisAlignItems": "MIN",
                     "counterAxisAlignItems": "MIN"
                   },
@@ -1054,7 +1064,7 @@
                     {
                       "type": "FRAME",
                       "name": "Reviewer Card",
-                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingHorizontal": "FIXED",
                       "layoutSizingVertical": "HUG",
                       "layout": {
                         "mode": "VERTICAL",
@@ -1156,12 +1166,13 @@
                           "layoutSizingVertical": "HUG",
                           "textAutoResize": "HEIGHT"
                         }
-                      ]
+                      ],
+                      "width": 389
                     },
                     {
                       "type": "FRAME",
                       "name": "Reviewer Card",
-                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingHorizontal": "FIXED",
                       "layoutSizingVertical": "HUG",
                       "layout": {
                         "mode": "VERTICAL",
@@ -1263,12 +1274,13 @@
                           "layoutSizingVertical": "HUG",
                           "textAutoResize": "HEIGHT"
                         }
-                      ]
+                      ],
+                      "width": 389
                     },
                     {
                       "type": "FRAME",
                       "name": "Reviewer Card",
-                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingHorizontal": "FIXED",
                       "layoutSizingVertical": "HUG",
                       "layout": {
                         "mode": "VERTICAL",
@@ -1370,21 +1382,24 @@
                           "layoutSizingVertical": "HUG",
                           "textAutoResize": "HEIGHT"
                         }
-                      ]
+                      ],
+                      "width": 389
                     }
-                  ]
+                  ],
+                  "width": 1200
                 }
-              ]
+              ],
+              "width": 1200
             },
             {
               "type": "FRAME",
               "name": "Ceremony Follow-up",
-              "layoutSizingHorizontal": "FILL",
+              "layoutSizingHorizontal": "FIXED",
               "layoutSizingVertical": "HUG",
               "layout": {
                 "mode": "HORIZONTAL",
                 "primaryAxisSizingMode": "AUTO",
-                "counterAxisSizingMode": "AUTO",
+                "counterAxisSizingMode": "FIXED",
                 "primaryAxisAlignItems": "MIN",
                 "counterAxisAlignItems": "MIN"
               },
@@ -1435,7 +1450,7 @@
                 {
                   "type": "FRAME",
                   "name": "Ceremony Copy",
-                  "layoutSizingHorizontal": "FILL",
+                  "layoutSizingHorizontal": "FIXED",
                   "layoutSizingVertical": "HUG",
                   "layout": {
                     "mode": "VERTICAL",
@@ -1478,9 +1493,11 @@
                       "layoutSizingVertical": "HUG",
                       "textAutoResize": "HEIGHT"
                     }
-                  ]
+                  ],
+                  "width": 1120
                 }
-              ]
+              ],
+              "width": 1200
             }
           ]
         }
