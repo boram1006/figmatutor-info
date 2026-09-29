@@ -336,8 +336,20 @@ async function runExtract(spec) {
 
   if (CONFIG.frameIds.length && !CONFIG.frameIds.every((id) => targets.some((n) => n.id === id)))
     throw new Error('요청한 frameId 없음');
-  if (CONFIG.frameNames.length && !CONFIG.frameNames.every((name) => targets.some((n) => n.name === name)))
-    throw new Error('요청한 frameName 없음');
+  if (CONFIG.frameNames.length && !CONFIG.frameNames.every((name) => targets.some((n) => n.name === name))) {
+    const missing = CONFIG.frameNames.filter((name) => !targets.some((n) => n.name === name));
+    const hints = missing.map((name) => {
+      const needle = name.toLowerCase();
+      return all
+        .filter((n) => n.name.toLowerCase().includes('tb') || n.name.toLowerCase().includes('team'))
+        .slice(0, 20)
+        .map((n) => ({ id: n.id, type: n.type, name: n.name }));
+    });
+    throw new Error(
+      '요청한 frameName 없음: ' + missing.join(', ') +
+      '\nTB/team top-level candidates=' + JSON.stringify(hints.flat())
+    );
+  }
   const frames = [];
   for (const target of targets) frames.push(await extract(target));
 
