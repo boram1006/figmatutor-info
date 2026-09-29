@@ -482,3 +482,40 @@ Lessons incorporated from that experiment:
 - semantic-token gradients are useful for bounded celebration regions
 - matching token values require actual variable binding
 - horizontal peer cards require equal-height behavior
+
+
+## 14. Large-file write strategy
+
+Kiro must not try to write a very large spec/analysis file in one generation when the file is long enough to risk truncation, timeout, or editor failure.
+
+Use incremental construction:
+
+1. create a valid skeleton first
+2. append/patch one logical section at a time
+3. keep each write small enough to complete reliably
+4. after every major section, re-read the file tail/structure before continuing
+5. after the final section:
+   - parse JSON if JSON
+   - run the relevant validator
+   - confirm no duplicate/missing braces or truncated arrays
+6. only then commit/push
+
+Recommended order for a large Figma create spec:
+- header + root screen + shared shell
+- breadcrumb / project context
+- hero/result block
+- each major content section one by one
+- follow-up/footer
+- final JSON parse + token/layout validation
+
+Do not reduce design fidelity merely to make the file shorter. Split the write operation, not the intended structure.
+
+### State-variant generation
+
+When creating another state of an existing screen (for example `AWARDED_RANK → NOT_AWARDED`):
+
+- inherit the approved information architecture and locked product scope
+- change only state-dependent content/visual treatment
+- do not invent new follow-up policies, delivery channels, dates, rewards, benefits, actions, or routes
+- if the baseline contains exploratory/mock content, either keep it explicitly mock or replace it with neutral wording; never upgrade it into factual product policy
+- run spec preflight again even when the variant was derived from an already validated spec
