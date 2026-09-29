@@ -317,6 +317,7 @@ Figma는 무료 계정 + 플러그인 왕복으로 다룬다(MCP 없음). 상세
 앞 단계로 충분하면 뒤 단계로 내려가지 않는다. 새 화면 생성은 새 visual language를 발명하는 작업이 아니다.
 
 - **색/치수/텍스트는 반드시 토큰에서.** raw hex·임의 padding 금지. 색은 semantic 변수, 여백은 space 토큰(4px 그리드), radius는 radius 토큰, 텍스트는 `Text/*` 스타일.
+- spacing/radius 값이 기존 semantic token과 정확히 일치하면 숫자만 넣지 말고 **반드시 variable binding까지 연결**한다. 예: 24px padding → `space-24`, radius 16 → `radius-16`. 값만 같고 binding이 없는 상태는 완료로 보지 않는다.
 - **재사용 컴포넌트는 인스턴스로.** 버튼·태그는 마스터(Button/Tag)의 실제 Figma instance를 배치한다. 도형으로 새로 그리지 않는다.
 - **복합 패턴은 CLONE으로.** 기존 카드·섹션·업무 블록을 비슷하게 재구성하지 않고 실제 source node를 `type:"CLONE"`으로 복제해 조합한다. clone 내부 구조는 직접 수정하지 않고 최소 patch만 허용한다.
 - **뷰포트 폭**: 데스크탑 1920 또는 1440. 세로는 콘텐츠 길이에 따라 자유(웹 랜딩). 카드 등 뷰포트가 아닌 부분 추출물은 별도 취급.
