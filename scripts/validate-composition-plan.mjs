@@ -24,6 +24,28 @@ const allowedReuse=new Set(['INSTANCE_REUSE','CLONE_COMPOSE','NEW_CONSTRUCTION']
 const allowedScope=new Set(['LOCKED_CORE','APPROVED']);
 const errors=[];
 
+if((plan.schemaVersion||1)>=3){
+  if(!plan.navigationContext || typeof plan.navigationContext!=='object')
+    errors.push('schemaVersion>=3: navigationContext 필요');
+  else {
+    for(const key of ['depth','immediateParent','returnPath','localNavigationDecision']){
+      if(!plan.navigationContext[key]) errors.push('navigationContext.'+key+' 필요');
+    }
+  }
+  if(!plan.alignmentEvidence || typeof plan.alignmentEvidence!=='object')
+    errors.push('schemaVersion>=3: alignmentEvidence 필요');
+  else {
+    for(const key of ['railMode','viewportWidth','contentWidth','centeringRule']){
+      if(plan.alignmentEvidence[key]===undefined || plan.alignmentEvidence[key]===null || plan.alignmentEvidence[key]==='')
+        errors.push('alignmentEvidence.'+key+' 필요');
+    }
+  }
+  if(!plan.surfacePolicy || typeof plan.surfacePolicy!=='object')
+    errors.push('schemaVersion>=3: surfacePolicy 필요');
+  else if(!plan.surfacePolicy.groupBoundaryRule)
+    errors.push('surfacePolicy.groupBoundaryRule 필요');
+}
+
 for(let i=0;i<regions.length;i++){
   const r=regions[i]||{};
   const label=r.region||r.id||`regions[${i}]`;
