@@ -1,0 +1,18 @@
+{
+  "op": "discover",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "terms": [
+    "H-02",
+    "first-round-result",
+    "RV-01",
+    "RV-02",
+    "final-review",
+    "J-01",
+    "J-02",
+    "J-03",
+    "dashboard",
+    "template"
+  ],
+  "_note": "One-time lightweight discovery for remaining representative archetypes (A2/A6/A7/A8). After resolving canonical frame names/nodeIds, use one batch extract with multiple frameNames; analyze frames one by one from the single snapshot."
+}
