@@ -13,7 +13,14 @@
 figma.showUI(__html__, { width: 460, height: 560 });
 
 figma.ui.onmessage = async (msg) => {
-  if (!msg || msg.type !== 'run') return;
+  if (!msg) return;
+  if (msg.type === 'resize') {
+    const width = Math.max(420, Math.min(900, Number(msg.width) || 460));
+    const height = Math.max(480, Math.min(1200, Number(msg.height) || 560));
+    figma.ui.resize(width, height);
+    return;
+  }
+  if (msg.type !== 'run') return;
   let spec;
   try {
     spec = typeof msg.spec === 'string' ? JSON.parse(msg.spec) : msg.spec;
