@@ -321,3 +321,55 @@ Representative current evidence:
 
 The evidence is cross-page. A-30 is only the immediate shell source for A-40; it is not the sole source of the product visual grammar.
 
+
+
+---
+
+## 12. Cross-screen evidence refresh — 2026-09-29
+
+Representative evidence was rechecked per archetype rather than extrapolated from A-30 alone:
+
+| Archetype | Representative evidence | Confirmed composition behavior |
+|---|---|---|
+| A1 | `N-01_notice-list` / `1:11206` | centered hero + flat list/table + pagination; do not force card layout |
+| A2 | `H-02_first-round-result_H2` / `1:22713` | expressive hero + result cards + follow-up/countdown |
+| A3 | `TB-01_team-list__recruiting_H2` / `1:21543` | hero + summary + 3-column browse cards |
+| A4 | A-30 current evidence | sidebar + status/work body |
+| A5 | A-31 current evidence | large editing/work surface |
+| A6 | `J-01_ai-review-dashboard` / `1:14166` | KPI summary + controls/template + dense table |
+| A7 | `RV-02_final-review-unfolded` / `1:6567` | split/high-density review workspace; centered rail is not mandatory |
+| A8 | `RV-01_first-review-finalize` / `1:3666` | finalization table + persistent action region; `1:3126` is incomplete-state variation |
+| A9 | A-32 current evidence | package/readiness workspace with nested artifact blocks |
+
+### Stable grammar after cross-screen comparison
+
+Repeated evidence supports the following as cross-screen grammar:
+- surface hierarchy: page/workspace → primary surface → nested subtle surface
+- standard 1440 content pages often use a 1200px rail / 120px sides
+- primary card/surface padding commonly 24px
+- primary card radius commonly 16px
+- nested block radius commonly 12px
+- compact controls commonly radius 8px
+- tags/status commonly 4px 8px padding
+- major sibling rhythm commonly 20–24px, with 32–48px for larger semantic separation
+
+These are **role-based defaults**, not mandatory geometry for every archetype.
+A7/A8 and other dense workspaces may widen the content region because task continuity and data density take priority.
+
+### Critical anti-overfitting rule
+
+Do not use A-30's sidebar/body geometry as a product-wide template.
+A-30 is valid evidence for A4/current participant shell only.
+The product-wide invariant is the surface/grouping language; the page composition must come from the target archetype/current family.
+
+### Stitch translation decision
+
+When Stitch proposes a useful block, preserve:
+- semantic parent/child grouping
+- section ordering
+- relative emphasis
+- density intent
+- useful information architecture
+
+Then select the closest target-archetype composition and rebuild the visual treatment with current Figma evidence.
+Stitch spacing/type/radius/color/shell values are never promoted into product Visual DNA.
