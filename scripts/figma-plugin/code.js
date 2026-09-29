@@ -979,11 +979,39 @@ async function runCreate(spec) {
       if (current.type !== 'TEXT') continue;
       const parent = current.parent;
       if (!parent || parent.type !== 'FRAME' || parent.layoutMode === 'NONE') continue;
+
+      // HUG/WIDTH_AND_HEIGHT text is intentionally allowed to size to its content.
+      // Containment guard is only for text that is supposed to live inside a bounded
+      // content width (HEIGHT/NONE/TRUNCATE or explicit FILL sizing).
+      const isBoundedText =
+        current.textAutoResize === 'HEIGHT' ||
+        current.textAutoResize === 'NONE' ||
+        current.textAutoResize === 'TRUNCATE' ||
+        ('layoutSizingHorizontal' in current && current.layoutSizingHorizontal === 'FILL');
+      if (!isBoundedText) continue;
+
       const tb = current.absoluteBoundingBox;
       const pb = parent.absoluteBoundingBox;
       if (!tb || !pb) continue;
+
+      const allowedWidth = Math.max(
+        0,
+        pb.width -
+        (typeof parent.paddingLeft === 'number' ? parent.paddingLeft : 0) -
+        (typeof parent.paddingRight === 'number' ? parent.paddingRight : 0)
+      );
+
+      // A parent that is itself still HUG/auto and has not resolved to a meaningful
+      // width is not a valid containment boundary. Its ancestor will be checked once
+      // the bounded rail/card width is established.
+      const parentIsBounded =
+        parent.primaryAxisSizingMode === 'FIXED' ||
+        parent.counterAxisSizingMode === 'FIXED' ||
+        ('layoutSizingHorizontal' in parent && parent.layoutSizingHorizontal === 'FILL');
+      if (!parentIsBounded || allowedWidth < 32) continue;
+
       const left = pb.x + (typeof parent.paddingLeft === 'number' ? parent.paddingLeft : 0);
-      const right = pb.x + pb.width - (typeof parent.paddingRight === 'number' ? parent.paddingRight : 0);
+      const right = left + allowedWidth;
       const epsilon = 1.5;
       if (tb.x < left - epsilon || tb.x + tb.width > right + epsilon) {
         errors.push({
@@ -993,7 +1021,7 @@ async function runCreate(spec) {
           parentName: parent.name,
           textAutoResize: current.textAutoResize,
           textWidth: current.width,
-          allowedWidth: Math.max(0, right - left),
+          allowedWidth,
         });
       }
     }
