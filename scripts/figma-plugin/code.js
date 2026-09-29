@@ -811,6 +811,12 @@ async function runCreate(spec) {
       default: throw new Error('지원하지 않는 노드 타입: ' + node.type);
     }
     if (node.name) n.name = node.name;
+
+    // Figma createFrame()/createComponent() start with a default white fill.
+    // Harness wrappers must be transparent unless the spec explicitly declares a surface.
+    if ((node.type === 'FRAME' || node.type === 'COMPONENT') && node.fills === undefined && 'fills' in n)
+      n.fills = [];
+
     // Attach to parent BEFORE sizing so auto-layout sizing applies correctly.
     if (parent) parent.appendChild(n);
     else page.appendChild(n);
