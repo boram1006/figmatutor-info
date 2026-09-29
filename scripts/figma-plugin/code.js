@@ -923,8 +923,8 @@ async function runCreate(spec) {
         n.resize(node.width, Math.max(1, n.height));
       }
 
-      if (node.fills) n.fills = node.fills.map((p) => paintFrom(p, semanticByName, imageHashes));
-      if (node.strokes) n.strokes = node.strokes.map((p) => paintFrom(p, semanticByName, imageHashes));
+      if (node.fills) n.fills = await Promise.all(node.fills.map((p) => paintFrom(p, semanticByName, imageHashes)));
+      if (node.strokes) n.strokes = await Promise.all(node.strokes.map((p) => paintFrom(p, semanticByName, imageHashes)));
       applyMetrics(n, node.metrics, node.bindings, semanticByName);
     } else if (typeof node.width === 'number' || typeof node.height === 'number' || node.layout) {
       throw new Error('CLONE geometry/layout 직접 재설정 금지. 원본 패턴 geometry를 보존: ' + node.sourceNodeId);
@@ -1040,12 +1040,56 @@ function applyMetrics(n, metrics, bindings, semanticByName) {
   }
 }
 
-function paintFrom(p, semanticByName, imageHashes) {
+async function resolveColorVariableValue(variable, seen = new Set()) {
+  if (!variable || seen.has(variable.id)) throw new Error('COLOR variable alias 순환/누락');
+  seen.add(variable.id);
+  const collection = await figma.variables.getVariableCollectionByIdAsync(variable.variableCollectionId);
+  if (!collection) throw new Error('variable collection 없음: ' + variable.variableCollectionId);
+  const value = variable.valuesByMode?.[collection.defaultModeId];
+  if (value && typeof value === 'object' && value.type === 'VARIABLE_ALIAS') {
+    const target = await figma.variables.getVariableByIdAsync(value.id);
+    return resolveColorVariableValue(target, seen);
+  }
+  if (!value || typeof value.r !== 'number' || typeof value.g !== 'number' || typeof value.b !== 'number')
+    throw new Error('gradient stop에 사용할 COLOR variable 값 아님: ' + variable.name);
+  return { r:value.r, g:value.g, b:value.b, a:typeof value.a === 'number' ? value.a : 1 };
+}
+
+async function paintFrom(p, semanticByName, imageHashes) {
   if (p.type === 'IMAGE') {
     const hash = p.imageHash || (p.assetId ? imageHashes[p.assetId] : null);
     if (!hash) throw new Error('IMAGE paint에 imageHash/assetId 필요');
     return { type: 'IMAGE', scaleMode: p.scaleMode || 'FIT', imageHash: hash };
   }
+
+  if (p.type === 'GRADIENT_LINEAR') {
+    if (!Array.isArray(p.stops) || p.stops.length < 2)
+      throw new Error('GRADIENT_LINEAR stops는 2개 이상 필요');
+    const gradientStops = [];
+    for (const stop of p.stops) {
+      let color;
+      if (stop.binding) {
+        const v = semanticByName.get(stop.binding);
+        if (!v) throw new Error('gradient stop semantic 변수 없음: ' + stop.binding);
+        color = await resolveColorVariableValue(v);
+      } else {
+        const raw = hexToRgb(stop.color || '#000000');
+        color = {r:raw.r,g:raw.g,b:raw.b,a:raw.a ?? 1};
+      }
+      const opacity = typeof stop.opacity === 'number' ? stop.opacity : 1;
+      gradientStops.push({
+        position: stop.position,
+        color: {r:color.r,g:color.g,b:color.b,a:color.a * opacity},
+      });
+    }
+    return {
+      type:'GRADIENT_LINEAR',
+      gradientTransform: p.gradientTransform || [[1,0,0],[0,1,0]],
+      gradientStops,
+      opacity: typeof p.opacity === 'number' ? p.opacity : 1,
+    };
+  }
+
   // SOLID
   const color = hexToRgb(p.color || '#000000');
   const paint = { type: 'SOLID', color: { r: color.r, g: color.g, b: color.b }, opacity: color.a ?? 1 };
