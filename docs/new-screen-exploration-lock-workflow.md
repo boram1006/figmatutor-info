@@ -63,6 +63,9 @@ Lock된 product scope만 사용해 composition plan을 만든 뒤 Figma spec을 
 
 ## 3. 외부 생성물(Stitch 등) 사용 규칙
 
+> 캡처 + HTML/CSS + optional Figma-copy code를 실제 Kiro/Figma 작업으로 연결할 때는
+> `docs/kiro-external-reference-to-figma-workflow.md`를 정식 실행 절차로 사용한다.
+
 외부 생성물은 두 층으로 분리해서 본다.
 
 ### 가져올 수 있는 것
