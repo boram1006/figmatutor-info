@@ -5,7 +5,7 @@
   "_task": "v6 A-40 NOT_AWARDED (미입상) — code-informed-v4 base에서 상태 확장",
   "_base": "design/operations/v6-judging-result/spec-create-a40-code-informed-v4.json",
   "_contentStatus": "MOCK_FOR_VISUAL_EXPLORATION",
-  "_notes": "v4(AWARDED_RANK) 대비 미입상 차이만 반영. Hero 축하 gradient/트로피 → 중립 헤더(background-subtle). 순위 배지(Primary) → 중립(secondary '본선 미입상'). Project Meta 배지 → '본선 진출 TOP 30'. 시상식 안내 → 결과/피드백 후속 안내. 구조/토큰/1200 rail/헤더 CLONE(1:23010)/투명 래퍼/텍스트 wrap는 v4와 동일. 좌표만 x=12800. Peer horizontal cards use vertical FILL for equal height. NOT_AWARDED follow-up copy is neutralized to avoid unsupported policy/channel claims.",
+  "_notes": "v4(AWARDED_RANK) 대비 미입상 차이만 반영. Hero 축하 gradient/트로피 → 중립 헤더(background-subtle). 순위 배지(Primary) → 중립(secondary '본선 미입상'). Project Meta 배지 → '본선 진출 TOP 30'. 시상식 안내 → 결과/피드백 후속 안내. 구조/토큰/1200 rail/헤더 CLONE(1:23010)/투명 래퍼/텍스트 wrap는 v4와 동일. 좌표만 x=12800. Peer horizontal cards use vertical FILL for equal height. NOT_AWARDED follow-up copy is neutralized to avoid unsupported policy/channel claims. NOT_AWARDED hero now states the final outcome explicitly in the first viewport; TOP 30 remains supporting context rather than the final result.",
   "nodes": [
     {
       "type": "FRAME",
@@ -321,7 +321,7 @@
                       "type": "TEXT",
                       "name": "Header Headline",
                       "textStyle": "Text/h1",
-                      "characters": "CodeReview Team의 본선 심사가\n완료되었습니다.",
+                      "characters": "이번 본선에서는 수상팀으로\n선정되지 않았습니다.",
                       "fills": [
                         {
                           "type": "SOLID",
@@ -336,7 +336,7 @@
                       "type": "TEXT",
                       "name": "Header Narrative",
                       "textStyle": "Text/body-lg",
-                      "characters": "본선 진출 30개 팀을 대상으로 한 AI 정량·정성 분석과 전문 심사위원단 평가가 모두 완료되었습니다. 아쉽게도 이번 수상에는 선정되지 못했으나, 심사 과정에서 확인된 강점과 피드백을 아래에서 확인하실 수 있습니다.",
+                      "characters": "본선 심사는 모두 완료되었습니다. 심사 과정에서 확인된 주요 강점과 평가 의견을 아래에서 확인하실 수 있습니다.",
                       "fills": [
                         {
                           "type": "SOLID",
@@ -431,7 +431,7 @@
                       "type": "TEXT",
                       "name": "Result Rank",
                       "textStyle": "Text/h2",
-                      "characters": "본선 진출",
+                      "characters": "수상 미선정",
                       "fills": [
                         {
                           "type": "SOLID",
@@ -446,7 +446,7 @@
                       "type": "TEXT",
                       "name": "Result Sub",
                       "textStyle": "Text/body-sm-semibold",
-                      "characters": "TOP 30",
+                      "characters": "본선 진출 TOP 30",
                       "fills": [
                         {
                           "type": "SOLID",
