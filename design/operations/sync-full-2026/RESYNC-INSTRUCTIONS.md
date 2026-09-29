@@ -106,3 +106,12 @@ npm run audit
 - Permanent rule:
   - generation contracts are not valid merely because JSON contains geometry/alignment fields; plugin create must have parity with the extract/layout schema.
   - when a generated layout collapses globally, inspect create-runtime property application before compensating by changing design rules or adding arbitrary widths.
+
+
+### Peer-card height mismatch
+- Observation: horizontally adjacent same-level cards can end up with different heights when every card is generated with vertical HUG.
+- Permanent rule:
+  - row/grid may HUG tallest content
+  - same-row peer cards use vertical FILL/STRETCH so heights resolve equally
+  - internal content can HUG; use SPACE_BETWEEN/flexible content layout when bottom metadata or tags should align
+  - intentional masonry/asymmetry requires explicit composition evidence
