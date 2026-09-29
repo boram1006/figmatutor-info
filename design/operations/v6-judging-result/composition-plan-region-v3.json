@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 2,
+  "task": "v6-judging-result/A-40",
+  "variant": "region-composed-v3",
+  "status": "VISUAL_EXPLORATION",
+  "contentPolicy": "Selected screenshot structure is approved for composition exploration. Literal claims/dates/amounts remain mock unless confirmed in PRD.",
+  "targetArchetype": {
+    "primary": "A4",
+    "supporting": [
+      "A2",
+      "A1"
+    ],
+    "rationale": "A-40 stays in participant My Page shell; A2 contributes result emphasis; A1 contributes readable follow-up information treatment."
+  },
+  "sourceMap": "design/operations/v6-judging-result/external-region-source-map-v3.md",
+  "policy": {
+    "productTruth": "design/operations/prd-v6/PRD.md",
+    "visualTruth": "design/03-design-rules/generation/product-visual-grammar.md",
+    "archetypeTruth": "design/03-design-rules/generation/page-archetypes.md",
+    "externalRule": "Captured Stitch regions provide grouping/sequence/emphasis only. Product grammar controls all visual styling."
+  },
+  "regions": [
+    {
+      "region": "shell",
+      "purpose": "A-40를 A-30 이후 참가자 My Page 흐름 안에 유지한다",
+      "source": {
+        "type": "FIGMA",
+        "nodeId": "1:23009"
+      },
+      "reuseMode": "CLONE_COMPOSE",
+      "productScope": "LOCKED_CORE",
+      "inspectBeforeBuild": true
+    },
+    {
+      "region": "project-meta-and-result-hero",
+      "purpose": "프로젝트 맥락과 수상 결과를 첫 시야에서 명확히 전달한다",
+      "source": "capture-01 / external-region-source-map-v3.md",
+      "reuseMode": "NEW_CONSTRUCTION",
+      "productScope": "LOCKED_CORE",
+      "inspectBeforeBuild": false,
+      "visualEvidence": {
+        "typography": "product Text/h2 + Text/h3-bold + Text/body-sm/body roles",
+        "spacing": "8 title-lead micro gap, 20/24 internal and section rhythm from product grammar",
+        "surface": "white primary outlined surfaces; no Stitch gradient/shadow",
+        "radius": "16 primary, 12 nested, 8 compact"
+      },
+      "externalSource": {
+        "type": "STITCH",
+        "keep": [
+          "grouping",
+          "section-order",
+          "relative-emphasis",
+          "density-intent"
+        ],
+        "translateWithProductGrammar": [
+          "typography",
+          "spacing",
+          "surface",
+          "radius"
+        ]
+      }
+    },
+    {
+      "region": "key-achievements",
+      "purpose": "핵심 성과 3개를 병렬로 스캔한다",
+      "source": "capture-02 / external-region-source-map-v3.md",
+      "reuseMode": "NEW_CONSTRUCTION",
+      "productScope": "APPROVED",
+      "inspectBeforeBuild": false,
+      "visualEvidence": {
+        "typography": "Text/h3-bold section heading, Text/h4 item heading, Text/body-sm/caption details",
+        "spacing": "24 outer padding, 16 card gap, 16/20 nested padding",
+        "surface": "one parent white outlined group containing three nested subtle blocks",
+        "radius": "16 parent, 12 nested"
+      },
+      "externalSource": {
+        "type": "STITCH",
+        "keep": [
+          "grouping",
+          "relative-emphasis",
+          "density-intent"
+        ],
+        "translateWithProductGrammar": [
+          "typography",
+          "spacing",
+          "surface",
+          "radius"
+        ]
+      }
+    },
+    {
+      "region": "judges-aggregate-review",
+      "purpose": "종합평을 먼저 읽고 세부 심사 관점을 뒤에서 보강한다",
+      "source": "capture-03 / external-region-source-map-v3.md",
+      "reuseMode": "NEW_CONSTRUCTION",
+      "productScope": "APPROVED",
+      "inspectBeforeBuild": false,
+      "visualEvidence": {
+        "typography": "Text/h3-bold + Text/body-sm + Text/body-lg roles",
+        "spacing": "24 outer padding, 20 nested quote padding, 16 supporting card gap",
+        "surface": "one primary white outlined group; aggregate quote and three comments as nested subtle blocks",
+        "radius": "16 parent, 12 nested"
+      },
+      "externalSource": {
+        "type": "STITCH",
+        "keep": [
+          "grouping",
+          "section-order",
+          "relative-emphasis"
+        ],
+        "translateWithProductGrammar": [
+          "typography",
+          "spacing",
+          "surface",
+          "radius"
+        ]
+      }
+    },
+    {
+      "region": "follow-up-info",
+      "purpose": "후속 시상식/네트워킹 안내를 짧고 분리된 정보 블록으로 제공한다",
+      "source": "capture-04 / external-region-source-map-v3.md",
+      "reuseMode": "NEW_CONSTRUCTION",
+      "productScope": "APPROVED",
+      "inspectBeforeBuild": false,
+      "visualEvidence": {
+        "typography": "Text/body-sm-semibold + Text/body-sm/caption",
+        "spacing": "16/20 internal padding and compact 4/8 text grouping",
+        "surface": "information notice surface using product subtle fill + neutral outline",
+        "radius": "12"
+      },
+      "externalSource": {
+        "type": "STITCH",
+        "keep": [
+          "grouping",
+          "section-order",
+          "relative-emphasis"
+        ],
+        "translateWithProductGrammar": [
+          "typography",
+          "spacing",
+          "surface",
+          "radius"
+        ]
+      }
+    }
+  ],
+  "excludedActions": [
+    "최종 제출 내용 보기",
+    "심사 상세 보기"
+  ],
+  "forbiddenCarryover": [
+    "Stitch colors",
+    "Stitch typography",
+    "Stitch shadows",
+    "Stitch radii",
+    "Stitch spacing",
+    "Stitch shell"
+  ]
+}
