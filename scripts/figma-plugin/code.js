@@ -817,6 +817,24 @@ async function runCreate(spec) {
     if ((node.type === 'FRAME' || node.type === 'COMPONENT') && node.fills === undefined && 'fills' in n)
       n.fills = [];
 
+    // Configure TEXT before attaching it to auto-layout parents.
+    // This keeps font/style mutation on a stable, unattached node and avoids
+    // lifecycle races during async font loading + parent auto-layout recalculation.
+    if (node.type === 'TEXT') {
+      const styleName = node.textStyle;
+      if (styleName) {
+        const s = textStyleByName.get(styleName);
+        if (!s) throw new Error('텍스트 스타일 없음: ' + styleName);
+        await figma.loadFontAsync(s.fontName);
+        n.fontName = s.fontName;
+        n.characters = node.characters || '';
+        await n.setTextStyleIdAsync(s.id);
+      } else {
+        await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
+        n.characters = node.characters || '';
+      }
+    }
+
     // Attach to parent BEFORE sizing so auto-layout sizing applies correctly.
     if (parent) parent.appendChild(n);
     else page.appendChild(n);
@@ -889,21 +907,6 @@ async function runCreate(spec) {
         appliedComponentProperties: node.componentProperties || null,
         patches: instancePatchReport,
       };
-    }
-
-    if (node.type === 'TEXT') {
-      const styleName = node.textStyle;
-      if (styleName) {
-        const s = textStyleByName.get(styleName);
-        if (!s) throw new Error('텍스트 스타일 없음: ' + styleName);
-        await figma.loadFontAsync(s.fontName);
-        n.fontName = s.fontName;
-        n.characters = node.characters || '';
-        await n.setTextStyleIdAsync(s.id);
-      } else {
-        await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
-        n.characters = node.characters || '';
-      }
     }
 
     // Auto layout / visual construction rules.
