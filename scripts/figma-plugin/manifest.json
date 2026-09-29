@@ -7,7 +7,11 @@
   "editorType": ["figma"],
   "networkAccess": {
     "allowedDomains": ["none"],
-    "reasoning": "클립보드 왕복만 사용한다. 로컬 브릿지는 이후 확장 시 도메인을 추가한다."
+    "devAllowedDomains": [
+      "http://localhost:3845",
+      "http://127.0.0.1:3845"
+    ],
+    "reasoning": "Development plugin may connect only to the local Design Flow Harness bridge."
   },
   "documentAccess": "dynamic-page"
 }
