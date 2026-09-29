@@ -37,3 +37,13 @@ npm run audit
   이번 재동기화는 `design` 페이지(실제 화면)가 대상.
 - 이름 바꾼 프레임은 추출 결과의 name 필드에 그대로 반영됨.
   이후 screens.json / coverage 갱신 시 이 최신 name을 기준으로 함.
+
+
+## Failure log — 2026-09-29
+
+### TB-01 exact-name extract
+- Spec: `spec-extract-tb01-by-name.json`
+- Failure: `오류: 요청한 frameName 없음`
+- Meaning: the canonical manifest name `TB-01_team-list__recruiting_H2` did not exactly match any visible top-level FRAME/COMPONENT/COMPONENT_SET/INSTANCE/SECTION on page `design`.
+- Harness fix: plugin extract now includes TB/team top-level candidate names, node ids, and node types when exact frame-name lookup fails. This prevents repeating blind name guesses.
+- Do not guess/rename the target until candidate evidence is returned by the plugin.
