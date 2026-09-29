@@ -159,6 +159,24 @@ INSTANCE 규칙:
 - **`patches`의 `nodeName`은 `components/snapshot.json`에서 확인한 실제 노드 이름만 쓴다.** 이 문서/다른 스펙의 예시에 나오는 `Label` 같은 이름을 그대로 추측해 쓰지 않는다. 컴포넌트마다, variant마다 내부 텍스트 노드 이름이 다를 수 있다(예: 현 Button은 `지원하기`/`지원취소`, Tag는 `active`/`미심사`). 실제 이름을 모르면 스냅샷에서 먼저 확인한다. 존재하지 않는 `nodeName`은 `npm run validate-tokens`가 실행 전에 실패시킨다.
 - `componentProperties`는 실제 snapshot에 존재하는 property key만 사용한다. 문서 예시를 근거로 property 이름을 발명하지 않는다.
 
+
+### 식별자 정책 — 이름은 탐색용, 실행은 nodeId 우선
+
+Figma node/frame 이름은 사람이 읽기 위한 label이며 고유 식별자가 아니다. 같은 이름이 여러 번 존재할 수 있고,
+디자인 정리 과정에서 바뀔 수도 있다.
+
+- `discover` 또는 초기 탐색 단계에서는 이름/키워드를 사용할 수 있다.
+- 한 번 실제 nodeId가 확인되면 이후 `extract`, `update`, `duplicate`, mutation 계열 작업은 **nodeId를 우선**한다.
+- `frameNames`는 nodeId를 아직 모르는 탐색/초기 추출 보조 수단이다.
+- 동일 이름이 여러 개면 fail-closed하고 후보 nodeId를 반환한다. **Figma 프레임 이름을 바꿔서 충돌을 해결하지 않는다.**
+- 동일 이름 후보가 둘 다 의미가 있을 수 있으면 둘 다 exact nodeId로 추출한 뒤, manifest/archetype/structure sanity gate로 선택한다.
+- canonical Figma node rename은 Harness workaround가 아니라 명시적인 디자인 변경으로만 수행한다.
+
+실패 사례(2026-09-29):
+`RV-01_first-review-finalize`가 두 nodeId에 존재했는데 batch extract가 이름 기반이라 실패했다.
+이후 이름 변경으로 다른 참조가 연쇄적으로 깨졌다. 현재 plugin과 reference extractor는 descendant `frameIds`를 직접 지원하며,
+대표 화면 batch도 exact nodeId 기반으로 실행한다.
+
 ### `op: "extract"` — 스냅샷 추출
 
 `scripts/figma/extract-snapshot.js`와 **동일한 추출 로직**을 플러그인 안에서 실행한다.
