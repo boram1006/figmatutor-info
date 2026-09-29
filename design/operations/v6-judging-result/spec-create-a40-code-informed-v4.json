@@ -1,0 +1,1490 @@
+{
+  "op": "create",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "_task": "v6 A-40 code-informed exploration v4",
+  "_compositionPlan": "design/operations/v6-judging-result/composition-plan-code-informed-v4.json",
+  "_sourceAnalysis": "design/operations/v6-judging-result/STITCH-CODE-ANALYSIS-v4.md",
+  "_contentStatus": "MOCK_FOR_VISUAL_EXPLORATION",
+  "_notes": "No My Page sidebar. Centered 1200 detail rail. Long text wraps. Outlines are not default. Hero and follow-up may use semantic-token gradients. Code source 1=hero/follow-up, source 2=highlights/panel review.",
+  "nodes": [
+    {
+      "type": "FRAME",
+      "key": "a40CodeV4",
+      "name": "A-40_judging-result_code-informed-v4",
+      "x": 11200,
+      "y": 4800,
+      "width": 1440,
+      "height": 1900,
+      "metadata": {
+        "role": "screen",
+        "release": "v6",
+        "screenId": "A-40",
+        "variant": "code-informed-v4",
+        "state": "AWARDED_RANK",
+        "exploration": true
+      },
+      "layout": {
+        "mode": "VERTICAL",
+        "primaryAxisSizingMode": "FIXED",
+        "counterAxisSizingMode": "FIXED",
+        "primaryAxisAlignItems": "MIN",
+        "counterAxisAlignItems": "CENTER"
+      },
+      "fills": [
+        {
+          "type": "SOLID",
+          "binding": "background-subtle-2"
+        }
+      ],
+      "children": [
+        {
+          "type": "CLONE",
+          "key": "a40Header",
+          "name": "Header",
+          "sourceNodeId": "1:23010"
+        },
+        {
+          "type": "FRAME",
+          "name": "Detail Main",
+          "width": 1200,
+          "layoutSizingHorizontal": "FIXED",
+          "layoutSizingVertical": "HUG",
+          "layout": {
+            "mode": "VERTICAL",
+            "primaryAxisSizingMode": "AUTO",
+            "counterAxisSizingMode": "FIXED",
+            "primaryAxisAlignItems": "MIN",
+            "counterAxisAlignItems": "MIN"
+          },
+          "metrics": {
+            "paddingTop": 32,
+            "paddingRight": 0,
+            "paddingBottom": 64,
+            "paddingLeft": 0,
+            "itemSpacing": 24
+          },
+          "children": [
+            {
+              "type": "FRAME",
+              "name": "Breadcrumb Row",
+              "layoutSizingHorizontal": "FILL",
+              "layoutSizingVertical": "HUG",
+              "layout": {
+                "mode": "HORIZONTAL",
+                "primaryAxisSizingMode": "AUTO",
+                "counterAxisSizingMode": "FIXED",
+                "primaryAxisAlignItems": "MIN",
+                "counterAxisAlignItems": "CENTER"
+              },
+              "metrics": {
+                "itemSpacing": 8
+              },
+              "children": [
+                {
+                  "type": "TEXT",
+                  "name": "Back Link",
+                  "textStyle": "Text/body-sm",
+                  "characters": "←  내 지원 현황으로 돌아가기",
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "binding": "text-secondary"
+                    }
+                  ],
+                  "layoutSizingHorizontal": "HUG",
+                  "layoutSizingVertical": "HUG",
+                  "textAutoResize": "WIDTH_AND_HEIGHT"
+                },
+                {
+                  "type": "TEXT",
+                  "name": "Breadcrumb Separator",
+                  "textStyle": "Text/caption",
+                  "characters": "/",
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "binding": "text-tertiary"
+                    }
+                  ],
+                  "layoutSizingHorizontal": "HUG",
+                  "layoutSizingVertical": "HUG",
+                  "textAutoResize": "WIDTH_AND_HEIGHT"
+                },
+                {
+                  "type": "TEXT",
+                  "name": "Current Page",
+                  "textStyle": "Text/body-sm-semibold",
+                  "characters": "심사 결과",
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "binding": "text-primary"
+                    }
+                  ],
+                  "layoutSizingHorizontal": "HUG",
+                  "layoutSizingVertical": "HUG",
+                  "textAutoResize": "WIDTH_AND_HEIGHT"
+                }
+              ]
+            },
+            {
+              "type": "FRAME",
+              "name": "Project Meta",
+              "layoutSizingHorizontal": "FILL",
+              "layoutSizingVertical": "HUG",
+              "layout": {
+                "mode": "VERTICAL",
+                "primaryAxisSizingMode": "AUTO",
+                "counterAxisSizingMode": "FIXED",
+                "primaryAxisAlignItems": "MIN",
+                "counterAxisAlignItems": "MIN"
+              },
+              "metrics": {
+                "paddingTop": 20,
+                "paddingRight": 24,
+                "paddingBottom": 20,
+                "paddingLeft": 24,
+                "itemSpacing": 8,
+                "topLeftRadius": 16,
+                "topRightRadius": 16,
+                "bottomLeftRadius": 16,
+                "bottomRightRadius": 16
+              },
+              "fills": [
+                {
+                  "type": "SOLID",
+                  "binding": "background-primary"
+                }
+              ],
+              "children": [
+                {
+                  "type": "INSTANCE",
+                  "key": "awardTag",
+                  "name": "최종 수상",
+                  "componentNodeId": "1:877",
+                  "variantProperties": {
+                    "속성 1": "Accent",
+                    "속성 2": "Small"
+                  },
+                  "layoutSizingHorizontal": "HUG",
+                  "layoutSizingVertical": "HUG",
+                  "patches": [
+                    {
+                      "sourceNodeId": "1:881",
+                      "characters": "최종 수상",
+                      "expectedMatches": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "TEXT",
+                  "name": "Project Title",
+                  "textStyle": "Text/h2",
+                  "characters": "AI 기반 코드 리뷰 자동화 시스템",
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "binding": "text-primary"
+                    }
+                  ],
+                  "layoutSizingHorizontal": "FILL",
+                  "layoutSizingVertical": "HUG",
+                  "textAutoResize": "HEIGHT"
+                },
+                {
+                  "type": "TEXT",
+                  "name": "Project Meta Line",
+                  "textStyle": "Text/body-sm",
+                  "characters": "CodeReview Team   ·   팀장: 최보람 (외 3명)   ·   트랙: 엔터프라이즈 AI 솔루션",
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "binding": "text-secondary"
+                    }
+                  ],
+                  "layoutSizingHorizontal": "FILL",
+                  "layoutSizingVertical": "HUG",
+                  "textAutoResize": "HEIGHT"
+                }
+              ]
+            },
+            {
+              "type": "FRAME",
+              "name": "Celebration Hero",
+              "layoutSizingHorizontal": "FILL",
+              "layoutSizingVertical": "HUG",
+              "layout": {
+                "mode": "HORIZONTAL",
+                "primaryAxisSizingMode": "FIXED",
+                "counterAxisSizingMode": "AUTO",
+                "primaryAxisAlignItems": "SPACE_BETWEEN",
+                "counterAxisAlignItems": "CENTER"
+              },
+              "metrics": {
+                "paddingTop": 32,
+                "paddingRight": 32,
+                "paddingBottom": 32,
+                "paddingLeft": 32,
+                "itemSpacing": 32,
+                "topLeftRadius": 16,
+                "topRightRadius": 16,
+                "bottomLeftRadius": 16,
+                "bottomRightRadius": 16
+              },
+              "fills": [
+                {
+                  "type": "GRADIENT_LINEAR",
+                  "stops": [
+                    {
+                      "position": 0,
+                      "binding": "background-subtle",
+                      "opacity": 1
+                    },
+                    {
+                      "position": 0.58,
+                      "binding": "background-primary",
+                      "opacity": 1
+                    },
+                    {
+                      "position": 1,
+                      "binding": "award-amber-s",
+                      "opacity": 0.18
+                    }
+                  ]
+                }
+              ],
+              "children": [
+                {
+                  "type": "FRAME",
+                  "name": "Hero Copy",
+                  "layoutSizingHorizontal": "FILL",
+                  "layoutSizingVertical": "HUG",
+                  "layout": {
+                    "mode": "VERTICAL",
+                    "primaryAxisSizingMode": "AUTO",
+                    "counterAxisSizingMode": "FIXED",
+                    "primaryAxisAlignItems": "MIN",
+                    "counterAxisAlignItems": "MIN"
+                  },
+                  "metrics": {
+                    "itemSpacing": 12
+                  },
+                  "children": [
+                    {
+                      "type": "INSTANCE",
+                      "key": "rankTag",
+                      "name": "본선 2위 · 최우수상",
+                      "componentNodeId": "1:877",
+                      "variantProperties": {
+                        "속성 1": "Primary",
+                        "속성 2": "Medium"
+                      },
+                      "layoutSizingHorizontal": "HUG",
+                      "layoutSizingVertical": "HUG",
+                      "patches": [
+                        {
+                          "sourceNodeId": "1:905",
+                          "characters": "본선 2위 · 최우수상",
+                          "expectedMatches": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "Hero Headline",
+                      "textStyle": "Text/h1",
+                      "characters": "축하합니다! CodeReview Team이\n본선 2위(최우수상)에 입상했습니다.",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-primary"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingVertical": "HUG",
+                      "textAutoResize": "HEIGHT"
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "Hero Narrative",
+                      "textStyle": "Text/body-lg",
+                      "characters": "엄격한 AI 정량·정성 분석과 전문 심사위원단의 종합 평가를 거쳐 최종 입상작으로 선정되었습니다.",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-secondary"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingVertical": "HUG",
+                      "textAutoResize": "HEIGHT"
+                    }
+                  ]
+                },
+                {
+                  "type": "FRAME",
+                  "name": "Honors Object",
+                  "width": 220,
+                  "layoutSizingHorizontal": "FIXED",
+                  "layoutSizingVertical": "HUG",
+                  "layout": {
+                    "mode": "VERTICAL",
+                    "primaryAxisSizingMode": "AUTO",
+                    "counterAxisSizingMode": "FIXED",
+                    "primaryAxisAlignItems": "MIN",
+                    "counterAxisAlignItems": "CENTER"
+                  },
+                  "metrics": {
+                    "paddingTop": 24,
+                    "paddingRight": 20,
+                    "paddingBottom": 24,
+                    "paddingLeft": 20,
+                    "itemSpacing": 8,
+                    "topLeftRadius": 12,
+                    "topRightRadius": 12,
+                    "bottomLeftRadius": 12,
+                    "bottomRightRadius": 12
+                  },
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "binding": "background-primary"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "name": "Honors Mark",
+                      "textStyle": "Text/h2",
+                      "characters": "★",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "award-first"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "HUG",
+                      "layoutSizingVertical": "HUG",
+                      "textAutoResize": "WIDTH_AND_HEIGHT"
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "Honors Label",
+                      "textStyle": "Text/caption-medium",
+                      "characters": "FINAL RESULT",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-secondary"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "HUG",
+                      "layoutSizingVertical": "HUG",
+                      "textAutoResize": "WIDTH_AND_HEIGHT"
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "Honors Rank",
+                      "textStyle": "Text/h2",
+                      "characters": "본선 2위",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-primary"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "HUG",
+                      "layoutSizingVertical": "HUG",
+                      "textAutoResize": "WIDTH_AND_HEIGHT"
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "Honors Award",
+                      "textStyle": "Text/body-sm-semibold",
+                      "characters": "최우수상",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-accent"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "HUG",
+                      "layoutSizingVertical": "HUG",
+                      "textAutoResize": "WIDTH_AND_HEIGHT"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "FRAME",
+              "name": "Highlights Section",
+              "layoutSizingHorizontal": "FILL",
+              "layoutSizingVertical": "HUG",
+              "layout": {
+                "mode": "VERTICAL",
+                "primaryAxisSizingMode": "AUTO",
+                "counterAxisSizingMode": "FIXED",
+                "primaryAxisAlignItems": "MIN",
+                "counterAxisAlignItems": "MIN"
+              },
+              "metrics": {
+                "itemSpacing": 16
+              },
+              "children": [
+                {
+                  "type": "FRAME",
+                  "name": "Highlights Intro",
+                  "layoutSizingHorizontal": "FILL",
+                  "layoutSizingVertical": "HUG",
+                  "layout": {
+                    "mode": "VERTICAL",
+                    "primaryAxisSizingMode": "AUTO",
+                    "counterAxisSizingMode": "FIXED",
+                    "primaryAxisAlignItems": "MIN",
+                    "counterAxisAlignItems": "MIN"
+                  },
+                  "metrics": {
+                    "itemSpacing": 4
+                  },
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "name": "Highlights Eyebrow",
+                      "textStyle": "Text/caption-medium",
+                      "characters": "핵심 강점 분석",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-accent"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "HUG",
+                      "layoutSizingVertical": "HUG",
+                      "textAutoResize": "WIDTH_AND_HEIGHT"
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "Highlights Title",
+                      "textStyle": "Text/h3-bold",
+                      "characters": "프로젝트 핵심 성과 3대 하이라이트",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-primary"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingVertical": "HUG",
+                      "textAutoResize": "HEIGHT"
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "Highlights Lead",
+                      "textStyle": "Text/body-sm",
+                      "characters": "심사 과정에서 공통적으로 높게 평가된 핵심 강점을 요약합니다.",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-secondary"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingVertical": "HUG",
+                      "textAutoResize": "HEIGHT"
+                    }
+                  ]
+                },
+                {
+                  "type": "FRAME",
+                  "name": "Highlights Grid",
+                  "layoutSizingHorizontal": "FILL",
+                  "layoutSizingVertical": "HUG",
+                  "layout": {
+                    "mode": "HORIZONTAL",
+                    "primaryAxisSizingMode": "FIXED",
+                    "counterAxisSizingMode": "AUTO",
+                    "primaryAxisAlignItems": "MIN",
+                    "counterAxisAlignItems": "MIN"
+                  },
+                  "metrics": {
+                    "itemSpacing": 16
+                  },
+                  "children": [
+                    {
+                      "type": "FRAME",
+                      "name": "Highlight Card",
+                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingVertical": "HUG",
+                      "layout": {
+                        "mode": "VERTICAL",
+                        "primaryAxisSizingMode": "AUTO",
+                        "counterAxisSizingMode": "FIXED",
+                        "primaryAxisAlignItems": "MIN",
+                        "counterAxisAlignItems": "MIN"
+                      },
+                      "metrics": {
+                        "paddingTop": 24,
+                        "paddingRight": 24,
+                        "paddingBottom": 24,
+                        "paddingLeft": 24,
+                        "itemSpacing": 12,
+                        "topLeftRadius": 16,
+                        "topRightRadius": 16,
+                        "bottomLeftRadius": 16,
+                        "bottomRightRadius": 16
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "background-primary"
+                        }
+                      ],
+                      "children": [
+                        {
+                          "type": "FRAME",
+                          "name": "Highlight Top",
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "layout": {
+                            "mode": "HORIZONTAL",
+                            "primaryAxisSizingMode": "AUTO",
+                            "counterAxisSizingMode": "FIXED",
+                            "primaryAxisAlignItems": "SPACE_BETWEEN",
+                            "counterAxisAlignItems": "CENTER"
+                          },
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "name": "Highlight Icon",
+                              "textStyle": "Text/h4",
+                              "characters": "✓",
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "binding": "text-accent"
+                                }
+                              ],
+                              "layoutSizingHorizontal": "HUG",
+                              "layoutSizingVertical": "HUG",
+                              "textAutoResize": "WIDTH_AND_HEIGHT"
+                            },
+                            {
+                              "type": "INSTANCE",
+                              "key": "tag-완성도",
+                              "name": "완성도",
+                              "componentNodeId": "1:877",
+                              "variantProperties": {
+                                "속성 1": "Accent",
+                                "속성 2": "Small"
+                              },
+                              "layoutSizingHorizontal": "HUG",
+                              "layoutSizingVertical": "HUG",
+                              "patches": [
+                                {
+                                  "sourceNodeId": "1:881",
+                                  "characters": "완성도",
+                                  "expectedMatches": 1
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "TEXT",
+                          "name": "Highlight Title",
+                          "textStyle": "Text/h4",
+                          "characters": "8대 필수 기능 100% 충족 및 안정적 CI/CD 구현",
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "binding": "text-primary"
+                            }
+                          ],
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "textAutoResize": "HEIGHT"
+                        },
+                        {
+                          "type": "TEXT",
+                          "name": "Highlight Body",
+                          "textStyle": "Text/body-sm",
+                          "characters": "핵심 요구 기능을 안정적으로 구현하고 주요 실행 흐름의 완성도를 확인했습니다.",
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "binding": "text-secondary"
+                            }
+                          ],
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "textAutoResize": "HEIGHT"
+                        },
+                        {
+                          "type": "TEXT",
+                          "name": "Highlight Footer",
+                          "textStyle": "Text/caption",
+                          "characters": "파이프라인 무결점 통과 · 예외 처리 견고성",
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "binding": "text-secondary"
+                            }
+                          ],
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "textAutoResize": "HEIGHT"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "Highlight Card",
+                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingVertical": "HUG",
+                      "layout": {
+                        "mode": "VERTICAL",
+                        "primaryAxisSizingMode": "AUTO",
+                        "counterAxisSizingMode": "FIXED",
+                        "primaryAxisAlignItems": "MIN",
+                        "counterAxisAlignItems": "MIN"
+                      },
+                      "metrics": {
+                        "paddingTop": 24,
+                        "paddingRight": 24,
+                        "paddingBottom": 24,
+                        "paddingLeft": 24,
+                        "itemSpacing": 12,
+                        "topLeftRadius": 16,
+                        "topRightRadius": 16,
+                        "bottomLeftRadius": 16,
+                        "bottomRightRadius": 16
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "background-primary"
+                        }
+                      ],
+                      "children": [
+                        {
+                          "type": "FRAME",
+                          "name": "Highlight Top",
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "layout": {
+                            "mode": "HORIZONTAL",
+                            "primaryAxisSizingMode": "AUTO",
+                            "counterAxisSizingMode": "FIXED",
+                            "primaryAxisAlignItems": "SPACE_BETWEEN",
+                            "counterAxisAlignItems": "CENTER"
+                          },
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "name": "Highlight Icon",
+                              "textStyle": "Text/h4",
+                              "characters": "◎",
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "binding": "text-accent"
+                                }
+                              ],
+                              "layoutSizingHorizontal": "HUG",
+                              "layoutSizingVertical": "HUG",
+                              "textAutoResize": "WIDTH_AND_HEIGHT"
+                            },
+                            {
+                              "type": "INSTANCE",
+                              "key": "tag-기술 난이도",
+                              "name": "기술 난이도",
+                              "componentNodeId": "1:877",
+                              "variantProperties": {
+                                "속성 1": "Accent",
+                                "속성 2": "Small"
+                              },
+                              "layoutSizingHorizontal": "HUG",
+                              "layoutSizingVertical": "HUG",
+                              "patches": [
+                                {
+                                  "sourceNodeId": "1:881",
+                                  "characters": "기술 난이도",
+                                  "expectedMatches": 1
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "TEXT",
+                          "name": "Highlight Title",
+                          "textStyle": "Text/h4",
+                          "characters": "할루시네이션 억제 2중 검증 아키텍처",
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "binding": "text-primary"
+                            }
+                          ],
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "textAutoResize": "HEIGHT"
+                        },
+                        {
+                          "type": "TEXT",
+                          "name": "Highlight Body",
+                          "textStyle": "Text/body-sm",
+                          "characters": "정적 규칙과 의미 기반 분석을 결합해 신뢰 가능한 코드 검증 흐름을 구성했습니다.",
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "binding": "text-secondary"
+                            }
+                          ],
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "textAutoResize": "HEIGHT"
+                        },
+                        {
+                          "type": "TEXT",
+                          "name": "Highlight Footer",
+                          "textStyle": "Text/caption",
+                          "characters": "아키텍처 독창성 · 검증 기법",
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "binding": "text-secondary"
+                            }
+                          ],
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "textAutoResize": "HEIGHT"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "Highlight Card",
+                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingVertical": "HUG",
+                      "layout": {
+                        "mode": "VERTICAL",
+                        "primaryAxisSizingMode": "AUTO",
+                        "counterAxisSizingMode": "FIXED",
+                        "primaryAxisAlignItems": "MIN",
+                        "counterAxisAlignItems": "MIN"
+                      },
+                      "metrics": {
+                        "paddingTop": 24,
+                        "paddingRight": 24,
+                        "paddingBottom": 24,
+                        "paddingLeft": 24,
+                        "itemSpacing": 12,
+                        "topLeftRadius": 16,
+                        "topRightRadius": 16,
+                        "bottomLeftRadius": 16,
+                        "bottomRightRadius": 16
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "background-primary"
+                        }
+                      ],
+                      "children": [
+                        {
+                          "type": "FRAME",
+                          "name": "Highlight Top",
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "layout": {
+                            "mode": "HORIZONTAL",
+                            "primaryAxisSizingMode": "AUTO",
+                            "counterAxisSizingMode": "FIXED",
+                            "primaryAxisAlignItems": "SPACE_BETWEEN",
+                            "counterAxisAlignItems": "CENTER"
+                          },
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "name": "Highlight Icon",
+                              "textStyle": "Text/h4",
+                              "characters": "↗",
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "binding": "text-accent"
+                                }
+                              ],
+                              "layoutSizingHorizontal": "HUG",
+                              "layoutSizingVertical": "HUG",
+                              "textAutoResize": "WIDTH_AND_HEIGHT"
+                            },
+                            {
+                              "type": "INSTANCE",
+                              "key": "tag-비즈니스 즉시성",
+                              "name": "비즈니스 즉시성",
+                              "componentNodeId": "1:877",
+                              "variantProperties": {
+                                "속성 1": "Accent",
+                                "속성 2": "Small"
+                              },
+                              "layoutSizingHorizontal": "HUG",
+                              "layoutSizingVertical": "HUG",
+                              "patches": [
+                                {
+                                  "sourceNodeId": "1:881",
+                                  "characters": "비즈니스 즉시성",
+                                  "expectedMatches": 1
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "TEXT",
+                          "name": "Highlight Title",
+                          "textStyle": "Text/h4",
+                          "characters": "LG DX 개발 환경 즉시 도입 가능한 실무 적합성",
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "binding": "text-primary"
+                            }
+                          ],
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "textAutoResize": "HEIGHT"
+                        },
+                        {
+                          "type": "TEXT",
+                          "name": "Highlight Body",
+                          "textStyle": "Text/body-sm",
+                          "characters": "현업 개발 흐름과 연결 가능한 적용성과 확장성을 갖춘 구조를 확인했습니다.",
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "binding": "text-secondary"
+                            }
+                          ],
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "textAutoResize": "HEIGHT"
+                        },
+                        {
+                          "type": "TEXT",
+                          "name": "Highlight Footer",
+                          "textStyle": "Text/caption",
+                          "characters": "실무 즉시 적용성 · 높은 확장성",
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "binding": "text-secondary"
+                            }
+                          ],
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "textAutoResize": "HEIGHT"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "FRAME",
+              "name": "Panel Review Section",
+              "layoutSizingHorizontal": "FILL",
+              "layoutSizingVertical": "HUG",
+              "layout": {
+                "mode": "VERTICAL",
+                "primaryAxisSizingMode": "AUTO",
+                "counterAxisSizingMode": "FIXED",
+                "primaryAxisAlignItems": "MIN",
+                "counterAxisAlignItems": "MIN"
+              },
+              "metrics": {
+                "itemSpacing": 16
+              },
+              "children": [
+                {
+                  "type": "FRAME",
+                  "name": "Panel Intro",
+                  "layoutSizingHorizontal": "FILL",
+                  "layoutSizingVertical": "HUG",
+                  "layout": {
+                    "mode": "VERTICAL",
+                    "primaryAxisSizingMode": "AUTO",
+                    "counterAxisSizingMode": "FIXED",
+                    "primaryAxisAlignItems": "MIN",
+                    "counterAxisAlignItems": "MIN"
+                  },
+                  "metrics": {
+                    "itemSpacing": 4
+                  },
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "name": "Panel Eyebrow",
+                      "textStyle": "Text/caption-medium",
+                      "characters": "전문 심사위원 평가",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-accent"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "HUG",
+                      "layoutSizingVertical": "HUG",
+                      "textAutoResize": "WIDTH_AND_HEIGHT"
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "Panel Title",
+                      "textStyle": "Text/h3-bold",
+                      "characters": "심사위원단 종합 평가 및 패널 총평",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-primary"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingVertical": "HUG",
+                      "textAutoResize": "HEIGHT"
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "Panel Lead",
+                      "textStyle": "Text/body-sm",
+                      "characters": "최종 심사위원의 심층 정성 심사 의견입니다.",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-secondary"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingVertical": "HUG",
+                      "textAutoResize": "HEIGHT"
+                    }
+                  ]
+                },
+                {
+                  "type": "FRAME",
+                  "name": "Consensus Quote",
+                  "layoutSizingHorizontal": "FILL",
+                  "layoutSizingVertical": "HUG",
+                  "layout": {
+                    "mode": "HORIZONTAL",
+                    "primaryAxisSizingMode": "AUTO",
+                    "counterAxisSizingMode": "AUTO",
+                    "primaryAxisAlignItems": "MIN",
+                    "counterAxisAlignItems": "MIN"
+                  },
+                  "metrics": {
+                    "paddingTop": 24,
+                    "paddingRight": 24,
+                    "paddingBottom": 24,
+                    "paddingLeft": 24,
+                    "itemSpacing": 16,
+                    "topLeftRadius": 16,
+                    "topRightRadius": 16,
+                    "bottomLeftRadius": 16,
+                    "bottomRightRadius": 16
+                  },
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "binding": "background-primary"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "name": "Quote Mark",
+                      "textStyle": "Text/h2",
+                      "characters": "“",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-accent"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "HUG",
+                      "layoutSizingVertical": "HUG",
+                      "textAutoResize": "WIDTH_AND_HEIGHT"
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "Consensus Text",
+                      "textStyle": "Text/body-lg",
+                      "characters": "문제 정의부터 기술적 해결책 도출, 그리고 프로덕션 레벨의 코드 구현까지 빈틈없이 연결된 프로젝트입니다. 데모 시연과 최종 산출물 전반에서 높은 완성도가 확인되었습니다.",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-primary"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingVertical": "HUG",
+                      "textAutoResize": "HEIGHT"
+                    }
+                  ]
+                },
+                {
+                  "type": "FRAME",
+                  "name": "Reviewer Grid",
+                  "layoutSizingHorizontal": "FILL",
+                  "layoutSizingVertical": "HUG",
+                  "layout": {
+                    "mode": "HORIZONTAL",
+                    "primaryAxisSizingMode": "FIXED",
+                    "counterAxisSizingMode": "AUTO",
+                    "primaryAxisAlignItems": "MIN",
+                    "counterAxisAlignItems": "MIN"
+                  },
+                  "metrics": {
+                    "itemSpacing": 16
+                  },
+                  "children": [
+                    {
+                      "type": "FRAME",
+                      "name": "Reviewer Card",
+                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingVertical": "HUG",
+                      "layout": {
+                        "mode": "VERTICAL",
+                        "primaryAxisSizingMode": "AUTO",
+                        "counterAxisSizingMode": "FIXED",
+                        "primaryAxisAlignItems": "MIN",
+                        "counterAxisAlignItems": "MIN"
+                      },
+                      "metrics": {
+                        "paddingTop": 24,
+                        "paddingRight": 24,
+                        "paddingBottom": 24,
+                        "paddingLeft": 24,
+                        "itemSpacing": 12,
+                        "topLeftRadius": 16,
+                        "topRightRadius": 16,
+                        "bottomLeftRadius": 16,
+                        "bottomRightRadius": 16
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "background-primary"
+                        }
+                      ],
+                      "children": [
+                        {
+                          "type": "FRAME",
+                          "name": "Reviewer Header",
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "layout": {
+                            "mode": "HORIZONTAL",
+                            "primaryAxisSizingMode": "AUTO",
+                            "counterAxisSizingMode": "FIXED",
+                            "primaryAxisAlignItems": "SPACE_BETWEEN",
+                            "counterAxisAlignItems": "CENTER"
+                          },
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "name": "Reviewer Label",
+                              "textStyle": "Text/caption-medium",
+                              "characters": "기술 독창성 탁월",
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "binding": "text-accent"
+                                }
+                              ],
+                              "layoutSizingHorizontal": "HUG",
+                              "layoutSizingVertical": "HUG",
+                              "textAutoResize": "WIDTH_AND_HEIGHT"
+                            },
+                            {
+                              "type": "TEXT",
+                              "name": "Reviewer Role",
+                              "textStyle": "Text/caption",
+                              "characters": "AI 아키텍처 심사위원",
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "binding": "text-secondary"
+                                }
+                              ],
+                              "layoutSizingHorizontal": "HUG",
+                              "layoutSizingVertical": "HUG",
+                              "textAutoResize": "WIDTH_AND_HEIGHT"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "TEXT",
+                          "name": "Reviewer Comment",
+                          "textStyle": "Text/body-sm",
+                          "characters": "복합 평가 흐름과 안정성 방어 로직의 설계가 인상적입니다. 실제 코드 검증에 필요한 방어 구조가 명확합니다.",
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "binding": "text-primary"
+                            }
+                          ],
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "textAutoResize": "HEIGHT"
+                        },
+                        {
+                          "type": "TEXT",
+                          "name": "Reviewer Footer",
+                          "textStyle": "Text/caption",
+                          "characters": "생성형 AI 검증 체계 호평",
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "binding": "text-secondary"
+                            }
+                          ],
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "textAutoResize": "HEIGHT"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "Reviewer Card",
+                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingVertical": "HUG",
+                      "layout": {
+                        "mode": "VERTICAL",
+                        "primaryAxisSizingMode": "AUTO",
+                        "counterAxisSizingMode": "FIXED",
+                        "primaryAxisAlignItems": "MIN",
+                        "counterAxisAlignItems": "MIN"
+                      },
+                      "metrics": {
+                        "paddingTop": 24,
+                        "paddingRight": 24,
+                        "paddingBottom": 24,
+                        "paddingLeft": 24,
+                        "itemSpacing": 12,
+                        "topLeftRadius": 16,
+                        "topRightRadius": 16,
+                        "bottomLeftRadius": 16,
+                        "bottomRightRadius": 16
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "background-primary"
+                        }
+                      ],
+                      "children": [
+                        {
+                          "type": "FRAME",
+                          "name": "Reviewer Header",
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "layout": {
+                            "mode": "HORIZONTAL",
+                            "primaryAxisSizingMode": "AUTO",
+                            "counterAxisSizingMode": "FIXED",
+                            "primaryAxisAlignItems": "SPACE_BETWEEN",
+                            "counterAxisAlignItems": "CENTER"
+                          },
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "name": "Reviewer Label",
+                              "textStyle": "Text/caption-medium",
+                              "characters": "현업 즉시 도입 권장",
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "binding": "text-accent"
+                                }
+                              ],
+                              "layoutSizingHorizontal": "HUG",
+                              "layoutSizingVertical": "HUG",
+                              "textAutoResize": "WIDTH_AND_HEIGHT"
+                            },
+                            {
+                              "type": "TEXT",
+                              "name": "Reviewer Role",
+                              "textStyle": "Text/caption",
+                              "characters": "DX 플랫폼 실무 심사위원",
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "binding": "text-secondary"
+                                }
+                              ],
+                              "layoutSizingHorizontal": "HUG",
+                              "layoutSizingVertical": "HUG",
+                              "textAutoResize": "WIDTH_AND_HEIGHT"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "TEXT",
+                          "name": "Reviewer Comment",
+                          "textStyle": "Text/body-sm",
+                          "characters": "실제 개발자 워크플로우에 편입하기 쉬운 구조와 적용성이 강점으로 확인되었습니다.",
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "binding": "text-primary"
+                            }
+                          ],
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "textAutoResize": "HEIGHT"
+                        },
+                        {
+                          "type": "TEXT",
+                          "name": "Reviewer Footer",
+                          "textStyle": "Text/caption",
+                          "characters": "엔터프라이즈 환경 적합",
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "binding": "text-secondary"
+                            }
+                          ],
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "textAutoResize": "HEIGHT"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FRAME",
+                      "name": "Reviewer Card",
+                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingVertical": "HUG",
+                      "layout": {
+                        "mode": "VERTICAL",
+                        "primaryAxisSizingMode": "AUTO",
+                        "counterAxisSizingMode": "FIXED",
+                        "primaryAxisAlignItems": "MIN",
+                        "counterAxisAlignItems": "MIN"
+                      },
+                      "metrics": {
+                        "paddingTop": 24,
+                        "paddingRight": 24,
+                        "paddingBottom": 24,
+                        "paddingLeft": 24,
+                        "itemSpacing": 12,
+                        "topLeftRadius": 16,
+                        "topRightRadius": 16,
+                        "bottomLeftRadius": 16,
+                        "bottomRightRadius": 16
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "background-primary"
+                        }
+                      ],
+                      "children": [
+                        {
+                          "type": "FRAME",
+                          "name": "Reviewer Header",
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "layout": {
+                            "mode": "HORIZONTAL",
+                            "primaryAxisSizingMode": "AUTO",
+                            "counterAxisSizingMode": "FIXED",
+                            "primaryAxisAlignItems": "SPACE_BETWEEN",
+                            "counterAxisAlignItems": "CENTER"
+                          },
+                          "children": [
+                            {
+                              "type": "TEXT",
+                              "name": "Reviewer Label",
+                              "textStyle": "Text/caption-medium",
+                              "characters": "코드베이스 완성도 우수",
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "binding": "text-accent"
+                                }
+                              ],
+                              "layoutSizingHorizontal": "HUG",
+                              "layoutSizingVertical": "HUG",
+                              "textAutoResize": "WIDTH_AND_HEIGHT"
+                            },
+                            {
+                              "type": "TEXT",
+                              "name": "Reviewer Role",
+                              "textStyle": "Text/caption",
+                              "characters": "소프트웨어 품질 심사위원",
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "binding": "text-secondary"
+                                }
+                              ],
+                              "layoutSizingHorizontal": "HUG",
+                              "layoutSizingVertical": "HUG",
+                              "textAutoResize": "WIDTH_AND_HEIGHT"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "TEXT",
+                          "name": "Reviewer Comment",
+                          "textStyle": "Text/body-sm",
+                          "characters": "모듈화와 문서 정합성, 유지보수 관점에서 안정적인 완성도를 보여줍니다.",
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "binding": "text-primary"
+                            }
+                          ],
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "textAutoResize": "HEIGHT"
+                        },
+                        {
+                          "type": "TEXT",
+                          "name": "Reviewer Footer",
+                          "textStyle": "Text/caption",
+                          "characters": "클린 코드 & 문서화 체계",
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "binding": "text-secondary"
+                            }
+                          ],
+                          "layoutSizingHorizontal": "FILL",
+                          "layoutSizingVertical": "HUG",
+                          "textAutoResize": "HEIGHT"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "FRAME",
+              "name": "Ceremony Follow-up",
+              "layoutSizingHorizontal": "FILL",
+              "layoutSizingVertical": "HUG",
+              "layout": {
+                "mode": "HORIZONTAL",
+                "primaryAxisSizingMode": "AUTO",
+                "counterAxisSizingMode": "AUTO",
+                "primaryAxisAlignItems": "MIN",
+                "counterAxisAlignItems": "MIN"
+              },
+              "metrics": {
+                "paddingTop": 20,
+                "paddingRight": 24,
+                "paddingBottom": 20,
+                "paddingLeft": 24,
+                "itemSpacing": 12,
+                "topLeftRadius": 12,
+                "topRightRadius": 12,
+                "bottomLeftRadius": 12,
+                "bottomRightRadius": 12
+              },
+              "fills": [
+                {
+                  "type": "GRADIENT_LINEAR",
+                  "stops": [
+                    {
+                      "position": 0,
+                      "binding": "background-surface",
+                      "opacity": 1
+                    },
+                    {
+                      "position": 1,
+                      "binding": "background-subtle",
+                      "opacity": 1
+                    }
+                  ]
+                }
+              ],
+              "children": [
+                {
+                  "type": "TEXT",
+                  "name": "Ceremony Icon",
+                  "textStyle": "Text/h4",
+                  "characters": "▣",
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "binding": "award-amber-s"
+                    }
+                  ],
+                  "layoutSizingHorizontal": "HUG",
+                  "layoutSizingVertical": "HUG",
+                  "textAutoResize": "WIDTH_AND_HEIGHT"
+                },
+                {
+                  "type": "FRAME",
+                  "name": "Ceremony Copy",
+                  "layoutSizingHorizontal": "FILL",
+                  "layoutSizingVertical": "HUG",
+                  "layout": {
+                    "mode": "VERTICAL",
+                    "primaryAxisSizingMode": "AUTO",
+                    "counterAxisSizingMode": "FIXED",
+                    "primaryAxisAlignItems": "MIN",
+                    "counterAxisAlignItems": "MIN"
+                  },
+                  "metrics": {
+                    "itemSpacing": 4
+                  },
+                  "children": [
+                    {
+                      "type": "TEXT",
+                      "name": "Ceremony Title",
+                      "textStyle": "Text/body-sm-semibold",
+                      "characters": "시상식 및 오프라인 네트워킹 데이 안내",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-primary"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingVertical": "HUG",
+                      "textAutoResize": "HEIGHT"
+                    },
+                    {
+                      "type": "TEXT",
+                      "name": "Ceremony Body",
+                      "textStyle": "Text/body-sm",
+                      "characters": "일정 및 장소는 확정 후 팀장 연락처와 등록 이메일로 별도 안내됩니다.",
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "binding": "text-secondary"
+                        }
+                      ],
+                      "layoutSizingHorizontal": "FILL",
+                      "layoutSizingVertical": "HUG",
+                      "textAutoResize": "HEIGHT"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
