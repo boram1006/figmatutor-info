@@ -519,3 +519,28 @@ When creating another state of an existing screen (for example `AWARDED_RANK →
 - do not invent new follow-up policies, delivery channels, dates, rewards, benefits, actions, or routes
 - if the baseline contains exploratory/mock content, either keep it explicitly mock or replace it with neutral wording; never upgrade it into factual product policy
 - run spec preflight again even when the variant was derived from an already validated spec
+
+
+## Existing artifact format inheritance
+
+When creating an artifact that already has an established in-product/repo format (for example PRD yellow boxes, QA notes, release annotations, state matrices), **do not invent a new presentation format**.
+
+Before generating:
+1. find the latest same-type artifact in the repo/Figma evidence
+2. treat its information hierarchy, typography roles, spacing, surface treatment, width, and section naming pattern as the format baseline
+3. change only the new release/task content unless the user explicitly asks to redesign the format
+4. if multiple historical formats exist, use the latest canonical one or ask only when the canonical source is genuinely ambiguous
+
+For Figma PRD yellow boxes, the current baseline is the existing v5 PRD yellow-box pattern:
+- 900px fixed width
+- warning/yellow surface
+- 48px padding
+- 20px vertical gap
+- `Text/title` title
+- `Text/body` lead
+- screen heading in `Text/h2`
+- repeated `Text/h3-bold` heading + `Text/body-sm` body blocks
+- common/dependency section in the same hierarchy
+- final note in `Text/caption`
+
+Do not replace this with a newly invented card/section layout merely because the PRD content changed.
