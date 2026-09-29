@@ -103,9 +103,11 @@ Do not choose spacing because the external reference uses that px value. Identif
 
 ---
 
-## 4. Surface and outline grammar is mandatory for information grouping
+## 4. Grouping grammar: boundary is mandatory, outline is not
 
-The product does **not** rely on whitespace alone to group functional information.
+A functional group must be perceptible, but **a border is only one possible boundary cue**.
+Use the lightest cue that preserves grouping: spacing, surface contrast, divider, outline, or true elevation/shadow.
+Do not add an outline merely because the element is a card-like rectangle.
 
 ### Page background
 
@@ -115,11 +117,11 @@ Current functional participant screens commonly use:
 ### Outer functional group
 
 Repeated evidence:
-- white/`text-inverse` surface
-- thin neutral outline: commonly `border-disabled` or the current family-equivalent neutral border
-- radius **16**
+- white/`text-inverse` or family-appropriate raised surface
+- radius **16** is common for major grouped surfaces
 - padding **24** for entity/status cards
 - padding **32** for larger form/workspace containers
+- neutral outline is common where entity boundaries would otherwise disappear, but is **not mandatory** when surface contrast, spacing/divider, or legitimate elevation already establishes the group
 
 Examples:
 - A-30 status cards: radius 16, padding 24, outline
@@ -157,7 +159,7 @@ Before finalizing any generated functional screen, ask:
 
 > If the labels were removed, can a viewer still see which elements belong to the same information group?
 
-If not, the layout is missing a surface, outline, divider, or spacing boundary.
+If not, add the minimum necessary grouping cue: stronger spacing, surface contrast, divider, outline, or legitimate elevation.
 
 **Forbidden default:** many white child blocks floating on a light page background with no parent grouping.
 
@@ -373,3 +375,71 @@ When Stitch proposes a useful block, preserve:
 
 Then select the closest target-archetype composition and rebuild the visual treatment with current Figma evidence.
 Stitch spacing/type/radius/color/shell values are never promoted into product Visual DNA.
+
+
+---
+
+## 13. Navigation depth before shell reuse
+
+Do not clone a predecessor sidebar merely because the target screen is reached from that predecessor.
+
+Before inheriting local navigation, classify the target depth:
+
+- **hub/list screen**: persistent My Page navigation may remain if it represents the current level.
+- **entity detail / child result screen**: preserve the selected entity context and provide an explicit return path to the immediate parent.
+- If a sidebar action would jump over the immediate parent level, the sidebar is not valid local navigation for that child screen.
+
+For a child such as:
+`My Page → 내 지원 현황 → selected application → 심사 결과`
+
+the minimum navigation context is:
+1. explicit back/breadcrumb to **내 지원 현황** or the selected application context,
+2. current screen label,
+3. global navigation as appropriate.
+
+Do not force the My Page sidebar into the child screen unless the real product flow proves that it remains persistent.
+
+External evidence may reveal this information architecture even when its visual styling is not reused.
+
+---
+
+## 14. Text containment and wrapping is a generation invariant
+
+Text must not exceed the content box that owns it.
+
+For every generated non-chip text block:
+- give it a bounded content width through parent FILL/fixed width,
+- use height-growing wrap behavior rather than width-growing behavior,
+- long Korean/English mixed copy must wrap inside the parent,
+- verify the generated text bounding box against the parent content box after creation.
+
+Do not leave body/title text as unconstrained `WIDTH_AND_HEIGHT` auto-resize inside a fixed-width card.
+A visually correct screenshot with clipped/overflowing text is a generation failure.
+
+---
+
+## 15. Centering and rail geometry must be preserved explicitly
+
+A width value alone does not preserve a centered rail.
+
+When evidence shows a centered content rail:
+- preserve both the rail width **and** its centering relationship to the viewport,
+- root/page auto-layout alignment must explicitly center the rail or reproduce measured left/right margins,
+- after generation verify left and right viewport margins are equal within tolerance.
+
+Do not reconstruct `width:1200` and assume Figma will center it automatically.
+
+---
+
+## 16. Celebration surfaces may use bounded expressive color
+
+Result/award states are allowed to carry more visual expression than ordinary functional cards.
+
+For A2 or A4+A2 result screens:
+- a hero may use product-semantic accent gradients, tinted layers, or soft ambient shapes,
+- accent treatment must remain inside a bounded celebration region rather than recoloring the whole functional shell,
+- use existing semantic/brand colors as endpoints; external raw colors are reference only,
+- shadow may support a hero/honors object when it represents actual elevation or celebration emphasis,
+- surrounding functional sections return to normal product surfaces.
+
+Therefore `external color cannot be copied` does **not** mean `generated result screens must be colorless`.
