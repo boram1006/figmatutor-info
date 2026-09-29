@@ -213,6 +213,48 @@ function collectRefs(node, path, tokenRefs, componentRefs) {
   }
 }
 
+function collectLayoutIssues(node, path, issues) {
+  if (Array.isArray(node)) {
+    node.forEach((v, i) => collectLayoutIssues(v, `${path}[${i}]`, issues));
+    return;
+  }
+  if (!node || typeof node !== 'object') return;
+
+  const children = Array.isArray(node.children) ? node.children : [];
+  const isHorizontal = node.type === 'FRAME' && node.layout?.mode === 'HORIZONTAL';
+  if (isHorizontal && children.length >= 2) {
+    const cardChildren = children.filter((c) =>
+      c && c.type === 'FRAME' && /card$/i.test(String(c.name || '').trim())
+    );
+    const sameNameGroups = new Map();
+    for (const c of children.filter((c) => c && c.type === 'FRAME' && c.name)) {
+      const key = String(c.name);
+      const arr = sameNameGroups.get(key) || [];
+      arr.push(c);
+      sameNameGroups.set(key, arr);
+    }
+    const repeated = [...sameNameGroups.values()].flatMap((arr) => arr.length >= 2 ? arr : []);
+    const peerCards = [...new Set([...cardChildren, ...repeated])];
+    if (peerCards.length >= 2) {
+      for (const c of peerCards) {
+        if (c.layoutSizingVertical !== 'FILL') {
+          issues.push({
+            kind: 'peerCardHeight',
+            at: path,
+            parentName: node.name || null,
+            childName: c.name || null,
+            value: c.layoutSizingVertical || null,
+          });
+        }
+      }
+    }
+  }
+
+  for (let i = 0; i < children.length; i++) {
+    collectLayoutIssues(children[i], `${path}.children[${i}]`, issues);
+  }
+}
+
 function findAllSpecs() {
   const results = [];
   const walk = (dir) => {
@@ -268,9 +310,175 @@ for (const sp of specPaths) {
 
   const tokenRefs = [];
   const componentRefs = [];
-  collectRefs(spec, '$', tokenRefs, componentRefs);
+  collectRefs(spec, '
+
+  for (const r of tokenRefs) {
+    if (r.kind === 'semantic' && !semantic.has(r.value)) bad.push(r);
+    if (r.kind === 'textStyle' && !textStyles.has(r.value)) bad.push(r);
+  }
+
+  for (const c of componentRefs) {
+    if (typeof c.componentNodeId !== 'string' || !c.componentNodeId) {
+      bad.push({
+        kind: 'component',
+        field: 'componentNodeId',
+        value: String(c.componentNodeId),
+        at: c.at,
+      });
+    } else if (!catalogNodeIds.has(c.componentNodeId)) {
+      bad.push({
+        kind: 'component',
+        field: 'componentNodeId',
+        value: c.componentNodeId,
+        at: c.at,
+      });
+    } else if (componentSnapshotIndex && Array.isArray(c.patchNodeNames)) {
+      const setNames = componentSnapshotIndex.namesBySet.get(c.componentNodeId);
+      const variantResolution = resolveVariant(
+        componentSnapshotIndex,
+        c.componentNodeId,
+        c.variantProperties
+      );
+
+      if (variantResolution && variantResolution.matches.length !== 1) {
+        bad.push({
+          kind: 'variantResolution',
+          field: 'variantProperties',
+          value: JSON.stringify(variantResolution.requested),
+          componentNodeId: c.componentNodeId,
+          matches: variantResolution.matches.map((v) => v.name),
+          at: c.at,
+        });
+        continue;
+      }
+
+      const selectedVariant =
+        variantResolution && variantResolution.matches.length === 1
+          ? variantResolution.matches[0]
+          : null;
+      const names = selectedVariant ? new Set(selectedVariant.names) : setNames;
+
+      for (const p of c.patchNodeNames) {
+        if (names && !names.has(p.nodeName)) {
+          bad.push({
+            kind: 'patchNodeName',
+            field: 'patches.nodeName',
+            value: p.nodeName,
+            componentNodeId: c.componentNodeId,
+            variantName: selectedVariant?.name || null,
+            names,
+            at: p.at,
+          });
+          continue;
+        }
+
+        if (names && p.expectedMatches !== null) {
+          const actualMatches = [...names].filter((n) => n === p.nodeName).length;
+          // names는 Set이라 이름 중복 개수까지는 보존하지 않는다. expectedMatches=1인 일반 patch는
+          // selected variant 안의 존재 여부로 충분히 preflight하고, 실제 중복은 plugin runtime이 최종 검증한다.
+          if (p.expectedMatches === 0 && actualMatches !== 0) {
+            bad.push({
+              kind: 'patchExpectedMatches',
+              field: 'patches.expectedMatches',
+              value: p.expectedMatches,
+              actualMatches,
+              nodeName: p.nodeName,
+              componentNodeId: c.componentNodeId,
+              variantName: selectedVariant?.name || null,
+              at: p.at,
+            });
+          }
+        }
+      }
+    }
+  }
+
+  checked++;
+
+  if (!bad.length) {
+    console.log(
+      `OK   ${sp} (${tokenRefs.length}개 토큰, ${componentRefs.length}개 INSTANCE 참조 유효)`
+    );
+    continue;
+  }
+
+  hadError = true;
+  console.error(`\nFAIL ${sp}`);
+
+  for (const b of bad) {
+    if (b.kind === 'peerCardHeight') {
+      console.error(
+        `  - horizontal peer card는 동일 높이를 위해 layoutSizingVertical="FILL" 필요: parent="${b.parentName || '(unnamed)'}", child="${b.childName || '(unnamed)'}", current="${b.value}" (${b.at})`
+      );
+      continue;
+    }
+
+    if (b.kind === 'component') {
+      console.error(
+        `  - ${b.field}="${b.value}" 는 catalog.json에 등록된 component nodeId가 아님 (${b.at})`
+      );
+      console.error('    Design System을 수동 extract하고 catalog.json을 먼저 갱신하라.');
+      continue;
+    }
+
+    if (b.kind === 'variantResolution') {
+      console.error(
+        `  - variantProperties=${b.value} 로 컴포넌트(${b.componentNodeId}) variant를 정확히 1개 resolve하지 못함 (${b.at})`
+      );
+      if (b.matches?.length) console.error(`    매칭 variant: ${b.matches.join(', ')}`);
+      else console.error('    매칭 variant 없음. components/snapshot.json의 실제 variant property/value를 확인하라.');
+      continue;
+    }
+
+    if (b.kind === 'patchExpectedMatches') {
+      console.error(
+        `  - patches.nodeName="${b.nodeName}" expectedMatches=${b.value}, preflight actual=${b.actualMatches} (${b.at})`
+      );
+      continue;
+    }
+
+    if (b.kind === 'patchNodeName') {
+      const variantText = b.variantName ? ` / variant="${b.variantName}"` : '';
+      console.error(
+        `  - patches.nodeName="${b.value}" 는 컴포넌트(${b.componentNodeId}${variantText}) 스냅샷에 없는 노드 이름 (${b.at})`
+      );
+      const stem = String(b.value);
+      const near = [...(b.names || [])]
+        .filter((n) => n && (n.includes(stem) || stem.includes(n)))
+        .slice(0, 8);
+      const sample = near.length ? near : [...(b.names || [])].slice(0, 12);
+      if (sample.length) console.error(`    실제 노드 이름(일부): ${sample.join(', ')}`);
+      console.error(
+        '    "Label" 같은 문서 예시 이름을 추측해 쓰지 말고, components/snapshot.json의 실제 노드 이름을 사용하라.'
+      );
+      continue;
+    }
+
+    const pool = b.kind === 'semantic' ? semantic : textStyles;
+    const stem = String(b.value).split('-')[0];
+    const near = [...pool].filter((k) => k.includes(stem)).slice(0, 6);
+
+    console.error(
+      `  - ${b.field}="${b.value}" 는 실제 ${b.kind} 정본에 없음 (${b.at})`
+    );
+    if (near.length) console.error(`    비슷한 후보: ${near.join(', ')}`);
+  }
+}
+
+if (hadError) {
+  console.error(
+    `\n검증 실패. 추측한 토큰/컴포넌트 참조를 제거하라. 정본: ${TOKENS} (+ ${EXT}), ${CATALOG}.`
+  );
+  process.exit(1);
+}
+
+console.log(
+  `\n검증 통과: ${checked}개 스펙, 모든 토큰/컴포넌트 참조 유효.`
+);
+, tokenRefs, componentRefs);
 
   const bad = [];
+  collectLayoutIssues(spec.nodes || spec.frames || [], '$.nodes', bad);
 
   for (const r of tokenRefs) {
     if (r.kind === 'semantic' && !semantic.has(r.value)) bad.push(r);
