@@ -316,38 +316,43 @@ async function runExtract(spec) {
     };
   }
 
+  const eligibleTypes = ['FRAME', 'COMPONENT', 'COMPONENT_SET', 'INSTANCE', 'SECTION'];
   const all = page.children.filter(
-    (n) => n.visible !== false && ['FRAME', 'COMPONENT', 'COMPONENT_SET', 'INSTANCE', 'SECTION'].includes(n.type)
+    (n) => n.visible !== false && eligibleTypes.includes(n.type)
   );
   const requestedIds = new Set(CONFIG.frameIds);
   const requestedNames = new Set(CONFIG.frameNames);
   if (requestedIds.size !== CONFIG.frameIds.length) throw new Error('frameIds 중복');
   if (requestedNames.size !== CONFIG.frameNames.length) throw new Error('frameNames 중복');
 
+  const descendantCandidates = CONFIG.frameNames.length
+    ? page.findAll((n) => n.visible !== false && eligibleTypes.includes(n.type) && requestedNames.has(n.name))
+    : [];
+
   const duplicateRequestedNames = CONFIG.frameNames.filter(
-    (name) => all.filter((n) => n.name === name).length > 1
+    (name) => descendantCandidates.filter((n) => n.name === name).length > 1
   );
   if (duplicateRequestedNames.length)
     throw new Error('동일 이름 프레임 중복: ' + duplicateRequestedNames.join(', '));
 
+  const idTargets = CONFIG.frameIds.length ? all.filter((n) => requestedIds.has(n.id)) : [];
+  const nameTargets = CONFIG.frameNames.length ? descendantCandidates : [];
   const targets = (CONFIG.frameIds.length || CONFIG.frameNames.length)
-    ? all.filter((n) => requestedIds.has(n.id) || requestedNames.has(n.name))
+    ? [...idTargets, ...nameTargets.filter((n) => !idTargets.some((x) => x.id === n.id))]
     : all;
 
   if (CONFIG.frameIds.length && !CONFIG.frameIds.every((id) => targets.some((n) => n.id === id)))
     throw new Error('요청한 frameId 없음');
   if (CONFIG.frameNames.length && !CONFIG.frameNames.every((name) => targets.some((n) => n.name === name))) {
     const missing = CONFIG.frameNames.filter((name) => !targets.some((n) => n.name === name));
-    const hints = missing.map((name) => {
-      const needle = name.toLowerCase();
-      return all
-        .filter((n) => n.name.toLowerCase().includes('tb') || n.name.toLowerCase().includes('team'))
-        .slice(0, 20)
-        .map((n) => ({ id: n.id, type: n.type, name: n.name }));
-    });
+    const hints = page.findAll((n) => {
+      if (n.visible === false || !eligibleTypes.includes(n.type)) return false;
+      const lower = n.name.toLowerCase();
+      return lower.includes('tb') || lower.includes('team');
+    }).slice(0, 20).map((n) => ({ id: n.id, type: n.type, name: n.name, parent: n.parent?.name || null }));
     throw new Error(
       '요청한 frameName 없음: ' + missing.join(', ') +
-      '\nTB/team top-level candidates=' + JSON.stringify(hints.flat())
+      '\nTB/team page candidates=' + JSON.stringify(hints)
     );
   }
   const frames = [];
