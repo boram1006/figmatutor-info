@@ -5,26 +5,48 @@
     <style>
       body { font: 12px -apple-system, 'Segoe UI', sans-serif; margin: 0; padding: 12px; color: #333; }
       h1 { font-size: 13px; margin: 0 0 8px; }
-      p.hint { margin: 0 0 8px; color: #777; }
+      p.hint { margin: 0 0 8px; color: #777; line-height: 1.45; }
       label { display: block; font-weight: 600; margin: 8px 0 4px; }
+      input[type="text"] { width: 100%; box-sizing: border-box; padding: 7px 8px; font: 11px ui-monospace, Consolas, monospace; }
       textarea { width: 100%; box-sizing: border-box; font-family: ui-monospace, Consolas, monospace; font-size: 11px; resize: vertical; }
-      #spec { height: 200px; }
-      #out { height: 160px; background: #f5f5f5; }
+      #spec { height: 190px; }
+      #out { height: 150px; background: #f5f5f5; }
+      .bridge { padding: 10px; background: #f7f7f7; border-radius: 8px; margin-bottom: 10px; }
       .row { display: flex; gap: 8px; margin: 8px 0; }
+      .row.inline { align-items: center; }
+      .row.inline label { margin: 0; font-weight: 400; }
       button { flex: 1; padding: 8px; border: 0; border-radius: 6px; cursor: pointer; font-weight: 600; }
       #run { background: #18a0fb; color: #fff; }
-      #copy { background: #e5e5e5; color: #333; }
-      #status { margin-top: 6px; min-height: 16px; }
+      #load, #save, #copy { background: #e5e5e5; color: #333; }
+      #status { margin-top: 6px; min-height: 16px; line-height: 1.4; }
       #status.error { color: #d13438; }
       #status.ok { color: #107c10; }
+      .small { font-size: 11px; color: #777; }
     </style>
   </head>
   <body>
     <h1>Design Flow Harness</h1>
-    <p class="hint">스펙 JSON을 붙여넣고 Run. 결과 JSON을 복사해 저장 경로에 저장하세요. (op: create/extract/screenshot)</p>
+    <p class="hint">기존 붙여넣기/Run/복사 방식은 그대로 사용할 수 있습니다. localhost bridge가 켜져 있으면 파일 왕복만 줄일 수 있습니다.</p>
 
-    <label for="spec">스펙 JSON 붙여넣기</label>
-    <textarea id="spec" placeholder='{ "op": "extract", "fileKey": "...", "pageName": "02 Components", "stage": "components", "inputDigest": "..." }'></textarea>
+    <div class="bridge">
+      <div class="small">Bridge: http://localhost:3845 · 허용 경로: design/operations/**/*.json</div>
+
+      <label for="specPath">Spec 경로</label>
+      <input id="specPath" type="text" placeholder="design/operations/&lt;task-id&gt;/request.json" />
+      <div class="row">
+        <button id="load">localhost에서 Spec 불러오기</button>
+      </div>
+
+      <label for="resultPath">결과 저장 경로</label>
+      <input id="resultPath" type="text" placeholder="design/operations/&lt;task-id&gt;/result.json" />
+      <div class="row inline">
+        <input id="autoSave" type="checkbox" checked />
+        <label for="autoSave">Run 완료 후 결과 경로가 있으면 자동 저장</label>
+      </div>
+    </div>
+
+    <label for="spec">스펙 JSON</label>
+    <textarea id="spec" placeholder='{ "op": "extract", "fileKey": "...", "pageName": "design", "stage": "screens", "inputDigest": "..." }'></textarea>
 
     <div class="row">
       <button id="run">Run</button>
@@ -33,40 +55,120 @@
     <label for="out">결과 JSON</label>
     <textarea id="out" readonly></textarea>
     <div class="row">
+      <button id="save">localhost에 결과 저장</button>
       <button id="copy">결과 복사</button>
     </div>
     <div id="status"></div>
 
     <script>
+      const BRIDGE_URL = 'http://localhost:3845';
       const $spec = document.getElementById('spec');
       const $out = document.getElementById('out');
       const $status = document.getElementById('status');
+      const $specPath = document.getElementById('specPath');
+      const $resultPath = document.getElementById('resultPath');
+      const $autoSave = document.getElementById('autoSave');
+      let latestResult = null;
+      let latestOp = null;
+
+      function setStatus(message, kind) {
+        $status.className = kind || '';
+        $status.textContent = message;
+      }
+
+      async function readError(response) {
+        try {
+          const body = await response.json();
+          return body.error || response.statusText;
+        } catch {
+          return response.statusText || ('HTTP ' + response.status);
+        }
+      }
+
+      async function loadSpec() {
+        const specPath = $specPath.value.trim();
+        if (!specPath) {
+          setStatus('Spec 경로를 입력하세요.', 'error');
+          return;
+        }
+
+        setStatus('localhost에서 Spec 불러오는 중…');
+        try {
+          const response = await fetch(
+            BRIDGE_URL + '/api/spec?path=' + encodeURIComponent(specPath),
+            { cache: 'no-store' }
+          );
+          if (!response.ok) throw new Error(await readError(response));
+          const body = await response.json();
+          $spec.value = JSON.stringify(body.spec, null, 2);
+          setStatus('Spec 불러오기 완료: ' + body.path, 'ok');
+        } catch (error) {
+          setStatus('Bridge 연결/Spec 읽기 실패: ' + error.message + ' — 기존 붙여넣기 방식 사용 가능', 'error');
+        }
+      }
+
+      async function saveResult() {
+        const resultPath = $resultPath.value.trim();
+        if (!resultPath) {
+          setStatus('결과 저장 경로를 입력하세요. 복사 방식은 그대로 사용할 수 있습니다.', 'error');
+          return false;
+        }
+        if (latestResult === null) {
+          setStatus('저장할 실행 결과가 없습니다.', 'error');
+          return false;
+        }
+
+        try {
+          const response = await fetch(BRIDGE_URL + '/api/result', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ path: resultPath, data: latestResult }),
+          });
+          if (!response.ok) throw new Error(await readError(response));
+          const body = await response.json();
+          setStatus((latestOp || 'run') + ' 완료 + 저장됨: ' + body.path, 'ok');
+          return true;
+        } catch (error) {
+          setStatus('실행은 완료됐지만 Bridge 저장 실패: ' + error.message + ' — 결과 복사로 저장 가능', 'error');
+          return false;
+        }
+      }
+
+      document.getElementById('load').onclick = loadSpec;
 
       document.getElementById('run').onclick = () => {
-        $status.className = '';
-        $status.textContent = '실행 중…';
+        setStatus('실행 중…');
+        latestResult = null;
+        latestOp = null;
         parent.postMessage({ pluginMessage: { type: 'run', spec: $spec.value } }, '*');
       };
+
+      document.getElementById('save').onclick = saveResult;
 
       document.getElementById('copy').onclick = () => {
         $out.select();
         document.execCommand('copy');
-        $status.className = 'ok';
-        $status.textContent = '클립보드에 복사됨';
+        setStatus('클립보드에 복사됨', 'ok');
       };
 
-      onmessage = (event) => {
+      onmessage = async (event) => {
         const msg = event.data.pluginMessage;
         if (!msg) return;
         if (msg.type === 'error') {
-          $status.className = 'error';
-          $status.textContent = '오류: ' + msg.message;
+          setStatus('오류: ' + msg.message, 'error');
           return;
         }
         if (msg.type === 'result') {
+          latestResult = msg.result;
+          latestOp = msg.op;
           $out.value = JSON.stringify(msg.result, null, 2);
-          $status.className = 'ok';
-          $status.textContent = msg.op + ' 완료. 결과를 복사해 저장하세요.';
+
+          if ($autoSave.checked && $resultPath.value.trim()) {
+            setStatus(msg.op + ' 완료. localhost에 저장 중…');
+            await saveResult();
+          } else {
+            setStatus(msg.op + ' 완료. 필요하면 localhost 저장 또는 결과 복사를 사용하세요.', 'ok');
+          }
         }
       };
     </script>
