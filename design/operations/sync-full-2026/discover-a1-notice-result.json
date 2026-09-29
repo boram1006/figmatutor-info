@@ -1,0 +1,579 @@
+{
+  "pageId": "1:987",
+  "pageName": "design",
+  "terms": [
+    "공지",
+    "notice",
+    "faq",
+    "home"
+  ],
+  "matches": [
+    {
+      "id": "1:3674",
+      "type": "FRAME",
+      "name": "home",
+      "parentId": "1:3673",
+      "parentName": "Frame 3",
+      "width": 14.734375,
+      "height": 19
+    },
+    {
+      "id": "1:3676",
+      "type": "FRAME",
+      "name": "notice",
+      "parentId": "1:3673",
+      "parentName": "Frame 3",
+      "width": 58.890625,
+      "height": 19
+    },
+    {
+      "id": "1:3680",
+      "type": "FRAME",
+      "name": "faq",
+      "parentId": "1:3673",
+      "parentName": "Frame 3",
+      "width": 29.5,
+      "height": 19
+    },
+    {
+      "id": "1:4443",
+      "type": "FRAME",
+      "name": "home",
+      "parentId": "1:4442",
+      "parentName": "Frame 3",
+      "width": 14.734375,
+      "height": 19
+    },
+    {
+      "id": "1:4445",
+      "type": "FRAME",
+      "name": "notice",
+      "parentId": "1:4442",
+      "parentName": "Frame 3",
+      "width": 58.890625,
+      "height": 19
+    },
+    {
+      "id": "1:4449",
+      "type": "FRAME",
+      "name": "faq",
+      "parentId": "1:4442",
+      "parentName": "Frame 3",
+      "width": 29.5,
+      "height": 19
+    },
+    {
+      "id": "1:5484",
+      "type": "FRAME",
+      "name": "home",
+      "parentId": "1:5483",
+      "parentName": "Frame 3",
+      "width": 15,
+      "height": 24
+    },
+    {
+      "id": "1:5486",
+      "type": "FRAME",
+      "name": "notice",
+      "parentId": "1:5483",
+      "parentName": "Frame 3",
+      "width": 59,
+      "height": 24
+    },
+    {
+      "id": "1:5490",
+      "type": "FRAME",
+      "name": "faq",
+      "parentId": "1:5483",
+      "parentName": "Frame 3",
+      "width": 31,
+      "height": 24
+    },
+    {
+      "id": "1:5594",
+      "type": "FRAME",
+      "name": "home",
+      "parentId": "1:5593",
+      "parentName": "Frame 3",
+      "width": 15,
+      "height": 24
+    },
+    {
+      "id": "1:5596",
+      "type": "FRAME",
+      "name": "notice",
+      "parentId": "1:5593",
+      "parentName": "Frame 3",
+      "width": 59,
+      "height": 24
+    },
+    {
+      "id": "1:5600",
+      "type": "FRAME",
+      "name": "faq",
+      "parentId": "1:5593",
+      "parentName": "Frame 3",
+      "width": 31,
+      "height": 24
+    },
+    {
+      "id": "1:5651",
+      "type": "FRAME",
+      "name": "home",
+      "parentId": "1:5650",
+      "parentName": "Frame 3",
+      "width": 14.734375,
+      "height": 19
+    },
+    {
+      "id": "1:5653",
+      "type": "FRAME",
+      "name": "notice",
+      "parentId": "1:5650",
+      "parentName": "Frame 3",
+      "width": 58.890625,
+      "height": 19
+    },
+    {
+      "id": "1:5657",
+      "type": "FRAME",
+      "name": "faq",
+      "parentId": "1:5650",
+      "parentName": "Frame 3",
+      "width": 29.5,
+      "height": 19
+    },
+    {
+      "id": "1:9383",
+      "type": "FRAME",
+      "name": "home",
+      "parentId": "1:9382",
+      "parentName": "Frame 3",
+      "width": 14.734375,
+      "height": 19
+    },
+    {
+      "id": "1:9385",
+      "type": "FRAME",
+      "name": "notice",
+      "parentId": "1:9382",
+      "parentName": "Frame 3",
+      "width": 58.890625,
+      "height": 19
+    },
+    {
+      "id": "1:9387",
+      "type": "FRAME",
+      "name": "notice",
+      "parentId": "1:9382",
+      "parentName": "Frame 3",
+      "width": 58.890625,
+      "height": 19
+    },
+    {
+      "id": "1:9391",
+      "type": "FRAME",
+      "name": "faq",
+      "parentId": "1:9382",
+      "parentName": "Frame 3",
+      "width": 29.5,
+      "height": 19
+    },
+    {
+      "id": "1:9393",
+      "type": "FRAME",
+      "name": "faq",
+      "parentId": "1:9382",
+      "parentName": "Frame 3",
+      "width": 29.5,
+      "height": 19
+    },
+    {
+      "id": "1:10390",
+      "type": "FRAME",
+      "name": "home",
+      "parentId": "1:10389",
+      "parentName": "Frame 3",
+      "width": 14.734375,
+      "height": 19
+    },
+    {
+      "id": "1:10392",
+      "type": "FRAME",
+      "name": "notice",
+      "parentId": "1:10389",
+      "parentName": "Frame 3",
+      "width": 58.890625,
+      "height": 19
+    },
+    {
+      "id": "1:10394",
+      "type": "FRAME",
+      "name": "notice",
+      "parentId": "1:10389",
+      "parentName": "Frame 3",
+      "width": 58.890625,
+      "height": 19
+    },
+    {
+      "id": "1:10398",
+      "type": "FRAME",
+      "name": "faq",
+      "parentId": "1:10389",
+      "parentName": "Frame 3",
+      "width": 29.5,
+      "height": 19
+    },
+    {
+      "id": "1:10400",
+      "type": "FRAME",
+      "name": "faq",
+      "parentId": "1:10389",
+      "parentName": "Frame 3",
+      "width": 29.5,
+      "height": 19
+    },
+    {
+      "id": "1:10434",
+      "type": "FRAME",
+      "name": "home",
+      "parentId": "1:10433",
+      "parentName": "Frame 3",
+      "width": 14.734375,
+      "height": 19
+    },
+    {
+      "id": "1:10436",
+      "type": "FRAME",
+      "name": "notice",
+      "parentId": "1:10433",
+      "parentName": "Frame 3",
+      "width": 58.890625,
+      "height": 19
+    },
+    {
+      "id": "1:10438",
+      "type": "FRAME",
+      "name": "notice",
+      "parentId": "1:10433",
+      "parentName": "Frame 3",
+      "width": 58.890625,
+      "height": 19
+    },
+    {
+      "id": "1:10442",
+      "type": "FRAME",
+      "name": "faq",
+      "parentId": "1:10433",
+      "parentName": "Frame 3",
+      "width": 29.5,
+      "height": 19
+    },
+    {
+      "id": "1:10444",
+      "type": "FRAME",
+      "name": "faq",
+      "parentId": "1:10433",
+      "parentName": "Frame 3",
+      "width": 29.5,
+      "height": 19
+    },
+    {
+      "id": "1:11144",
+      "type": "FRAME",
+      "name": "F-01_faq",
+      "parentId": "1:8865",
+      "parentName": "v1. 공통 페이지",
+      "width": 1440,
+      "height": 1749
+    },
+    {
+      "id": "1:11171",
+      "type": "FRAME",
+      "name": "icon-faq-1",
+      "parentId": "1:11170",
+      "parentName": "svg",
+      "width": 16,
+      "height": 16
+    },
+    {
+      "id": "1:11179",
+      "type": "FRAME",
+      "name": "icon-faq-2",
+      "parentId": "1:11178",
+      "parentName": "svg",
+      "width": 16,
+      "height": 16
+    },
+    {
+      "id": "1:11185",
+      "type": "FRAME",
+      "name": "icon-faq-3",
+      "parentId": "1:11184",
+      "parentName": "svg",
+      "width": 16,
+      "height": 16
+    },
+    {
+      "id": "1:11191",
+      "type": "FRAME",
+      "name": "icon-faq-4",
+      "parentId": "1:11190",
+      "parentName": "svg",
+      "width": 16,
+      "height": 16
+    },
+    {
+      "id": "1:11197",
+      "type": "FRAME",
+      "name": "icon-faq-5",
+      "parentId": "1:11196",
+      "parentName": "svg",
+      "width": 16,
+      "height": 16
+    },
+    {
+      "id": "1:11206",
+      "type": "FRAME",
+      "name": "N-01_notice-list",
+      "parentId": "1:8865",
+      "parentName": "v1. 공통 페이지",
+      "width": 1440,
+      "height": 1284
+    },
+    {
+      "id": "1:11399",
+      "type": "FRAME",
+      "name": "최신 공지",
+      "parentId": "1:11392",
+      "parentName": "해커톤 주세",
+      "width": 996,
+      "height": 116
+    },
+    {
+      "id": "1:11558",
+      "type": "FRAME",
+      "name": "home",
+      "parentId": "1:11557",
+      "parentName": "Frame 3",
+      "width": 14.734375,
+      "height": 19
+    },
+    {
+      "id": "1:11560",
+      "type": "FRAME",
+      "name": "notice",
+      "parentId": "1:11557",
+      "parentName": "Frame 3",
+      "width": 58.890625,
+      "height": 19
+    },
+    {
+      "id": "1:11564",
+      "type": "FRAME",
+      "name": "faq",
+      "parentId": "1:11557",
+      "parentName": "Frame 3",
+      "width": 29.5,
+      "height": 19
+    },
+    {
+      "id": "1:12503",
+      "type": "FRAME",
+      "name": "N-02_notice-detail",
+      "parentId": "1:8865",
+      "parentName": "v1. 공통 페이지",
+      "width": 1440,
+      "height": 2821
+    },
+    {
+      "id": "1:18039",
+      "type": "FRAME",
+      "name": "1_Notice (Updated)",
+      "parentId": "1:987",
+      "parentName": "design",
+      "width": 1920,
+      "height": 1145
+    },
+    {
+      "id": "1:21714",
+      "type": "FRAME",
+      "name": "home",
+      "parentId": "1:21713",
+      "parentName": "Frame 3",
+      "width": 14.734375,
+      "height": 19
+    },
+    {
+      "id": "1:21716",
+      "type": "FRAME",
+      "name": "notice",
+      "parentId": "1:21713",
+      "parentName": "Frame 3",
+      "width": 58.890625,
+      "height": 19
+    },
+    {
+      "id": "1:21718",
+      "type": "FRAME",
+      "name": "notice",
+      "parentId": "1:21713",
+      "parentName": "Frame 3",
+      "width": 58.890625,
+      "height": 19
+    },
+    {
+      "id": "1:21722",
+      "type": "FRAME",
+      "name": "faq",
+      "parentId": "1:21713",
+      "parentName": "Frame 3",
+      "width": 29.5,
+      "height": 19
+    },
+    {
+      "id": "1:21724",
+      "type": "FRAME",
+      "name": "faq",
+      "parentId": "1:21713",
+      "parentName": "Frame 3",
+      "width": 29.5,
+      "height": 19
+    },
+    {
+      "id": "1:22721",
+      "type": "FRAME",
+      "name": "home",
+      "parentId": "1:22720",
+      "parentName": "Frame 3",
+      "width": 14.734375,
+      "height": 19
+    },
+    {
+      "id": "1:22723",
+      "type": "FRAME",
+      "name": "notice",
+      "parentId": "1:22720",
+      "parentName": "Frame 3",
+      "width": 58.890625,
+      "height": 19
+    },
+    {
+      "id": "1:22725",
+      "type": "FRAME",
+      "name": "notice",
+      "parentId": "1:22720",
+      "parentName": "Frame 3",
+      "width": 58.890625,
+      "height": 19
+    },
+    {
+      "id": "1:22729",
+      "type": "FRAME",
+      "name": "faq",
+      "parentId": "1:22720",
+      "parentName": "Frame 3",
+      "width": 29.5,
+      "height": 19
+    },
+    {
+      "id": "1:22731",
+      "type": "FRAME",
+      "name": "faq",
+      "parentId": "1:22720",
+      "parentName": "Frame 3",
+      "width": 29.5,
+      "height": 19
+    },
+    {
+      "id": "1:23758",
+      "type": "FRAME",
+      "name": "Notice Warning Card (1 col)",
+      "parentId": "1:23633",
+      "parentName": "Frame 184",
+      "width": 860,
+      "height": 93
+    },
+    {
+      "id": "1:23782",
+      "type": "FRAME",
+      "name": "Center Status Notice",
+      "parentId": "1:23781",
+      "parentName": "Frame 185",
+      "width": 483,
+      "height": 20
+    },
+    {
+      "id": "17:1225",
+      "type": "FRAME",
+      "name": "Notice Warning Card (1 col)",
+      "parentId": "17:1100",
+      "parentName": "Frame 184",
+      "width": 860,
+      "height": 85
+    },
+    {
+      "id": "17:1249",
+      "type": "FRAME",
+      "name": "Center Status Notice",
+      "parentId": "17:1248",
+      "parentName": "Frame 185",
+      "width": 483,
+      "height": 20
+    },
+    {
+      "id": "76:2384",
+      "type": "FRAME",
+      "name": "Notice Warning Card (1 col)",
+      "parentId": "76:2259",
+      "parentName": "Frame 184",
+      "width": 860,
+      "height": 93
+    },
+    {
+      "id": "76:2408",
+      "type": "FRAME",
+      "name": "Center Status Notice",
+      "parentId": "76:2407",
+      "parentName": "Frame 185",
+      "width": 459,
+      "height": 20
+    },
+    {
+      "id": "98:2834",
+      "type": "FRAME",
+      "name": "Notice Warning Card (1 col)",
+      "parentId": "98:2709",
+      "parentName": "Frame 184",
+      "width": 860,
+      "height": 93
+    },
+    {
+      "id": "98:2858",
+      "type": "FRAME",
+      "name": "Center Status Notice",
+      "parentId": "98:2857",
+      "parentName": "Frame 185",
+      "width": 159,
+      "height": 20
+    },
+    {
+      "id": "141:2465",
+      "type": "FRAME",
+      "name": "Score Policy Notice",
+      "parentId": "141:2445",
+      "parentName": "Project Award Block",
+      "width": 855,
+      "height": 44
+    },
+    {
+      "id": "141:2504",
+      "type": "FRAME",
+      "name": "Ceremony Notice",
+      "parentId": "141:2441",
+      "parentName": "Body",
+      "width": 855,
+      "height": 90
+    }
+  ]
+}
