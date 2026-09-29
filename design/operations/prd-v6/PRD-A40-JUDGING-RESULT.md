@@ -1,228 +1,80 @@
-# A-40 PRD — 심사 결과
+# v6 릴리즈 PRD — 심사 결과 (Judging Result)
 
-> Release: v6
-> Screen ID: A-40
-> Audience: 본선 TOP30 참가자
-> Entry: 마이페이지 → 내 지원 현황 → 선택한 지원서 → 심사 결과 보기
-> Supported states: `AWARDED`, `NOT_AWARDED`
-> Status: current implementation-aligned PRD
+> Screen ID: A-40  
+> 대상: 본선 TOP30 참가자  
+> 상태: `AWARDED`, `NOT_AWARDED`  
+> 진입: 마이페이지 → 내 지원 현황 → 선택한 지원서 → 심사 결과 보기
 
----
+## 1. 화면 개요
 
-## 1. 목적
+### 1.1. 목적
+참가자가 “우리 팀의 최종 결과가 무엇인가?”를 첫 viewport에서 바로 이해하도록 한다. 결과 상태를 “심사 완료” 같은 일반 문구로 흐리지 않는다.
 
-본선 심사가 완료된 참가자가 자신의 **최종 심사 결과를 첫 화면에서 즉시 확인**하고,
-심사 과정에서 높게 평가된 핵심 강점과 심사위원 평가를 확인한다.
+### 1.2. 대상/역할
+대상은 본선 TOP30 참가자다. A-40은 선택된 지원 건의 결과를 조회하는 child/detail 화면이며, 수상/미입상 상태가 달라도 같은 화면 구조를 사용한다.
 
-이 화면이 첫 번째로 답해야 하는 질문은:
+## 2. 진입 경로 + 조건
 
-> “그래서 우리 팀의 최종 결과가 무엇인가?”
+### 2.1. 진입 경로
+마이페이지 → 내 지원 현황 → 선택한 지원서 → [심사 결과 보기]. 상단 [← 내 지원 현황으로 돌아가기]로 상위 목록에 복귀한다. My Page sidebar는 사용하지 않는다.
 
-수상/미입상 여부는 첫 viewport에서 해석 없이 명확해야 한다.
+### 2.2. 진입 조건
+본선 진출(TOP30) + 최종 제출 완료 + 심사 종료 + 결과 발표 완료 시 진입한다. 결과 발표 전에는 결과 보기 CTA를 기본적으로 노출하지 않는다.
 
----
+## 3. 데이터 로딩 정책 + 예외
 
-## 2. 진입 및 Navigation
+### 3.1. 필수 데이터
+application/project identity, team identity, final result state, highlight items, panel consensus, reviewer comments. AWARDED는 awardName과 optional rank가 추가된다.
 
-- 진입 경로: `마이페이지 → 내 지원 현황 → 선택한 지원서 → 심사 결과 보기`
-- A-40은 My Page hub가 아니라 **선택된 지원 건의 child/detail 화면**이다.
-- My Page sidebar는 노출하지 않는다.
-- 상단에 `← 내 지원 현황으로 돌아가기`를 제공한다.
-- 결과 발표 전에는 A-40 진입을 기본적으로 노출하지 않는다.
+### 3.2. 로딩/에러/빈상태
+로딩·에러는 기존 서비스 공통 패턴을 재사용한다. 표시할 결과가 없는 예외는 별도 빈상태를 발명하지 않고 실제 요구가 확인될 때 정의한다.
 
----
+## 4. 상태 머신
 
-## 3. 공통 정보 구조
+### 4.1. AWARDED
+순위상과 특별상을 별도 화면 상태로 나누지 않는다. 동일 AWARDED UI를 사용하고 awardName과 optional rank만 달라진다. 순위가 있는 상은 rank+awardName, 특별상은 awardName 중심으로 표시한다.
 
-### 3.1 지원 프로젝트 Context
+### 4.2. NOT_AWARDED
+본선 TOP30이나 수상팀으로 선정되지 않은 상태다. 최종 결과는 “수상 미선정”으로 명확히 표시하며, “본선 진출 TOP 30”은 이전 단계 성과/보조 context로만 사용한다.
 
-표시:
-- 프로젝트명
-- 팀명
-- 팀장/구성원 요약
-- 트랙
-- 필요 시 이전 단계 성과(예: 본선 진출 TOP30)
+## 5. 상태별 UI
 
-이전 단계 성과는 현재 최종 결과보다 더 강하게 표현하지 않는다.
+### 5.1. AWARDED UI
+첫 viewport에서 수상 여부·상명·필요 시 순위를 직접 표시한다. bounded celebration treatment를 허용하되 product semantic/award token을 사용한다. 이후 핵심 강점 3개와 패널 총평·개별 심사 의견을 제공한다.
 
-### 3.2 최종 결과 Hero
+### 5.2. NOT_AWARDED UI
+상태 tag “본선 미입상”, headline “이번 본선에서는 수상팀으로 선정되지 않았습니다.”, result object “수상 미선정”. Celebration 표현은 쓰지 않고 neutral result treatment를 사용한다.
 
-필수:
-- 결과 상태 tag
-- 결과를 직접 설명하는 headline
-- 짧은 보조 설명
-- final result object
+### 5.3. 미입상 마무리
+Title: “본선 심사까지 수고 많으셨습니다.”  
+Body: “이번 경험을 바탕으로 다음 도전에서도 좋은 결과를 기대하겠습니다.”
 
-원칙:
-- `심사가 완료되었습니다`처럼 일반 상태만 headline으로 사용하지 않는다.
-- 실제 결과가 첫 viewport에서 바로 이해되어야 한다.
-- 상태에 따라 visual tone만 달라지며 별도 IA를 만들지 않는다.
+본문에서 이미 제공한 평가를 다시 안내하지 않고, 미확정 프로그램·채널·혜택을 새로 만들지 않는다.
 
-### 3.3 핵심 강점
+## 6. 정렬·버튼 규칙
 
-심사 과정에서 확인된 주요 강점을 3개 내외로 요약한다.
+### 6.1. 액션
+현재 A-40에는 [심사 상세 보기], [최종 제출 내용 보기]를 추가하지 않는다. 결과 확인과 평가 정보 열람에 집중한다.
 
-각 card:
-- label/icon
-- 강점 제목
-- 설명
-- 보조 evidence/keyword
+### 6.2. 카드 정렬
+핵심 강점과 reviewer card는 같은 위계의 peer card로 배치하며, 같은 horizontal row에서는 동일 높이(FILL/STRETCH)를 유지한다.
 
-원칙:
-- 동일 row의 peer card는 동일 높이
-- 구체 문구는 실제 심사 데이터에 따라 달라질 수 있다
-- 디자인 exploration용 문구를 실제 평가 데이터로 간주하지 않는다
+## 7. 표기 규칙
 
-### 3.4 심사위원 종합 평가
+### 7.1. 결과 표현
+결과는 첫 viewport에서 해석 없이 이해되어야 한다. 미입상 상태를 숨기지 않되 “탈락/실패”처럼 필요 이상으로 강한 표현은 사용하지 않는다.
 
-표시:
-- 패널 총평
-- 심사위원별 주요 평가
+### 7.2. 데이터/문구 경계
+디자인 exploration용 프로젝트명·평가 문구·심사위원 코멘트는 실제 제품 정책/실데이터와 구분한다. 확정 근거 없는 상금·혜택·일정·장소·채널·점수 산식·미입상 원인을 추가하지 않는다.
 
-원칙:
-- 패널 총평이 개별 reviewer comment보다 상위 위계
-- reviewer card는 동일 row에서 동일 높이
-- 실제 심사 데이터 이상으로 수상/미입상 원인을 추론하지 않는다
+## 8. 레이아웃·인터랙션 세부
 
-### 3.5 화면 마무리
+### 8.1. 레이아웃
+Desktop 1440, centered 1200 detail rail. 상태가 달라도 공통 section order와 IA를 유지한다. Layout wrapper는 투명하고 semantic card만 product surface+outline을 사용한다.
 
-상태에 맞는 후속 정보 또는 closure를 제공한다.
-
-원칙:
-- 본문에서 이미 전달한 내용을 다시 반복하지 않는다.
-- 근거 없는 일정/혜택/프로그램/전달 채널을 새로 만들지 않는다.
+### 8.2. Design System
+긴 텍스트는 content width 안에서 wrap한다. spacing/radius는 기존 DS token 값과 실제 Figma variable binding을 사용한다. 외부 HTML/CSS는 composition evidence로만 사용하며 product visual grammar로 변환한다.
 
 ---
 
-## 4. 상태별 UI
-
-### 4.1 AWARDED
-
-목적:
-- 수상 여부와 상 결과를 첫 viewport에서 명확히 전달
-- 순위상/특별상은 별도 화면 상태가 아니라 동일한 AWARDED UI에서 데이터만 달라진다
-
-표시 데이터:
-- `awardName`: 최우수상 / 우수상 / 특별상 등
-- `rank`: 순위가 있는 상에만 표시, 특별상은 생략 가능
-
-예시:
-- headline: `축하합니다! CodeReview Team이 본선 2위(최우수상)에 입상했습니다.`
-- result object:
-  - `FINAL RESULT`
-  - `본선 2위` (순위가 있을 때)
-  - `최우수상`
-
-Visual:
-- bounded celebration treatment 허용
-- gradient/tint는 product semantic/award token 사용
-- 주변 기능 영역은 기본 product grammar 유지
-
-마무리:
-- 수상 후 실제 확정된 후속 안내가 있을 때 제공
-- 정확한 일정/장소/연락 채널은 확정 데이터가 있을 때만 노출
-
-특별상도 동일:
-- 같은 hero/section/layout을 사용한다.
-- 별도 상태/화면 구조를 만들지 않는다.
-- 확정된 `awardName`만 바뀌며, 순위가 없으면 rank 줄을 생략한다.
-
-### 4.2 NOT_AWARDED
-
-목적:
-- 미입상 결과를 명확하게 전달하되 불필요하게 실패를 강조하지 않는다
-
-필수 표현:
-- state tag: `본선 미입상`
-- headline: `이번 본선에서는 수상팀으로 선정되지 않았습니다.`
-- result object:
-  - `FINAL RESULT`
-  - `수상 미선정`
-  - `본선 진출 TOP 30`은 보조 context
-
-Visual:
-- celebration gradient / trophy / award object 사용 안 함
-- neutral result treatment 사용
-- card/content 구조는 수상 화면과 동일한 product grammar 유지
-
-마무리 확정 문구:
-- title: `본선 심사까지 수고 많으셨습니다.`
-- body: `이번 경험을 바탕으로 다음 도전에서도 좋은 결과를 기대하겠습니다.`
-
-주의:
-- `탈락`, `실패`처럼 필요 이상으로 강한 표현은 사용하지 않는다.
-- `TOP30`은 이전 단계 성과이며 최종 결과를 대체하지 않는다.
-- 미입상 사유를 임의로 추론하지 않는다.
-
----
-
-## 5. 상태 간 공통/차이
-
-공통:
-- navigation
-- project context
-- section order
-- 핵심 강점
-- 심사위원 종합 평가
-- centered rail
-- product card grammar
-
-상태별 변경:
-- result tag/headline
-- hero visual tone
-- result object
-- final closure/follow-up
-
-상태가 달라져도 별도 새로운 레이아웃을 만들지 않는다.
-
----
-
-## 6. Layout / Design System
-
-- desktop viewport: 1440
-- centered detail rail: 1200
-- My Page sidebar 미사용
-- layout wrapper는 투명
-- semantic card만 product surface + outline
-- long copy는 content width 안에서 wrap
-- 동일 row peer card는 vertical FILL/STRETCH로 동일 높이
-- spacing/radius는 기존 DS token 값뿐 아니라 실제 Figma variable binding까지 적용
-- 외부 Stitch/HTML의 layout 구조는 참고하되 font/color/radius/shadow는 product Figma grammar로 변환
-
----
-
-## 7. 비포함 범위
-
-현재 A-40에는 아래 action을 추가하지 않는다.
-
-- `심사 상세 보기`
-- `최종 제출 내용 보기`
-
-또한 확정 근거 없이 아래 내용을 추가하지 않는다.
-
-- 상금/혜택
-- 정확한 시상식 일시/장소
-- 재도전 프로그램
-- 별도 이메일/공식 채널 안내
-- 점수 산식/가중치
-- 다운로드/공유 기능
-- 미입상 원인의 임의 추론
-
----
-
-## 8. 데이터
-
-공통 최소 데이터:
-- application/project identity
-- team identity
-- final result state
-- highlight items
-- panel consensus
-- reviewer comments
-
-상태별:
-- AWARDED: award name, optional rank
-- NOT_AWARDED: final result = not awarded, prior-stage context if needed
-- follow-up/closure data: 확정된 경우에만 사용
-
-디자인 exploration에 사용한 예시 텍스트는 실제 제품 정책/실데이터와 구분한다.
+※ PRD 정보 구조는 v1·v3의 계층 넘버링/8블록을 따르고, Figma 노란 박스의 시각 형식은 v5 yellow-box를 따른다.
