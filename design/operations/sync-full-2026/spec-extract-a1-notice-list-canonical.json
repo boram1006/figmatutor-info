@@ -1,0 +1,11 @@
+{
+  "op": "extract",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "stage": "screens",
+  "inputDigest": "a1-notice-list-canonical-2026-09-29",
+  "frameNames": [
+    "N-01_notice-list"
+  ],
+  "_note": "Canonical A1 notice-list resolved by lightweight discovery. nodeId evidence=1:11206, parent=v1. 공통 페이지, size=1440x1284. Save result as design/operations/sync-full-2026/snapshot-a1-notice-list-canonical.json."
+}
