@@ -6,7 +6,7 @@
   "_compositionPlan": "design/operations/v6-judging-result/composition-plan-code-informed-v4.json",
   "_sourceAnalysis": "design/operations/v6-judging-result/STITCH-CODE-ANALYSIS-v4.md",
   "_contentStatus": "MOCK_FOR_VISUAL_EXPLORATION",
-  "_notes": "No My Page sidebar. Centered 1200 detail rail. Long text wraps. Outlines are not default. Hero and follow-up may use semantic-token gradients. Code source 1=hero/follow-up, source 2=highlights/panel review. Explicit 1200 rail/card widths added after v4 containment failure; HUG microcopy remains HUG, long copy wraps by HEIGHT. Product card entities use background-primary + border-default. Layout/group frames are transparent by default; hero/follow-up keep intentional non-card surfaces.",
+  "_notes": "No My Page sidebar. Centered 1200 detail rail. Long text wraps. Outlines are not default. Hero and follow-up may use semantic-token gradients. Code source 1=hero/follow-up, source 2=highlights/panel review. Explicit 1200 rail/card widths added after v4 containment failure; HUG microcopy remains HUG, long copy wraps by HEIGHT. Product card entities use background-primary + border-default. Layout/group frames are transparent by default; hero/follow-up keep intentional non-card surfaces. Exact spacing/radius metrics are explicitly bound to existing semantic tokens when available.",
   "nodes": [
     {
       "type": "FRAME",
@@ -127,7 +127,10 @@
                   "textAutoResize": "WIDTH_AND_HEIGHT"
                 }
               ],
-              "width": 1200
+              "width": 1200,
+              "bindings": {
+                "itemSpacing": "space-8"
+              }
             },
             {
               "type": "FRAME",
@@ -215,7 +218,18 @@
                   "type": "SOLID",
                   "binding": "border-default"
                 }
-              ]
+              ],
+              "bindings": {
+                "paddingTop": "space-20",
+                "paddingRight": "space-24",
+                "paddingBottom": "space-20",
+                "paddingLeft": "space-24",
+                "itemSpacing": "space-8",
+                "topLeftRadius": "radius-16",
+                "topRightRadius": "radius-16",
+                "bottomLeftRadius": "radius-16",
+                "bottomRightRadius": "radius-16"
+              }
             },
             {
               "type": "FRAME",
@@ -329,7 +343,10 @@
                       "textAutoResize": "HEIGHT"
                     }
                   ],
-                  "width": 884
+                  "width": 884,
+                  "bindings": {
+                    "itemSpacing": "space-12"
+                  }
                 },
                 {
                   "type": "FRAME",
@@ -428,10 +445,32 @@
                       "type": "SOLID",
                       "binding": "border-default"
                     }
-                  ]
+                  ],
+                  "bindings": {
+                    "paddingTop": "space-24",
+                    "paddingRight": "space-20",
+                    "paddingBottom": "space-24",
+                    "paddingLeft": "space-20",
+                    "itemSpacing": "space-8",
+                    "topLeftRadius": "radius-12",
+                    "topRightRadius": "radius-12",
+                    "bottomLeftRadius": "radius-12",
+                    "bottomRightRadius": "radius-12"
+                  }
                 }
               ],
-              "width": 1200
+              "width": 1200,
+              "bindings": {
+                "paddingTop": "space-32",
+                "paddingRight": "space-32",
+                "paddingBottom": "space-32",
+                "paddingLeft": "space-32",
+                "itemSpacing": "space-32",
+                "topLeftRadius": "radius-16",
+                "topRightRadius": "radius-16",
+                "bottomLeftRadius": "radius-16",
+                "bottomRightRadius": "radius-16"
+              }
             },
             {
               "type": "FRAME",
@@ -510,7 +549,10 @@
                       "layoutSizingVertical": "HUG",
                       "textAutoResize": "HEIGHT"
                     }
-                  ]
+                  ],
+                  "bindings": {
+                    "itemSpacing": "space-4"
+                  }
                 },
                 {
                   "type": "FRAME",
@@ -659,7 +701,18 @@
                           "type": "SOLID",
                           "binding": "border-default"
                         }
-                      ]
+                      ],
+                      "bindings": {
+                        "paddingTop": "space-24",
+                        "paddingRight": "space-24",
+                        "paddingBottom": "space-24",
+                        "paddingLeft": "space-24",
+                        "itemSpacing": "space-12",
+                        "topLeftRadius": "radius-16",
+                        "topRightRadius": "radius-16",
+                        "bottomLeftRadius": "radius-16",
+                        "bottomRightRadius": "radius-16"
+                      }
                     },
                     {
                       "type": "FRAME",
@@ -792,7 +845,18 @@
                           "type": "SOLID",
                           "binding": "border-default"
                         }
-                      ]
+                      ],
+                      "bindings": {
+                        "paddingTop": "space-24",
+                        "paddingRight": "space-24",
+                        "paddingBottom": "space-24",
+                        "paddingLeft": "space-24",
+                        "itemSpacing": "space-12",
+                        "topLeftRadius": "radius-16",
+                        "topRightRadius": "radius-16",
+                        "bottomLeftRadius": "radius-16",
+                        "bottomRightRadius": "radius-16"
+                      }
                     },
                     {
                       "type": "FRAME",
@@ -925,13 +989,30 @@
                           "type": "SOLID",
                           "binding": "border-default"
                         }
-                      ]
+                      ],
+                      "bindings": {
+                        "paddingTop": "space-24",
+                        "paddingRight": "space-24",
+                        "paddingBottom": "space-24",
+                        "paddingLeft": "space-24",
+                        "itemSpacing": "space-12",
+                        "topLeftRadius": "radius-16",
+                        "topRightRadius": "radius-16",
+                        "bottomLeftRadius": "radius-16",
+                        "bottomRightRadius": "radius-16"
+                      }
                     }
                   ],
-                  "width": 1200
+                  "width": 1200,
+                  "bindings": {
+                    "itemSpacing": "space-16"
+                  }
                 }
               ],
-              "width": 1200
+              "width": 1200,
+              "bindings": {
+                "itemSpacing": "space-16"
+              }
             },
             {
               "type": "FRAME",
@@ -1010,7 +1091,10 @@
                       "layoutSizingVertical": "HUG",
                       "textAutoResize": "HEIGHT"
                     }
-                  ]
+                  ],
+                  "bindings": {
+                    "itemSpacing": "space-4"
+                  }
                 },
                 {
                   "type": "FRAME",
@@ -1079,7 +1163,18 @@
                       "type": "SOLID",
                       "binding": "border-default"
                     }
-                  ]
+                  ],
+                  "bindings": {
+                    "paddingTop": "space-24",
+                    "paddingRight": "space-24",
+                    "paddingBottom": "space-24",
+                    "paddingLeft": "space-24",
+                    "itemSpacing": "space-16",
+                    "topLeftRadius": "radius-16",
+                    "topRightRadius": "radius-16",
+                    "bottomLeftRadius": "radius-16",
+                    "bottomRightRadius": "radius-16"
+                  }
                 },
                 {
                   "type": "FRAME",
@@ -1209,7 +1304,18 @@
                           "type": "SOLID",
                           "binding": "border-default"
                         }
-                      ]
+                      ],
+                      "bindings": {
+                        "paddingTop": "space-24",
+                        "paddingRight": "space-24",
+                        "paddingBottom": "space-24",
+                        "paddingLeft": "space-24",
+                        "itemSpacing": "space-12",
+                        "topLeftRadius": "radius-16",
+                        "topRightRadius": "radius-16",
+                        "bottomLeftRadius": "radius-16",
+                        "bottomRightRadius": "radius-16"
+                      }
                     },
                     {
                       "type": "FRAME",
@@ -1323,7 +1429,18 @@
                           "type": "SOLID",
                           "binding": "border-default"
                         }
-                      ]
+                      ],
+                      "bindings": {
+                        "paddingTop": "space-24",
+                        "paddingRight": "space-24",
+                        "paddingBottom": "space-24",
+                        "paddingLeft": "space-24",
+                        "itemSpacing": "space-12",
+                        "topLeftRadius": "radius-16",
+                        "topRightRadius": "radius-16",
+                        "bottomLeftRadius": "radius-16",
+                        "bottomRightRadius": "radius-16"
+                      }
                     },
                     {
                       "type": "FRAME",
@@ -1437,13 +1554,30 @@
                           "type": "SOLID",
                           "binding": "border-default"
                         }
-                      ]
+                      ],
+                      "bindings": {
+                        "paddingTop": "space-24",
+                        "paddingRight": "space-24",
+                        "paddingBottom": "space-24",
+                        "paddingLeft": "space-24",
+                        "itemSpacing": "space-12",
+                        "topLeftRadius": "radius-16",
+                        "topRightRadius": "radius-16",
+                        "bottomLeftRadius": "radius-16",
+                        "bottomRightRadius": "radius-16"
+                      }
                     }
                   ],
-                  "width": 1200
+                  "width": 1200,
+                  "bindings": {
+                    "itemSpacing": "space-16"
+                  }
                 }
               ],
-              "width": 1200
+              "width": 1200,
+              "bindings": {
+                "itemSpacing": "space-16"
+              }
             },
             {
               "type": "FRAME",
@@ -1548,12 +1682,31 @@
                       "textAutoResize": "HEIGHT"
                     }
                   ],
-                  "width": 1120
+                  "width": 1120,
+                  "bindings": {
+                    "itemSpacing": "space-4"
+                  }
                 }
               ],
-              "width": 1200
+              "width": 1200,
+              "bindings": {
+                "paddingTop": "space-20",
+                "paddingRight": "space-24",
+                "paddingBottom": "space-20",
+                "paddingLeft": "space-24",
+                "itemSpacing": "space-12",
+                "topLeftRadius": "radius-12",
+                "topRightRadius": "radius-12",
+                "bottomLeftRadius": "radius-12",
+                "bottomRightRadius": "radius-12"
+              }
             }
-          ]
+          ],
+          "bindings": {
+            "paddingTop": "space-32",
+            "paddingBottom": "space-64",
+            "itemSpacing": "space-24"
+          }
         }
       ]
     }
