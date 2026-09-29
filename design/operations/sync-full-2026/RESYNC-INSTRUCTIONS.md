@@ -47,3 +47,10 @@ npm run audit
 - Meaning: the canonical manifest name `TB-01_team-list__recruiting_H2` did not exactly match any visible top-level FRAME/COMPONENT/COMPONENT_SET/INSTANCE/SECTION on page `design`.
 - Harness fix: plugin extract now includes TB/team top-level candidate names, node ids, and node types when exact frame-name lookup fails. This prevents repeating blind name guesses.
 - Do not guess/rename the target until candidate evidence is returned by the plugin.
+
+
+### TB-01 exact-name extract — second failure
+- Failure: `TB/team top-level candidates=[]`.
+- Interpretation: the canonical TB-01 name is not a visible top-level eligible node; likely nested under another frame/section, or the exact name differs deeper in the page tree.
+- Harness fix: exact `frameNames` now search the whole `design` page descendant tree (FRAME/COMPONENT/COMPONENT_SET/INSTANCE/SECTION only), while duplicate names still fail closed.
+- Failure hints now report TB/team candidates from the whole page with node id, type, and parent name.
