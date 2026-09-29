@@ -1,0 +1,11 @@
+{
+  "op": "extract",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "stage": "screens",
+  "inputDigest": "tb01-visual-rule-analysis-2026-09-29",
+  "frameNames": [
+    "TB-01_team-list__recruiting_H2"
+  ],
+  "_note": "TB-01 only. Exact top-level frame-name extraction; fail closed on missing/duplicate name. Save plugin result as design/operations/sync-full-2026/snapshot-tb01.json."
+}
