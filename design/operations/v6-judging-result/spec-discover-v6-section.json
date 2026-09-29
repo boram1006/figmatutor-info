@@ -1,0 +1,9 @@
+{
+  "op": "discover",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "terms": [
+    "v6. 심사결과"
+  ],
+  "_note": "Find exact SECTION nodeId for v6. 심사결과. After discovery, use the exact SECTION id for extract and PRD yellow-box create."
+}
