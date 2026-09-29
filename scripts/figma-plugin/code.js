@@ -62,6 +62,7 @@ async function runExtract(spec) {
     stage: spec.stage,
     inputDigest: spec.inputDigest,
     frameIds: Array.isArray(spec.frameIds) ? spec.frameIds : [],
+    frameNames: Array.isArray(spec.frameNames) ? spec.frameNames : [],
     capturedAt: spec.capturedAt || null,
   };
   for (const [k, v] of Object.entries(CONFIG)) {
@@ -318,9 +319,25 @@ async function runExtract(spec) {
   const all = page.children.filter(
     (n) => n.visible !== false && ['FRAME', 'COMPONENT', 'COMPONENT_SET', 'INSTANCE', 'SECTION'].includes(n.type)
   );
-  const targets = CONFIG.frameIds.length ? all.filter((n) => CONFIG.frameIds.includes(n.id)) : all;
-  if (CONFIG.frameIds.length && targets.length !== new Set(CONFIG.frameIds).size)
-    throw new Error('요청한 프레임 없음');
+  const requestedIds = new Set(CONFIG.frameIds);
+  const requestedNames = new Set(CONFIG.frameNames);
+  if (requestedIds.size !== CONFIG.frameIds.length) throw new Error('frameIds 중복');
+  if (requestedNames.size !== CONFIG.frameNames.length) throw new Error('frameNames 중복');
+
+  const duplicateRequestedNames = CONFIG.frameNames.filter(
+    (name) => all.filter((n) => n.name === name).length > 1
+  );
+  if (duplicateRequestedNames.length)
+    throw new Error('동일 이름 프레임 중복: ' + duplicateRequestedNames.join(', '));
+
+  const targets = (CONFIG.frameIds.length || CONFIG.frameNames.length)
+    ? all.filter((n) => requestedIds.has(n.id) || requestedNames.has(n.name))
+    : all;
+
+  if (CONFIG.frameIds.length && !CONFIG.frameIds.every((id) => targets.some((n) => n.id === id)))
+    throw new Error('요청한 frameId 없음');
+  if (CONFIG.frameNames.length && !CONFIG.frameNames.every((name) => targets.some((n) => n.name === name)))
+    throw new Error('요청한 frameName 없음');
   const frames = [];
   for (const target of targets) frames.push(await extract(target));
 
