@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 3,
+  "task": "v6-judging-result/A-40",
+  "variant": "code-informed-v4",
+  "status": "VISUAL_EXPLORATION",
+  "sourceAnalysis": "design/operations/v6-judging-result/STITCH-CODE-ANALYSIS-v4.md",
+  "targetArchetype": {
+    "primary": "A4-child-detail",
+    "supporting": [
+      "A2"
+    ],
+    "rationale": "The result is reached from one selected application inside A4. It is a child/detail result screen, while AWARDED_RANK permits bounded A2 celebration treatment."
+  },
+  "navigationContext": {
+    "depth": "child-detail",
+    "immediateParent": "A-30 내 지원 현황 / selected application context",
+    "returnPath": "← 내 지원 현황으로 돌아가기",
+    "localNavigationDecision": "REMOVE_A4_SIDEBAR; sidebar would skip the immediate parent depth."
+  },
+  "alignmentEvidence": {
+    "railMode": "CENTERED_DETAIL_RAIL",
+    "viewportWidth": 1440,
+    "contentWidth": 1200,
+    "centeringRule": "root counter-axis CENTER; verify equal 120px viewport margins"
+  },
+  "surfacePolicy": {
+    "groupBoundaryRule": "Use the minimum sufficient cue. Hero may use gradient/elevation; highlights and panel cards rely primarily on white-vs-page surface contrast and spacing; outlines only where boundary would otherwise disappear.",
+    "heroTreatment": "semantic-token gradient bounded to hero only",
+    "ordinarySections": "no mandatory outer outline"
+  },
+  "contentPolicy": "Use code composition, but only confirmed product facts. Unconfirmed prize/date/place and qualitative claims remain mock/placeholder for visual exploration.",
+  "regions": [
+    {
+      "region": "breadcrumb",
+      "purpose": "Return to the immediate parent without skipping hierarchy.",
+      "source": "Stitch code source 1 + source 2",
+      "reuseMode": "NEW_CONSTRUCTION",
+      "productScope": "LOCKED_CORE",
+      "visualEvidence": {
+        "typography": "Text/caption-medium and Text/body-sm",
+        "spacing": "4/8 compact navigation rhythm",
+        "surface": "no card required",
+        "radius": "none"
+      },
+      "externalSource": {
+        "type": "STITCH",
+        "keep": [
+          "grouping",
+          "section-order"
+        ],
+        "translateWithProductGrammar": [
+          "typography",
+          "spacing",
+          "surface",
+          "radius"
+        ]
+      }
+    },
+    {
+      "region": "result-hero",
+      "purpose": "Deliver award result with strong celebratory hierarchy.",
+      "source": "Stitch code source 1 hero",
+      "reuseMode": "NEW_CONSTRUCTION",
+      "productScope": "LOCKED_CORE",
+      "visualEvidence": {
+        "typography": "Text/h1 + Text/body-lg + compact status role",
+        "spacing": "24/32 hero interior; 8/12 copy rhythm",
+        "surface": "bounded semantic gradient using product red/white/award family; right honors object as raised white surface",
+        "radius": "16 hero / 12 honors"
+      },
+      "externalSource": {
+        "type": "STITCH",
+        "keep": [
+          "grouping",
+          "section-order",
+          "relative-emphasis",
+          "density-intent"
+        ],
+        "translateWithProductGrammar": [
+          "typography",
+          "spacing",
+          "surface",
+          "radius"
+        ]
+      }
+    },
+    {
+      "region": "key-highlights",
+      "purpose": "Scan three peer strengths with dense internal hierarchy.",
+      "source": "Stitch code source 2 highlights",
+      "reuseMode": "NEW_CONSTRUCTION",
+      "productScope": "APPROVED",
+      "visualEvidence": {
+        "typography": "Text/h3-bold section title; Text/h4 card title; Text/body-sm/caption details",
+        "spacing": "section 16/24; card p24; internal 8/12",
+        "surface": "three white peer cards directly on page surface; no outer wrapper outline",
+        "radius": "16 cards / 8 labels"
+      },
+      "externalSource": {
+        "type": "STITCH",
+        "keep": [
+          "grouping",
+          "relative-emphasis",
+          "density-intent"
+        ],
+        "translateWithProductGrammar": [
+          "typography",
+          "spacing",
+          "surface",
+          "radius"
+        ]
+      }
+    },
+    {
+      "region": "panel-review",
+      "purpose": "Read one aggregate conclusion then three supporting expert perspectives.",
+      "source": "Stitch code source 2 panel review",
+      "reuseMode": "NEW_CONSTRUCTION",
+      "productScope": "APPROVED",
+      "visualEvidence": {
+        "typography": "Text/h3-bold + Text/h4/body-lg + body-sm",
+        "spacing": "16/24 section rhythm; p24 cards",
+        "surface": "one prominent white quote card + three peer white reviewer cards; no extra outer outline",
+        "radius": "16 cards / 8 compact labels"
+      },
+      "externalSource": {
+        "type": "STITCH",
+        "keep": [
+          "grouping",
+          "section-order",
+          "relative-emphasis",
+          "density-intent"
+        ],
+        "translateWithProductGrammar": [
+          "typography",
+          "spacing",
+          "surface",
+          "radius"
+        ]
+      }
+    },
+    {
+      "region": "ceremony-followup",
+      "purpose": "Show concise post-result next-step information.",
+      "source": "Stitch code source 1 follow-up band",
+      "reuseMode": "NEW_CONSTRUCTION",
+      "productScope": "APPROVED",
+      "visualEvidence": {
+        "typography": "Text/body-sm-semibold + Text/body-sm",
+        "spacing": "16/20 horizontal information band",
+        "surface": "bounded semantic tinted/gradient band, no mandatory outline",
+        "radius": "12"
+      },
+      "externalSource": {
+        "type": "STITCH",
+        "keep": [
+          "grouping",
+          "section-order",
+          "relative-emphasis"
+        ],
+        "translateWithProductGrammar": [
+          "typography",
+          "spacing",
+          "surface",
+          "radius"
+        ]
+      }
+    }
+  ],
+  "excludedActions": [
+    "최종 제출 내용 보기",
+    "심사 상세 보기"
+  ]
+}
