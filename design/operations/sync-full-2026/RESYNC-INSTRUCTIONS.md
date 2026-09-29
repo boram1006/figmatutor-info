@@ -54,3 +54,19 @@ npm run audit
 - Interpretation: the canonical TB-01 name is not a visible top-level eligible node; likely nested under another frame/section, or the exact name differs deeper in the page tree.
 - Harness fix: exact `frameNames` now search the whole `design` page descendant tree (FRAME/COMPONENT/COMPONENT_SET/INSTANCE/SECTION only), while duplicate names still fail closed.
 - Failure hints now report TB/team candidates from the whole page with node id, type, and parent name.
+
+
+### Representative batch extract — duplicate frame-name failure
+- Failure: batch extract used `frameNames`, and `RV-01_first-review-finalize` existed at two distinct node IDs (`1:3126`, `1:3666`).
+- User renamed a Figma frame to resolve the duplicate, which triggered many secondary errors because manifests/specs/other references still depended on existing names.
+- Root cause: the harness treated a mutable display name as an execution identifier after node IDs were already known.
+- Harness fix:
+  - extract now supports descendant `frameIds` directly, not only top-level IDs.
+  - reference extractor is kept in parity.
+  - representative batch spec now uses exact node IDs.
+- Permanent rule:
+  1. frame/node names are discovery and human-readable evidence only.
+  2. once a node ID is resolved, all subsequent extract/update/duplicate/mutation specs MUST prefer exact node ID.
+  3. duplicate names MUST fail closed; do not ask the user to rename Figma nodes just to satisfy the harness.
+  4. if two same-name candidates are both plausible, extract both by ID and apply a structure/archetype sanity gate before choosing one.
+  5. renaming canonical Figma nodes is a product/design change and must never be used as a harness workaround.
