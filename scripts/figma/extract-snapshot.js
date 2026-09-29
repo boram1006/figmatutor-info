@@ -101,15 +101,34 @@ async function extract(root){
  const meta=metadata(root);
  return {id:root.id,name:root.name,width:root.width,height:root.height,screenId:meta.screenId||null,state:meta.state||null,viewportId:meta.viewportId||null,nodes,truncated:false};
 }
-const all=page.children.filter(n=>n.visible!==false && ['FRAME','COMPONENT','COMPONENT_SET','INSTANCE','SECTION'].includes(n.type));
+const eligibleTypes=['FRAME','COMPONENT','COMPONENT_SET','INSTANCE','SECTION'];
+const all=page.children.filter(n=>n.visible!==false && eligibleTypes.includes(n.type));
 const requestedIds=new Set(CONFIG.frameIds||[]);
 const requestedNames=new Set(CONFIG.frameNames||[]);
 if(requestedIds.size!==(CONFIG.frameIds||[]).length)throw new Error('Duplicate frameIds');
 if(requestedNames.size!==(CONFIG.frameNames||[]).length)throw new Error('Duplicate frameNames');
-const duplicateRequestedNames=(CONFIG.frameNames||[]).filter(name=>all.filter(n=>n.name===name).length>1);
-if(duplicateRequestedNames.length)throw new Error('Duplicate top-level frame name: '+duplicateRequestedNames.join(', '));
-const targets=((CONFIG.frameIds||[]).length||(CONFIG.frameNames||[]).length)?all.filter(n=>requestedIds.has(n.id)||requestedNames.has(n.name)):all;
-if((CONFIG.frameIds||[]).length && !CONFIG.frameIds.every(id=>targets.some(n=>n.id===id)))throw new Error('Requested frameId missing');
+
+const descendantNameCandidates=(CONFIG.frameNames||[]).length
+ ? page.findAll(n=>n.visible!==false && eligibleTypes.includes(n.type) && requestedNames.has(n.name))
+ : [];
+const duplicateRequestedNames=(CONFIG.frameNames||[]).filter(name=>descendantNameCandidates.filter(n=>n.name===name).length>1);
+if(duplicateRequestedNames.length)throw new Error('Duplicate frame name: '+duplicateRequestedNames.join(', '));
+
+const descendantIdCandidates=(CONFIG.frameIds||[]).length
+ ? page.findAll(n=>n.visible!==false && eligibleTypes.includes(n.type) && requestedIds.has(n.id))
+ : [];
+const idTargets=(CONFIG.frameIds||[]).length
+ ? [...all.filter(n=>requestedIds.has(n.id)), ...descendantIdCandidates.filter(n=>!all.some(x=>x.id===n.id))]
+ : [];
+const nameTargets=(CONFIG.frameNames||[]).length?descendantNameCandidates:[];
+const targets=((CONFIG.frameIds||[]).length||(CONFIG.frameNames||[]).length)
+ ? [...idTargets, ...nameTargets.filter(n=>!idTargets.some(x=>x.id===n.id))]
+ : all;
+
+if((CONFIG.frameIds||[]).length && !CONFIG.frameIds.every(id=>targets.some(n=>n.id===id))){
+ const missing=CONFIG.frameIds.filter(id=>!targets.some(n=>n.id===id));
+ throw new Error('Requested frameId missing: '+missing.join(', '));
+}
 if((CONFIG.frameNames||[]).length && !CONFIG.frameNames.every(name=>targets.some(n=>n.name===name)))throw new Error('Requested frameName missing');
 const frames=[];
 for(const target of targets)frames.push(await extract(target));
