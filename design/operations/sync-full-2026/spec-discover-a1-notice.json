@@ -1,0 +1,12 @@
+{
+  "op": "discover",
+  "fileKey": "t00UvcVe1M6llSJFyXcDkG",
+  "pageName": "design",
+  "terms": [
+    "공지",
+    "notice",
+    "faq",
+    "home"
+  ],
+  "_note": "Lightweight discovery only. Returns matching node id/type/name/parent/size; does not extract snapshots. Use to locate the real A1 notice-list frame after stale sourceFrame evidence was detected."
+}
