@@ -6,7 +6,7 @@
   "_compositionPlan": "design/operations/v6-judging-result/composition-plan-code-informed-v4.json",
   "_sourceAnalysis": "design/operations/v6-judging-result/STITCH-CODE-ANALYSIS-v4.md",
   "_contentStatus": "MOCK_FOR_VISUAL_EXPLORATION",
-  "_notes": "No My Page sidebar. Centered 1200 detail rail. Long text wraps. Outlines are not default. Hero and follow-up may use semantic-token gradients. Code source 1=hero/follow-up, source 2=highlights/panel review. Explicit 1200 rail/card widths added after v4 containment failure; HUG microcopy remains HUG, long copy wraps by HEIGHT.",
+  "_notes": "No My Page sidebar. Centered 1200 detail rail. Long text wraps. Outlines are not default. Hero and follow-up may use semantic-token gradients. Code source 1=hero/follow-up, source 2=highlights/panel review. Explicit 1200 rail/card widths added after v4 containment failure; HUG microcopy remains HUG, long copy wraps by HEIGHT. Product card entities use background-primary + border-default. Layout/group frames are transparent by default; hero/follow-up keep intentional non-card surfaces.",
   "nodes": [
     {
       "type": "FRAME",
@@ -209,7 +209,13 @@
                   "textAutoResize": "HEIGHT"
                 }
               ],
-              "width": 1200
+              "width": 1200,
+              "strokes": [
+                {
+                  "type": "SOLID",
+                  "binding": "border-default"
+                }
+              ]
             },
             {
               "type": "FRAME",
@@ -415,6 +421,12 @@
                       "layoutSizingHorizontal": "HUG",
                       "layoutSizingVertical": "HUG",
                       "textAutoResize": "WIDTH_AND_HEIGHT"
+                    }
+                  ],
+                  "strokes": [
+                    {
+                      "type": "SOLID",
+                      "binding": "border-default"
                     }
                   ]
                 }
@@ -641,7 +653,13 @@
                           "textAutoResize": "HEIGHT"
                         }
                       ],
-                      "width": 389
+                      "width": 389,
+                      "strokes": [
+                        {
+                          "type": "SOLID",
+                          "binding": "border-default"
+                        }
+                      ]
                     },
                     {
                       "type": "FRAME",
@@ -768,7 +786,13 @@
                           "textAutoResize": "HEIGHT"
                         }
                       ],
-                      "width": 389
+                      "width": 389,
+                      "strokes": [
+                        {
+                          "type": "SOLID",
+                          "binding": "border-default"
+                        }
+                      ]
                     },
                     {
                       "type": "FRAME",
@@ -895,7 +919,13 @@
                           "textAutoResize": "HEIGHT"
                         }
                       ],
-                      "width": 389
+                      "width": 389,
+                      "strokes": [
+                        {
+                          "type": "SOLID",
+                          "binding": "border-default"
+                        }
+                      ]
                     }
                   ],
                   "width": 1200
@@ -1043,7 +1073,13 @@
                       "textAutoResize": "HEIGHT"
                     }
                   ],
-                  "width": 1200
+                  "width": 1200,
+                  "strokes": [
+                    {
+                      "type": "SOLID",
+                      "binding": "border-default"
+                    }
+                  ]
                 },
                 {
                   "type": "FRAME",
@@ -1167,7 +1203,13 @@
                           "textAutoResize": "HEIGHT"
                         }
                       ],
-                      "width": 389
+                      "width": 389,
+                      "strokes": [
+                        {
+                          "type": "SOLID",
+                          "binding": "border-default"
+                        }
+                      ]
                     },
                     {
                       "type": "FRAME",
@@ -1275,7 +1317,13 @@
                           "textAutoResize": "HEIGHT"
                         }
                       ],
-                      "width": 389
+                      "width": 389,
+                      "strokes": [
+                        {
+                          "type": "SOLID",
+                          "binding": "border-default"
+                        }
+                      ]
                     },
                     {
                       "type": "FRAME",
@@ -1383,7 +1431,13 @@
                           "textAutoResize": "HEIGHT"
                         }
                       ],
-                      "width": 389
+                      "width": 389,
+                      "strokes": [
+                        {
+                          "type": "SOLID",
+                          "binding": "border-default"
+                        }
+                      ]
                     }
                   ],
                   "width": 1200
