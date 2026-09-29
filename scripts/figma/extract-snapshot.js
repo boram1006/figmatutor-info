@@ -3,7 +3,7 @@
 // Keep this file and the plugin's runExtract() in sync. Not a local Node script.
 // One invocation = one page. A large page may use top-level frameIds; merge with merge-snapshots.mjs.
 // See docs/kiro-figma-plugin.md for the plugin round-trip.
-const CONFIG = {fileKey:'__FILE_KEY__',pageName:'__PAGE_NAME__',stage:'__STAGE__',inputDigest:'__INPUT_DIGEST__',frameIds:[]};
+const CONFIG = {fileKey:'__FILE_KEY__',pageName:'__PAGE_NAME__',stage:'__STAGE__',inputDigest:'__INPUT_DIGEST__',frameIds:[],frameNames:[]};
 if(Object.values(CONFIG).some(v=>typeof v==='string'&&v.startsWith('__')))throw new Error('CONFIG replacement required');
 if(figma.fileKey && figma.fileKey!==CONFIG.fileKey)throw new Error('Wrong Figma file');
 const page=figma.root.children.find(p=>p.name===CONFIG.pageName);
@@ -102,8 +102,15 @@ async function extract(root){
  return {id:root.id,name:root.name,width:root.width,height:root.height,screenId:meta.screenId||null,state:meta.state||null,viewportId:meta.viewportId||null,nodes,truncated:false};
 }
 const all=page.children.filter(n=>n.visible!==false && ['FRAME','COMPONENT','COMPONENT_SET','INSTANCE','SECTION'].includes(n.type));
-const targets=CONFIG.frameIds.length?all.filter(n=>CONFIG.frameIds.includes(n.id)):all;
-if(CONFIG.frameIds.length && targets.length!==new Set(CONFIG.frameIds).size)throw new Error('Requested frame missing');
+const requestedIds=new Set(CONFIG.frameIds||[]);
+const requestedNames=new Set(CONFIG.frameNames||[]);
+if(requestedIds.size!==(CONFIG.frameIds||[]).length)throw new Error('Duplicate frameIds');
+if(requestedNames.size!==(CONFIG.frameNames||[]).length)throw new Error('Duplicate frameNames');
+const duplicateRequestedNames=(CONFIG.frameNames||[]).filter(name=>all.filter(n=>n.name===name).length>1);
+if(duplicateRequestedNames.length)throw new Error('Duplicate top-level frame name: '+duplicateRequestedNames.join(', '));
+const targets=((CONFIG.frameIds||[]).length||(CONFIG.frameNames||[]).length)?all.filter(n=>requestedIds.has(n.id)||requestedNames.has(n.name)):all;
+if((CONFIG.frameIds||[]).length && !CONFIG.frameIds.every(id=>targets.some(n=>n.id===id)))throw new Error('Requested frameId missing');
+if((CONFIG.frameNames||[]).length && !CONFIG.frameNames.every(name=>targets.some(n=>n.name===name)))throw new Error('Requested frameName missing');
 const frames=[];
 for(const target of targets)frames.push(await extract(target));
 const snapshot={schemaVersion:1,fileKey:CONFIG.fileKey,stage:CONFIG.stage,inputDigest:CONFIG.inputDigest,capturedAt:CONFIG.capturedAt||new Date().toISOString(),pageId:page.id,expectedFrameIds:all.map(f=>f.id),complete:targets.length===all.length,frames,variables,textStyles};
