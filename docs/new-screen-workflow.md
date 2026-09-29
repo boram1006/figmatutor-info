@@ -226,6 +226,22 @@ PASS 확인. `status: "ready"` 유지.
 
 ---
 
+## 2.4. Navigation / alignment / containment audit — shell 재사용 전 필수
+
+predecessor shell을 clone하기 전에 다음을 먼저 판정한다.
+
+1. **navigation depth** — target이 hub/list인지, selected entity의 child/detail인지.
+   - child/detail이면 immediate parent로 돌아가는 route가 반드시 있어야 한다.
+   - sidebar action이 immediate parent를 건너뛰면 그 sidebar는 target local navigation으로 재사용하지 않는다.
+2. **rail alignment** — centered rail evidence가 있으면 width뿐 아니라 viewport 대비 중앙정렬 관계를 보존한다.
+3. **text containment** — body/title copy는 allocated width 안에서 wrap되어야 하며 width-growing text를 금지한다.
+4. **group boundary** — outline을 기본값으로 강제하지 않는다. spacing/surface contrast/divider/outline/elevation 중 최소한의 수단으로 grouping을 표현한다.
+5. **expressive state** — award/result/campaign state는 semantic brand colors 안에서 bounded gradient/tint/decorative accent를 허용한다.
+
+이 audit의 결정은 composition plan의 `navigationContext`, `alignmentEvidence`, `surfacePolicy`에 남긴다.
+
+---
+
 ## 2.5. Composition Plan — Figma spec 전 필수
 
 신규 화면은 Pattern Retrieval 후 바로 JSON을 작성하지 않는다.
