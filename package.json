@@ -30,6 +30,7 @@
     "visual-dna:derive": "node scripts/visual-dna.mjs derive",
     "merge:components-snapshot": "node scripts/merge-component-snapshots.mjs",
     "check:coverage": "node scripts/coverage-gate.mjs",
-    "audit:structural": "node scripts/harness.mjs audit"
+    "audit:structural": "node scripts/harness.mjs audit",
+    "composition:validate": "node scripts/validate-composition-plan.mjs"
   }
 }
