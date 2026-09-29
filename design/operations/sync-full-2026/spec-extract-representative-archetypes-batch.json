@@ -3,12 +3,13 @@
   "fileKey": "t00UvcVe1M6llSJFyXcDkG",
   "pageName": "design",
   "stage": "screens",
-  "inputDigest": "representative-archetypes-batch-2026-09-29",
-  "frameNames": [
-    "H-02_first-round-result_H2",
-    "J-01_ai-review-dashboard",
-    "RV-02_final-review-unfolded",
-    "RV-01_first-review-finalize"
-  ],
-  "_note": "Batch extract for representative archetypes. A2=H-02 node 1:22713, A6=J-01 node 1:14166, A7=RV-02 node 1:6567. A8 candidate=RV-01_first-review-finalize; validate structure before accepting as A8 rule source. Save as snapshot-representative-archetypes-batch.json."
+  "inputDigest": "representative-archetypes-batch-by-id-2026-09-29",
+  "_note": "Batch extract by exact descendant nodeId to avoid duplicate-name failures. A2=1:22713, A6=1:14166, A7=1:6567. A8 candidates=1:3126 and 1:3666 (same name); extract both and sanity-check before selecting one as A8 rule source. Frame renames are irrelevant to this spec.",
+  "frameIds": [
+    "1:22713",
+    "1:14166",
+    "1:6567",
+    "1:3126",
+    "1:3666"
+  ]
 }
