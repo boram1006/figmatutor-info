@@ -239,6 +239,51 @@ PASS 확인. `status: "ready"` 유지.
 
 composition plan 없이 primitive FRAME/TEXT부터 만드는 것은 신규 화면 생성 절차 위반이다.
 
+### Composition Plan validation
+
+신규/외부-reference 기반 화면은 Figma spec 생성 전에 composition plan을 기계 검증한다.
+
+```sh
+npm run composition:validate -- --plan design/operations/<task>/composition-plan.json
+```
+
+권장 machine-readable 형식:
+
+```json
+{
+  "schemaVersion": 2,
+  "regions": [
+    {
+      "region": "result-summary",
+      "purpose": "사용자가 결과와 핵심 성과를 한 번에 이해한다",
+      "source": {"type": "FIGMA", "nodeId": "verified-node-id"},
+      "reuseMode": "CLONE_COMPOSE",
+      "productScope": "LOCKED_CORE",
+      "visualEvidence": {
+        "typography": "product-visual-grammar + target archetype",
+        "spacing": "product-visual-grammar + exact Figma evidence",
+        "surface": "product-visual-grammar + exact Figma evidence",
+        "radius": "product-visual-grammar + exact Figma evidence"
+      },
+      "externalSource": {
+        "type": "STITCH",
+        "keep": ["grouping", "section-order", "relative-emphasis", "density-intent"],
+        "translateWithProductGrammar": ["typography", "spacing", "surface", "radius"]
+      }
+    }
+  ]
+}
+```
+
+validator는 다음을 fail 처리한다.
+- 승인되지 않은 product scope를 생성 대상으로 사용
+- NEW_CONSTRUCTION인데 typography/spacing/surface/radius 근거가 없음
+- Stitch의 typography/spacing/radius/color/shell을 `keep` 대상으로 선언
+- Stitch 사용인데 product grammar로 변환해야 할 visual role을 명시하지 않음
+- Figma source object인데 nodeId/selector evidence가 없음
+
+**수집/아이디어는 외부 source를 사용할 수 있지만, visual truth는 기존 Figma 자산에서만 가져온다.**
+
 ## 3. 화면 그리기 (Figma 플러그인)
 
 Figma는 무료 계정 + 플러그인 왕복으로 다룬다(MCP 없음). 상세: `docs/kiro-figma-plugin.md`, `docs/figma-delegation.md`.
